@@ -64,8 +64,9 @@ public class LSI {
         this.m = m;
         this.n = n;
 
-        PhysicalStore C = new RawStore(C_, m, n);
-        SingularValue svd = new SingularValue();
+        //PhysicalStore C = new RawStore(C_, m, n);
+        //SingularValue svd = new SingularValue();
+
 
         return err;
     }
