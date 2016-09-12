@@ -57,7 +57,50 @@ public class Matrix
         return c;
     }
 
-    public int transpose
+    public int transpose()
+    {
+        double[][] matT = new double[this.n][this.m];
+        for ( int i=0; i< this.m; i++ )
+        {
+            for ( int j = 0; j<this.n; j++ )
+            {
+                if ( i==j )
+                {
+                    matT[i][j] = this.mat[i][j];
+                }
+                else
+                {
+                    matT[j][i] = this.mat[i][j];
+                }
+            }
+        }
+        this.mat = matT;
+        int temp = this.m;
+        this.m = this.n;
+        this.n = temp;
+        return 0;
+    }
+
+    public Matrix getTransposeOf()
+    {
+        Matrix transposeOfMat = new Matrix(this.n, this.m);
+        double[][] matT = transposeOfMat.mat;
+        for ( int i=0; i< this.m; i++ )
+        {
+            for ( int j = 0; j<this.n; j++ )
+            {
+                if ( i==j )
+                {
+                    matT[i][j] = this.mat[i][j];
+                }
+                else
+                {
+                    matT[j][i] = this.mat[i][j];
+                }
+            }
+        }
+        return transposeOfMat;
+    }
 
     public String toString()
     {
