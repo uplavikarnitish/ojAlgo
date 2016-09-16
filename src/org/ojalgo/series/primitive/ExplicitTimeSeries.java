@@ -23,11 +23,13 @@ package org.ojalgo.series.primitive;
 
 import org.ojalgo.type.CalendarDate;
 
-public final class ExplicitTimeSeries extends PrimitiveTimeSeries {
+public final class ExplicitTimeSeries extends PrimitiveTimeSeries
+{
 
     private final long[] myTimes;
 
-    public ExplicitTimeSeries(final long[] someTimes, final PrimitiveSeries aValueSeries) {
+    public ExplicitTimeSeries(final long[] someTimes, final PrimitiveSeries aValueSeries)
+    {
 
         super(aValueSeries);
 
@@ -35,112 +37,134 @@ public final class ExplicitTimeSeries extends PrimitiveTimeSeries {
     }
 
     @Override
-    public ExplicitTimeSeries add(final double addend) {
+    public ExplicitTimeSeries add(final double addend)
+    {
         return new ExplicitTimeSeries(this.keys(), super.add(addend));
     }
 
     @Override
-    public final ExplicitTimeSeries add(final PrimitiveSeries addend) {
+    public final ExplicitTimeSeries add(final PrimitiveSeries addend)
+    {
         return new ExplicitTimeSeries(this.keys(), super.add(addend));
     }
 
     @Override
-    public ExplicitTimeSeries copy() {
+    public ExplicitTimeSeries copy()
+    {
         return new ExplicitTimeSeries(this.keys(), super.copy());
     }
 
     @Override
-    public final ExplicitTimeSeries differences() {
+    public final ExplicitTimeSeries differences()
+    {
         return new ExplicitTimeSeries(this.keys(), super.differences());
     }
 
     @Override
-    public final ExplicitTimeSeries differences(final int period) {
+    public final ExplicitTimeSeries differences(final int period)
+    {
         return new ExplicitTimeSeries(this.keys(), super.differences(period));
     }
 
     @Override
-    public ExplicitTimeSeries divide(final double divisor) {
+    public ExplicitTimeSeries divide(final double divisor)
+    {
         return new ExplicitTimeSeries(this.keys(), super.divide(divisor));
     }
 
     @Override
-    public final ExplicitTimeSeries divide(final PrimitiveSeries divisor) {
+    public final ExplicitTimeSeries divide(final PrimitiveSeries divisor)
+    {
         return new ExplicitTimeSeries(this.keys(), super.divide(divisor));
     }
 
     @Override
-    public PrimitiveSeries exp() {
+    public PrimitiveSeries exp()
+    {
         return new ExplicitTimeSeries(this.keys(), super.exp());
     }
 
     @Override
-    public final CalendarDate first() {
+    public final CalendarDate first()
+    {
         return new CalendarDate(myTimes[0]);
     }
 
     @Override
-    public long getAverageStepSize() {
+    public long getAverageStepSize()
+    {
         final int tmpIndexOfLast = myTimes.length - 1;
         return (myTimes[tmpIndexOfLast] - myTimes[0]) / tmpIndexOfLast;
     }
 
-    public final long key(final int index) {
+    public final long key(final int index)
+    {
         return myTimes[index];
     }
 
     @Override
-    public final long[] keys() {
+    public final long[] keys()
+    {
         return myTimes;
     }
 
     @Override
-    public final CalendarDate last() {
+    public final CalendarDate last()
+    {
         return new CalendarDate(myTimes[myTimes.length - 1]);
     }
 
     @Override
-    public PrimitiveSeries log() {
+    public PrimitiveSeries log()
+    {
         return new ExplicitTimeSeries(this.keys(), super.log());
     }
 
     @Override
-    public final ExplicitTimeSeries multiply(final double aFactor) {
+    public final ExplicitTimeSeries multiply(final double aFactor)
+    {
         return new ExplicitTimeSeries(this.keys(), super.multiply(aFactor));
     }
 
     @Override
-    public ExplicitTimeSeries multiply(final PrimitiveSeries multiplicand) {
+    public ExplicitTimeSeries multiply(final PrimitiveSeries multiplicand)
+    {
         return new ExplicitTimeSeries(this.keys(), super.multiply(multiplicand));
     }
 
     @Override
-    public final ExplicitTimeSeries quotients() {
+    public final ExplicitTimeSeries quotients()
+    {
         return new ExplicitTimeSeries(this.keys(), super.quotients());
     }
 
     @Override
-    public final ExplicitTimeSeries quotients(final int period) {
+    public final ExplicitTimeSeries quotients(final int period)
+    {
         return new ExplicitTimeSeries(this.keys(), super.quotients(period));
     }
 
     @Override
-    public final ExplicitTimeSeries runningProduct(final double initialValue) {
+    public final ExplicitTimeSeries runningProduct(final double initialValue)
+    {
         return new ExplicitTimeSeries(this.keys(), super.runningProduct(initialValue));
     }
 
     @Override
-    public final ExplicitTimeSeries runningSum(final double initialValue) {
+    public final ExplicitTimeSeries runningSum(final double initialValue)
+    {
         return new ExplicitTimeSeries(this.keys(), super.runningSum(initialValue));
     }
 
     @Override
-    public ExplicitTimeSeries subtract(final double subtrahend) {
+    public ExplicitTimeSeries subtract(final double subtrahend)
+    {
         return new ExplicitTimeSeries(this.keys(), super.subtract(subtrahend));
     }
 
     @Override
-    public ExplicitTimeSeries subtract(final PrimitiveSeries subtrahend) {
+    public ExplicitTimeSeries subtract(final PrimitiveSeries subtrahend)
+    {
         return new ExplicitTimeSeries(this.keys(), super.subtract(subtrahend));
     }
 

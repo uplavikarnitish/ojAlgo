@@ -26,7 +26,8 @@ import org.ojalgo.function.PrimitiveFunction;
 import org.ojalgo.netio.ASCII;
 import org.ojalgo.netio.BasicLogger;
 
-public final class VirtualMachine extends AbstractMachine {
+public final class VirtualMachine extends AbstractMachine
+{
 
     private static final String AMD64 = "amd64";
 
@@ -36,33 +37,40 @@ public final class VirtualMachine extends AbstractMachine {
 
     private static final String X86_64 = "x86_64";
 
-    public static String getArchitecture() {
+    public static String getArchitecture()
+    {
 
         // http://fantom.org/sidewalk/topic/756
 
         final String tmpProperty = System.getProperty("os.arch").toLowerCase();
 
-        if (tmpProperty.equals(I386)) {
+        if (tmpProperty.equals(I386))
+        {
             return X86;
-        } else if (tmpProperty.equals(AMD64)) {
+        } else if (tmpProperty.equals(AMD64))
+        {
             return X86_64;
-        } else {
+        } else
+        {
             return tmpProperty;
         }
     }
 
-    public static long getMemory() {
+    public static long getMemory()
+    {
         return Runtime.getRuntime().maxMemory();
     }
 
-    public static int getThreads() {
+    public static int getThreads()
+    {
         return Runtime.getRuntime().availableProcessors();
     }
 
     private final Hardware myHardware;
     private final Runtime myRuntime;
 
-    private VirtualMachine(final String architecture, final BasicMachine[] levels) {
+    private VirtualMachine(final String architecture, final BasicMachine[] levels)
+    {
 
         super(architecture, levels);
 
@@ -72,7 +80,8 @@ public final class VirtualMachine extends AbstractMachine {
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    VirtualMachine(final Hardware hardware, final Runtime runtime) {
+    VirtualMachine(final Hardware hardware, final Runtime runtime)
+    {
 
         super(hardware, runtime);
 
@@ -80,19 +89,23 @@ public final class VirtualMachine extends AbstractMachine {
         myRuntime = runtime;
     }
 
-    public void collectGarbage() {
+    public void collectGarbage()
+    {
 
         myRuntime.runFinalization();
 
         long tmpIsFree = myRuntime.freeMemory();
         long tmpWasFree;
 
-        do {
+        do
+        {
             tmpWasFree = tmpIsFree;
             myRuntime.gc();
-            try {
+            try
+            {
                 Thread.sleep(8L);
-            } catch (final InterruptedException exception) {
+            } catch (final InterruptedException exception)
+            {
                 BasicLogger.error(exception.getMessage());
             }
             tmpIsFree = myRuntime.freeMemory();
@@ -102,36 +115,46 @@ public final class VirtualMachine extends AbstractMachine {
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (!super.equals(obj)) {
+        if (!super.equals(obj))
+        {
             return false;
         }
-        if (!(obj instanceof VirtualMachine)) {
+        if (!(obj instanceof VirtualMachine))
+        {
             return false;
         }
         final VirtualMachine other = (VirtualMachine) obj;
-        if (myHardware == null) {
-            if (other.myHardware != null) {
+        if (myHardware == null)
+        {
+            if (other.myHardware != null)
+            {
                 return false;
             }
-        } else if (!myHardware.equals(other.myHardware)) {
+        } else if (!myHardware.equals(other.myHardware))
+        {
             return false;
         }
         return true;
     }
 
-    public int getAvailableDim1D(final long elementSize) {
+    public int getAvailableDim1D(final long elementSize)
+    {
         return (int) AbstractMachine.elements(this.getAvailableMemory(), elementSize);
     }
 
-    public int getAvailableDim2D(final long elementSize) {
+    public int getAvailableDim2D(final long elementSize)
+    {
         return (int) PrimitiveFunction.SQRT.invoke(AbstractMachine.elements(this.getAvailableMemory(), elementSize));
     }
 
-    public long getAvailableMemory() {
+    public long getAvailableMemory()
+    {
 
         final long tmpMax = myRuntime.maxMemory();
         final long tmpTotal = myRuntime.totalMemory();
@@ -143,7 +166,8 @@ public final class VirtualMachine extends AbstractMachine {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = super.hashCode();
         result = (prime * result) + ((myHardware == null) ? 0 : myHardware.hashCode());
@@ -151,7 +175,8 @@ public final class VirtualMachine extends AbstractMachine {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return super.toString() + ASCII.SP + myHardware.toString();
     }
 

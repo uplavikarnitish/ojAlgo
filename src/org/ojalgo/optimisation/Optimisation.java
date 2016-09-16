@@ -34,14 +34,16 @@ import org.ojalgo.type.CalendarDateUnit;
 import org.ojalgo.type.TypeUtils;
 import org.ojalgo.type.context.NumberContext;
 
-public interface Optimisation {
+public interface Optimisation
+{
 
     /**
      * Constraint
      *
      * @author apete
      */
-    public static interface Constraint extends Optimisation {
+    public static interface Constraint extends Optimisation
+    {
 
         /**
          * May return null
@@ -76,7 +78,8 @@ public interface Optimisation {
 
     }
 
-    public static interface Integration<M extends Optimisation.Model, S extends Optimisation.Solver> extends Optimisation {
+    public static interface Integration<M extends Optimisation.Model, S extends Optimisation.Solver> extends Optimisation
+    {
 
         /**
          * An integration must be able to instantiate a solver that can handle (any) model instance.
@@ -105,12 +108,14 @@ public interface Optimisation {
 
     }
 
-    public static interface Model extends Optimisation {
+    public static interface Model extends Optimisation
+    {
 
         /**
          * Cleanup when a model instance is no longer needed. The default implementation does nothing,
          */
-        default void dispose() {
+        default void dispose()
+        {
             ;
         }
 
@@ -120,7 +125,7 @@ public interface Optimisation {
 
         /**
          * @return true If eveything is ok. false The model is structurally ok, but the "value" breaks
-         *         constraints - the solution is infeasible.
+         * constraints - the solution is infeasible.
          */
         boolean validate();
 
@@ -131,7 +136,8 @@ public interface Optimisation {
      *
      * @author apete
      */
-    public static interface Objective extends Optimisation {
+    public static interface Objective extends Optimisation
+    {
 
         /**
          * May return null
@@ -140,13 +146,14 @@ public interface Optimisation {
 
         /**
          * @return true if this Objective has a non zero contribution weight - it actually is contributing to
-         *         the objective function.
+         * the objective function.
          */
         boolean isObjective();
 
     }
 
-    public static final class Options implements Optimisation, Cloneable {
+    public static final class Options implements Optimisation, Cloneable
+    {
 
         /**
          * If this is null nothing is printed, if it is not null then debug statements are printed to that
@@ -250,14 +257,18 @@ public interface Optimisation {
          */
         public boolean validate = false;
 
-        public Options() {
+        public Options()
+        {
             super();
         }
 
-        public Options copy() {
-            try {
+        public Options copy()
+        {
+            try
+            {
                 return (Options) this.clone();
-            } catch (final CloneNotSupportedException anException) {
+            } catch (final CloneNotSupportedException anException)
+            {
                 return null;
             }
         }
@@ -268,29 +279,34 @@ public interface Optimisation {
          *
          * @param solver
          */
-        public void debug(final Class<? extends Optimisation.Solver> solver) {
+        public void debug(final Class<? extends Optimisation.Solver> solver)
+        {
             debug_appender = solver != null ? BasicLogger.DEBUG : null;
             debug_solver = solver;
             validate = solver != null ? true : false;
         }
 
         @Override
-        protected Object clone() throws CloneNotSupportedException {
+        protected Object clone() throws CloneNotSupportedException
+        {
             return super.clone();
         }
     }
 
-    public static final class Result implements Optimisation, Access1D<BigDecimal>, Comparable<Optimisation.Result>, Serializable {
+    public static final class Result implements Optimisation, Access1D<BigDecimal>, Comparable<Optimisation.Result>, Serializable
+    {
 
         private final Access1D<?> mySolution;
         private final Optimisation.State myState;
         private final double myValue; // Objective Function Value
 
-        public Result(final Optimisation.State state, final Access1D<?> solution) {
+        public Result(final Optimisation.State state, final Access1D<?> solution)
+        {
             this(state, Double.NaN, solution);
         }
 
-        public Result(final Optimisation.State state, final double value, final Access1D<?> solution) {
+        public Result(final Optimisation.State state, final double value, final Access1D<?> solution)
+        {
 
             super();
 
@@ -302,69 +318,86 @@ public interface Optimisation {
             mySolution = solution;
         }
 
-        public Result(final Optimisation.State state, final Optimisation.Result result) {
+        public Result(final Optimisation.State state, final Optimisation.Result result)
+        {
             this(state, result.getValue(), result);
         }
 
-        public int compareTo(final Result reference) {
+        public int compareTo(final Result reference)
+        {
 
             final double tmpRefValue = reference.getValue();
 
-            if (myValue > tmpRefValue) {
+            if (myValue > tmpRefValue)
+            {
                 return 1;
-            } else if (myValue < tmpRefValue) {
+            } else if (myValue < tmpRefValue)
+            {
                 return -1;
-            } else {
+            } else
+            {
                 return 0;
             }
         }
 
-        public long count() {
+        public long count()
+        {
             return mySolution.count();
         }
 
-        public double doubleValue(final long index) {
+        public double doubleValue(final long index)
+        {
             return mySolution.doubleValue(index);
         }
 
         @Override
-        public boolean equals(final Object obj) {
-            if (this == obj) {
+        public boolean equals(final Object obj)
+        {
+            if (this == obj)
+            {
                 return true;
             }
-            if (obj == null) {
+            if (obj == null)
+            {
                 return false;
             }
-            if (this.getClass() != obj.getClass()) {
+            if (this.getClass() != obj.getClass())
+            {
                 return false;
             }
             final Result other = (Result) obj;
-            if (myState != other.myState) {
+            if (myState != other.myState)
+            {
                 return false;
             }
-            if (Double.doubleToLongBits(myValue) != Double.doubleToLongBits(other.myValue)) {
+            if (Double.doubleToLongBits(myValue) != Double.doubleToLongBits(other.myValue))
+            {
                 return false;
             }
             return true;
         }
 
-        public BigDecimal get(final long index) {
+        public BigDecimal get(final long index)
+        {
             return TypeUtils.toBigDecimal(mySolution.get(index));
         }
 
-        public Optimisation.State getState() {
+        public Optimisation.State getState()
+        {
             return myState;
         }
 
         /**
          * Objective Function Value
          */
-        public double getValue() {
+        public double getValue()
+        {
             return myValue;
         }
 
         @Override
-        public int hashCode() {
+        public int hashCode()
+        {
             final int prime = 31;
             int result = 1;
             result = (prime * result) + ((myState == null) ? 0 : myState.hashCode());
@@ -374,12 +407,14 @@ public interface Optimisation {
             return result;
         }
 
-        public int size() {
+        public int size()
+        {
             return (int) this.count();
         }
 
         @Override
-        public String toString() {
+        public String toString()
+        {
             return myState + " " + myValue + " @ " + Array1D.PRIMITIVE.copy(mySolution);
         }
     }
@@ -396,16 +431,19 @@ public interface Optimisation {
      *
      * @author apete
      */
-    public static interface Solver extends Optimisation {
+    public static interface Solver extends Optimisation
+    {
 
         /**
          * Cleanup when a solver instance is no longer needed. The default implementation does nothing,
          */
-        default void dispose() {
+        default void dispose()
+        {
             ;
         }
 
-        default Optimisation.Result solve() {
+        default Optimisation.Result solve()
+        {
             return this.solve(null);
         }
 
@@ -413,7 +451,8 @@ public interface Optimisation {
 
     }
 
-    public static enum State implements Optimisation {
+    public static enum State implements Optimisation
+    {
 
         /**
          * Approximate and/or Intermediate solution - Iteration point Probably infeasible, but still "good"
@@ -467,52 +506,62 @@ public interface Optimisation {
 
         private final int myValue;
 
-        State(final int aValue) {
+        State(final int aValue)
+        {
             myValue = aValue;
         }
 
-        public boolean isApproximate() {
+        public boolean isApproximate()
+        {
             return (this == APPROXIMATE) || this.isFeasible();
         }
 
-        public boolean isDistinct() {
+        public boolean isDistinct()
+        {
             return this.absValue() >= DISTINCT.absValue();
         }
 
         /**
          * FAILED, INVALID, INFEASIBLE or UNBOUNDED
          */
-        public boolean isFailure() {
+        public boolean isFailure()
+        {
             return myValue < 0;
         }
 
-        public boolean isFeasible() {
+        public boolean isFeasible()
+        {
             return this.absValue() >= FEASIBLE.absValue();
         }
 
-        public boolean isOptimal() {
+        public boolean isOptimal()
+        {
             return this.absValue() >= OPTIMAL.absValue();
         }
 
         /**
          * VALID, APPROXIMATE, FEASIBLE, OPTIMAL or DISTINCT
          */
-        public boolean isSuccess() {
+        public boolean isSuccess()
+        {
             return myValue > 0;
         }
 
         /**
          * UNEXPLORED
          */
-        public boolean isUnexplored() {
+        public boolean isUnexplored()
+        {
             return myValue == 0;
         }
 
-        public boolean isValid() {
+        public boolean isValid()
+        {
             return this.absValue() >= VALID.absValue();
         }
 
-        private int absValue() {
+        private int absValue()
+        {
             return Math.abs(myValue);
         }
 

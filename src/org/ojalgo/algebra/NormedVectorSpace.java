@@ -24,7 +24,8 @@ package org.ojalgo.algebra;
 /**
  * @author apete
  */
-public interface NormedVectorSpace<V, F extends Number> extends VectorSpace<V, F> {
+public interface NormedVectorSpace<V, F extends Number> extends VectorSpace<V, F>
+{
 
     /**
      * @param comparedTo What to compare with

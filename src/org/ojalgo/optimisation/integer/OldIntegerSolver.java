@@ -50,21 +50,25 @@ import org.ojalgo.type.TypeUtils;
  *
  * @author apete
  */
-public final class OldIntegerSolver extends IntegerSolver {
+public final class OldIntegerSolver extends IntegerSolver
+{
 
-    final class BranchAndBoundNodeTask extends RecursiveTask<Boolean> {
+    final class BranchAndBoundNodeTask extends RecursiveTask<Boolean>
+    {
 
         private final NodeKey myKey;
         private final PrinterBuffer myPrinter = OldIntegerSolver.this.isDebug() ? new CharacterRing().asPrinter() : null;
 
-        private BranchAndBoundNodeTask(final NodeKey key) {
+        private BranchAndBoundNodeTask(final NodeKey key)
+        {
 
             super();
 
             myKey = key;
         }
 
-        BranchAndBoundNodeTask() {
+        BranchAndBoundNodeTask()
+        {
 
             super();
 
@@ -72,43 +76,54 @@ public final class OldIntegerSolver extends IntegerSolver {
         }
 
         @Override
-        public String toString() {
+        public String toString()
+        {
             return myKey.toString();
         }
 
-        private boolean isNodeDebug() {
+        private boolean isNodeDebug()
+        {
             return (myPrinter != null) && OldIntegerSolver.this.isDebug();
         }
 
         @Override
-        protected Boolean compute() {
+        protected Boolean compute()
+        {
 
-            if (this.isNodeDebug()) {
+            if (this.isNodeDebug())
+            {
                 myPrinter.println("\nBranch&Bound Node");
                 myPrinter.println(myKey.toString());
                 myPrinter.println(OldIntegerSolver.this.toString());
             }
 
-            if (!OldIntegerSolver.this.isIterationAllowed() || !OldIntegerSolver.this.isIterationNecessary()) {
-                if (this.isNodeDebug()) {
+            if (!OldIntegerSolver.this.isIterationAllowed() || !OldIntegerSolver.this.isIterationNecessary())
+            {
+                if (this.isNodeDebug())
+                {
                     myPrinter.println("Reached iterations or time limit - stop!");
                     this.flush(OldIntegerSolver.this.getModel().options.debug_appender);
                 }
                 return false;
             }
 
-            if (OldIntegerSolver.this.isExplored(this)) {
-                if (this.isNodeDebug()) {
+            if (OldIntegerSolver.this.isExplored(this))
+            {
+                if (this.isNodeDebug())
+                {
                     myPrinter.println("Node previously explored!");
                     this.flush(OldIntegerSolver.this.getModel().options.debug_appender);
                 }
                 return true;
-            } else {
+            } else
+            {
                 OldIntegerSolver.this.markAsExplored(this);
             }
 
-            if (!OldIntegerSolver.this.isGoodEnoughToContinueBranching(myKey.objective)) {
-                if (this.isNodeDebug()) {
+            if (!OldIntegerSolver.this.isGoodEnoughToContinueBranching(myKey.objective))
+            {
+                if (this.isNodeDebug())
+                {
                     myPrinter.println("No longer a relevant node!");
                     this.flush(OldIntegerSolver.this.getModel().options.debug_appender);
                 }
@@ -119,18 +134,22 @@ public final class OldIntegerSolver extends IntegerSolver {
             final Result tmpBestResultSoFar = OldIntegerSolver.this.getBestResultSoFar();
             final Optimisation.Result tmpNodeResult = tmpNodeModel.solve(tmpBestResultSoFar);
 
-            if (this.isNodeDebug()) {
+            if (this.isNodeDebug())
+            {
                 myPrinter.println("Node Result: {}", tmpNodeResult);
             }
 
             OldIntegerSolver.this.incrementIterationsCount();
 
-            if (tmpNodeResult.getState().isOptimal()) {
-                if (this.isNodeDebug()) {
+            if (tmpNodeResult.getState().isOptimal())
+            {
+                if (this.isNodeDebug())
+                {
                     myPrinter.println("Node solved to optimality!");
                 }
 
-                if (OldIntegerSolver.this.options.validate && !tmpNodeModel.validate(tmpNodeResult)) {
+                if (OldIntegerSolver.this.options.validate && !tmpNodeModel.validate(tmpNodeResult))
+                {
                     // This should not be possible. There is a bug somewhere.
                     myPrinter.println("Node solution marked as OPTIMAL, but is actually INVALID/INFEASIBLE/FAILED. Stop this branch!");
                     myPrinter.println("Lower bounds: {}", Arrays.toString(myKey.getLowerBounds()));
@@ -146,8 +165,10 @@ public final class OldIntegerSolver extends IntegerSolver {
                 final int tmpBranchIndex = OldIntegerSolver.this.identifyNonIntegerVariable(tmpNodeResult, myKey);
                 final double tmpSolutionValue = OldIntegerSolver.this.evaluateFunction(tmpNodeResult);
 
-                if (tmpBranchIndex == -1) {
-                    if (this.isNodeDebug()) {
+                if (tmpBranchIndex == -1)
+                {
+                    if (this.isNodeDebug())
+                    {
                         myPrinter.println("Integer solution! Store it among the others, and stop this branch!");
                     }
 
@@ -155,7 +176,8 @@ public final class OldIntegerSolver extends IntegerSolver {
 
                     OldIntegerSolver.this.markInteger(myKey, tmpIntegerSolutionResult);
 
-                    if (this.isNodeDebug()) {
+                    if (this.isNodeDebug())
+                    {
                         myPrinter.println(OldIntegerSolver.this.getBestResultSoFar().toString());
                         BasicLogger.debug();
                         BasicLogger.debug(OldIntegerSolver.this.toString());
@@ -163,15 +185,19 @@ public final class OldIntegerSolver extends IntegerSolver {
                         this.flush(OldIntegerSolver.this.getModel().options.debug_appender);
                     }
 
-                } else {
-                    if (this.isNodeDebug()) {
+                } else
+                {
+                    if (this.isNodeDebug())
+                    {
                         myPrinter.println("Not an Integer Solution: " + tmpSolutionValue);
                     }
 
                     final double tmpVariableValue = tmpNodeResult.doubleValue(OldIntegerSolver.this.getGlobalIndex(tmpBranchIndex));
 
-                    if (OldIntegerSolver.this.isGoodEnoughToContinueBranching(tmpSolutionValue)) {
-                        if (this.isNodeDebug()) {
+                    if (OldIntegerSolver.this.isGoodEnoughToContinueBranching(tmpSolutionValue))
+                    {
+                        if (this.isNodeDebug())
+                        {
                             myPrinter.println("Still hope, branching on {} @ {} >>> {}", tmpBranchIndex, tmpVariableValue,
                                     tmpNodeModel.getVariable(OldIntegerSolver.this.getGlobalIndex(tmpBranchIndex)));
                             this.flush(OldIntegerSolver.this.getModel().options.debug_appender);
@@ -203,16 +229,20 @@ public final class OldIntegerSolver extends IntegerSolver {
                         //                            return false;
                         //                        }
 
-                    } else {
-                        if (this.isNodeDebug()) {
+                    } else
+                    {
+                        if (this.isNodeDebug())
+                        {
                             myPrinter.println("Can't find better integer solutions - stop this branch!");
                             this.flush(OldIntegerSolver.this.getModel().options.debug_appender);
                         }
                     }
                 }
 
-            } else {
-                if (this.isNodeDebug()) {
+            } else
+            {
+                if (this.isNodeDebug())
+                {
                     myPrinter.println("Failed to solve node problem - stop this branch!");
                     this.flush(OldIntegerSolver.this.getModel().options.debug_appender);
                 }
@@ -221,40 +251,48 @@ public final class OldIntegerSolver extends IntegerSolver {
             return true;
         }
 
-        BranchAndBoundNodeTask createLowerBranch(final int branchIndex, final double nonIntegerValue, final double parentObjectiveValue) {
+        BranchAndBoundNodeTask createLowerBranch(final int branchIndex, final double nonIntegerValue, final double parentObjectiveValue)
+        {
 
             final NodeKey tmpKey = myKey.createLowerBranch(branchIndex, nonIntegerValue, parentObjectiveValue);
 
             return new BranchAndBoundNodeTask(tmpKey);
         }
 
-        BranchAndBoundNodeTask createUpperBranch(final int branchIndex, final double nonIntegerValue, final double parentObjectiveValue) {
+        BranchAndBoundNodeTask createUpperBranch(final int branchIndex, final double nonIntegerValue, final double parentObjectiveValue)
+        {
 
             final NodeKey tmpKey = myKey.createUpperBranch(branchIndex, nonIntegerValue, parentObjectiveValue);
 
             return new BranchAndBoundNodeTask(tmpKey);
         }
 
-        void flush(final BasicLogger.Printer receiver) {
-            if ((myPrinter != null) && (receiver != null)) {
+        void flush(final BasicLogger.Printer receiver)
+        {
+            if ((myPrinter != null) && (receiver != null))
+            {
                 myPrinter.flush(receiver);
             }
         }
 
-        NodeKey getKey() {
+        NodeKey getKey()
+        {
             return myKey;
         }
 
-        ExpressionsBasedModel getModel() {
+        ExpressionsBasedModel getModel()
+        {
 
             final ExpressionsBasedModel retVal = OldIntegerSolver.this.getModel().relax(false);
 
-            if (retVal.options.debug_appender != null) {
+            if (retVal.options.debug_appender != null)
+            {
                 retVal.options.debug_appender = new CharacterRing().asPrinter();
             }
 
             final int[] tmpIntegerIndeces = OldIntegerSolver.this.getIntegerIndeces();
-            for (int i = 0; i < tmpIntegerIndeces.length; i++) {
+            for (int i = 0; i < tmpIntegerIndeces.length; i++)
+            {
 
                 final BigDecimal tmpLowerBound = myKey.getLowerBound(i);
                 final BigDecimal tmpUpperBound = myKey.getUpperBound(i);
@@ -264,23 +302,29 @@ public final class OldIntegerSolver extends IntegerSolver {
                 tmpVariable.upper(tmpUpperBound);
 
                 BigDecimal tmpValue = tmpVariable.getValue();
-                if (tmpValue != null) {
-                    if (tmpLowerBound != null) {
+                if (tmpValue != null)
+                {
+                    if (tmpLowerBound != null)
+                    {
                         tmpValue = tmpValue.max(tmpLowerBound);
                     }
-                    if (tmpUpperBound != null) {
+                    if (tmpUpperBound != null)
+                    {
                         tmpValue = tmpValue.min(tmpUpperBound);
                     }
                     tmpVariable.setValue(tmpValue);
                 }
             }
 
-            if (OldIntegerSolver.this.isIntegerSolutionFound()) {
+            if (OldIntegerSolver.this.isIntegerSolutionFound())
+            {
                 final double tmpBestValue = OldIntegerSolver.this.getBestResultSoFar().getValue();
                 final double tmpGap = PrimitiveFunction.ABS.invoke(tmpBestValue * OldIntegerSolver.this.options.mip_gap);
-                if (retVal.isMinimisation()) {
+                if (retVal.isMinimisation())
+                {
                     retVal.limitObjective(null, TypeUtils.toBigDecimal(tmpBestValue - tmpGap, OldIntegerSolver.this.options.problem));
-                } else {
+                } else
+                {
                     retVal.limitObjective(TypeUtils.toBigDecimal(tmpBestValue + tmpGap, OldIntegerSolver.this.options.problem), null);
                 }
             }
@@ -293,7 +337,8 @@ public final class OldIntegerSolver extends IntegerSolver {
     private final Set<NodeKey> myExploredNodes = Collections.synchronizedSet(new HashSet<NodeKey>());
     private final int[] myIntegerIndeces;
 
-    OldIntegerSolver(final ExpressionsBasedModel model, final Options solverOptions) {
+    OldIntegerSolver(final ExpressionsBasedModel model, final Options solverOptions)
+    {
 
         super(model, solverOptions);
 
@@ -301,7 +346,8 @@ public final class OldIntegerSolver extends IntegerSolver {
 
         myIntegerIndeces = new int[tmpIntegerVariables.size()];
 
-        for (int i = 0; i < myIntegerIndeces.length; i++) {
+        for (int i = 0; i < myIntegerIndeces.length; i++)
+        {
             final Variable tmpVariable = tmpIntegerVariables.get(i);
             myIntegerIndeces[i] = model.indexOf(tmpVariable);
         }
@@ -309,11 +355,13 @@ public final class OldIntegerSolver extends IntegerSolver {
         //options.debug = System.out;
     }
 
-    public Result solve(final Result kickStarter) {
+    public Result solve(final Result kickStarter)
+    {
 
         // Must verify that it actually is an integer solution
         // The kickStarter may be user-supplied
-        if ((kickStarter != null) && kickStarter.getState().isFeasible() && this.getModel().validate(kickStarter)) {
+        if ((kickStarter != null) && kickStarter.getState().isFeasible() && this.getModel().validate(kickStarter))
+        {
             this.markInteger(null, kickStarter);
         }
 
@@ -325,19 +373,25 @@ public final class OldIntegerSolver extends IntegerSolver {
 
         Optimisation.Result retVal = this.getBestResultSoFar();
 
-        if (retVal.getState().isFeasible()) {
+        if (retVal.getState().isFeasible())
+        {
 
-            if (tmpNormalExit) {
+            if (tmpNormalExit)
+            {
                 retVal = new Optimisation.Result(State.OPTIMAL, retVal);
-            } else {
+            } else
+            {
                 retVal = new Optimisation.Result(State.FEASIBLE, retVal);
             }
 
-        } else {
+        } else
+        {
 
-            if (tmpNormalExit) {
+            if (tmpNormalExit)
+            {
                 retVal = new Optimisation.Result(State.INFEASIBLE, retVal);
-            } else {
+            } else
+            {
                 retVal = new Optimisation.Result(State.FAILED, retVal);
             }
         }
@@ -346,39 +400,47 @@ public final class OldIntegerSolver extends IntegerSolver {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return TypeUtils.format("Solutions={} Nodes/Iterations={} {}", this.countIntegerSolutions(), this.countExploredNodes(), this.getBestResultSoFar());
     }
 
     @Override
-    protected MatrixStore<Double> extractSolution() {
+    protected MatrixStore<Double> extractSolution()
+    {
         return PrimitiveDenseStore.FACTORY.columns(this.getBestResultSoFar());
     }
 
     @Override
-    protected boolean initialise(final Result kickStarter) {
+    protected boolean initialise(final Result kickStarter)
+    {
         return true;
     }
 
     @Override
-    protected boolean needsAnotherIteration() {
+    protected boolean needsAnotherIteration()
+    {
         return !this.getState().isOptimal();
     }
 
     @Override
-    protected boolean validate() {
+    protected boolean validate()
+    {
 
         boolean retVal = true;
         this.setState(State.VALID);
 
-        try {
+        try
+        {
 
-            if (!(retVal = this.getModel().validate())) {
+            if (!(retVal = this.getModel().validate()))
+            {
                 retVal = false;
                 this.setState(State.INVALID);
             }
 
-        } catch (final Exception ex) {
+        } catch (final Exception ex)
+        {
 
             retVal = false;
             this.setState(State.FAILED);
@@ -387,19 +449,23 @@ public final class OldIntegerSolver extends IntegerSolver {
         return retVal;
     }
 
-    int countExploredNodes() {
+    int countExploredNodes()
+    {
         return myExploredNodes.size();
     }
 
-    int getGlobalIndex(final int integerIndex) {
+    int getGlobalIndex(final int integerIndex)
+    {
         return myIntegerIndeces[integerIndex];
     }
 
-    final int[] getIntegerIndeces() {
+    final int[] getIntegerIndeces()
+    {
         return myIntegerIndeces;
     }
 
-    int identifyNonIntegerVariable(final Optimisation.Result nodeResult, final NodeKey nodeKey) {
+    int identifyNonIntegerVariable(final Optimisation.Result nodeResult, final NodeKey nodeKey)
+    {
 
         final MatrixStore<Double> tmpGradient = this.getGradient(AccessUtils.asPrimitive1D(nodeResult));
 
@@ -408,12 +474,14 @@ public final class OldIntegerSolver extends IntegerSolver {
         double tmpFraction, tmpWeightedFraction;
         double tmpMaxFraction = ZERO;
 
-        for (int i = 0; i < myIntegerIndeces.length; i++) {
+        for (int i = 0; i < myIntegerIndeces.length; i++)
+        {
 
             tmpFraction = nodeKey.getFraction(i, nodeResult.doubleValue(myIntegerIndeces[i]));
             tmpWeightedFraction = tmpFraction * (PrimitiveMath.ONE + PrimitiveFunction.ABS.invoke(tmpGradient.doubleValue(myIntegerIndeces[i])));
 
-            if ((tmpWeightedFraction > tmpMaxFraction) && !options.integer.isZero(tmpWeightedFraction)) {
+            if ((tmpWeightedFraction > tmpMaxFraction) && !options.integer.isZero(tmpWeightedFraction))
+            {
                 retVal = i;
                 tmpMaxFraction = tmpWeightedFraction;
             }
@@ -423,11 +491,13 @@ public final class OldIntegerSolver extends IntegerSolver {
         return retVal;
     }
 
-    boolean isExplored(final BranchAndBoundNodeTask aNodeTask) {
+    boolean isExplored(final BranchAndBoundNodeTask aNodeTask)
+    {
         return myExploredNodes.contains(aNodeTask.getKey());
     }
 
-    void markAsExplored(final BranchAndBoundNodeTask aNodeTask) {
+    void markAsExplored(final BranchAndBoundNodeTask aNodeTask)
+    {
         myExploredNodes.add(aNodeTask.getKey());
     }
 

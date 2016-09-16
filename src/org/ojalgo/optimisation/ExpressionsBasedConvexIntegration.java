@@ -23,9 +23,11 @@ package org.ojalgo.optimisation;
 
 import org.ojalgo.optimisation.convex.ConvexSolver;
 
-final class ExpressionsBasedConvexIntegration extends ExpressionsBasedModel.Integration<ConvexSolver> {
+final class ExpressionsBasedConvexIntegration extends ExpressionsBasedModel.Integration<ConvexSolver>
+{
 
-    public ConvexSolver build(final ExpressionsBasedModel model) {
+    public ConvexSolver build(final ExpressionsBasedModel model)
+    {
 
         final ConvexSolver.Builder tmpBuilder = ConvexSolver.getBuilder();
 
@@ -34,7 +36,8 @@ final class ExpressionsBasedConvexIntegration extends ExpressionsBasedModel.Inte
         return tmpBuilder.build(model.options);
     }
 
-    public boolean isCapable(final ExpressionsBasedModel model) {
+    public boolean isCapable(final ExpressionsBasedModel model)
+    {
         return !model.isAnyVariableInteger() && model.isAnyExpressionQuadratic();
     }
 

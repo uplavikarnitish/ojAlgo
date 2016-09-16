@@ -29,20 +29,24 @@ import org.ojalgo.array.PrimitiveArray;
 import org.ojalgo.constant.PrimitiveMath;
 import org.ojalgo.function.PrimitiveFunction;
 
-public final class SampleSet implements Access1D<Double> {
+public final class SampleSet implements Access1D<Double>
+{
 
-    public static SampleSet make(final RandomNumber randomNumber, final int size) {
+    public static SampleSet make(final RandomNumber randomNumber, final int size)
+    {
 
         final PrimitiveArray retVal = PrimitiveArray.make(size);
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++)
+        {
             retVal.data[i] = randomNumber.doubleValue();
         }
 
         return new SampleSet(retVal);
     }
 
-    public static SampleSet wrap(final Access1D<?> someSamples) {
+    public static SampleSet wrap(final Access1D<?> someSamples)
+    {
         return new SampleSet(someSamples);
     }
 
@@ -52,14 +56,16 @@ public final class SampleSet implements Access1D<Double> {
     private transient double myVariance = Double.NaN;
 
     @SuppressWarnings("unused")
-    private SampleSet() {
+    private SampleSet()
+    {
 
         this(null);
 
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    SampleSet(final Access1D<?> samples) {
+    SampleSet(final Access1D<?> samples)
+    {
 
         super();
 
@@ -68,29 +74,35 @@ public final class SampleSet implements Access1D<Double> {
         this.reset();
     }
 
-    public long count() {
+    public long count()
+    {
         return mySamples.count();
     }
 
-    public double doubleValue(final long index) {
+    public double doubleValue(final long index)
+    {
         return mySamples.doubleValue(index);
     }
 
-    public Double get(final int index) {
+    public Double get(final int index)
+    {
         return mySamples.doubleValue(index);
     }
 
-    public Double get(final long index) {
+    public Double get(final long index)
+    {
         return mySamples.doubleValue(index);
     }
 
-    public double getCorrelation(final SampleSet anotherSampleSet) {
+    public double getCorrelation(final SampleSet anotherSampleSet)
+    {
 
         double retVal = PrimitiveMath.ZERO;
 
         final double tmpCovar = this.getCovariance(anotherSampleSet);
 
-        if (tmpCovar != PrimitiveMath.ZERO) {
+        if (tmpCovar != PrimitiveMath.ZERO)
+        {
 
             final double tmpThisStdDev = this.getStandardDeviation();
             final double tmpThatStdDev = anotherSampleSet.getStandardDeviation();
@@ -101,7 +113,8 @@ public final class SampleSet implements Access1D<Double> {
         return retVal;
     }
 
-    public double getCovariance(final SampleSet anotherSampleSet) {
+    public double getCovariance(final SampleSet anotherSampleSet)
+    {
 
         double retVal = PrimitiveMath.ZERO;
 
@@ -112,7 +125,8 @@ public final class SampleSet implements Access1D<Double> {
 
         final Access1D<?> tmpValues = anotherSampleSet.getSamples();
 
-        for (int i = 0; i < tmpCount; i++) {
+        for (int i = 0; i < tmpCount; i++)
+        {
             retVal += (mySamples.doubleValue(i) - tmpThisMean) * (tmpValues.doubleValue(i) - tmpThatMean);
         }
 
@@ -121,49 +135,58 @@ public final class SampleSet implements Access1D<Double> {
         return retVal;
     }
 
-    public double getFirst() {
+    public double getFirst()
+    {
         return mySamples.doubleValue(0);
     }
 
     /**
      * max(abs(value))
      */
-    public double getLargest() {
+    public double getLargest()
+    {
 
         double retVal = PrimitiveMath.ZERO;
 
-        for (int i = 0; i < mySamples.count(); i++) {
+        for (int i = 0; i < mySamples.count(); i++)
+        {
             retVal = PrimitiveFunction.MAX.invoke(retVal, PrimitiveFunction.ABS.invoke(mySamples.doubleValue(i)));
         }
 
         return retVal;
     }
 
-    public double getLast() {
+    public double getLast()
+    {
         return mySamples.doubleValue(mySamples.count() - 1L);
     }
 
     /**
      * max(value)
      */
-    public double getMaximum() {
+    public double getMaximum()
+    {
 
         double retVal = PrimitiveMath.NEGATIVE_INFINITY;
 
-        for (int i = 0; i < mySamples.count(); i++) {
+        for (int i = 0; i < mySamples.count(); i++)
+        {
             retVal = PrimitiveFunction.MAX.invoke(retVal, mySamples.doubleValue(i));
         }
 
         return retVal;
     }
 
-    public double getMean() {
+    public double getMean()
+    {
 
-        if (Double.isNaN(myMean)) {
+        if (Double.isNaN(myMean))
+        {
 
             myMean = PrimitiveMath.ZERO;
 
-            for (int i = 0; i < mySamples.count(); i++) {
+            for (int i = 0; i < mySamples.count(); i++)
+            {
                 myMean += mySamples.doubleValue(i);
             }
 
@@ -176,9 +199,11 @@ public final class SampleSet implements Access1D<Double> {
     /**
      * Potentially expensive as it requires copying and sorting of the samples.
      */
-    public double getMedian() {
+    public double getMedian()
+    {
 
-        if (Double.isNaN(myMedian)) {
+        if (Double.isNaN(myMedian))
+        {
 
             final double[] tmpCopy = mySamples.toRawCopy1D();
 
@@ -193,11 +218,13 @@ public final class SampleSet implements Access1D<Double> {
     /**
      * min(value)
      */
-    public double getMinimum() {
+    public double getMinimum()
+    {
 
         double retVal = PrimitiveMath.POSITIVE_INFINITY;
 
-        for (int i = 0; i < mySamples.count(); i++) {
+        for (int i = 0; i < mySamples.count(); i++)
+        {
             retVal = PrimitiveFunction.MIN.invoke(retVal, mySamples.doubleValue(i));
         }
 
@@ -207,18 +234,21 @@ public final class SampleSet implements Access1D<Double> {
     /**
      * min(abs(value))
      */
-    public double getSmallest() {
+    public double getSmallest()
+    {
 
         double retVal = PrimitiveMath.POSITIVE_INFINITY;
 
-        for (int i = 0; i < mySamples.count(); i++) {
+        for (int i = 0; i < mySamples.count(); i++)
+        {
             retVal = PrimitiveFunction.MIN.invoke(retVal, PrimitiveFunction.ABS.invoke(mySamples.doubleValue(i)));
         }
 
         return retVal;
     }
 
-    public double getStandardDeviation() {
+    public double getStandardDeviation()
+    {
         return PrimitiveFunction.SQRT.invoke(this.getVariance());
     }
 
@@ -231,7 +261,8 @@ public final class SampleSet implements Access1D<Double> {
      *
      * @see <a href="https://en.wikipedia.org/wiki/Standard_score">WikipediA</a>
      */
-    public double getStandardScore(final long index) {
+    public double getStandardScore(final long index)
+    {
         return (this.doubleValue(index) - this.getMean()) / this.getStandardDeviation();
     }
 
@@ -243,14 +274,16 @@ public final class SampleSet implements Access1D<Double> {
      *
      * @see <a href="http://en.wikipedia.org/wiki/Sum_of_squares">WikipediA</a>
      */
-    public double getSumOfSquares() {
+    public double getSumOfSquares()
+    {
 
         double retVal = PrimitiveMath.ZERO;
 
         final double tmpMean = this.getMean();
         double tmpVal;
         final int tmpLimit = (int) mySamples.count();
-        for (int i = 0; i < tmpLimit; i++) {
+        for (int i = 0; i < tmpLimit; i++)
+        {
             tmpVal = mySamples.doubleValue(i) - tmpMean;
             retVal += (tmpVal * tmpVal);
         }
@@ -261,13 +294,16 @@ public final class SampleSet implements Access1D<Double> {
     /**
      * @return A copy of the internal data (the samples).
      */
-    public double[] getValues() {
+    public double[] getValues()
+    {
         return mySamples.toRawCopy1D();
     }
 
-    public double getVariance() {
+    public double getVariance()
+    {
 
-        if (Double.isNaN(myVariance)) {
+        if (Double.isNaN(myVariance))
+        {
             myVariance = this.getCovariance(this);
         }
 
@@ -277,31 +313,36 @@ public final class SampleSet implements Access1D<Double> {
     /**
      * If the underlying {@link Access1D} of samples is modified you must reset the sample set before using.
      */
-    public void reset() {
+    public void reset()
+    {
         myMean = Double.NaN;
         myMedian = Double.NaN;
         myVariance = Double.NaN;
     }
 
-    public int size() {
+    public int size()
+    {
         return (int) mySamples.count();
     }
 
     /**
      * Replace the underlying samples and reset the sample set.
      */
-    public void swap(final SampleSet samples) {
+    public void swap(final SampleSet samples)
+    {
         mySamples = samples;
         this.reset();
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "Sample set Size=" + this.count() + ", Mean=" + this.getMean() + ", Median=" + this.getMedian() + ", Var=" + this.getVariance() + ", StdDev="
                 + this.getStandardDeviation() + ", Min=" + this.getMinimum() + ", Max=" + this.getMaximum();
     }
 
-    Access1D<?> getSamples() {
+    Access1D<?> getSamples()
+    {
         return mySamples;
     }
 

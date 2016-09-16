@@ -36,13 +36,15 @@ import org.ojalgo.random.Poisson;
  *
  * @author apete
  */
-public final class PoissonProcess extends AbstractProcess<Poisson> {
+public final class PoissonProcess extends AbstractProcess<Poisson>
+{
 
     private static final Poisson GENERATOR = new Poisson();
 
     private final double myRate; // lambda, intensity
 
-    protected PoissonProcess(final double rate) {
+    protected PoissonProcess(final double rate)
+    {
 
         super();
 
@@ -51,48 +53,57 @@ public final class PoissonProcess extends AbstractProcess<Poisson> {
         myRate = rate;
     }
 
-    public Poisson getDistribution(final double evaluationPoint) {
+    public Poisson getDistribution(final double evaluationPoint)
+    {
         return new Poisson(myRate * evaluationPoint);
     }
 
-    public Exponential getTimeBetweenConsecutiveEvents() {
+    public Exponential getTimeBetweenConsecutiveEvents()
+    {
         return new Exponential(myRate);
     }
 
     @Override
-    protected double getNormalisedRandomIncrement() {
+    protected double getNormalisedRandomIncrement()
+    {
         return GENERATOR.doubleValue();
     }
 
     @Override
-    protected double step(final double currentValue, final double stepSize, final double normalisedRandomIncrement) {
+    protected double step(final double currentValue, final double stepSize, final double normalisedRandomIncrement)
+    {
         final double retVal = currentValue + ((myRate * stepSize) * normalisedRandomIncrement);
         this.setValue(retVal);
         return retVal;
     }
 
     @Override
-    double getExpected(final double stepSize) {
+    double getExpected(final double stepSize)
+    {
         return myRate * stepSize;
     }
 
     @Override
-    double getLowerConfidenceQuantile(final double stepSize, final double confidence) {
+    double getLowerConfidenceQuantile(final double stepSize, final double confidence)
+    {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    double getStandardDeviation(final double stepSize) {
+    double getStandardDeviation(final double stepSize)
+    {
         return PrimitiveFunction.SQRT.invoke(myRate * stepSize);
     }
 
     @Override
-    double getUpperConfidenceQuantile(final double stepSize, final double confidence) {
+    double getUpperConfidenceQuantile(final double stepSize, final double confidence)
+    {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    double getVariance(final double stepSize) {
+    double getVariance(final double stepSize)
+    {
         return myRate * stepSize;
     }
 

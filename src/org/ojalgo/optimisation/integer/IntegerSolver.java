@@ -32,9 +32,11 @@ import org.ojalgo.optimisation.ExpressionsBasedModel;
 import org.ojalgo.optimisation.GenericSolver;
 import org.ojalgo.optimisation.Optimisation;
 
-public abstract class IntegerSolver extends GenericSolver {
+public abstract class IntegerSolver extends GenericSolver
+{
 
-    final class NodeStatistics {
+    final class NodeStatistics
+    {
 
         private final AtomicInteger myAbandoned = new AtomicInteger();
         /**
@@ -62,18 +64,21 @@ public abstract class IntegerSolver extends GenericSolver {
          */
         private final AtomicInteger myInteger = new AtomicInteger();
 
-        public int countCreated() {
+        public int countCreated()
+        {
             return myTruncated.get() + myAbandoned.get() + this.countEvaluated();
         }
 
-        public int countEvaluated() {
+        public int countEvaluated()
+        {
             return myInfeasible.get() + myFailed.get() + myExhausted.get() + myBranched.get();
         }
 
         /**
          * Node never evaluated (sub/node problem never solved)
          */
-        boolean abandoned() {
+        boolean abandoned()
+        {
             myAbandoned.incrementAndGet();
             return true;
         }
@@ -82,7 +87,8 @@ public abstract class IntegerSolver extends GenericSolver {
          * Node evaluated, but solution not integer. Estimate still possible to find better integer solution.
          * Created 2 new branches.
          */
-        boolean branched() {
+        boolean branched()
+        {
             myBranched.incrementAndGet();
             return true;
         }
@@ -90,22 +96,26 @@ public abstract class IntegerSolver extends GenericSolver {
         /**
          * Node evaluated, but solution not integer. Estimate NOT possible to find better integer solution.
          */
-        boolean exhausted() {
+        boolean exhausted()
+        {
             myExhausted.incrementAndGet();
             return true;
         }
 
-        boolean failed(final boolean state) {
+        boolean failed(final boolean state)
+        {
             myFailed.incrementAndGet();
             return state;
         }
 
-        boolean infeasible() {
+        boolean infeasible()
+        {
             myInfeasible.incrementAndGet();
             return true;
         }
 
-        boolean infeasible(final boolean state) {
+        boolean infeasible(final boolean state)
+        {
             myInfeasible.incrementAndGet();
             return state;
         }
@@ -113,19 +123,22 @@ public abstract class IntegerSolver extends GenericSolver {
         /**
          * Integer solution found
          */
-        boolean integer() {
+        boolean integer()
+        {
             myInteger.incrementAndGet();
             return true;
         }
 
-        boolean truncated(final boolean state) {
+        boolean truncated(final boolean state)
+        {
             myTruncated.incrementAndGet();
             return state;
         }
 
     }
 
-    public static IntegerSolver make(final ExpressionsBasedModel model) {
+    public static IntegerSolver make(final ExpressionsBasedModel model)
+    {
         return new OldIntegerSolver(model, model.options);
         //return new NewIntegerSolver(model, model.options);
     }
@@ -140,11 +153,13 @@ public abstract class IntegerSolver extends GenericSolver {
     private final ExpressionsBasedModel myModel;
 
     @SuppressWarnings("unused")
-    private IntegerSolver(final Options solverOptions) {
+    private IntegerSolver(final Options solverOptions)
+    {
         this(null, solverOptions);
     }
 
-    protected IntegerSolver(final ExpressionsBasedModel model, final Options solverOptions) {
+    protected IntegerSolver(final ExpressionsBasedModel model, final Options solverOptions)
+    {
 
         super(solverOptions);
 
@@ -154,28 +169,35 @@ public abstract class IntegerSolver extends GenericSolver {
         myMinimisation = model.isMinimisation();
     }
 
-    protected int countIntegerSolutions() {
+    protected int countIntegerSolutions()
+    {
         return myIntegerSolutionsCount.intValue();
     }
 
     @Override
-    protected final double evaluateFunction(final Access1D<?> solution) {
-        if ((myFunction != null) && (solution != null) && (myFunction.arity() == solution.count())) {
+    protected final double evaluateFunction(final Access1D<?> solution)
+    {
+        if ((myFunction != null) && (solution != null) && (myFunction.arity() == solution.count()))
+        {
             return myFunction.invoke(AccessUtils.asPrimitive1D(solution));
-        } else {
+        } else
+        {
             return Double.NaN;
         }
     }
 
-    protected Optimisation.Result getBestResultSoFar() {
+    protected Optimisation.Result getBestResultSoFar()
+    {
 
         final Result tmpCurrentlyTheBest = myBestResultSoFar;
 
-        if (tmpCurrentlyTheBest != null) {
+        if (tmpCurrentlyTheBest != null)
+        {
 
             return tmpCurrentlyTheBest;
 
-        } else {
+        } else
+        {
 
             final State tmpSate = State.INVALID;
             final double tmpValue = myMinimisation ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
@@ -185,51 +207,63 @@ public abstract class IntegerSolver extends GenericSolver {
         }
     }
 
-    protected final MatrixStore<Double> getGradient(final Access1D<Double> solution) {
+    protected final MatrixStore<Double> getGradient(final Access1D<Double> solution)
+    {
         return myFunction.getGradient(solution);
     }
 
-    protected final ExpressionsBasedModel getModel() {
+    protected final ExpressionsBasedModel getModel()
+    {
         return myModel;
     }
 
-    protected final boolean isFunctionSet() {
+    protected final boolean isFunctionSet()
+    {
         return myFunction != null;
     }
 
-    protected boolean isGoodEnoughToContinueBranching(final double nonIntegerValue) {
+    protected boolean isGoodEnoughToContinueBranching(final double nonIntegerValue)
+    {
 
         final Result tmpCurrentlyTheBest = myBestResultSoFar;
 
-        if ((tmpCurrentlyTheBest == null) || Double.isNaN(nonIntegerValue)) {
+        if ((tmpCurrentlyTheBest == null) || Double.isNaN(nonIntegerValue))
+        {
 
             return true;
 
-        } else {
+        } else
+        {
 
             final double tmpBestIntegerValue = tmpCurrentlyTheBest.getValue();
 
             final double tmpMipGap = PrimitiveFunction.ABS.invoke(tmpBestIntegerValue - nonIntegerValue) / PrimitiveFunction.ABS.invoke(tmpBestIntegerValue);
 
-            if (myMinimisation) {
+            if (myMinimisation)
+            {
                 return (nonIntegerValue < tmpBestIntegerValue) && (tmpMipGap > options.mip_gap);
-            } else {
+            } else
+            {
                 return (nonIntegerValue > tmpBestIntegerValue) && (tmpMipGap > options.mip_gap);
             }
         }
     }
 
-    protected boolean isIntegerSolutionFound() {
+    protected boolean isIntegerSolutionFound()
+    {
         return myBestResultSoFar != null;
     }
 
-    protected boolean isIterationNecessary() {
+    protected boolean isIterationNecessary()
+    {
 
-        if (myBestResultSoFar == null) {
+        if (myBestResultSoFar == null)
+        {
 
             return true;
 
-        } else {
+        } else
+        {
 
             final int tmpIterations = this.countIterations();
             final long tmpTime = this.countTime();
@@ -238,23 +272,28 @@ public abstract class IntegerSolver extends GenericSolver {
         }
     }
 
-    protected final boolean isModelSet() {
+    protected final boolean isModelSet()
+    {
         return myModel != null;
     }
 
-    protected synchronized void markInteger(final NodeKey node, final Optimisation.Result result) {
+    protected synchronized void markInteger(final NodeKey node, final Optimisation.Result result)
+    {
 
         final Optimisation.Result tmpCurrentlyTheBest = myBestResultSoFar;
 
-        if (tmpCurrentlyTheBest == null) {
+        if (tmpCurrentlyTheBest == null)
+        {
 
             myBestResultSoFar = result;
 
-        } else if (myMinimisation && (result.getValue() < tmpCurrentlyTheBest.getValue())) {
+        } else if (myMinimisation && (result.getValue() < tmpCurrentlyTheBest.getValue()))
+        {
 
             myBestResultSoFar = result;
 
-        } else if (!myMinimisation && (result.getValue() > tmpCurrentlyTheBest.getValue())) {
+        } else if (!myMinimisation && (result.getValue() > tmpCurrentlyTheBest.getValue()))
+        {
 
             myBestResultSoFar = result;
         }

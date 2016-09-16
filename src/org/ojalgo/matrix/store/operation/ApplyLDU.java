@@ -25,15 +25,18 @@ import java.math.BigDecimal;
 
 import org.ojalgo.scalar.ComplexNumber;
 
-public final class ApplyLDU extends MatrixOperation {
+public final class ApplyLDU extends MatrixOperation
+{
 
     public static final ApplyLDU SETUP = new ApplyLDU();
 
     public static int THRESHOLD = 256;
 
     public static void invoke(final BigDecimal[] data, final int structure, final int firstColumn, final int columnLimit, final BigDecimal[] multipliers,
-            final int iterationPoint, final boolean hermitian) {
-        for (int j = firstColumn; j < columnLimit; j++) {
+                              final int iterationPoint, final boolean hermitian)
+    {
+        for (int j = firstColumn; j < columnLimit; j++)
+        {
             final BigDecimal tmpScalar = hermitian ? multipliers[j] : data[iterationPoint + (j * structure)];
             final int tmpFirstRow = hermitian ? j : iterationPoint + 1;
             SubtractScaledVector.invoke(data, j * structure, multipliers, 0, tmpScalar, tmpFirstRow, structure);
@@ -41,8 +44,10 @@ public final class ApplyLDU extends MatrixOperation {
     }
 
     public static void invoke(final ComplexNumber[] data, final int structure, final int firstColumn, final int columnLimit, final ComplexNumber[] multipliers,
-            final int iterationPoint, final boolean hermitian) {
-        for (int j = firstColumn; j < columnLimit; j++) {
+                              final int iterationPoint, final boolean hermitian)
+    {
+        for (int j = firstColumn; j < columnLimit; j++)
+        {
             final ComplexNumber tmpScalar = hermitian ? multipliers[j].conjugate() : data[iterationPoint + (j * structure)];
             final int tmpFirstRow = hermitian ? j : iterationPoint + 1;
             SubtractScaledVector.invoke(data, j * structure, multipliers, 0, tmpScalar, tmpFirstRow, structure);
@@ -50,20 +55,24 @@ public final class ApplyLDU extends MatrixOperation {
     }
 
     public static void invoke(final double[] data, final int structure, final int firstColumn, final int columnLimit, final double[] multipliers,
-            final int iterationPoint, final boolean hermitian) {
-        for (int j = firstColumn; j < columnLimit; j++) {
+                              final int iterationPoint, final boolean hermitian)
+    {
+        for (int j = firstColumn; j < columnLimit; j++)
+        {
             final double tmpScalar = hermitian ? multipliers[j] : data[iterationPoint + (j * structure)];
             final int tmpFirstRow = hermitian ? j : iterationPoint + 1;
             SubtractScaledVector.invoke(data, j * structure, multipliers, 0, tmpScalar, tmpFirstRow, structure);
         }
     }
 
-    private ApplyLDU() {
+    private ApplyLDU()
+    {
         super();
     }
 
     @Override
-    public int threshold() {
+    public int threshold()
+    {
         return THRESHOLD;
     }
 

@@ -43,19 +43,24 @@ import org.ojalgo.matrix.task.TaskException;
 import org.ojalgo.scalar.ComplexNumber;
 import org.ojalgo.type.context.NumberContext;
 
-abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N> implements MatrixDecomposition.Solver<N> {
+abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N> implements MatrixDecomposition.Solver<N>
+{
 
-    static final class Big extends HermitianEvD<BigDecimal> {
+    static final class Big extends HermitianEvD<BigDecimal>
+    {
 
-        Big() {
+        Big()
+        {
             super(BigDenseStore.FACTORY, new TridiagonalDecomposition.Big());
         }
 
     }
 
-    static final class Complex extends HermitianEvD<ComplexNumber> {
+    static final class Complex extends HermitianEvD<ComplexNumber>
+    {
 
-        Complex() {
+        Complex()
+        {
             super(ComplexDenseStore.FACTORY, new TridiagonalDecomposition.Complex());
         }
 
@@ -63,20 +68,22 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
 
     /**
      * Eigenvalues and eigenvectors of a real matrix.
-     * <P>
+     * <p>
      * If A is symmetric, then A = V*D*V' where the eigenvalue matrix D is diagonal and the eigenvector matrix
      * V is orthogonal. I.e. A = V.times(D.times(V.transpose())) and V.times(V.transpose()) equals the
      * identity matrix.
-     * <P>
+     * <p>
      * If A is not symmetric, then the eigenvalue matrix D is block diagonal with the real eigenvalues in
      * 1-by-1 blocks and any complex eigenvalues, lambda + i*mu, in 2-by-2 blocks, [lambda, mu; -mu, lambda].
      * The columns of V represent the eigenvectors in the sense that A*V = V*D, i.e. A.times(V) equals
      * V.times(D). The matrix V may be badly conditioned, or even singular, so the validity of the equation A
      * = V*D*inverse(V) depends upon V.cond().
      **/
-    static final class Primitive extends HermitianEvD<Double> {
+    static final class Primitive extends HermitianEvD<Double>
+    {
 
-        Primitive() {
+        Primitive()
+        {
             super(PrimitiveDenseStore.FACTORY, new TridiagonalDecomposition.Primitive());
         }
 
@@ -84,7 +91,8 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
 
     private static final double EPSILON = PrimitiveFunction.POW.invoke(2.0, -52.0);
 
-    static Array1D<Double> toDiagonal(final DiagonalAccess<?> aTridiagonal, final DecompositionStore<?> transformationAccumulator) {
+    static Array1D<Double> toDiagonal(final DiagonalAccess<?> aTridiagonal, final DecompositionStore<?> transformationAccumulator)
+    {
 
         //   BasicLogger.logDebug("Tridiagonal={}", aTridiagonal.toString());
 
@@ -96,7 +104,8 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
         final double[] tmpMainDiagData = tmpMainDiagonal.toRawCopy1D(); // Actually unnecessary to copy
         final double[] tmpOffDiagData = new double[tmpDim]; // The algorith needs the array to be the same length as the main diagonal
         final int tmpLength = tmpSubdiagonal.size();
-        for (int i = 0; i < tmpLength; i++) {
+        for (int i = 0; i < tmpLength; i++)
+        {
             tmpOffDiagData[i] = tmpSubdiagonal.doubleValue(i);
         }
 
@@ -114,7 +123,8 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
 
         int m;
         // Main loop
-        for (int l = 0; l < tmpDim; l++) {
+        for (int l = 0; l < tmpDim; l++)
+        {
 
             //BasicLogger.logDebug("Loop l=" + l, tmpMainDiagonal, tmpOffDiagonal);
 
@@ -123,17 +133,21 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
             tmpLocalEpsilon = EPSILON * tmpMagnitude;
 
             m = l;
-            while (m < tmpDim) {
-                if (PrimitiveFunction.ABS.invoke(tmpOffDiagData[m]) <= tmpLocalEpsilon) {
+            while (m < tmpDim)
+            {
+                if (PrimitiveFunction.ABS.invoke(tmpOffDiagData[m]) <= tmpLocalEpsilon)
+                {
                     break;
                 }
                 m++;
             }
 
             // If m == l, aMainDiagonal[l] is an eigenvalue, otherwise, iterate.
-            if (m > l) {
+            if (m > l)
+            {
 
-                do {
+                do
+                {
 
                     final double tmp1Ml0 = tmpMainDiagData[l]; // (l,l)
                     final double tmp1Ml1 = tmpMainDiagData[l + 1]; // (l+1,l+1)
@@ -143,7 +157,8 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
 
                     double p = (tmp1Ml1 - tmp1Ml0) / (tmp1Sl0 + tmp1Sl0);
                     double r = PrimitiveFunction.HYPOT.invoke(p, PrimitiveMath.ONE);
-                    if (p < 0) {
+                    if (p < 0)
+                    {
                         r = -r;
                     }
 
@@ -152,7 +167,8 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
                     final double tmp2Sl1 = tmpOffDiagData[l + 1]; // (l+1,l) and (l,l+1)
 
                     tmpShiftIncr = tmp1Ml0 - tmp2Ml0;
-                    for (int i = l + 2; i < tmpDim; i++) {
+                    for (int i = l + 2; i < tmpDim; i++)
+                    {
                         tmpMainDiagData[i] -= tmpShiftIncr;
                     }
                     tmpShift += tmpShiftIncr;
@@ -171,7 +187,8 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
 
                     p = tmpMainDiagData[m]; // Initiate p
                     //      BasicLogger.logDebug("m={} l={}", m, l);
-                    for (int i = m - 1; i >= l; i--) {
+                    for (int i = m - 1; i >= l; i--)
+                    {
 
                         final double tmp1Mi0 = tmpMainDiagData[i];
                         final double tmp1Si0 = tmpOffDiagData[i];
@@ -195,7 +212,8 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
                         //aV.transformRight(new Rotation.Primitive(i, i + 1, tmpRotCos, tmpRotSin));
 
                         //BasicLogger.logDebug("low={} high={} cos={} sin={}", i, i + 1, tmpRotCos, tmpRotSin);
-                        if (transformationAccumulator != null) {
+                        if (transformationAccumulator != null)
+                        {
                             transformationAccumulator.rotateRight(i, i + 1, tmpRotCos, tmpRotSin);
                         }
 
@@ -235,22 +253,26 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
     private final TridiagonalDecomposition<N> myTridiagonal;
 
     @SuppressWarnings("unused")
-    private HermitianEvD(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> aFactory) {
+    private HermitianEvD(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> aFactory)
+    {
         this(aFactory, null);
     }
 
-    protected HermitianEvD(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> aFactory, final TridiagonalDecomposition<N> aTridiagonal) {
+    protected HermitianEvD(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> aFactory, final TridiagonalDecomposition<N> aTridiagonal)
+    {
 
         super(aFactory);
 
         myTridiagonal = aTridiagonal;
     }
 
-    public final boolean equals(final MatrixStore<N> aStore, final NumberContext context) {
+    public final boolean equals(final MatrixStore<N> aStore, final NumberContext context)
+    {
         return MatrixUtils.equals(aStore, this, context);
     }
 
-    public final N getDeterminant() {
+    public final N getDeterminant()
+    {
 
         final AggregatorFunction<ComplexNumber> tmpVisitor = ComplexAggregator.getSet().product();
 
@@ -259,9 +281,11 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
         return this.scalar().cast(tmpVisitor.getNumber());
     }
 
-    public final MatrixStore<N> getInverse() {
+    public final MatrixStore<N> getInverse()
+    {
 
-        if (myInverse == null) {
+        if (myInverse == null)
+        {
 
             final MatrixStore<N> tmpV = this.getV();
             final MatrixStore<N> tmpD = this.getD();
@@ -273,10 +297,13 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
             final N tmpZero = this.scalar().zero().getNumber();
             final BinaryFunction<N> tmpDivide = this.function().divide();
 
-            for (int i = 0; i < tmpDim; i++) {
-                if (tmpD.isSmall(i, i, PrimitiveMath.ONE)) {
+            for (int i = 0; i < tmpDim; i++)
+            {
+                if (tmpD.isSmall(i, i, PrimitiveMath.ONE))
+                {
                     tmpMtrx.fillRow(i, 0, tmpZero);
-                } else {
+                } else
+                {
                     tmpMtrx.modifyRow(i, 0, tmpDivide.second(tmpD.get(i, i)));
                 }
             }
@@ -287,9 +314,11 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
         return myInverse;
     }
 
-    public final MatrixStore<N> getInverse(final DecompositionStore<N> preallocated) {
+    public final MatrixStore<N> getInverse(final DecompositionStore<N> preallocated)
+    {
 
-        if (myInverse == null) {
+        if (myInverse == null)
+        {
 
             final MatrixStore<N> tmpV = this.getV();
             final MatrixStore<N> tmpD = this.getD();
@@ -303,10 +332,13 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
             final N tmpZero = this.scalar().zero().getNumber();
             final BinaryFunction<N> tmpDivide = this.function().divide();
 
-            for (int i = 0; i < tmpDim; i++) {
-                if (tmpD.isSmall(i, i, PrimitiveMath.ONE)) {
+            for (int i = 0; i < tmpDim; i++)
+            {
+                if (tmpD.isSmall(i, i, PrimitiveMath.ONE))
+                {
                     tmpMtrx.fillRow(i, 0, tmpZero);
-                } else {
+                } else
+                {
                     tmpMtrx.modifyRow(i, 0, tmpDivide.second(tmpD.get(i, i)));
                 }
             }
@@ -317,7 +349,8 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
         return myInverse;
     }
 
-    public final ComplexNumber getTrace() {
+    public final ComplexNumber getTrace()
+    {
 
         final AggregatorFunction<ComplexNumber> tmpVisitor = ComplexAggregator.getSet().sum();
 
@@ -326,47 +359,59 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
         return tmpVisitor.getNumber();
     }
 
-    public final MatrixStore<N> invert(final Access2D<?> original) throws TaskException {
+    public final MatrixStore<N> invert(final Access2D<?> original) throws TaskException
+    {
         this.decompose(this.wrap(original));
-        if (this.isSolvable()) {
+        if (this.isSolvable())
+        {
             return this.getInverse();
-        } else {
+        } else
+        {
             throw TaskException.newNotInvertible();
         }
     }
 
-    public final MatrixStore<N> invert(final Access2D<?> original, final DecompositionStore<N> preallocated) throws TaskException {
+    public final MatrixStore<N> invert(final Access2D<?> original, final DecompositionStore<N> preallocated) throws TaskException
+    {
         this.decompose(this.wrap(original));
-        if (this.isSolvable()) {
+        if (this.isSolvable())
+        {
             return this.getInverse(preallocated);
-        } else {
+        } else
+        {
             throw TaskException.newNotInvertible();
         }
     }
 
-    public final boolean isHermitian() {
+    public final boolean isHermitian()
+    {
         return true;
     }
 
-    public final boolean isOrdered() {
+    public final boolean isOrdered()
+    {
         return true;
     }
 
-    public final boolean isSolvable() {
+    public final boolean isSolvable()
+    {
         return this.isComputed() && this.isHermitian();
     }
 
-    public DecompositionStore<N> preallocate(final Structure2D template) {
+    public DecompositionStore<N> preallocate(final Structure2D template)
+    {
         final long tmpCountRows = template.countRows();
         return this.allocate(tmpCountRows, tmpCountRows);
     }
 
-    public DecompositionStore<N> preallocate(final Structure2D templateBody, final Structure2D templateRHS) {
+    public DecompositionStore<N> preallocate(final Structure2D templateBody, final Structure2D templateRHS)
+    {
         return this.allocate(templateRHS.countRows(), templateRHS.countColumns());
     }
 
     @Override
-    public void reset() {
+    public void reset()
+    {
 
         super.reset();
 
@@ -375,44 +420,54 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
         myInverse = null;
     }
 
-    public MatrixStore<N> solve(final Access2D<?> body, final Access2D<?> rhs) throws TaskException {
+    public MatrixStore<N> solve(final Access2D<?> body, final Access2D<?> rhs) throws TaskException
+    {
 
         this.decompose(this.wrap(body));
 
-        if (this.isSolvable()) {
+        if (this.isSolvable())
+        {
             return this.solve(this.wrap(rhs));
-        } else {
+        } else
+        {
             throw TaskException.newNotSolvable();
         }
     }
 
-    public MatrixStore<N> solve(final Access2D<?> body, final Access2D<?> rhs, final DecompositionStore<N> preallocated) throws TaskException {
+    public MatrixStore<N> solve(final Access2D<?> body, final Access2D<?> rhs, final DecompositionStore<N> preallocated) throws TaskException
+    {
 
         this.decompose(this.wrap(body));
 
-        if (this.isSolvable()) {
+        if (this.isSolvable())
+        {
             return this.solve(rhs, preallocated);
-        } else {
+        } else
+        {
             throw TaskException.newNotSolvable();
         }
     }
 
-    public final MatrixStore<N> solve(final ElementsSupplier<N> rhs) {
+    public final MatrixStore<N> solve(final ElementsSupplier<N> rhs)
+    {
         return this.getInverse().multiply(rhs.get());
     }
 
-    public final MatrixStore<N> solve(final ElementsSupplier<N> rhs, final DecompositionStore<N> preallocated) {
+    public final MatrixStore<N> solve(final ElementsSupplier<N> rhs, final DecompositionStore<N> preallocated)
+    {
         preallocated.fillByMultiplying(this.getInverse(), rhs.get());
         return preallocated;
     }
 
     @Override
-    protected final boolean doNonsymmetric(final ElementsSupplier<N> aMtrx, final boolean eigenvaluesOnly) {
+    protected final boolean doNonsymmetric(final ElementsSupplier<N> aMtrx, final boolean eigenvaluesOnly)
+    {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    protected final boolean doSymmetric(final ElementsSupplier<N> aMtrx, final boolean eigenvaluesOnly) {
+    protected final boolean doSymmetric(final ElementsSupplier<N> aMtrx, final boolean eigenvaluesOnly)
+    {
 
         final int tmpDim = (int) aMtrx.countRows();
 
@@ -428,31 +483,37 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
 
         final Array1D<Double> tmpDiagonal = myDiagonalValues = HermitianEvD.toDiagonal(tmpTridiagonal, tmpV);
 
-        for (int ij1 = 0; ij1 < (tmpDim - 1); ij1++) {
+        for (int ij1 = 0; ij1 < (tmpDim - 1); ij1++)
+        {
             final double tmpValue1 = tmpDiagonal.doubleValue(ij1);
 
             int ij2 = ij1;
             double tmpValue2 = tmpValue1;
 
-            for (int ij2exp = ij1 + 1; ij2exp < tmpDim; ij2exp++) {
+            for (int ij2exp = ij1 + 1; ij2exp < tmpDim; ij2exp++)
+            {
                 final double tmpValue2exp = tmpDiagonal.doubleValue(ij2exp);
 
-                if ((PrimitiveFunction.ABS.invoke(tmpValue2exp) > PrimitiveFunction.ABS.invoke(tmpValue1)) || ((PrimitiveFunction.ABS.invoke(tmpValue2exp) == PrimitiveFunction.ABS.invoke(tmpValue1)) && (tmpValue2exp > tmpValue1))) {
+                if ((PrimitiveFunction.ABS.invoke(tmpValue2exp) > PrimitiveFunction.ABS.invoke(tmpValue1)) || ((PrimitiveFunction.ABS.invoke(tmpValue2exp) == PrimitiveFunction.ABS.invoke(tmpValue1)) && (tmpValue2exp > tmpValue1)))
+                {
                     ij2 = ij2exp;
                     tmpValue2 = tmpValue2exp;
                 }
             }
 
-            if (ij2 != ij1) {
+            if (ij2 != ij1)
+            {
                 tmpDiagonal.set(ij1, tmpValue2);
                 tmpDiagonal.set(ij2, tmpValue1);
-                if (tmpV != null) {
+                if (tmpV != null)
+                {
                     tmpV.exchangeColumns(ij1, ij2);
                 }
             }
         }
 
-        if (!eigenvaluesOnly) {
+        if (!eigenvaluesOnly)
+        {
             this.setV(tmpV);
         }
 
@@ -460,19 +521,22 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
     }
 
     @Override
-    protected MatrixStore<N> makeD() {
+    protected MatrixStore<N> makeD()
+    {
         final DiagonalAccess<Double> tmpDiagonal = new DiagonalAccess<>(myDiagonalValues, null, null, PrimitiveMath.ZERO);
         return this.wrap(tmpDiagonal).diagonal(false).get();
     }
 
     @Override
-    protected Array1D<ComplexNumber> makeEigenvalues() {
+    protected Array1D<ComplexNumber> makeEigenvalues()
+    {
 
         final int tmpDim = myDiagonalValues.size();
 
         final Array1D<ComplexNumber> retVal = Array1D.COMPLEX.makeZero(tmpDim);
 
-        for (int ij = 0; ij < tmpDim; ij++) {
+        for (int ij = 0; ij < tmpDim; ij++)
+        {
             retVal.set(ij, ComplexNumber.valueOf(myDiagonalValues.doubleValue(ij)));
         }
 
@@ -480,7 +544,8 @@ abstract class HermitianEvD<N extends Number> extends EigenvalueDecomposition<N>
     }
 
     @Override
-    protected MatrixStore<N> makeV() {
+    protected MatrixStore<N> makeV()
+    {
         return myTridiagonal.getQ();
     }
 

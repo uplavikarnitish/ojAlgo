@@ -36,17 +36,21 @@ import org.ojalgo.type.TypeUtils;
  *
  * @author apete
  */
-public class BigPolynomial extends AbstractPolynomial<BigDecimal> {
+public class BigPolynomial extends AbstractPolynomial<BigDecimal>
+{
 
-    public BigPolynomial(final int aDegree) {
+    public BigPolynomial(final int aDegree)
+    {
         super(Array1D.BIG.makeZero(aDegree + 1));
     }
 
-    BigPolynomial(final Array1D<BigDecimal> someCoefficients) {
+    BigPolynomial(final Array1D<BigDecimal> someCoefficients)
+    {
         super(someCoefficients);
     }
 
-    public void estimate(final Access1D<?> x, final Access1D<?> y) {
+    public void estimate(final Access1D<?> x, final Access1D<?> y)
+    {
 
         final int tmpRowDim = (int) Math.min(x.count(), y.count());
         final int tmpColDim = this.size();
@@ -54,13 +58,15 @@ public class BigPolynomial extends AbstractPolynomial<BigDecimal> {
         final PhysicalStore<BigDecimal> tmpBody = BigDenseStore.FACTORY.makeZero(tmpRowDim, tmpColDim);
         final PhysicalStore<BigDecimal> tmpRHS = BigDenseStore.FACTORY.makeZero(tmpRowDim, 1);
 
-        for (int i = 0; i < tmpRowDim; i++) {
+        for (int i = 0; i < tmpRowDim; i++)
+        {
 
             BigDecimal tmpX = BigMath.ONE;
             final BigDecimal tmpXfactor = TypeUtils.toBigDecimal(x.get(i));
             final BigDecimal tmpY = TypeUtils.toBigDecimal(y.get(i));
 
-            for (int j = 0; j < tmpColDim; j++) {
+            for (int j = 0; j < tmpColDim; j++)
+            {
                 tmpBody.set(i, j, tmpX);
                 tmpX = tmpX.multiply(tmpXfactor);
             }
@@ -72,7 +78,8 @@ public class BigPolynomial extends AbstractPolynomial<BigDecimal> {
         this.set(tmpQR.solve(tmpRHS));
     }
 
-    public BigDecimal integrate(final BigDecimal fromPoint, final BigDecimal toPoint) {
+    public BigDecimal integrate(final BigDecimal fromPoint, final BigDecimal toPoint)
+    {
 
         final PolynomialFunction<BigDecimal> tmpPrim = this.buildPrimitive();
 
@@ -82,43 +89,52 @@ public class BigPolynomial extends AbstractPolynomial<BigDecimal> {
         return tmpToVal.subtract(tmpFromVal);
     }
 
-    public BigDecimal invoke(final BigDecimal arg) {
+    public BigDecimal invoke(final BigDecimal arg)
+    {
 
         int tmpPower = this.degree();
 
         BigDecimal retVal = this.get(tmpPower);
 
-        while (--tmpPower >= 0) {
+        while (--tmpPower >= 0)
+        {
             retVal = this.get(tmpPower).add(arg.multiply(retVal));
         }
 
         return retVal;
     }
 
-    public void set(final Access1D<?> someCoefficient) {
+    public void set(final Access1D<?> someCoefficient)
+    {
         final int tmpLimit = (int) Math.min(this.count(), someCoefficient.count());
-        for (int p = 0; p < tmpLimit; p++) {
+        for (int p = 0; p < tmpLimit; p++)
+        {
             this.set(p, TypeUtils.toBigDecimal(someCoefficient.get(p)));
         }
     }
 
     @Override
-    protected BigDecimal getDerivativeFactor(final int aPower) {
+    protected BigDecimal getDerivativeFactor(final int aPower)
+    {
         final int tmpNextIndex = aPower + 1;
         return this.get(tmpNextIndex).multiply(new BigDecimal(tmpNextIndex));
     }
 
     @Override
-    protected BigDecimal getPrimitiveFactor(final int aPower) {
-        if (aPower <= 0) {
+    protected BigDecimal getPrimitiveFactor(final int aPower)
+    {
+        if (aPower <= 0)
+        {
             return BigMath.ZERO;
-        } else {
+        } else
+        {
             return this.get(aPower - 1).divide(new BigDecimal(aPower));
         }
     }
 
     @Override
-    protected AbstractPolynomial<BigDecimal> makeInstance(final int aSize) {
+    protected AbstractPolynomial<BigDecimal> makeInstance(final int aSize)
+    {
         return new BigPolynomial(Array1D.BIG.makeZero(aSize));
     }
 

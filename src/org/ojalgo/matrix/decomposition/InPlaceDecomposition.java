@@ -24,52 +24,64 @@ package org.ojalgo.matrix.decomposition;
 import org.ojalgo.matrix.store.ElementsSupplier;
 import org.ojalgo.matrix.store.MatrixStore;
 
-abstract class InPlaceDecomposition<N extends Number> extends GenericDecomposition<N> {
+abstract class InPlaceDecomposition<N extends Number> extends GenericDecomposition<N>
+{
 
     private int myColDim;
     private DecompositionStore<N> myInPlace;
     private int myRowDim;
 
-    protected InPlaceDecomposition(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> aFactory) {
+    protected InPlaceDecomposition(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> aFactory)
+    {
         super(aFactory);
     }
 
-    public final MatrixStore<N> getInverse() {
+    public final MatrixStore<N> getInverse()
+    {
         return this.getInverse(this.allocate(this.getRowDim(), this.getRowDim()));
     }
 
-    public MatrixStore<N> getInverse(final DecompositionStore<N> preallocated) {
+    public MatrixStore<N> getInverse(final DecompositionStore<N> preallocated)
+    {
         throw new UnsupportedOperationException();
     }
 
-    protected final int getColDim() {
+    protected final int getColDim()
+    {
         return myColDim;
     }
 
-    protected final DecompositionStore<N> getInPlace() {
+    protected final DecompositionStore<N> getInPlace()
+    {
         return myInPlace;
     }
 
-    protected final int getMaxDim() {
+    protected final int getMaxDim()
+    {
         return Math.max(myRowDim, myColDim);
     }
 
-    protected final int getMinDim() {
+    protected final int getMinDim()
+    {
         return Math.min(myRowDim, myColDim);
     }
 
-    protected final int getRowDim() {
+    protected final int getRowDim()
+    {
         return myRowDim;
     }
 
-    final DecompositionStore<N> setInPlace(final ElementsSupplier<N> matrix) {
+    final DecompositionStore<N> setInPlace(final ElementsSupplier<N> matrix)
+    {
 
         final int tmpRowDim = (int) matrix.countRows();
         final int tmpColDim = (int) matrix.countColumns();
 
-        if ((myInPlace != null) && (myRowDim == tmpRowDim) && (myColDim == tmpColDim)) {
+        if ((myInPlace != null) && (myRowDim == tmpRowDim) && (myColDim == tmpColDim))
+        {
 
-        } else {
+        } else
+        {
 
             myInPlace = this.makeZero(tmpRowDim, tmpColDim);
 

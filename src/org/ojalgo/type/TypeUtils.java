@@ -31,7 +31,8 @@ import org.ojalgo.netio.ASCII;
 import org.ojalgo.scalar.Scalar;
 import org.ojalgo.type.context.NumberContext;
 
-public abstract class TypeUtils {
+public abstract class TypeUtils
+{
 
     public static final long HOURS_PER_CENTURY = 876582L; // 365.2425 * 24 * 100 = 876582)
     public static final long MILLIS_PER_HOUR = 60L * 60L * 1000L;
@@ -42,9 +43,11 @@ public abstract class TypeUtils {
     /**
      * Compatible with slf4j. {} in the message pattern will be replaced by the arguments.
      */
-    public static String format(final String messagePattern, final Object... args) {
+    public static String format(final String messagePattern, final Object... args)
+    {
 
-        if (messagePattern == null) {
+        if (messagePattern == null)
+        {
             return null;
         }
 
@@ -56,14 +59,17 @@ public abstract class TypeUtils {
 
         final StringBuilder retVal = new StringBuilder(tmpPatternSize + (tmpArgsCount * 20));
 
-        for (int a = 0; a < tmpArgsCount; a++) {
+        for (int a = 0; a < tmpArgsCount; a++)
+        {
 
             tmpLimit = messagePattern.indexOf(TypeUtils.START, tmpFirst);
 
-            if (tmpLimit == -1) {
+            if (tmpLimit == -1)
+            {
                 retVal.append(ASCII.SP);
                 retVal.append(args[a]);
-            } else {
+            } else
+            {
                 retVal.append(messagePattern.substring(tmpFirst, tmpLimit));
                 retVal.append(args[a]);
                 tmpFirst = tmpLimit + 2;
@@ -75,7 +81,8 @@ public abstract class TypeUtils {
         return retVal.toString();
     }
 
-    public static final GregorianCalendar getHundredYearsAgo() {
+    public static final GregorianCalendar getHundredYearsAgo()
+    {
 
         final GregorianCalendar retVal = new GregorianCalendar();
 
@@ -84,7 +91,8 @@ public abstract class TypeUtils {
         return retVal;
     }
 
-    public static final GregorianCalendar getThousandYearsAgo() {
+    public static final GregorianCalendar getThousandYearsAgo()
+    {
 
         final GregorianCalendar retVal = new GregorianCalendar();
 
@@ -93,7 +101,8 @@ public abstract class TypeUtils {
         return retVal;
     }
 
-    public static final GregorianCalendar getThousandYearsFromNow() {
+    public static final GregorianCalendar getThousandYearsFromNow()
+    {
 
         final GregorianCalendar retVal = new GregorianCalendar();
 
@@ -109,37 +118,48 @@ public abstract class TypeUtils {
      * @param number Any Number
      * @return A corresponding BigDecimal
      */
-    public static BigDecimal toBigDecimal(final Number number) {
+    public static BigDecimal toBigDecimal(final Number number)
+    {
 
         BigDecimal retVal = BigMath.ZERO;
 
-        if (number != null) {
+        if (number != null)
+        {
 
-            if (number instanceof BigDecimal) {
+            if (number instanceof BigDecimal)
+            {
 
                 retVal = (BigDecimal) number;
 
-            } else if (number instanceof Scalar<?>) {
+            } else if (number instanceof Scalar<?>)
+            {
 
                 retVal = ((Scalar<?>) number).toBigDecimal();
 
-            } else {
+            } else
+            {
 
-                try {
+                try
+                {
 
                     retVal = new BigDecimal(number.toString());
 
-                } catch (final NumberFormatException exception) {
+                } catch (final NumberFormatException exception)
+                {
 
                     final double tmpVal = number.doubleValue();
 
-                    if (Double.isNaN(tmpVal)) {
+                    if (Double.isNaN(tmpVal))
+                    {
                         retVal = BigMath.ZERO;
-                    } else if (Double.isInfinite(tmpVal) && (tmpVal > PrimitiveMath.ZERO)) {
+                    } else if (Double.isInfinite(tmpVal) && (tmpVal > PrimitiveMath.ZERO))
+                    {
                         retVal = BigMath.VERY_POSITIVE;
-                    } else if (Double.isInfinite(tmpVal) && (tmpVal < PrimitiveMath.ZERO)) {
+                    } else if (Double.isInfinite(tmpVal) && (tmpVal < PrimitiveMath.ZERO))
+                    {
                         retVal = BigMath.VERY_NEGATIVE;
-                    } else {
+                    } else
+                    {
                         retVal = BigDecimal.valueOf(tmpVal);
                     }
                 }
@@ -149,18 +169,21 @@ public abstract class TypeUtils {
         return retVal;
     }
 
-    public static BigDecimal toBigDecimal(final Number number, final NumberContext context) {
+    public static BigDecimal toBigDecimal(final Number number, final NumberContext context)
+    {
         return context.enforce(TypeUtils.toBigDecimal(number));
     }
 
     /**
      * The way colours are specified in html pages.
      */
-    public static String toHexString(final int colour) {
+    public static String toHexString(final int colour)
+    {
         return HEX + Integer.toHexString(colour).substring(2);
     }
 
-    static boolean isSameDate(final Calendar aCal1, final Calendar aCal2) {
+    static boolean isSameDate(final Calendar aCal1, final Calendar aCal2)
+    {
 
         boolean retVal = aCal1.get(Calendar.YEAR) == aCal2.get(Calendar.YEAR);
 
@@ -171,7 +194,8 @@ public abstract class TypeUtils {
         return retVal;
     }
 
-    static boolean isSameTime(final Calendar aCal1, final Calendar aCal2) {
+    static boolean isSameTime(final Calendar aCal1, final Calendar aCal2)
+    {
 
         boolean retVal = aCal1.get(Calendar.HOUR_OF_DAY) == aCal2.get(Calendar.HOUR_OF_DAY);
 
@@ -182,7 +206,8 @@ public abstract class TypeUtils {
         return retVal;
     }
 
-    protected TypeUtils() {
+    protected TypeUtils()
+    {
         super();
     }
 

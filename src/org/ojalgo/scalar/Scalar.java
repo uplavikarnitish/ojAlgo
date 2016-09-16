@@ -48,9 +48,11 @@ import org.ojalgo.type.context.NumberContext;
  * @author apete
  */
 public interface Scalar<N extends Number> extends AccessScalar<N>, Field<Scalar<N>>, NormedVectorSpace<Scalar<N>, N>, ScalarOperation.Addition<Scalar<N>, N>,
-        ScalarOperation.Division<Scalar<N>, N>, ScalarOperation.Subtraction<Scalar<N>, N>, Comparable<N> {
+        ScalarOperation.Division<Scalar<N>, N>, ScalarOperation.Subtraction<Scalar<N>, N>, Comparable<N>
+{
 
-    public interface Factory<N extends Number> {
+    public interface Factory<N extends Number>
+    {
 
         N cast(double value);
 
@@ -72,32 +74,37 @@ public interface Scalar<N extends Number> extends AccessScalar<N>, Field<Scalar<
 
     }
 
-    default Scalar<N> add(final Scalar<N> addend) {
+    default Scalar<N> add(final Scalar<N> addend)
+    {
         return this.add(addend.getNumber());
     }
 
-    default Scalar<N> divide(final Scalar<N> divisor) {
+    default Scalar<N> divide(final Scalar<N> divisor)
+    {
         return this.divide(divisor.getNumber());
     }
 
     /**
      * @return true if this is equal to its own norm, modulus or absolute value (non-negative real part and no
-     *         imaginary part); otherwise false.
+     * imaginary part); otherwise false.
      * @see #isAbsolute()
      */
     boolean isAbsolute();
 
-    default Scalar<N> multiply(final Scalar<N> multiplicand) {
+    default Scalar<N> multiply(final Scalar<N> multiplicand)
+    {
         return this.multiply(multiplicand.getNumber());
     }
 
-    default Scalar<N> subtract(final Scalar<N> subtrahend) {
+    default Scalar<N> subtract(final Scalar<N> subtrahend)
+    {
         return this.subtract(subtrahend.getNumber());
     }
 
     BigDecimal toBigDecimal();
 
-    default String toPlainString(final NumberContext context) {
+    default String toPlainString(final NumberContext context)
+    {
         return context.enforce(this.toBigDecimal()).toPlainString();
     }
 

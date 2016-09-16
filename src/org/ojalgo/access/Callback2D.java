@@ -24,23 +24,27 @@ package org.ojalgo.access;
 import org.ojalgo.function.FunctionUtils;
 
 @FunctionalInterface
-public interface Callback2D<N extends Number> {
+public interface Callback2D<N extends Number>
+{
 
-    static <N extends Number> void onMatching(final Access2D<N> from, final Callback2D<N> through, final Mutate2D to) {
+    static <N extends Number> void onMatching(final Access2D<N> from, final Callback2D<N> through, final Mutate2D to)
+    {
         final long tmpRows = FunctionUtils.min(from.countRows(), to.countRows());
         final long tmpCols = FunctionUtils.min(from.countColumns(), to.countColumns());
-        for (long j = 0L; j < tmpCols; j++) {
-            for (long i = 0L; i < tmpRows; i++) {
+        for (long j = 0L; j < tmpCols; j++)
+        {
+            for (long i = 0L; i < tmpRows; i++)
+            {
                 through.call(from, i, j, to);
             }
         }
     }
 
     /**
-     * @param r Reader/Accessor/Getter
+     * @param r   Reader/Accessor/Getter
      * @param row Row
      * @param col Column
-     * @param w Writer/Mutator/Setter
+     * @param w   Writer/Mutator/Setter
      */
     void call(Access2D<N> r, long row, long col, Mutate2D w);
 

@@ -21,11 +21,13 @@
  */
 package org.ojalgo.matrix.store;
 
-final class OffsetStore<N extends Number> extends SelectingStore<N> {
+final class OffsetStore<N extends Number> extends SelectingStore<N>
+{
 
     private final int myRowOffset, myColumnOffset; // origin/offset
 
-    OffsetStore(final MatrixStore<N> base, final int rowOffset, final int columnOffset) {
+    OffsetStore(final MatrixStore<N> base, final int rowOffset, final int columnOffset)
+    {
 
         super(base, (int) base.countRows() - rowOffset, (int) base.countColumns() - columnOffset);
 
@@ -33,11 +35,13 @@ final class OffsetStore<N extends Number> extends SelectingStore<N> {
         myColumnOffset = columnOffset;
     }
 
-    public double doubleValue(final long row, final long col) {
+    public double doubleValue(final long row, final long col)
+    {
         return this.getBase().doubleValue(myRowOffset + row, myColumnOffset + col);
     }
 
-    public N get(final long row, final long col) {
+    public N get(final long row, final long col)
+    {
         return this.getBase().get(myRowOffset + row, myColumnOffset + col);
     }
 

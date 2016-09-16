@@ -36,7 +36,8 @@ import org.ojalgo.type.format.DatePart;
 import org.ojalgo.type.format.DateStyle;
 import org.ojalgo.type.format.NumberStyle;
 
-public abstract class StandardType {
+public abstract class StandardType
+{
 
     /**
      * <ul>
@@ -161,140 +162,171 @@ public abstract class StandardType {
     public static final StringContext TEXT = StandardType.string(0);
     public static final DateContext TIME = new DateContext(DatePart.TIME);
 
-    public static NumberContext amount(final Locale locale) {
+    public static NumberContext amount(final Locale locale)
+    {
         return NumberContext.getCurrency(locale);
     }
 
-    public static DateContext date() {
+    public static DateContext date()
+    {
         return DATE;
     }
 
-    public static NumberContext decimal032() {
+    public static NumberContext decimal032()
+    {
         return DECIMAL_032;
     }
 
-    public static NumberContext decimal064() {
+    public static NumberContext decimal064()
+    {
         return DECIMAL_064;
     }
 
-    public static NumberContext integer() {
+    public static NumberContext integer()
+    {
         return NumberContext.getInteger(Locale.getDefault());
     }
 
-    public static NumberContext percent(final Locale locale) {
+    public static NumberContext percent(final Locale locale)
+    {
         final NumberContext retVal = NumberContext.getPercent(locale);
         retVal.format(new BigDecimal("0.5000"));
         return retVal;
     }
 
-    public static StringContext string(final int length) {
+    public static StringContext string(final int length)
+    {
         return new StringContext(length);
     }
 
-    public static NumberContext wholePercentage() {
+    public static NumberContext wholePercentage()
+    {
         final NumberContext retVal = NumberContext.getPercent(2, Locale.getDefault());
         retVal.format(0.01);
         return retVal;
     }
 
-    protected StandardType() {
+    protected StandardType()
+    {
         super();
     }
 
     /**
      * {@linkplain #getQuantity()} * {@linkplain #getPrice()} = {@linkplain #getAmount()}
      */
-    public TypeContext<Number> getAmount() {
+    public TypeContext<Number> getAmount()
+    {
         return AMOUNT;
     }
 
-    public TypeContext<Boolean> getBoolean() {
+    public TypeContext<Boolean> getBoolean()
+    {
         return new BooleanContext();
     }
 
-    public TypeContext<Date> getDate() {
+    public TypeContext<Date> getDate()
+    {
         return DATE;
     }
 
-    public TypeContext<Number> getDecimal032() {
+    public TypeContext<Number> getDecimal032()
+    {
         return DECIMAL_032;
     }
 
-    public TypeContext<Number> getDecimal064() {
+    public TypeContext<Number> getDecimal064()
+    {
         return DECIMAL_064;
     }
 
-    public TypeContext<Number> getDecimal128() {
+    public TypeContext<Number> getDecimal128()
+    {
         return DECIMAL_128;
     }
 
-    public TypeContext<Number> getMath032() {
+    public TypeContext<Number> getMath032()
+    {
         return MATH_032;
     }
 
-    public TypeContext<Number> getMath064() {
+    public TypeContext<Number> getMath064()
+    {
         return MATH_064;
     }
 
-    public TypeContext<Number> getMath128() {
+    public TypeContext<Number> getMath128()
+    {
         return MATH_128;
     }
 
-    public TypeContext<Date> getMoment() {
+    public TypeContext<Date> getMoment()
+    {
         return DATETIME;
     }
 
-    public TypeContext<Number> getMoney() {
+    public TypeContext<Number> getMoney()
+    {
         return AMOUNT;
     }
 
-    public TypeContext<Number> getParameter() {
+    public TypeContext<Number> getParameter()
+    {
         return DECIMAL_064;
     }
 
-    public TypeContext<Number> getPercent() {
+    public TypeContext<Number> getPercent()
+    {
         return PERCENT;
     }
 
     /**
      * {@linkplain #getQuantity()} * {@linkplain #getPrice()} = {@linkplain #getAmount()}
      */
-    public TypeContext<Number> getPrice() {
+    public TypeContext<Number> getPrice()
+    {
         return PRICE;
     }
 
     /**
      * {@linkplain #getQuantity()} * {@linkplain #getPrice()} = {@linkplain #getAmount()}
      */
-    public TypeContext<Number> getQuantity() {
+    public TypeContext<Number> getQuantity()
+    {
         return QUANTITY;
     }
 
-    public TypeContext<String> getString1() {
+    public TypeContext<String> getString1()
+    {
         return STRING_1;
     }
 
-    public TypeContext<String> getString3() {
+    public TypeContext<String> getString3()
+    {
         return STRING_3;
     }
 
-    public TypeContext<String> getString9() {
+    public TypeContext<String> getString9()
+    {
         return STRING_9;
     }
 
-    public TypeContext<String> getStringM() {
+    public TypeContext<String> getStringM()
+    {
         return STRING_M;
     }
 
-    public TypeContext<String> getText() {
+    public TypeContext<String> getText()
+    {
         return TEXT;
     }
 
-    public TypeContext<Date> getTime() {
+    public TypeContext<Date> getTime()
+    {
         return TIME;
     }
 
-    public TypeContext<Date> getTimestamp() {
+    public TypeContext<Date> getTimestamp()
+    {
         return DATETIME;
     }
 

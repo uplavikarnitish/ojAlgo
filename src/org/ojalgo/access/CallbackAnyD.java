@@ -24,33 +24,38 @@ package org.ojalgo.access;
 import java.util.Arrays;
 
 @FunctionalInterface
-public interface CallbackAnyD<N extends Number> {
+public interface CallbackAnyD<N extends Number>
+{
 
-    static <N extends Number> void onMatching(final AccessAnyD<N> from, final CallbackAnyD<N> through, final MutateAnyD to) {
-    
+    static <N extends Number> void onMatching(final AccessAnyD<N> from, final CallbackAnyD<N> through, final MutateAnyD to)
+    {
+
         final long[] tmpShape = from.shape();
-    
-        if (Arrays.equals(tmpShape, to.shape())) {
+
+        if (Arrays.equals(tmpShape, to.shape()))
+        {
             throw new IllegalArgumentException("Must have the same shape!");
         }
-    
+
         final long[] tmpRef = new long[tmpShape.length];
-    
+
         final long tmpLimit = from.count();
-        for (long i = 0L; i < tmpLimit; i++) {
-    
+        for (long i = 0L; i < tmpLimit; i++)
+        {
+
             through.call(from, tmpRef, to);
-    
-            for (int j = tmpShape.length - 1; (j > 0) && ((++tmpRef[j] % tmpShape[j]) == 0); j++) {
-    
+
+            for (int j = tmpShape.length - 1; (j > 0) && ((++tmpRef[j] % tmpShape[j]) == 0); j++)
+            {
+
             }
         }
     }
 
     /**
-     * @param r Reader/Accessor/Getter
+     * @param r   Reader/Accessor/Getter
      * @param ref Element reference (indices)
-     * @param w Writer/Mutator/Setter
+     * @param w   Writer/Mutator/Setter
      */
     void call(AccessAnyD<N> r, long[] ref, MutateAnyD w);
 

@@ -30,18 +30,21 @@ import org.ojalgo.function.PrimitiveFunction;
  *
  * @author apete
  */
-public class Erlang extends RandomNumber {
+public class Erlang extends RandomNumber
+{
 
     private static final long serialVersionUID = 6544837857838057678L;
 
     private final int myCount;
     private final double myRate;
 
-    public Erlang() {
+    public Erlang()
+    {
         this((int) ONE, ONE);
     }
 
-    public Erlang(final int aCount, final double aRate) {
+    public Erlang(final int aCount, final double aRate)
+    {
 
         super();
 
@@ -49,21 +52,25 @@ public class Erlang extends RandomNumber {
         myRate = aRate;
     }
 
-    public double getExpected() {
+    public double getExpected()
+    {
         return myCount / myRate;
     }
 
     @Override
-    public double getVariance() {
+    public double getVariance()
+    {
         return myCount / (myRate * myRate);
     }
 
     @Override
-    protected double generate() {
+    protected double generate()
+    {
 
         double tmpVal = ZERO;
 
-        for (int i = 0; i < myCount; i++) {
+        for (int i = 0; i < myCount; i++)
+        {
             tmpVal -= PrimitiveFunction.LOG.invoke(this.random().nextDouble());
         }
 

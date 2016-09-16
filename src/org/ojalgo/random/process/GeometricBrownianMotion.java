@@ -36,20 +36,23 @@ import org.ojalgo.random.SampleSet;
  *
  * @author apete
  */
-public final class GeometricBrownianMotion extends AbstractProcess<LogNormal> {
+public final class GeometricBrownianMotion extends AbstractProcess<LogNormal>
+{
 
     private static final WienerProcess GENERATOR = new WienerProcess();
 
     /**
      * @param seriesOfSamples A series of samples, evenly spaced in time.
-     * @param samplePeriod The amount of time (in which ever unit you prefer) between each sample in the
-     *        series.
+     * @param samplePeriod    The amount of time (in which ever unit you prefer) between each sample in the
+     *                        series.
      */
-    public static GeometricBrownianMotion estimate(final Access1D<?> seriesOfSamples, final double samplePeriod) {
+    public static GeometricBrownianMotion estimate(final Access1D<?> seriesOfSamples, final double samplePeriod)
+    {
 
         final int tmpSizeMinusOne = (int) (seriesOfSamples.count() - 1);
         final Array1D<Double> tmpLogDiffSeries = Array1D.PRIMITIVE.makeZero(tmpSizeMinusOne);
-        for (int i = 0; i < tmpSizeMinusOne; i++) {
+        for (int i = 0; i < tmpSizeMinusOne; i++)
+        {
             tmpLogDiffSeries.set(i, PrimitiveFunction.LOG.invoke(seriesOfSamples.doubleValue(i + 1) / seriesOfSamples.doubleValue(i)));
         }
         final SampleSet tmpSampleSet = SampleSet.wrap(tmpLogDiffSeries);
@@ -68,24 +71,27 @@ public final class GeometricBrownianMotion extends AbstractProcess<LogNormal> {
     /**
      * Assuming initial value = 1.0 and horizon = 1.0.
      */
-    public static GeometricBrownianMotion make(final double expected, final double variance) {
+    public static GeometricBrownianMotion make(final double expected, final double variance)
+    {
         return GeometricBrownianMotion.make(ONE, expected, variance, ONE);
     }
 
     /**
      * Assuming initial value = 1.0.
      */
-    public static GeometricBrownianMotion make(final double expected, final double variance, final double horizon) {
+    public static GeometricBrownianMotion make(final double expected, final double variance, final double horizon)
+    {
         return GeometricBrownianMotion.make(ONE, expected, variance, horizon);
     }
 
     /**
-     * @param initialValue The process initial value.
+     * @param initialValue        The process initial value.
      * @param expectedFutureValue An expected value (sometime in the future).
-     * @param aVariance The variance of that future value.
-     * @param aHorizon When do you expect that value?
+     * @param aVariance           The variance of that future value.
+     * @param aHorizon            When do you expect that value?
      */
-    public static GeometricBrownianMotion make(final double initialValue, final double expectedFutureValue, final double aVariance, final double aHorizon) {
+    public static GeometricBrownianMotion make(final double initialValue, final double expectedFutureValue, final double aVariance, final double aHorizon)
+    {
 
         final double tmpDrift = PrimitiveFunction.LOG.invoke(expectedFutureValue / initialValue) / aHorizon;
         final double tmpDiff = PrimitiveFunction.SQRT.invoke(PrimitiveFunction.LOG1P.invoke(aVariance / (expectedFutureValue * expectedFutureValue)) / aHorizon);
@@ -100,7 +106,8 @@ public final class GeometricBrownianMotion extends AbstractProcess<LogNormal> {
     private final double myDiffusionFunction;
     private final double myLocalDrift;
 
-    public GeometricBrownianMotion(final double localDrift, final double diffusionFunction) {
+    public GeometricBrownianMotion(final double localDrift, final double diffusionFunction)
+    {
 
         super();
 
@@ -111,14 +118,16 @@ public final class GeometricBrownianMotion extends AbstractProcess<LogNormal> {
     }
 
     @SuppressWarnings("unused")
-    private GeometricBrownianMotion() {
+    private GeometricBrownianMotion()
+    {
         this(ZERO, ZERO);
     }
 
     /**
      * @param convertionFactor A step size change factor.
      */
-    public GeometricBrownianMotion convert(final double convertionFactor) {
+    public GeometricBrownianMotion convert(final double convertionFactor)
+    {
 
         final double tmpDrift = myLocalDrift * convertionFactor;
         final double tmpDiff = myDiffusionFunction * PrimitiveFunction.SQRT.invoke(convertionFactor);
@@ -126,7 +135,8 @@ public final class GeometricBrownianMotion extends AbstractProcess<LogNormal> {
         return new GeometricBrownianMotion(tmpDrift, tmpDiff);
     }
 
-    public LogNormal getDistribution(final double evaluationPoint) {
+    public LogNormal getDistribution(final double evaluationPoint)
+    {
 
         final double tmpVar = this.getDistributionVariance(evaluationPoint);
 
@@ -137,21 +147,25 @@ public final class GeometricBrownianMotion extends AbstractProcess<LogNormal> {
         return new LogNormal(tmpLocation, tmpScale);
     }
 
-    private final double getDistributionLocation(final double stepSize, final double variance) {
+    private final double getDistributionLocation(final double stepSize, final double variance)
+    {
         return (PrimitiveFunction.LOG.invoke(this.getValue()) + (myLocalDrift * stepSize)) - (HALF * variance);
     }
 
-    private final double getDistributionVariance(final double stepSize) {
+    private final double getDistributionVariance(final double stepSize)
+    {
         return myDiffusionFunction * myDiffusionFunction * stepSize;
     }
 
     @Override
-    protected double getNormalisedRandomIncrement() {
+    protected double getNormalisedRandomIncrement()
+    {
         return GENERATOR.getNormalisedRandomIncrement();
     }
 
     @Override
-    protected double step(final double currentValue, final double stepSize, final double normalisedRandomIncrement) {
+    protected double step(final double currentValue, final double stepSize, final double normalisedRandomIncrement)
+    {
 
         final double tmpDetPart = (myLocalDrift - ((myDiffusionFunction * myDiffusionFunction) / TWO)) * stepSize;
         final double tmpRandPart = myDiffusionFunction * PrimitiveFunction.SQRT.invoke(stepSize) * normalisedRandomIncrement;
@@ -165,12 +179,14 @@ public final class GeometricBrownianMotion extends AbstractProcess<LogNormal> {
      * Expected future value
      */
     @Override
-    double getExpected(final double stepSize) {
+    double getExpected(final double stepSize)
+    {
         return this.getValue() * PrimitiveFunction.EXP.invoke(myLocalDrift * stepSize);
     }
 
     @Override
-    double getLowerConfidenceQuantile(final double stepSize, final double confidence) {
+    double getLowerConfidenceQuantile(final double stepSize, final double confidence)
+    {
 
         final double tmpVar = this.getDistributionVariance(stepSize);
 
@@ -182,12 +198,14 @@ public final class GeometricBrownianMotion extends AbstractProcess<LogNormal> {
     }
 
     @Override
-    double getStandardDeviation(final double stepSize) {
+    double getStandardDeviation(final double stepSize)
+    {
         return PrimitiveFunction.SQRT.invoke(this.getVariance(stepSize));
     }
 
     @Override
-    double getUpperConfidenceQuantile(final double stepSize, final double confidence) {
+    double getUpperConfidenceQuantile(final double stepSize, final double confidence)
+    {
 
         final double tmpVar = this.getDistributionVariance(stepSize);
 
@@ -199,7 +217,8 @@ public final class GeometricBrownianMotion extends AbstractProcess<LogNormal> {
     }
 
     @Override
-    double getVariance(final double stepSize) {
+    double getVariance(final double stepSize)
+    {
         return this.getValue() * this.getValue() * PrimitiveFunction.EXP.invoke(TWO * myLocalDrift * stepSize) * PrimitiveFunction.EXPM1.invoke(this.getDistributionVariance(stepSize));
     }
 

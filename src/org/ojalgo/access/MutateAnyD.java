@@ -29,49 +29,61 @@ import org.ojalgo.function.UnaryFunction;
  *
  * @author apete
  */
-public interface MutateAnyD extends StructureAnyD, Mutate1D {
+public interface MutateAnyD extends StructureAnyD, Mutate1D
+{
 
-    interface BiModifiable<N extends Number> extends StructureAnyD, Mutate1D.BiModifiable<N> {
+    interface BiModifiable<N extends Number> extends StructureAnyD, Mutate1D.BiModifiable<N>
+    {
 
     }
 
-    interface Fillable<N extends Number> extends StructureAnyD, Mutate1D.Fillable<N> {
+    interface Fillable<N extends Number> extends StructureAnyD, Mutate1D.Fillable<N>
+    {
 
         void fillOne(long[] reference, N value);
 
         void fillOne(long[] reference, NullaryFunction<N> supplier);
 
-        default void fillRange(final long first, final long limit, final N value) {
-            for (long i = first; i < limit; i++) {
+        default void fillRange(final long first, final long limit, final N value)
+        {
+            for (long i = first; i < limit; i++)
+            {
                 this.fillOne(i, value);
             }
         }
 
-        default void fillRange(final long first, final long limit, final NullaryFunction<N> supplier) {
-            for (long i = first; i < limit; i++) {
+        default void fillRange(final long first, final long limit, final NullaryFunction<N> supplier)
+        {
+            for (long i = first; i < limit; i++)
+            {
                 this.fillOne(i, supplier);
             }
         }
 
     }
 
-    interface Modifiable<N extends Number> extends StructureAnyD, Mutate1D.Modifiable<N> {
+    interface Modifiable<N extends Number> extends StructureAnyD, Mutate1D.Modifiable<N>
+    {
 
         void modifyOne(long[] reference, UnaryFunction<N> modifier);
 
-        default void modifyRange(final long first, final long limit, final UnaryFunction<N> modifier) {
-            for (long i = first; i < limit; i++) {
+        default void modifyRange(final long first, final long limit, final UnaryFunction<N> modifier)
+        {
+            for (long i = first; i < limit; i++)
+            {
                 this.modifyOne(i, modifier);
             }
         }
 
     }
 
-    default void add(final long index, final double addend) {
+    default void add(final long index, final double addend)
+    {
         this.add(AccessUtils.reference(index, this.shape()), addend);
     }
 
-    default void add(final long index, final Number addend) {
+    default void add(final long index, final Number addend)
+    {
         this.add(AccessUtils.reference(index, this.shape()), addend);
     }
 
@@ -83,15 +95,18 @@ public interface MutateAnyD extends StructureAnyD, Mutate1D {
      * Will pass through each matching element position calling the {@code through} function. What happens is
      * entirely dictated by how you implement the callback.
      */
-    default <N extends Number> void passMatching(final AccessAnyD<N> from, final CallbackAnyD<N> through) {
+    default <N extends Number> void passMatching(final AccessAnyD<N> from, final CallbackAnyD<N> through)
+    {
         CallbackAnyD.onMatching(from, through, this);
     }
 
-    default void set(final long index, final double value) {
+    default void set(final long index, final double value)
+    {
         this.set(AccessUtils.reference(index, this.shape()), value);
     }
 
-    default void set(final long index, final Number value) {
+    default void set(final long index, final Number value)
+    {
         this.set(AccessUtils.reference(index, this.shape()), value);
     }
 

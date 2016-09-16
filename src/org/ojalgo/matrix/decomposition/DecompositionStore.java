@@ -40,7 +40,8 @@ import org.ojalgo.scalar.ComplexNumber;
  *
  * @author apete
  */
-public interface DecompositionStore<N extends Number> extends PhysicalStore<N> {
+public interface DecompositionStore<N extends Number> extends PhysicalStore<N>
+{
 
     /**
      * Cholesky transformations
@@ -81,11 +82,11 @@ public interface DecompositionStore<N extends Number> extends PhysicalStore<N> {
      * <li>[A] is upper/right triangular</li>
      * </ul>
      *
-     * @param body The equation system body parameters [A]
+     * @param body         The equation system body parameters [A]
      * @param unitDiagonal TODO
-     * @param conjugated true if the upper/right part of body is actually stored in the lower/left part of the
-     *        matrix, and the elements conjugated.
-     * @param hermitian TODO
+     * @param conjugated   true if the upper/right part of body is actually stored in the lower/left part of the
+     *                     matrix, and the elements conjugated.
+     * @param hermitian    TODO
      */
     void substituteBackwards(Access2D<N> body, boolean unitDiagonal, boolean conjugated, boolean hermitian);
 
@@ -97,9 +98,9 @@ public interface DecompositionStore<N extends Number> extends PhysicalStore<N> {
      * <li>[A] is lower/left triangular</li>
      * </ul>
      *
-     * @param body The equation system body parameters [A]
+     * @param body         The equation system body parameters [A]
      * @param unitDiagonal true if body as ones on the diagonal
-     * @param conjugated TODO
+     * @param conjugated   TODO
      * @param identity
      */
     void substituteForwards(Access2D<N> body, boolean unitDiagonal, boolean conjugated, boolean identity);

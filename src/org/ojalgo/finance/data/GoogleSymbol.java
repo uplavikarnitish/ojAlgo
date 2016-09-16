@@ -31,9 +31,11 @@ import org.ojalgo.netio.ASCII;
 import org.ojalgo.type.CalendarDateUnit;
 import org.ojalgo.type.context.GenericContext;
 
-public class GoogleSymbol extends DataSource<GoogleSymbol.Data> {
+public class GoogleSymbol extends DataSource<GoogleSymbol.Data>
+{
 
-    public static final class Data extends DatePrice {
+    public static final class Data extends DatePrice
+    {
 
         public double close;
         public double high;
@@ -41,24 +43,29 @@ public class GoogleSymbol extends DataSource<GoogleSymbol.Data> {
         public double open;
         public double volume;
 
-        protected Data(final Calendar calendar) {
+        protected Data(final Calendar calendar)
+        {
             super(calendar);
         }
 
-        protected Data(final Date date) {
+        protected Data(final Date date)
+        {
             super(date);
         }
 
-        protected Data(final long millis) {
+        protected Data(final long millis)
+        {
             super(millis);
         }
 
-        protected Data(final String sqlString) {
+        protected Data(final String sqlString)
+        {
             super(sqlString);
         }
 
         @Override
-        public double getPrice() {
+        public double getPrice()
+        {
             return close;
         }
 
@@ -76,11 +83,13 @@ public class GoogleSymbol extends DataSource<GoogleSymbol.Data> {
     private static final String STARTDATE = "startdate";
     private static final String WEEKLY = "weekly";
 
-    public GoogleSymbol(final String symbol) {
+    public GoogleSymbol(final String symbol)
+    {
         this(symbol, CalendarDateUnit.DAY);
     }
 
-    public GoogleSymbol(final String symbol, final CalendarDateUnit resolution) {
+    public GoogleSymbol(final String symbol, final CalendarDateUnit resolution)
+    {
 
         super(symbol, resolution);
 
@@ -88,19 +97,21 @@ public class GoogleSymbol extends DataSource<GoogleSymbol.Data> {
         this.setPath(FINANCE_HISTORICAL);
         this.addQueryParameter(Q, symbol);
         this.addQueryParameter(STARTDATE, JAN_2_1970);
-        switch (resolution) {
-        case WEEK:
-            this.addQueryParameter(HISTPERIOD, WEEKLY);
-            break;
-        default:
-            this.addQueryParameter(HISTPERIOD, DAILY);
-            break;
+        switch (resolution)
+        {
+            case WEEK:
+                this.addQueryParameter(HISTPERIOD, WEEKLY);
+                break;
+            default:
+                this.addQueryParameter(HISTPERIOD, DAILY);
+                break;
         }
         this.addQueryParameter(OUTPUT, CSV);
     }
 
     @Override
-    protected GoogleSymbol.Data parse(final String line) {
+    protected GoogleSymbol.Data parse(final String line)
+    {
 
         Data retVal = null;
 
@@ -115,44 +126,54 @@ public class GoogleSymbol extends DataSource<GoogleSymbol.Data> {
         tmpInclusiveBegin = tmpExclusiveEnd + 1;
         tmpExclusiveEnd = line.indexOf(ASCII.COMMA, tmpInclusiveBegin);
         tmpString = line.substring(tmpInclusiveBegin, tmpExclusiveEnd);
-        try {
+        try
+        {
             retVal.open = Double.parseDouble(tmpString);
-        } catch (final NumberFormatException ex) {
+        } catch (final NumberFormatException ex)
+        {
             retVal.open = Double.NaN;
         }
 
         tmpInclusiveBegin = tmpExclusiveEnd + 1;
         tmpExclusiveEnd = line.indexOf(ASCII.COMMA, tmpInclusiveBegin);
         tmpString = line.substring(tmpInclusiveBegin, tmpExclusiveEnd);
-        try {
+        try
+        {
             retVal.high = Double.parseDouble(tmpString);
-        } catch (final NumberFormatException ex) {
+        } catch (final NumberFormatException ex)
+        {
             retVal.high = Double.NaN;
         }
 
         tmpInclusiveBegin = tmpExclusiveEnd + 1;
         tmpExclusiveEnd = line.indexOf(ASCII.COMMA, tmpInclusiveBegin);
         tmpString = line.substring(tmpInclusiveBegin, tmpExclusiveEnd);
-        try {
+        try
+        {
             retVal.low = Double.parseDouble(tmpString);
-        } catch (final NumberFormatException ex) {
+        } catch (final NumberFormatException ex)
+        {
             retVal.low = Double.NaN;
         }
 
         tmpInclusiveBegin = tmpExclusiveEnd + 1;
         tmpExclusiveEnd = line.indexOf(ASCII.COMMA, tmpInclusiveBegin);
         tmpString = line.substring(tmpInclusiveBegin, tmpExclusiveEnd);
-        try {
+        try
+        {
             retVal.close = Double.parseDouble(tmpString);
-        } catch (final NumberFormatException ex) {
+        } catch (final NumberFormatException ex)
+        {
             retVal.close = Double.NaN;
         }
 
         tmpInclusiveBegin = tmpExclusiveEnd + 1;
         tmpString = line.substring(tmpInclusiveBegin);
-        try {
+        try
+        {
             retVal.volume = Double.parseDouble(tmpString);
-        } catch (final NumberFormatException ex) {
+        } catch (final NumberFormatException ex)
+        {
             retVal.volume = Double.NaN;
         }
 

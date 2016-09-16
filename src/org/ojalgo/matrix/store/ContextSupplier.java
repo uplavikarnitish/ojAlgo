@@ -23,23 +23,27 @@ package org.ojalgo.matrix.store;
 
 import org.ojalgo.matrix.store.PhysicalStore.Factory;
 
-abstract class ContextSupplier<N extends Number> implements ElementsSupplier<N> {
+abstract class ContextSupplier<N extends Number> implements ElementsSupplier<N>
+{
 
     private final ElementsSupplier<N> myContext;
 
-    protected ContextSupplier(final ElementsSupplier<N> context) {
+    protected ContextSupplier(final ElementsSupplier<N> context)
+    {
         super();
         myContext = context;
     }
 
-    public final Factory<N, ?> physical() {
+    public final Factory<N, ?> physical()
+    {
         return myContext.physical();
     }
 
     public abstract void supplyTo(final ElementsConsumer<N> consumer);
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return myContext.toString();
     }
 

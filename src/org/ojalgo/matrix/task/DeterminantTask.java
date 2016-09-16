@@ -30,11 +30,14 @@ import org.ojalgo.matrix.decomposition.LU;
 import org.ojalgo.matrix.store.MatrixStore;
 import org.ojalgo.scalar.ComplexNumber;
 
-public interface DeterminantTask<N extends Number> extends MatrixTask<N> {
+public interface DeterminantTask<N extends Number> extends MatrixTask<N>
+{
 
-    public static abstract class Factory<N extends Number> {
+    public static abstract class Factory<N extends Number>
+    {
 
-        public final DeterminantTask<N> make(final MatrixStore<N> template) {
+        public final DeterminantTask<N> make(final MatrixStore<N> template)
+        {
             return this.make(template, MatrixUtils.isHermitian(template), false);
         }
 
@@ -42,61 +45,84 @@ public interface DeterminantTask<N extends Number> extends MatrixTask<N> {
 
     }
 
-    public static final Factory<BigDecimal> BIG = new Factory<BigDecimal>() {
+    public static final Factory<BigDecimal> BIG = new Factory<BigDecimal>()
+    {
 
         @Override
-        public DeterminantTask<BigDecimal> make(final MatrixStore<BigDecimal> template, final boolean symmetric, final boolean positiveDefinite) {
-            if (symmetric && positiveDefinite) {
+        public DeterminantTask<BigDecimal> make(final MatrixStore<BigDecimal> template, final boolean symmetric, final boolean positiveDefinite)
+        {
+            if (symmetric && positiveDefinite)
+            {
                 return Cholesky.BIG.make(template);
-            } else {
+            } else
+            {
                 return LU.BIG.make(template);
             }
         }
 
     };
 
-    public static final Factory<ComplexNumber> COMPLEX = new Factory<ComplexNumber>() {
+    public static final Factory<ComplexNumber> COMPLEX = new Factory<ComplexNumber>()
+    {
 
         @Override
-        public DeterminantTask<ComplexNumber> make(final MatrixStore<ComplexNumber> template, final boolean symmetric, final boolean positiveDefinite) {
-            if (symmetric && positiveDefinite) {
+        public DeterminantTask<ComplexNumber> make(final MatrixStore<ComplexNumber> template, final boolean symmetric, final boolean positiveDefinite)
+        {
+            if (symmetric && positiveDefinite)
+            {
                 return Cholesky.COMPLEX.make(template);
-            } else {
+            } else
+            {
                 return LU.COMPLEX.make(template);
             }
         }
 
     };
 
-    public static final Factory<Double> PRIMITIVE = new Factory<Double>() {
+    public static final Factory<Double> PRIMITIVE = new Factory<Double>()
+    {
 
         @Override
-        public DeterminantTask<Double> make(final MatrixStore<Double> template, final boolean symmetric, final boolean positiveDefinite) {
+        public DeterminantTask<Double> make(final MatrixStore<Double> template, final boolean symmetric, final boolean positiveDefinite)
+        {
             final long tmpDim = template.countRows();
-            if (tmpDim == 1L) {
+            if (tmpDim == 1L)
+            {
                 return AbstractDeterminator.FULL_1X1;
-            } else if (symmetric) {
-                if (tmpDim == 2L) {
+            } else if (symmetric)
+            {
+                if (tmpDim == 2L)
+                {
                     return AbstractDeterminator.SYMMETRIC_2X2;
-                } else if (tmpDim == 3L) {
+                } else if (tmpDim == 3L)
+                {
                     return AbstractDeterminator.SYMMETRIC_3X3;
-                } else if (tmpDim == 4L) {
+                } else if (tmpDim == 4L)
+                {
                     return AbstractDeterminator.SYMMETRIC_4X4;
-                } else if (tmpDim == 5L) {
+                } else if (tmpDim == 5L)
+                {
                     return AbstractDeterminator.SYMMETRIC_5X5;
-                } else {
+                } else
+                {
                     return positiveDefinite ? Cholesky.PRIMITIVE.make(template) : LU.PRIMITIVE.make(template);
                 }
-            } else {
-                if (tmpDim == 2L) {
+            } else
+            {
+                if (tmpDim == 2L)
+                {
                     return AbstractDeterminator.FULL_2X2;
-                } else if (tmpDim == 3L) {
+                } else if (tmpDim == 3L)
+                {
                     return AbstractDeterminator.FULL_3X3;
-                } else if (tmpDim == 4L) {
+                } else if (tmpDim == 4L)
+                {
                     return AbstractDeterminator.FULL_4X4;
-                } else if (tmpDim == 5L) {
+                } else if (tmpDim == 5L)
+                {
                     return AbstractDeterminator.FULL_5X5;
-                } else {
+                } else
+                {
                     return LU.PRIMITIVE.make(template);
                 }
             }

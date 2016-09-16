@@ -32,7 +32,8 @@ import org.ojalgo.random.Uniform;
  *
  * @author apete
  */
-public class Password {
+public class Password
+{
 
     private static MessageDigest INSTANCE;
 
@@ -40,21 +41,26 @@ public class Password {
      * @param aPassword An unencrypted (plain text) password
      * @return An encrypted password
      */
-    public static String encrypt(final String aPassword) {
+    public static String encrypt(final String aPassword)
+    {
 
         String retVal = null;
         final MessageDigest tmpDigest = Password.getInstance();
 
-        if (aPassword != null) {
+        if (aPassword != null)
+        {
 
             final byte[] tmpBytes = tmpDigest.digest(aPassword.getBytes());
 
-            for (int i = 0; i < tmpBytes.length; i++) {
+            for (int i = 0; i < tmpBytes.length; i++)
+            {
 
-                if (tmpBytes[i] < 0) {
+                if (tmpBytes[i] < 0)
+                {
                     tmpBytes[i] = (byte) (tmpBytes[i] + 128);
                 }
-                if (tmpBytes[i] < 32) {
+                if (tmpBytes[i] < 32)
+                {
                     tmpBytes[i] = (byte) (tmpBytes[i] + 32);
                 }
                 // REMOVE!!!
@@ -67,7 +73,8 @@ public class Password {
                 // 92 is \
                 // REMOVE!!!
                 if ((tmpBytes[i] == 34) || (tmpBytes[i] == 38) || (tmpBytes[i] == 39) || (tmpBytes[i] == 47) || (tmpBytes[i] == 60) || (tmpBytes[i] == 62)
-                        || (tmpBytes[i] == 92)) {
+                        || (tmpBytes[i] == 92))
+                {
                     tmpBytes[i] = 32;
                 }
             }
@@ -79,25 +86,29 @@ public class Password {
     }
 
     /**
-     * @param aPassword An unencrypted (plain text) password
+     * @param aPassword          An unencrypted (plain text) password
      * @param aToBytesEncoding
      * @param aFromBytesEncoding
      * @return An encrypted password
      */
-    public static String encrypt(final String aPassword, final String aToBytesEncoding, final String aFromBytesEncoding) {
+    public static String encrypt(final String aPassword, final String aToBytesEncoding, final String aFromBytesEncoding)
+    {
 
         String retVal = null;
         final MessageDigest tmpDigest = Password.getInstance();
 
-        if (aPassword != null) {
+        if (aPassword != null)
+        {
 
-            try {
+            try
+            {
 
                 final byte[] tmpBytes = tmpDigest.digest(aPassword.getBytes(aToBytesEncoding));
 
                 retVal = new String(tmpBytes, aFromBytesEncoding).trim();
 
-            } catch (final UnsupportedEncodingException anE) {
+            } catch (final UnsupportedEncodingException anE)
+            {
                 BasicLogger.error(anE.toString());
             }
         }
@@ -105,15 +116,18 @@ public class Password {
         return retVal;
     }
 
-    public static String makeClearText(final int length) {
+    public static String makeClearText(final int length)
+    {
 
         final char[] retVal = new char[length];
 
         final Uniform tmpRandom = new Uniform(0, 128);
 
-        for (int c = 0; c < length; c++) {
+        for (int c = 0; c < length; c++)
+        {
             int tmpChar = ASCII.NBSP;
-            do {
+            do
+            {
                 tmpChar = tmpRandom.intValue();
             } while (!ASCII.isAlphanumeric(tmpChar));
             retVal[c] = (char) tmpChar;
@@ -122,12 +136,16 @@ public class Password {
         return String.valueOf(retVal);
     }
 
-    private static MessageDigest getInstance() {
+    private static MessageDigest getInstance()
+    {
 
-        if (INSTANCE == null) {
-            try {
+        if (INSTANCE == null)
+        {
+            try
+            {
                 INSTANCE = MessageDigest.getInstance("MD5");
-            } catch (final NoSuchAlgorithmException anE) {
+            } catch (final NoSuchAlgorithmException anE)
+            {
                 BasicLogger.error(anE.toString());
             }
         }
@@ -135,7 +153,8 @@ public class Password {
         return INSTANCE;
     }
 
-    protected Password() {
+    protected Password()
+    {
         super();
     }
 }

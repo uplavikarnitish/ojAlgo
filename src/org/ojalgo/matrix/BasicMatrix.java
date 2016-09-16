@@ -54,17 +54,21 @@ import org.ojalgo.type.context.NumberContext;
  */
 public interface BasicMatrix extends Access2D<Number>, Access2D.Elements, Access1D.Aggregatable<Number>, NormedVectorSpace<BasicMatrix, Number>,
         Operation.Subtraction<BasicMatrix>, Operation.Multiplication<BasicMatrix>, ScalarOperation.Addition<BasicMatrix, Number>,
-        ScalarOperation.Division<BasicMatrix, Number>, ScalarOperation.Subtraction<BasicMatrix, Number> {
+        ScalarOperation.Division<BasicMatrix, Number>, ScalarOperation.Subtraction<BasicMatrix, Number>
+{
 
-    public static interface Builder<I extends BasicMatrix> extends Mutate2D, Supplier2D<I> {
+    public static interface Builder<I extends BasicMatrix> extends Mutate2D, Supplier2D<I>
+    {
 
-        default I build() {
+        default I build()
+        {
             return this.get();
         }
 
     }
 
-    public static interface Factory<I extends BasicMatrix> extends Factory2D<I> {
+    public static interface Factory<I extends BasicMatrix> extends Factory2D<I>
+    {
 
         Builder<I> getBuilder(int count);
 
@@ -73,8 +77,8 @@ public interface BasicMatrix extends Access2D<Number>, Access2D.Elements, Access
     }
 
     /**
-     * @param row The row index of where to superimpose the top left element of aMtrx
-     * @param col The column index of where to superimpose the top left element of aMtrx
+     * @param row    The row index of where to superimpose the top left element of aMtrx
+     * @param col    The column index of where to superimpose the top left element of aMtrx
      * @param addend A matrix to superimpose
      * @return A new matrix
      */
@@ -103,7 +107,7 @@ public interface BasicMatrix extends Access2D<Number>, Access2D.Elements, Access
 
     /**
      * @return true if the frobenius norm of the difference between [this] and [aStore] is zero within the
-     *         limits of aCntxt.
+     * limits of aCntxt.
      */
     boolean equals(Access2D<?> aMtrx, NumberContext aCntxt);
 
@@ -370,7 +374,7 @@ public interface BasicMatrix extends Access2D<Number>, Access2D.Elements, Access
     /**
      * Extracts one element of this matrix as a BigDecimal.
      *
-     * @param row A row index.
+     * @param row    A row index.
      * @param column A column index.
      * @return One matrix element
      * @deprecated v40 Use {@link #get(long, long)} instead
@@ -391,7 +395,7 @@ public interface BasicMatrix extends Access2D<Number>, Access2D.Elements, Access
     /**
      * Extracts one element of this matrix as a ComplexNumber.
      *
-     * @param row A row index.
+     * @param row    A row index.
      * @param column A column index.
      * @return One matrix element
      * @deprecated v40 Use {@link #get(long, long)} instead

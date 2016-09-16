@@ -41,9 +41,11 @@ import org.ojalgo.scalar.ComplexNumber;
  *
  * @author apete
  */
-public interface Bidiagonal<N extends Number> extends MatrixDecomposition<N>, MatrixDecomposition.EconomySize<N> {
+public interface Bidiagonal<N extends Number> extends MatrixDecomposition<N>, MatrixDecomposition.EconomySize<N>
+{
 
-    interface Factory<N extends Number> extends MatrixDecomposition.Factory<Bidiagonal<N>> {
+    interface Factory<N extends Number> extends MatrixDecomposition.Factory<Bidiagonal<N>>
+    {
 
     }
 
@@ -54,17 +56,22 @@ public interface Bidiagonal<N extends Number> extends MatrixDecomposition<N>, Ma
     public static final Factory<Double> PRIMITIVE = typical -> new BidiagonalDecomposition.Primitive();
 
     @SuppressWarnings("unchecked")
-    public static <N extends Number> Bidiagonal<N> make(final Access2D<N> typical) {
+    public static <N extends Number> Bidiagonal<N> make(final Access2D<N> typical)
+    {
 
         final N tmpNumber = typical.get(0, 0);
 
-        if (tmpNumber instanceof BigDecimal) {
+        if (tmpNumber instanceof BigDecimal)
+        {
             return (Bidiagonal<N>) BIG.make(typical);
-        } else if (tmpNumber instanceof ComplexNumber) {
+        } else if (tmpNumber instanceof ComplexNumber)
+        {
             return (Bidiagonal<N>) COMPLEX.make(typical);
-        } else if (tmpNumber instanceof Double) {
+        } else if (tmpNumber instanceof Double)
+        {
             return (Bidiagonal<N>) PRIMITIVE.make(typical);
-        } else {
+        } else
+        {
             throw new IllegalArgumentException();
         }
     }
@@ -77,7 +84,8 @@ public interface Bidiagonal<N extends Number> extends MatrixDecomposition<N>, Ma
 
     boolean isUpper();
 
-    default MatrixStore<N> reconstruct() {
+    default MatrixStore<N> reconstruct()
+    {
         return MatrixUtils.reconstruct(this);
     }
 

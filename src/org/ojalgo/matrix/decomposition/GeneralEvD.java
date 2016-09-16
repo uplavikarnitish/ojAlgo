@@ -34,38 +34,44 @@ import org.ojalgo.matrix.store.PrimitiveDenseStore;
 import org.ojalgo.scalar.ComplexNumber;
 import org.ojalgo.type.context.NumberContext;
 
-abstract class GeneralEvD<N extends Number> extends EigenvalueDecomposition<N> {
+abstract class GeneralEvD<N extends Number> extends EigenvalueDecomposition<N>
+{
 
     /**
      * Eigenvalues and eigenvectors of a real matrix.
-     * <P>
+     * <p>
      * If A is symmetric, then A = V*D*V' where the eigenvalue matrix D is diagonal and the eigenvector matrix
      * V is orthogonal. I.e. A = V.times(D.times(V.transpose())) and V.times(V.transpose()) equals the
      * identity matrix.
-     * <P>
+     * <p>
      * If A is not symmetric, then the eigenvalue matrix D is block diagonal with the real eigenvalues in
      * 1-by-1 blocks and any complex eigenvalues, lambda + i*mu, in 2-by-2 blocks, [lambda, mu; -mu, lambda].
      * The columns of V represent the eigenvectors in the sense that A*V = V*D, i.e. A.times(V) equals
      * V.times(D). The matrix V may be badly conditioned, or even singular, so the validity of the equation A
      * = V*D*inverse(V) depends upon V.cond().
      **/
-    static final class Primitive extends GeneralEvD<Double> {
+    static final class Primitive extends GeneralEvD<Double>
+    {
 
-        Primitive() {
+        Primitive()
+        {
             super(PrimitiveDenseStore.FACTORY);
         }
 
     }
 
-    protected GeneralEvD(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> aFactory) {
+    protected GeneralEvD(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> aFactory)
+    {
         super(aFactory);
     }
 
-    public final boolean equals(final MatrixStore<N> aStore, final NumberContext context) {
+    public final boolean equals(final MatrixStore<N> aStore, final NumberContext context)
+    {
         return MatrixUtils.equals(aStore, this, context);
     }
 
-    public final N getDeterminant() {
+    public final N getDeterminant()
+    {
 
         final AggregatorFunction<ComplexNumber> tmpVisitor = ComplexAggregator.getSet().product();
 
@@ -74,15 +80,18 @@ abstract class GeneralEvD<N extends Number> extends EigenvalueDecomposition<N> {
         return this.scalar().cast(tmpVisitor.getNumber());
     }
 
-    public MatrixStore<N> getInverse() {
+    public MatrixStore<N> getInverse()
+    {
         throw new UnsupportedOperationException();
     }
 
-    public MatrixStore<N> getInverse(final DecompositionStore<N> newPreallocated) {
+    public MatrixStore<N> getInverse(final DecompositionStore<N> newPreallocated)
+    {
         throw new UnsupportedOperationException();
     }
 
-    public final ComplexNumber getTrace() {
+    public final ComplexNumber getTrace()
+    {
 
         final AggregatorFunction<ComplexNumber> tmpVisitor = ComplexAggregator.getSet().sum();
 
@@ -91,20 +100,24 @@ abstract class GeneralEvD<N extends Number> extends EigenvalueDecomposition<N> {
         return tmpVisitor.getNumber();
     }
 
-    public final boolean isHermitian() {
+    public final boolean isHermitian()
+    {
         return false;
     }
 
-    public final boolean isOrdered() {
+    public final boolean isOrdered()
+    {
         return true;
     }
 
-    public final boolean isSolvable() {
+    public final boolean isSolvable()
+    {
         return this.isComputed() && this.isHermitian();
     }
 
     @Override
-    protected boolean doNonsymmetric(final ElementsSupplier<N> aMtrx, final boolean eigenvaluesOnly) {
+    protected boolean doNonsymmetric(final ElementsSupplier<N> aMtrx, final boolean eigenvaluesOnly)
+    {
 
         final int tmpDiagDim = (int) aMtrx.countRows();
 
@@ -120,16 +133,19 @@ abstract class GeneralEvD<N extends Number> extends EigenvalueDecomposition<N> {
         final PhysicalStore<N> tmpD = this.makeZero(tmpDiagDim, tmpDiagDim);
         ComplexNumber tmpValue;
         double tmpImaginary;
-        for (int ij = 0; ij < tmpDiagDim; ij++) {
+        for (int ij = 0; ij < tmpDiagDim; ij++)
+        {
 
             tmpValue = tmpEigenvalues.get(ij);
             tmpD.set(ij, ij, tmpValue.doubleValue());
 
             tmpImaginary = tmpValue.i;
 
-            if (tmpImaginary > PrimitiveMath.ZERO) {
+            if (tmpImaginary > PrimitiveMath.ZERO)
+            {
                 tmpD.set(ij, ij + 1, tmpImaginary);
-            } else if (tmpImaginary < PrimitiveMath.ZERO) {
+            } else if (tmpImaginary < PrimitiveMath.ZERO)
+            {
                 tmpD.set(ij, ij - 1, tmpImaginary);
             }
         }
@@ -145,21 +161,25 @@ abstract class GeneralEvD<N extends Number> extends EigenvalueDecomposition<N> {
     }
 
     @Override
-    protected boolean doSymmetric(final ElementsSupplier<N> aMtrx, final boolean eigenvaluesOnly) {
+    protected boolean doSymmetric(final ElementsSupplier<N> aMtrx, final boolean eigenvaluesOnly)
+    {
         return this.doNonsymmetric(aMtrx, eigenvaluesOnly);
     }
 
     @Override
-    protected final MatrixStore<N> makeD() {
+    protected final MatrixStore<N> makeD()
+    {
         return null;
     }
 
     @Override
-    protected Array1D<ComplexNumber> makeEigenvalues() {
+    protected Array1D<ComplexNumber> makeEigenvalues()
+    {
         return null;
     }
 
-    protected final MatrixStore<N> makeInverse() {
+    protected final MatrixStore<N> makeInverse()
+    {
 
         final MatrixStore<N> tmpV = this.getV();
         final MatrixStore<N> tmpD = this.getD();
@@ -171,10 +191,13 @@ abstract class GeneralEvD<N extends Number> extends EigenvalueDecomposition<N> {
         final N tmpZero = this.scalar().zero().getNumber();
         final BinaryFunction<N> tmpDivide = this.function().divide();
 
-        for (int i = 0; i < tmpDim; i++) {
-            if (tmpD.isSmall(i, i, PrimitiveMath.ONE)) {
+        for (int i = 0; i < tmpDim; i++)
+        {
+            if (tmpD.isSmall(i, i, PrimitiveMath.ONE))
+            {
                 tmpMtrx.fillRow(i, 0, tmpZero);
-            } else {
+            } else
+            {
                 tmpMtrx.modifyRow(i, 0, tmpDivide.second(tmpD.get(i, i)));
             }
         }
@@ -183,7 +206,8 @@ abstract class GeneralEvD<N extends Number> extends EigenvalueDecomposition<N> {
     }
 
     @Override
-    protected MatrixStore<N> makeV() {
+    protected MatrixStore<N> makeV()
+    {
         return null;
     }
 

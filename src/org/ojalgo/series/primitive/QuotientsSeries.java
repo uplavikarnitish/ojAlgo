@@ -21,12 +21,14 @@
  */
 package org.ojalgo.series.primitive;
 
-final class QuotientsSeries extends PrimitiveSeries {
+final class QuotientsSeries extends PrimitiveSeries
+{
 
     private final PrimitiveSeries myBase;
     private final int myPeriod;
 
-    QuotientsSeries(final PrimitiveSeries base) {
+    QuotientsSeries(final PrimitiveSeries base)
+    {
 
         super();
 
@@ -34,7 +36,8 @@ final class QuotientsSeries extends PrimitiveSeries {
         myPeriod = 1;
     }
 
-    QuotientsSeries(final PrimitiveSeries base, final int period) {
+    QuotientsSeries(final PrimitiveSeries base, final int period)
+    {
 
         super();
 
@@ -43,12 +46,14 @@ final class QuotientsSeries extends PrimitiveSeries {
     }
 
     @Override
-    public final int size() {
+    public final int size()
+    {
         return myBase.size() - myPeriod;
     }
 
     @Override
-    public final double value(final int index) {
+    public final double value(final int index)
+    {
         return myBase.value(index + myPeriod) / myBase.value(index);
     }
 

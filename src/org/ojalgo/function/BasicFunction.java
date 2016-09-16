@@ -21,15 +21,18 @@
  */
 package org.ojalgo.function;
 
-public interface BasicFunction<N extends Number> {
+public interface BasicFunction<N extends Number>
+{
 
-    public static interface Differentiable<N extends Number, F extends BasicFunction<N>> extends BasicFunction<N> {
+    public static interface Differentiable<N extends Number, F extends BasicFunction<N>> extends BasicFunction<N>
+    {
 
         F buildDerivative();
 
     }
 
-    public static interface Integratable<N extends Number, F extends BasicFunction<N>> extends BasicFunction<N> {
+    public static interface Integratable<N extends Number, F extends BasicFunction<N>> extends BasicFunction<N>
+    {
 
         F buildPrimitive();
 

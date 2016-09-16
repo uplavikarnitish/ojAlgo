@@ -216,7 +216,8 @@ package org.ojalgo.netio;
  *
  * @author apete
  */
-public abstract class ASCII {
+public abstract class ASCII
+{
 
     public static final char COMMA = ',';
     public static final char CR = (char) 13; // Carriage Return
@@ -238,59 +239,70 @@ public abstract class ASCII {
     public static final char UPPERCASE_A = 'A';
     public static final char UPPERCASE_Z = 'Z';
 
-    public static boolean isAlphabetic(final int aChar) {
+    public static boolean isAlphabetic(final int aChar)
+    {
         return ASCII.isLowercase(aChar) || ASCII.isUppercase(aChar);
     }
 
-    public static boolean isAlphanumeric(final int aChar) {
+    public static boolean isAlphanumeric(final int aChar)
+    {
         return ASCII.isAlphabetic(aChar) || ASCII.isDigit(aChar);
     }
 
     /**
      * @return True if aChar is an ASCII character.
      */
-    public static boolean isAscii(final int aChar) {
+    public static boolean isAscii(final int aChar)
+    {
         return (NULL <= aChar) && (aChar <= DEL);
     }
 
-    public static boolean isControl(final int aChar) {
+    public static boolean isControl(final int aChar)
+    {
         return ((NULL <= aChar) && (aChar < SP)) || (aChar == DEL);
     }
 
-    public static boolean isDigit(final int aChar) {
+    public static boolean isDigit(final int aChar)
+    {
         return (DECIMAL_ZERO <= aChar) && (aChar <= DECIMAL_NINE);
     }
 
-    public static boolean isGraph(final int aChar) {
+    public static boolean isGraph(final int aChar)
+    {
         return (SP < aChar) && (aChar < DEL);
     }
 
     /**
      * @return true if aChar is an lowercase character
      */
-    public static boolean isLowercase(final int aChar) {
+    public static boolean isLowercase(final int aChar)
+    {
         return (LOWERCASE_A <= aChar) && (aChar <= LOWERCASE_Z);
     }
 
-    public static boolean isPrintable(final int aChar) {
+    public static boolean isPrintable(final int aChar)
+    {
         return (SP <= aChar) && (aChar < DEL);
     }
 
     /**
      * Not sure this is correct
      */
-    public static boolean isPunctuation(final int aChar) {
+    public static boolean isPunctuation(final int aChar)
+    {
         return ASCII.isGraph(aChar) && !ASCII.isAlphanumeric(aChar);
     }
 
-    public static boolean isSpace(final int aChar) {
+    public static boolean isSpace(final int aChar)
+    {
         return (aChar == SP) || ((9 <= aChar) && (aChar <= 13));
     }
 
     /**
      * @return true if aChar is an uppercase character
      */
-    public static boolean isUppercase(final int aChar) {
+    public static boolean isUppercase(final int aChar)
+    {
         return (UPPERCASE_A <= aChar) && (aChar <= UPPERCASE_Z);
     }
 
@@ -298,11 +310,13 @@ public abstract class ASCII {
      * If aChar is an uppercase character it is converted to the corresponding lowercase character. Otherwise
      * it is returned unaltered.
      */
-    public static int toLowercase(final int aChar) {
+    public static int toLowercase(final int aChar)
+    {
         return ASCII.isUppercase(aChar) ? aChar + SP : aChar;
     }
 
-    public static int toPrintable(final int aChar) {
+    public static int toPrintable(final int aChar)
+    {
         return ASCII.isPrintable(aChar) ? aChar : SP;
     }
 
@@ -310,11 +324,13 @@ public abstract class ASCII {
      * If aChar is a lowercase character it is converted to the corresponding uppercase character. Otherwise
      * it is returned unaltered.
      */
-    public static int toUppercase(final int aChar) {
+    public static int toUppercase(final int aChar)
+    {
         return ASCII.isLowercase(aChar) ? aChar - SP : aChar;
     }
 
-    private ASCII() {
+    private ASCII()
+    {
         super();
     }
 

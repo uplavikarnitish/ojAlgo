@@ -30,27 +30,35 @@ import org.ojalgo.ProgrammingError;
  *
  * @author apete
  */
-public interface Consumer2D extends Structure2D, Consumer<Access2D<?>> {
+public interface Consumer2D extends Structure2D, Consumer<Access2D<?>>
+{
 
-    interface Elements<N extends Number> extends Consumer2D, Mutate2D, Mutate2D.Fillable<N>, Mutate2D.Modifiable<N>, Mutate2D.BiModifiable<N> {
+    interface Elements<N extends Number> extends Consumer2D, Mutate2D, Mutate2D.Fillable<N>, Mutate2D.Modifiable<N>, Mutate2D.BiModifiable<N>
+    {
 
-        default void accept(final Access2D<?> supplied) {
-            if (this.isAcceptable(supplied)) {
+        default void accept(final Access2D<?> supplied)
+        {
+            if (this.isAcceptable(supplied))
+            {
                 final long tmpCountRows = supplied.countRows();
                 final long tmpCountColumns = supplied.countColumns();
-                for (long j = 0L; j < tmpCountColumns; j++) {
-                    for (long i = 0L; i < tmpCountRows; i++) {
+                for (long j = 0L; j < tmpCountColumns; j++)
+                {
+                    for (long i = 0L; i < tmpCountRows; i++)
+                    {
                         this.set(i, j, supplied.get(i, j));
                     }
                 }
-            } else {
+            } else
+            {
                 throw new ProgrammingError("Not acceptable!");
             }
         }
 
     }
 
-    default boolean isAcceptable(final Structure2D supplier) {
+    default boolean isAcceptable(final Structure2D supplier)
+    {
         return (this.countRows() >= supplier.countRows()) && (this.countColumns() >= supplier.countColumns());
     }
 

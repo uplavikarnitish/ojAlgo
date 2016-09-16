@@ -37,29 +37,36 @@ import org.ojalgo.scalar.ComplexNumber;
  *
  * @author apete
  */
-public final class ConstantFunction<N extends Number> extends AbstractMultiary<N, ConstantFunction<N>> {
+public final class ConstantFunction<N extends Number> extends AbstractMultiary<N, ConstantFunction<N>>
+{
 
-    public static ConstantFunction<BigDecimal> makeBig(final int arity) {
+    public static ConstantFunction<BigDecimal> makeBig(final int arity)
+    {
         return new ConstantFunction<>(arity, BigDenseStore.FACTORY, null);
     }
 
-    public static ConstantFunction<BigDecimal> makeBig(final int arity, final Number constant) {
+    public static ConstantFunction<BigDecimal> makeBig(final int arity, final Number constant)
+    {
         return new ConstantFunction<>(arity, BigDenseStore.FACTORY, constant);
     }
 
-    public static ConstantFunction<ComplexNumber> makeComplex(final int arity) {
+    public static ConstantFunction<ComplexNumber> makeComplex(final int arity)
+    {
         return new ConstantFunction<>(arity, ComplexDenseStore.FACTORY, null);
     }
 
-    public static ConstantFunction<ComplexNumber> makeComplex(final int arity, final Number constant) {
+    public static ConstantFunction<ComplexNumber> makeComplex(final int arity, final Number constant)
+    {
         return new ConstantFunction<>(arity, ComplexDenseStore.FACTORY, constant);
     }
 
-    public static ConstantFunction<Double> makePrimitive(final int arity) {
+    public static ConstantFunction<Double> makePrimitive(final int arity)
+    {
         return new ConstantFunction<>(arity, PrimitiveDenseStore.FACTORY, null);
     }
 
-    public static ConstantFunction<Double> makePrimitive(final int arity, final Number constant) {
+    public static ConstantFunction<Double> makePrimitive(final int arity, final Number constant)
+    {
         return new ConstantFunction<>(arity, PrimitiveDenseStore.FACTORY, constant);
     }
 
@@ -68,11 +75,13 @@ public final class ConstantFunction<N extends Number> extends AbstractMultiary<N
     private final PhysicalStore.Factory<N, ?> myFactory;
 
     @SuppressWarnings("unused")
-    private ConstantFunction() {
+    private ConstantFunction()
+    {
         this(0, null, null);
     }
 
-    ConstantFunction(final int arity, final PhysicalStore.Factory<N, ?> factory, final Number constant) {
+    ConstantFunction(final int arity, final PhysicalStore.Factory<N, ?> factory, final Number constant)
+    {
 
         super();
 
@@ -82,26 +91,31 @@ public final class ConstantFunction<N extends Number> extends AbstractMultiary<N
         this.setConstant(constant);
     }
 
-    public int arity() {
+    public int arity()
+    {
         return myArity;
     }
 
-    public MatrixStore<N> getGradient(final Access1D<N> point) {
+    public MatrixStore<N> getGradient(final Access1D<N> point)
+    {
         //return new ZeroStore<>(this.factory(), this.arity(), 1);
         return this.factory().builder().makeZero(this.arity(), 1).get();
     }
 
-    public MatrixStore<N> getHessian(final Access1D<N> point) {
+    public MatrixStore<N> getHessian(final Access1D<N> point)
+    {
         //return new ZeroStore<>(this.factory(), this.arity(), this.arity());
         return this.factory().builder().makeZero(this.arity(), this.arity()).get();
     }
 
-    public N invoke(final Access1D<N> arg) {
+    public N invoke(final Access1D<N> arg)
+    {
         return this.getConstant();
     }
 
     @Override
-    protected Factory<N, ?> factory() {
+    protected Factory<N, ?> factory()
+    {
         return myFactory;
     }
 

@@ -21,12 +21,14 @@
  */
 package org.ojalgo.series.primitive;
 
-final class DifferencesSeries extends PrimitiveSeries {
+final class DifferencesSeries extends PrimitiveSeries
+{
 
     private final int myPeriod;
     private final PrimitiveSeries mySeries;
 
-    DifferencesSeries(final PrimitiveSeries series) {
+    DifferencesSeries(final PrimitiveSeries series)
+    {
 
         super();
 
@@ -34,7 +36,8 @@ final class DifferencesSeries extends PrimitiveSeries {
         myPeriod = 1;
     }
 
-    DifferencesSeries(final PrimitiveSeries series, final int period) {
+    DifferencesSeries(final PrimitiveSeries series, final int period)
+    {
 
         super();
 
@@ -43,12 +46,14 @@ final class DifferencesSeries extends PrimitiveSeries {
     }
 
     @Override
-    public final int size() {
+    public final int size()
+    {
         return mySeries.size() - myPeriod;
     }
 
     @Override
-    public final double value(final int index) {
+    public final double value(final int index)
+    {
         return mySeries.value(index + myPeriod) - mySeries.value(index);
     }
 

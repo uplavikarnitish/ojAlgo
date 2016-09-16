@@ -29,12 +29,14 @@ import org.ojalgo.scalar.Scalar;
  *
  * @author apete
  */
-final class ZeroStore<N extends Number> extends FactoryStore<N> {
+final class ZeroStore<N extends Number> extends FactoryStore<N>
+{
 
     private final N myNumberZero;
     private final Scalar<N> myScalarZero;
 
-    ZeroStore(final PhysicalStore.Factory<N, ?> factory, final int rowsCount, final int columnsCount) {
+    ZeroStore(final PhysicalStore.Factory<N, ?> factory, final int rowsCount, final int columnsCount)
+    {
 
         super(factory, rowsCount, columnsCount);
 
@@ -43,62 +45,75 @@ final class ZeroStore<N extends Number> extends FactoryStore<N> {
     }
 
     @Override
-    public MatrixStore<N> add(final MatrixStore<N> addend) {
+    public MatrixStore<N> add(final MatrixStore<N> addend)
+    {
         return addend;
     }
 
     @Override
-    public MatrixStore<N> conjugate() {
+    public MatrixStore<N> conjugate()
+    {
         return new ZeroStore<>(this.physical(), this.getColDim(), this.getRowDim());
     }
 
     @Override
-    public double doubleValue(final long anInd) {
+    public double doubleValue(final long anInd)
+    {
         return PrimitiveMath.ZERO;
     }
 
-    public double doubleValue(final long aRow, final long aCol) {
+    public double doubleValue(final long aRow, final long aCol)
+    {
         return PrimitiveMath.ZERO;
     }
 
-    public int firstInColumn(final int col) {
+    public int firstInColumn(final int col)
+    {
         return this.getRowDim();
     }
 
-    public int firstInRow(final int row) {
+    public int firstInRow(final int row)
+    {
         return this.getColDim();
     }
 
-    public N get(final long aRow, final long aCol) {
+    public N get(final long aRow, final long aCol)
+    {
         return myNumberZero;
     }
 
     @Override
-    public int limitOfColumn(final int col) {
+    public int limitOfColumn(final int col)
+    {
         return 0;
     }
 
     @Override
-    public int limitOfRow(final int row) {
+    public int limitOfRow(final int row)
+    {
         return 0;
     }
 
     @Override
-    public ZeroStore<N> multiply(final MatrixStore<N> right) {
+    public ZeroStore<N> multiply(final MatrixStore<N> right)
+    {
         return new ZeroStore<>(this.physical(), this.getRowDim(), (int) (right.count() / this.getColDim()));
     }
 
-    public Scalar<N> toScalar(final long row, final long column) {
+    public Scalar<N> toScalar(final long row, final long column)
+    {
         return myScalarZero;
     }
 
     @Override
-    public MatrixStore<N> transpose() {
+    public MatrixStore<N> transpose()
+    {
         return new ZeroStore<>(this.physical(), this.getColDim(), this.getRowDim());
     }
 
     @Override
-    protected void addNonZerosTo(final ElementsConsumer<N> consumer) {
+    protected void addNonZerosTo(final ElementsConsumer<N> consumer)
+    {
     }
 
 }

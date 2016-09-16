@@ -36,21 +36,24 @@ import org.ojalgo.type.context.NumberContext;
  *
  * @author apete
  */
-final class NormalisedPortfolio extends FinancePortfolio {
+final class NormalisedPortfolio extends FinancePortfolio
+{
 
     private final FinancePortfolio myBasePortfolio;
     private transient BigDecimal myTotalWeight;
     private final NumberContext myWeightsContext;
 
     @SuppressWarnings("unused")
-    private NormalisedPortfolio() {
+    private NormalisedPortfolio()
+    {
 
         this(null, null);
 
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    NormalisedPortfolio(final FinancePortfolio basePortfolio, final NumberContext weightsContext) {
+    NormalisedPortfolio(final FinancePortfolio basePortfolio, final NumberContext weightsContext)
+    {
 
         super();
 
@@ -59,17 +62,20 @@ final class NormalisedPortfolio extends FinancePortfolio {
     }
 
     @Override
-    public double getMeanReturn() {
+    public double getMeanReturn()
+    {
         return myBasePortfolio.getMeanReturn() / this.getTotalWeight().doubleValue();
     }
 
     @Override
-    public double getVolatility() {
+    public double getVolatility()
+    {
         return myBasePortfolio.getVolatility() / this.getTotalWeight().doubleValue();
     }
 
     @Override
-    public List<BigDecimal> getWeights() {
+    public List<BigDecimal> getWeights()
+    {
 
         final List<BigDecimal> retVal = new ArrayList<>();
 
@@ -81,7 +87,8 @@ final class NormalisedPortfolio extends FinancePortfolio {
 
         final List<BigDecimal> tmpWeights = myBasePortfolio.getWeights();
         BigDecimal tmpWeight;
-        for (int i = 0; i < tmpWeights.size(); i++) {
+        for (int i = 0; i < tmpWeights.size(); i++)
+        {
 
             tmpWeight = tmpWeights.get(i);
             tmpWeight = DIVIDE.invoke(tmpWeight, tmpTotalWeight);
@@ -91,27 +98,33 @@ final class NormalisedPortfolio extends FinancePortfolio {
 
             tmpSum = tmpSum.add(tmpWeight);
 
-            if (tmpWeight.abs().compareTo(tmpLargest) == 1) {
+            if (tmpWeight.abs().compareTo(tmpLargest) == 1)
+            {
                 tmpLargest = tmpWeight.abs();
                 tmpIndexOfLargest = i;
             }
         }
 
-        if ((tmpSum.compareTo(BigMath.ONE) != 0) && (tmpIndexOfLargest != -1)) {
+        if ((tmpSum.compareTo(BigMath.ONE) != 0) && (tmpIndexOfLargest != -1))
+        {
             retVal.set(tmpIndexOfLargest, retVal.get(tmpIndexOfLargest).subtract(tmpSum.subtract(BigMath.ONE)));
         }
 
         return retVal;
     }
 
-    private final BigDecimal getTotalWeight() {
+    private final BigDecimal getTotalWeight()
+    {
 
-        if (myTotalWeight == null) {
+        if (myTotalWeight == null)
+        {
             myTotalWeight = BigMath.ZERO;
-            for (final BigDecimal tmpWeight : myBasePortfolio.getWeights()) {
+            for (final BigDecimal tmpWeight : myBasePortfolio.getWeights())
+            {
                 myTotalWeight = myTotalWeight.add(tmpWeight);
             }
-            if (myTotalWeight.signum() == 0) {
+            if (myTotalWeight.signum() == 0)
+            {
                 myTotalWeight = BigMath.ONE;
             }
         }
@@ -120,7 +133,8 @@ final class NormalisedPortfolio extends FinancePortfolio {
     }
 
     @Override
-    protected void reset() {
+    protected void reset()
+    {
 
         myBasePortfolio.reset();
 

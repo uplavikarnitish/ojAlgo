@@ -35,43 +35,51 @@ import org.ojalgo.function.PrimitiveFunction;
  *
  * @author apete
  */
-public class Poisson extends AbstractDiscrete {
+public class Poisson extends AbstractDiscrete
+{
 
     private static final long serialVersionUID = -5382163736545207782L;
 
     private final double myLambda; // rate or intensity
 
-    public Poisson() {
+    public Poisson()
+    {
         this(ONE);
     }
 
-    public Poisson(final double aLambda) {
+    public Poisson(final double aLambda)
+    {
 
         super();
 
         myLambda = aLambda;
     }
 
-    public double getExpected() {
+    public double getExpected()
+    {
         return myLambda;
     }
 
-    public double getProbability(final int aVal) {
+    public double getProbability(final int aVal)
+    {
         return (PrimitiveFunction.EXP.invoke(-myLambda) * PrimitiveFunction.POW.invoke(myLambda, aVal)) / RandomUtils.factorial(aVal);
     }
 
     @Override
-    public double getVariance() {
+    public double getVariance()
+    {
         return myLambda;
     }
 
     @Override
-    protected double generate() {
+    protected double generate()
+    {
 
         int retVal = -1;
         double tmpVal = ZERO;
 
-        while (tmpVal <= ONE) {
+        while (tmpVal <= ONE)
+        {
 
             retVal++;
 

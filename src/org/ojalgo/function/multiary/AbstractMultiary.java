@@ -26,39 +26,47 @@ import org.ojalgo.matrix.store.PhysicalStore;
 import org.ojalgo.scalar.Scalar;
 
 abstract class AbstractMultiary<N extends Number, F extends AbstractMultiary<N, ?>>
-        implements MultiaryFunction<N>, MultiaryFunction.Constant<N, F>, MultiaryFunction.TwiceDifferentiable<N> {
+        implements MultiaryFunction<N>, MultiaryFunction.Constant<N, F>, MultiaryFunction.TwiceDifferentiable<N>
+{
 
     private Scalar<N> myConstant = null;
 
-    protected AbstractMultiary() {
+    protected AbstractMultiary()
+    {
         super();
     }
 
     @SuppressWarnings("unchecked")
-    public final F constant(final Number constant) {
+    public final F constant(final Number constant)
+    {
         this.setConstant(constant);
         return (F) this;
     }
 
-    public final N getConstant() {
+    public final N getConstant()
+    {
         return this.getScalarConstant().getNumber();
     }
 
-    public final void setConstant(final Number constant) {
+    public final void setConstant(final Number constant)
+    {
         myConstant = constant != null ? this.factory().scalar().convert(constant) : null;
     }
 
-    public final FirstOrderApproximation<N> toFirstOrderApproximation(final Access1D<N> arg) {
+    public final FirstOrderApproximation<N> toFirstOrderApproximation(final Access1D<N> arg)
+    {
         return new FirstOrderApproximation<>(this, arg);
     }
 
-    public final SecondOrderApproximation<N> toSecondOrderApproximation(final Access1D<N> arg) {
+    public final SecondOrderApproximation<N> toSecondOrderApproximation(final Access1D<N> arg)
+    {
         return new SecondOrderApproximation<>(this, arg);
     }
 
     protected abstract PhysicalStore.Factory<N, ?> factory();
 
-    protected final Scalar<N> getScalarConstant() {
+    protected final Scalar<N> getScalarConstant()
+    {
         return myConstant != null ? myConstant : this.factory().scalar().zero();
     }
 

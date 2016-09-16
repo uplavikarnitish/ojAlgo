@@ -28,33 +28,40 @@ import org.ojalgo.scalar.Scalar;
  *
  * @author apete
  */
-final class ConjugatedStore<N extends Number> extends TransjugatedStore<N> {
+final class ConjugatedStore<N extends Number> extends TransjugatedStore<N>
+{
 
-    ConjugatedStore(final MatrixStore<N> base) {
+    ConjugatedStore(final MatrixStore<N> base)
+    {
         super(base);
     }
 
     @Override
-    public MatrixStore<N> conjugate() {
+    public MatrixStore<N> conjugate()
+    {
         return this.getBase();
     }
 
-    public N get(final long aRow, final long aCol) {
+    public N get(final long aRow, final long aCol)
+    {
         return this.getBase().toScalar((int) aCol, (int) aRow).conjugate().getNumber();
     }
 
     @Override
-    public MatrixStore<N> multiply(final MatrixStore<N> right) {
+    public MatrixStore<N> multiply(final MatrixStore<N> right)
+    {
 
         MatrixStore<N> retVal;
 
-        if (right instanceof ConjugatedStore<?>) {
+        if (right instanceof ConjugatedStore<?>)
+        {
 
             retVal = ((ConjugatedStore<N>) right).getOriginal().multiply(this.getBase());
 
             retVal = new ConjugatedStore<>(retVal);
 
-        } else {
+        } else
+        {
 
             retVal = super.multiply(right);
         }
@@ -62,7 +69,8 @@ final class ConjugatedStore<N extends Number> extends TransjugatedStore<N> {
         return retVal;
     }
 
-    public Scalar<N> toScalar(final long row, final long column) {
+    public Scalar<N> toScalar(final long row, final long column)
+    {
         return this.getBase().toScalar(column, row).conjugate();
     }
 

@@ -21,22 +21,27 @@
  */
 package org.ojalgo.matrix.store.operation;
 
-public class Copy extends MatrixOperation {
+public class Copy extends MatrixOperation
+{
 
     public static void invoke(final double[] source, final int sourceOffset, final double[] destination, final int destinationOffset, final int first,
-            final int limit) {
-        for (int i = first; i < limit; i++) {
+                              final int limit)
+    {
+        for (int i = first; i < limit; i++)
+        {
             destination[destinationOffset + i] = source[sourceOffset + i];
         }
 
     }
 
-    private Copy() {
+    private Copy()
+    {
         super();
     }
 
     @Override
-    public int threshold() {
+    public int threshold()
+    {
         // TODO Auto-generated method stub
         return 0;
     }

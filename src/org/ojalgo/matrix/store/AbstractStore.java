@@ -31,21 +31,24 @@ import org.ojalgo.function.aggregator.AggregatorFunction;
 import org.ojalgo.matrix.MatrixUtils;
 import org.ojalgo.type.context.NumberContext;
 
-abstract class AbstractStore<N extends Number> implements MatrixStore<N>, Serializable {
+abstract class AbstractStore<N extends Number> implements MatrixStore<N>, Serializable
+{
 
     private final int myColDim;
     private transient Class<?> myComponentType = null;
     private final int myRowDim;
 
     @SuppressWarnings("unused")
-    private AbstractStore() {
+    private AbstractStore()
+    {
 
         this(0, 0);
 
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    protected AbstractStore(final int rowsCount, final int columnsCount) {
+    protected AbstractStore(final int rowsCount, final int columnsCount)
+    {
 
         super();
 
@@ -54,7 +57,8 @@ abstract class AbstractStore<N extends Number> implements MatrixStore<N>, Serial
     }
 
     @SuppressWarnings("unchecked")
-    public N aggregateAll(final Aggregator aggregator) {
+    public N aggregateAll(final Aggregator aggregator)
+    {
 
         final AggregatorFunction<N> tmpFunction = (AggregatorFunction<N>) aggregator.getFunction(this.getComponentType());
 
@@ -63,7 +67,8 @@ abstract class AbstractStore<N extends Number> implements MatrixStore<N>, Serial
         return tmpFunction.getNumber();
     }
 
-    public final PhysicalStore<N> copy() {
+    public final PhysicalStore<N> copy()
+    {
 
         final PhysicalStore<N> retVal = this.physical().makeZero(this.countRows(), this.countColumns());
 
@@ -72,68 +77,84 @@ abstract class AbstractStore<N extends Number> implements MatrixStore<N>, Serial
         return retVal;
     }
 
-    public long count() {
+    public long count()
+    {
         return myRowDim * myColDim;
     }
 
-    public long countColumns() {
+    public long countColumns()
+    {
         return myColDim;
     }
 
-    public long countRows() {
+    public long countRows()
+    {
         return myRowDim;
     }
 
-    public final boolean equals(final MatrixStore<N> other, final NumberContext context) {
+    public final boolean equals(final MatrixStore<N> other, final NumberContext context)
+    {
         return AccessUtils.equals(this, other, context);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public final boolean equals(final Object someObj) {
-        if (someObj instanceof MatrixStore) {
+    public final boolean equals(final Object someObj)
+    {
+        if (someObj instanceof MatrixStore)
+        {
             return this.equals((MatrixStore<N>) someObj, NumberContext.getGeneral(6));
-        } else {
+        } else
+        {
             return super.equals(someObj);
         }
     }
 
-    public final MatrixStore<N> get() {
+    public final MatrixStore<N> get()
+    {
         return this;
     }
 
     @Override
-    public final int hashCode() {
+    public final int hashCode()
+    {
         return MatrixUtils.hashCode(this);
     }
 
-    public boolean isAbsolute(final long row, final long col) {
+    public boolean isAbsolute(final long row, final long col)
+    {
         return this.toScalar(row, col).isAbsolute();
     }
 
     /**
      * @see org.ojalgo.access.Access2D.Elements#isSmall(long, long, double)
      */
-    public boolean isSmall(final long row, final long col, final double comparedTo) {
+    public boolean isSmall(final long row, final long col, final double comparedTo)
+    {
         return this.toScalar(row, col).isSmall(comparedTo);
     }
 
-    public int limitOfColumn(final int col) {
+    public int limitOfColumn(final int col)
+    {
         return myRowDim;
     }
 
-    public int limitOfRow(final int row) {
+    public int limitOfRow(final int row)
+    {
         return myColDim;
     }
 
-    public N multiplyBoth(final Access1D<N> leftAndRight) {
+    public N multiplyBoth(final Access1D<N> leftAndRight)
+    {
 
         final PhysicalStore<N> tmpStep1 = this.physical().makeZero(1L, leftAndRight.count());
         final PhysicalStore<N> tmpStep2 = this.physical().makeZero(1L, 1L);
 
-        if (this.isPrimitive()) {
+        if (this.isPrimitive())
+        {
             tmpStep1.fillByMultiplying(leftAndRight, this);
-        } else {
+        } else
+        {
             final PhysicalStore<N> tmpLeft = this.physical().rows(leftAndRight);
             tmpLeft.modifyAll(this.physical().function().conjugate());
             tmpStep1.fillByMultiplying(tmpLeft.conjugate(), this);
@@ -144,42 +165,51 @@ abstract class AbstractStore<N extends Number> implements MatrixStore<N>, Serial
         return tmpStep2.get(0L);
     }
 
-    public void supplyTo(final ElementsConsumer<N> consumer) {
+    public void supplyTo(final ElementsConsumer<N> consumer)
+    {
         consumer.fillAll(this.physical().scalar().zero().getNumber());
         this.addNonZerosTo(consumer);
     }
 
     @Override
-    public final String toString() {
+    public final String toString()
+    {
         return MatrixUtils.toString(this);
     }
 
     protected abstract void addNonZerosTo(final ElementsConsumer<N> consumer);
 
-    protected final int getColDim() {
+    protected final int getColDim()
+    {
         return myColDim;
     }
 
-    protected final int getMaxDim() {
+    protected final int getMaxDim()
+    {
         return Math.max(myRowDim, myColDim);
     }
 
-    protected final int getMinDim() {
+    protected final int getMinDim()
+    {
         return Math.min(myRowDim, myColDim);
     }
 
-    protected final int getRowDim() {
+    protected final int getRowDim()
+    {
         return myRowDim;
     }
 
-    final Class<?> getComponentType() {
-        if (myComponentType == null) {
+    final Class<?> getComponentType()
+    {
+        if (myComponentType == null)
+        {
             myComponentType = this.get(0, 0).getClass();
         }
         return myComponentType;
     }
 
-    final boolean isPrimitive() {
+    final boolean isPrimitive()
+    {
         return this.getComponentType().equals(Double.class);
     }
 

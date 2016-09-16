@@ -26,7 +26,8 @@ package org.ojalgo.random;
  *
  * @author apete
  */
-public interface Distribution {
+public interface Distribution
+{
 
     double getExpected();
 

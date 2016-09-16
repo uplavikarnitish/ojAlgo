@@ -24,24 +24,30 @@ package org.ojalgo.type;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public abstract class TypeCache<T> {
+public abstract class TypeCache<T>
+{
 
     private static final Timer TIMER = new Timer("TypeCache-Daemon", true);
     private transient volatile T myCachedObject;
 
     private volatile boolean myDirty;
 
-    public TypeCache(final long aPurgeIntervalMeassure, final CalendarDateUnit aPurgeIntervalUnit) {
+    public TypeCache(final long aPurgeIntervalMeassure, final CalendarDateUnit aPurgeIntervalUnit)
+    {
 
         super();
 
-        TIMER.schedule(new TimerTask() {
+        TIMER.schedule(new TimerTask()
+        {
 
             @Override
-            public void run() {
-                if (TypeCache.this.isDirty()) {
+            public void run()
+            {
+                if (TypeCache.this.isDirty())
+                {
                     TypeCache.this.flushCache();
-                } else {
+                } else
+                {
                     TypeCache.this.makeDirty();
                 }
             }
@@ -50,17 +56,21 @@ public abstract class TypeCache<T> {
     }
 
     @SuppressWarnings("unused")
-    private TypeCache() {
+    private TypeCache()
+    {
         this(8L, CalendarDateUnit.HOUR);
     }
 
-    public synchronized final void flushCache() {
+    public synchronized final void flushCache()
+    {
         myCachedObject = null;
     }
 
-    public synchronized final T getCachedObject() {
+    public synchronized final T getCachedObject()
+    {
 
-        if ((myCachedObject == null) || myDirty) {
+        if ((myCachedObject == null) || myDirty)
+        {
 
             myCachedObject = this.recreateCache();
 
@@ -70,15 +80,18 @@ public abstract class TypeCache<T> {
         return myCachedObject;
     }
 
-    public synchronized final boolean isCacheSet() {
+    public synchronized final boolean isCacheSet()
+    {
         return myCachedObject != null;
     }
 
-    public synchronized final boolean isDirty() {
+    public synchronized final boolean isDirty()
+    {
         return myDirty;
     }
 
-    public synchronized final void makeDirty() {
+    public synchronized final void makeDirty()
+    {
         myDirty = true;
     }
 

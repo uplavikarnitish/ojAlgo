@@ -24,13 +24,15 @@ package org.ojalgo.finance.portfolio;
 import org.ojalgo.ProgrammingError;
 import org.ojalgo.function.PrimitiveFunction;
 
-public final class CharacteristicLine {
+public final class CharacteristicLine
+{
 
     public double beta, alpha, epsilon;
 
     private final FinancePortfolio myMarketPortfolio;
 
-    public CharacteristicLine(final FinancePortfolio theMarketPortfolio) {
+    public CharacteristicLine(final FinancePortfolio theMarketPortfolio)
+    {
 
         super();
 
@@ -38,18 +40,21 @@ public final class CharacteristicLine {
     }
 
     @SuppressWarnings("unused")
-    private CharacteristicLine() {
+    private CharacteristicLine()
+    {
 
         this(null);
 
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    public double calculateBeta(final FinancePortfolio anyAsset) {
+    public double calculateBeta(final FinancePortfolio anyAsset)
+    {
         return anyAsset.getMeanReturn() / myMarketPortfolio.getMeanReturn();
     }
 
-    public double calculateCorrelation(final FinancePortfolio anyAsset) {
+    public double calculateCorrelation(final FinancePortfolio anyAsset)
+    {
 
         final double tmpCovar = this.calculateCovariance(anyAsset);
 
@@ -58,7 +63,8 @@ public final class CharacteristicLine {
         return tmpCovar / PrimitiveFunction.SQRT.invoke(tmpVal);
     }
 
-    public double calculateCovariance(final FinancePortfolio anyAsset) {
+    public double calculateCovariance(final FinancePortfolio anyAsset)
+    {
 
         final double tmpBeta = this.calculateBeta(anyAsset);
 

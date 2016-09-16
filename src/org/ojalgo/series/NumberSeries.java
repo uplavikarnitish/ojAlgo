@@ -32,38 +32,47 @@ import org.ojalgo.array.ArrayUtils;
 import org.ojalgo.constant.PrimitiveMath;
 import org.ojalgo.function.UnaryFunction;
 
-public class NumberSeries<N extends Number & Comparable<N>> extends AbstractSeries<N, N, NumberSeries<N>> implements UnaryFunction<N> {
+public class NumberSeries<N extends Number & Comparable<N>> extends AbstractSeries<N, N, NumberSeries<N>> implements UnaryFunction<N>
+{
 
-    public NumberSeries() {
+    public NumberSeries()
+    {
         super();
     }
 
-    public NumberSeries(final Comparator<? super N> comparator) {
+    public NumberSeries(final Comparator<? super N> comparator)
+    {
         super(comparator);
     }
 
-    public NumberSeries(final Map<? extends N, ? extends N> map) {
+    public NumberSeries(final Map<? extends N, ? extends N> map)
+    {
         super(map);
     }
 
-    public NumberSeries(final SortedMap<N, ? extends N> sortedMap) {
+    public NumberSeries(final SortedMap<N, ? extends N> sortedMap)
+    {
         super(sortedMap);
     }
 
-    public Access1D<N> accessKeys() {
+    public Access1D<N> accessKeys()
+    {
         return ArrayUtils.wrapAccess1D(new ArrayList<>(this.keySet()));
     }
 
-    public Access1D<N> accessValues() {
+    public Access1D<N> accessValues()
+    {
         return ArrayUtils.wrapAccess1D(new ArrayList<>(this.values()));
     }
 
-    public double invoke(final double arg) {
+    public double invoke(final double arg)
+    {
         ProgrammingError.throwForIllegalInvocation();
         return PrimitiveMath.NaN;
     }
 
-    public N invoke(final N arg) {
+    public N invoke(final N arg)
+    {
         return this.get(arg);
     }
 

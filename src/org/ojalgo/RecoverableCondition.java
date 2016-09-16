@@ -27,19 +27,23 @@ package org.ojalgo;
  *
  * @author apete
  */
-public class RecoverableCondition extends Exception {
+public class RecoverableCondition extends Exception
+{
 
-    public RecoverableCondition(final String description) {
+    public RecoverableCondition(final String description)
+    {
         super(description);
     }
 
     @SuppressWarnings("unused")
-    private RecoverableCondition() {
+    private RecoverableCondition()
+    {
         super();
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         final String retVal = this.getClass().getSimpleName();
         final String tmpMessage = this.getLocalizedMessage();
         return (tmpMessage != null) ? (retVal + ": " + tmpMessage) : retVal;

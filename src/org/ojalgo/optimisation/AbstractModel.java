@@ -23,47 +23,56 @@ package org.ojalgo.optimisation;
 
 import java.io.Serializable;
 
-abstract class AbstractModel<S extends Optimisation.Solver> implements Optimisation.Model, Serializable {
+abstract class AbstractModel<S extends Optimisation.Solver> implements Optimisation.Model, Serializable
+{
 
     public final Optimisation.Options options;
 
     private boolean myMinimisation = true;
 
-    protected AbstractModel() {
+    protected AbstractModel()
+    {
 
         super();
 
         options = new Optimisation.Options();
     }
 
-    protected AbstractModel(final Optimisation.Options someOptions) {
+    protected AbstractModel(final Optimisation.Options someOptions)
+    {
 
         super();
 
         options = someOptions;
     }
 
-    public final boolean isMaximisation() {
+    public final boolean isMaximisation()
+    {
         return !this.isMinimisation();
     }
 
-    public final boolean isMinimisation() {
+    public final boolean isMinimisation()
+    {
         return myMinimisation;
     }
 
-    public final void setMaximisation() {
+    public final void setMaximisation()
+    {
         this.setMaximisation(true);
     }
 
-    public final void setMinimisation() {
+    public final void setMinimisation()
+    {
         this.setMinimisation(true);
     }
 
-    protected final void setMaximisation(final boolean maximisation) {
+    protected final void setMaximisation(final boolean maximisation)
+    {
         this.setMinimisation(!maximisation);
     }
 
-    protected final void setMinimisation(final boolean minimisation) {
+    protected final void setMinimisation(final boolean minimisation)
+    {
         myMinimisation = minimisation;
     }
 

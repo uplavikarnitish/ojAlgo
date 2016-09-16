@@ -41,9 +41,11 @@ import org.ojalgo.type.context.NumberContext;
  *
  * @author apete
  */
-public abstract class FinancePortfolio implements Comparable<FinancePortfolio> {
+public abstract class FinancePortfolio implements Comparable<FinancePortfolio>
+{
 
-    public static interface Context {
+    public static interface Context
+    {
 
         double calculatePortfolioReturn(final FinancePortfolio weightsPortfolio);
 
@@ -63,15 +65,18 @@ public abstract class FinancePortfolio implements Comparable<FinancePortfolio> {
 
     protected static final Factory<PrimitiveMatrix> MATRIX_FACTORY = PrimitiveMatrix.FACTORY;
 
-    protected FinancePortfolio() {
+    protected FinancePortfolio()
+    {
         super();
     }
 
-    public final int compareTo(final FinancePortfolio reference) {
+    public final int compareTo(final FinancePortfolio reference)
+    {
         return Double.compare(this.getSharpeRatio(), reference.getSharpeRatio());
     }
 
-    public final GeometricBrownianMotion forecast() {
+    public final GeometricBrownianMotion forecast()
+    {
 
         final double tmpInitialValue = ONE;
         final double tmpExpectedValue = ONE + this.getMeanReturn();
@@ -81,7 +86,8 @@ public abstract class FinancePortfolio implements Comparable<FinancePortfolio> {
         return GeometricBrownianMotion.make(tmpInitialValue, tmpExpectedValue, tmpValueVariance, tmpHorizon);
     }
 
-    public final double getConformance(final FinancePortfolio reference) {
+    public final double getConformance(final FinancePortfolio reference)
+    {
 
         final BasicMatrix tmpMyWeights = MATRIX_FACTORY.columns(this.getWeights());
         final BasicMatrix tmpRefWeights = MATRIX_FACTORY.columns(reference.getWeights());
@@ -93,11 +99,13 @@ public abstract class FinancePortfolio implements Comparable<FinancePortfolio> {
         return tmpNumerator / (tmpDenom1 * tmpDenom2);
     }
 
-    public final double getLossProbability() {
+    public final double getLossProbability()
+    {
         return this.getLossProbability(ONE);
     }
 
-    public final double getLossProbability(final Number timePeriod) {
+    public final double getLossProbability(final Number timePeriod)
+    {
 
         final GeometricBrownianMotion tmpProc = this.forecast();
 
@@ -117,19 +125,24 @@ public abstract class FinancePortfolio implements Comparable<FinancePortfolio> {
      * The instrument's return variance. Subclasses must override either {@linkplain #getReturnVariance()} or
      * {@linkplain #getVolatility()}.
      */
-    public double getReturnVariance() {
+    public double getReturnVariance()
+    {
         final double tmpVolatility = this.getVolatility();
         return tmpVolatility * tmpVolatility;
     }
 
-    public final double getSharpeRatio() {
+    public final double getSharpeRatio()
+    {
         return this.getSharpeRatio(null);
     }
 
-    public final double getSharpeRatio(final Number riskFreeReturn) {
-        if (riskFreeReturn != null) {
+    public final double getSharpeRatio(final Number riskFreeReturn)
+    {
+        if (riskFreeReturn != null)
+        {
             return (this.getMeanReturn() - riskFreeReturn.doubleValue()) / this.getVolatility();
-        } else {
+        } else
+        {
             return this.getMeanReturn() / this.getVolatility();
         }
     }
@@ -138,7 +151,8 @@ public abstract class FinancePortfolio implements Comparable<FinancePortfolio> {
      * Value at Risk (VaR) is the maximum loss not exceeded with a given probability defined as the confidence
      * level, over a given period of time.
      */
-    public final double getValueAtRisk(final Number confidenceLevel, final Number timePeriod) {
+    public final double getValueAtRisk(final Number confidenceLevel, final Number timePeriod)
+    {
 
         final double aReturn = this.getMeanReturn();
         final double aStdDev = this.getVolatility();
@@ -149,7 +163,8 @@ public abstract class FinancePortfolio implements Comparable<FinancePortfolio> {
         return PrimitiveFunction.MAX.invoke((PrimitiveFunction.SQRT.invoke(tmpTimePeriod) * aStdDev * tmpConfidenceScale) - (tmpTimePeriod * aReturn), ZERO);
     }
 
-    public final double getValueAtRisk95() {
+    public final double getValueAtRisk95()
+    {
         return this.getValueAtRisk(0.95, ONE);
     }
 
@@ -158,7 +173,8 @@ public abstract class FinancePortfolio implements Comparable<FinancePortfolio> {
      * horizon. It is often used to quantify the risk of the asset over that time period. Subclasses must
      * override either {@linkplain #getReturnVariance()} or {@linkplain #getVolatility()}.
      */
-    public double getVolatility() {
+    public double getVolatility()
+    {
         return PrimitiveFunction.SQRT.invoke(this.getReturnVariance());
     }
 
@@ -173,19 +189,22 @@ public abstract class FinancePortfolio implements Comparable<FinancePortfolio> {
     /**
      * Normalised weights Portfolio
      */
-    public final FinancePortfolio normalise() {
+    public final FinancePortfolio normalise()
+    {
         return new NormalisedPortfolio(this, StandardType.PERCENT);
     }
 
     /**
      * Normalised weights Portfolio
      */
-    public final FinancePortfolio normalise(final NumberContext weightsContext) {
+    public final FinancePortfolio normalise(final NumberContext weightsContext)
+    {
         return new NormalisedPortfolio(this, weightsContext);
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return TypeUtils.format("{}: Return={}, Variance={}, Volatility={}, Weights={}", this.getClass().getSimpleName(), this.getMeanReturn(),
                 this.getReturnVariance(), this.getVolatility(), this.getWeights());
     }

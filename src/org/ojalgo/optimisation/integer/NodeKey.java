@@ -34,7 +34,8 @@ import org.ojalgo.function.PrimitiveFunction;
 import org.ojalgo.optimisation.ExpressionsBasedModel;
 import org.ojalgo.optimisation.Variable;
 
-final class NodeKey implements Serializable, Comparable<NodeKey> {
+final class NodeKey implements Serializable, Comparable<NodeKey>
+{
 
     private static AtomicLong GENERATOR = new AtomicLong();
 
@@ -64,13 +65,15 @@ final class NodeKey implements Serializable, Comparable<NodeKey> {
     final long sequence = GENERATOR.getAndIncrement();
 
     @SuppressWarnings("unused")
-    private NodeKey() {
+    private NodeKey()
+    {
         this(null);
         ProgrammingError.throwForIllegalInvocation();
     }
 
     private NodeKey(final int[] lowerBounds, final int[] upperBounds, final long parentSequenceNumber, final int indexBranchedOn,
-            final double branchVariableDisplacement, final double parentObjectiveFunctionValue) {
+                    final double branchVariableDisplacement, final double parentObjectiveFunctionValue)
+    {
 
         super();
 
@@ -83,7 +86,8 @@ final class NodeKey implements Serializable, Comparable<NodeKey> {
         objective = parentObjectiveFunctionValue;
     }
 
-    NodeKey(final ExpressionsBasedModel integerModel) {
+    NodeKey(final ExpressionsBasedModel integerModel)
+    {
 
         super();
 
@@ -95,17 +99,20 @@ final class NodeKey implements Serializable, Comparable<NodeKey> {
         Arrays.fill(myLowerBounds, Integer.MIN_VALUE);
         Arrays.fill(myUpperBounds, Integer.MAX_VALUE);
 
-        for (int i = 0; i < tmpLength; i++) {
+        for (int i = 0; i < tmpLength; i++)
+        {
 
             final Variable tmpVariable = tmpIntegerVariables.get(i);
 
             final BigDecimal tmpLowerLimit = tmpVariable.getLowerLimit();
-            if (tmpLowerLimit != null) {
+            if (tmpLowerLimit != null)
+            {
                 myLowerBounds[i] = tmpLowerLimit.intValue();
             }
 
             final BigDecimal tmpUpperLimit = tmpVariable.getUpperLimit();
-            if (tmpUpperLimit != null) {
+            if (tmpUpperLimit != null)
+            {
                 myUpperBounds[i] = tmpUpperLimit.intValue();
             }
         }
@@ -116,33 +123,41 @@ final class NodeKey implements Serializable, Comparable<NodeKey> {
         objective = PrimitiveMath.NaN;
     }
 
-    public int compareTo(final NodeKey ref) {
+    public int compareTo(final NodeKey ref)
+    {
         return Long.compare(sequence, ref.sequence);
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return false;
         }
-        if (!(obj instanceof NodeKey)) {
+        if (!(obj instanceof NodeKey))
+        {
             return false;
         }
         final NodeKey other = (NodeKey) obj;
-        if (!Arrays.equals(myLowerBounds, other.myLowerBounds)) {
+        if (!Arrays.equals(myLowerBounds, other.myLowerBounds))
+        {
             return false;
         }
-        if (!Arrays.equals(myUpperBounds, other.myUpperBounds)) {
+        if (!Arrays.equals(myUpperBounds, other.myUpperBounds))
+        {
             return false;
         }
         return true;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = 1;
         result = (prime * result) + Arrays.hashCode(myLowerBounds);
@@ -151,7 +166,8 @@ final class NodeKey implements Serializable, Comparable<NodeKey> {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
 
         final StringBuilder retVal = new StringBuilder();
 
@@ -169,11 +185,13 @@ final class NodeKey implements Serializable, Comparable<NodeKey> {
         retVal.append(' ');
         retVal.append('[');
 
-        if (myLowerBounds.length > 0) {
+        if (myLowerBounds.length > 0)
+        {
             this.append(retVal, 0);
         }
 
-        for (int i = 1; i < myLowerBounds.length; i++) {
+        for (int i = 1; i < myLowerBounds.length; i++)
+        {
             retVal.append(',');
             retVal.append(' ');
             this.append(retVal, i);
@@ -182,7 +200,8 @@ final class NodeKey implements Serializable, Comparable<NodeKey> {
         return retVal.append(']').toString();
     }
 
-    private void append(final StringBuilder builder, final int index) {
+    private void append(final StringBuilder builder, final int index)
+    {
         builder.append(index);
         builder.append('=');
         builder.append(myLowerBounds[index]);
@@ -190,23 +209,27 @@ final class NodeKey implements Serializable, Comparable<NodeKey> {
         builder.append(myUpperBounds[index]);
     }
 
-    private double feasible(final int index, final double value) {
+    private double feasible(final int index, final double value)
+    {
         return PrimitiveFunction.MIN.invoke(PrimitiveFunction.MAX.invoke(myLowerBounds[index], value), myUpperBounds[index]);
     }
 
-    long calculateTreeSize() {
+    long calculateTreeSize()
+    {
 
         long retVal = 1L;
 
         final int tmpLength = myLowerBounds.length;
-        for (int i = 0; i < tmpLength; i++) {
+        for (int i = 0; i < tmpLength; i++)
+        {
             retVal *= (1L + (myUpperBounds[i] - myLowerBounds[i]));
         }
 
         return retVal;
     }
 
-    NodeKey createLowerBranch(final int index, final double value, final double objective) {
+    NodeKey createLowerBranch(final int index, final double value, final double objective)
+    {
 
         final int[] tmpLBs = this.getLowerBounds();
         final int[] tmpUBs = this.getUpperBounds();
@@ -215,16 +238,19 @@ final class NodeKey implements Serializable, Comparable<NodeKey> {
 
         final int tmpFloor = (int) PrimitiveFunction.FLOOR.invoke(tmpFeasibleValue);
 
-        if ((tmpFloor >= tmpUBs[index]) && (tmpFloor > tmpLBs[index])) {
+        if ((tmpFloor >= tmpUBs[index]) && (tmpFloor > tmpLBs[index]))
+        {
             tmpUBs[index] = tmpFloor - 1;
-        } else {
+        } else
+        {
             tmpUBs[index] = tmpFloor;
         }
 
         return new NodeKey(tmpLBs, tmpUBs, sequence, index, value - tmpFloor, objective);
     }
 
-    NodeKey createUpperBranch(final int index, final double value, final double objective) {
+    NodeKey createUpperBranch(final int index, final double value, final double objective)
+    {
 
         final int[] tmpLBs = this.getLowerBounds();
         final int[] tmpUBs = this.getUpperBounds();
@@ -233,45 +259,56 @@ final class NodeKey implements Serializable, Comparable<NodeKey> {
 
         final int tmpCeil = (int) PrimitiveFunction.CEIL.invoke(tmpFeasibleValue);
 
-        if ((tmpCeil <= tmpLBs[index]) && (tmpCeil < tmpUBs[index])) {
+        if ((tmpCeil <= tmpLBs[index]) && (tmpCeil < tmpUBs[index]))
+        {
             tmpLBs[index] = tmpCeil + 1;
-        } else {
+        } else
+        {
             tmpLBs[index] = tmpCeil;
         }
 
         return new NodeKey(tmpLBs, tmpUBs, sequence, index, tmpCeil - value, objective);
     }
 
-    double getFraction(final int index, final double value) {
+    double getFraction(final int index, final double value)
+    {
 
         final double tmpFeasibleValue = this.feasible(index, value);
 
         return PrimitiveFunction.ABS.invoke(tmpFeasibleValue - PrimitiveFunction.RINT.invoke(tmpFeasibleValue));
     }
 
-    BigDecimal getLowerBound(final int index) {
+    BigDecimal getLowerBound(final int index)
+    {
         final int tmpLower = myLowerBounds[index];
-        if (tmpLower != Integer.MIN_VALUE) {
+        if (tmpLower != Integer.MIN_VALUE)
+        {
             return new BigDecimal(tmpLower);
-        } else {
+        } else
+        {
             return null;
         }
     }
 
-    int[] getLowerBounds() {
+    int[] getLowerBounds()
+    {
         return ArrayUtils.copyOf(myLowerBounds);
     }
 
-    BigDecimal getUpperBound(final int index) {
+    BigDecimal getUpperBound(final int index)
+    {
         final int tmpUpper = myUpperBounds[index];
-        if (tmpUpper != Integer.MAX_VALUE) {
+        if (tmpUpper != Integer.MAX_VALUE)
+        {
             return new BigDecimal(tmpUpper);
-        } else {
+        } else
+        {
             return null;
         }
     }
 
-    int[] getUpperBounds() {
+    int[] getUpperBounds()
+    {
         return ArrayUtils.copyOf(myUpperBounds);
     }
 

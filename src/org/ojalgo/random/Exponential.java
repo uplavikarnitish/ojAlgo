@@ -32,44 +32,55 @@ import org.ojalgo.function.PrimitiveFunction;
  *
  * @author apete
  */
-public class Exponential extends AbstractContinuous {
+public class Exponential extends AbstractContinuous
+{
 
     private static final long serialVersionUID = -720007692511649669L;
 
     private final double myRate; // lamda
 
-    public Exponential() {
+    public Exponential()
+    {
         this(ONE);
     }
 
-    public Exponential(final double aRate) {
+    public Exponential(final double aRate)
+    {
 
         super();
 
         myRate = aRate;
     }
 
-    public double getDistribution(final double aValue) {
-        if (aValue < ZERO) {
+    public double getDistribution(final double aValue)
+    {
+        if (aValue < ZERO)
+        {
             return ZERO;
-        } else {
+        } else
+        {
             return ONE - PrimitiveFunction.EXP.invoke(-myRate * aValue);
         }
     }
 
-    public double getExpected() {
+    public double getExpected()
+    {
         return ONE / myRate;
     }
 
-    public double getProbability(final double aValue) {
-        if (aValue < ZERO) {
+    public double getProbability(final double aValue)
+    {
+        if (aValue < ZERO)
+        {
             return ZERO;
-        } else {
+        } else
+        {
             return myRate * PrimitiveFunction.EXP.invoke(-myRate * aValue);
         }
     }
 
-    public double getQuantile(final double aProbality) {
+    public double getQuantile(final double aProbality)
+    {
 
         this.checkProbabilty(aProbality);
 
@@ -77,12 +88,14 @@ public class Exponential extends AbstractContinuous {
     }
 
     @Override
-    public double getStandardDeviation() {
+    public double getStandardDeviation()
+    {
         return ONE / myRate;
     }
 
     @Override
-    protected double generate() {
+    protected double generate()
+    {
         return -PrimitiveFunction.LOG.invoke(this.random().nextDouble()) / myRate;
     }
 

@@ -30,14 +30,16 @@ import org.ojalgo.matrix.store.MatrixStore;
 import org.ojalgo.matrix.store.PrimitiveDenseStore;
 import org.ojalgo.type.Alternator;
 
-public class Random1D {
+public class Random1D
+{
 
     public final int length;
 
     private final Alternator<Random> myAlternator = RandomNumber.makeRandomAlternator();
     private final MatrixStore<Double> myCholeskiedCorrelations;
 
-    public Random1D(final Access2D<?> correlations) {
+    public Random1D(final Access2D<?> correlations)
+    {
 
         super();
 
@@ -53,7 +55,8 @@ public class Random1D {
     /**
      * If the variables are uncorrelated.
      */
-    public Random1D(final int size) {
+    public Random1D(final int size)
+    {
 
         super();
 
@@ -63,24 +66,29 @@ public class Random1D {
     }
 
     @SuppressWarnings("unused")
-    private Random1D() {
+    private Random1D()
+    {
         this(null);
     }
 
     /**
      * An array of correlated random numbers, provided that you gave a correlations matrix to the constructor.
      */
-    public Array1D<Double> nextDouble() {
+    public Array1D<Double> nextDouble()
+    {
 
         final PrimitiveDenseStore tmpUncorrelated = PrimitiveDenseStore.FACTORY.makeZero(length, 1);
 
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < length; i++)
+        {
             tmpUncorrelated.set(i, 0, this.random().nextDouble());
         }
 
-        if (myCholeskiedCorrelations != null) {
+        if (myCholeskiedCorrelations != null)
+        {
             return ((PrimitiveDenseStore) myCholeskiedCorrelations.multiply(tmpUncorrelated)).asList();
-        } else {
+        } else
+        {
             return tmpUncorrelated.asList();
         }
     }
@@ -88,26 +96,32 @@ public class Random1D {
     /**
      * An array of correlated random numbers, provided that you gave a correlations matrix to the constructor.
      */
-    public Array1D<Double> nextGaussian() {
+    public Array1D<Double> nextGaussian()
+    {
 
         final PrimitiveDenseStore tmpUncorrelated = PrimitiveDenseStore.FACTORY.makeZero(length, 1);
 
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < length; i++)
+        {
             tmpUncorrelated.set(i, 0, this.random().nextGaussian());
         }
 
-        if (myCholeskiedCorrelations != null) {
+        if (myCholeskiedCorrelations != null)
+        {
             return ((PrimitiveDenseStore) myCholeskiedCorrelations.multiply(tmpUncorrelated)).asList();
-        } else {
+        } else
+        {
             return tmpUncorrelated.asList();
         }
     }
 
-    public int size() {
+    public int size()
+    {
         return length;
     }
 
-    protected Random random() {
+    protected Random random()
+    {
         return myAlternator.get();
     }
 

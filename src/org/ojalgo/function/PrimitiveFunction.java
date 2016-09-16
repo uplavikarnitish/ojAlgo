@@ -35,201 +35,251 @@ import org.ojalgo.scalar.PrimitiveScalar;
  *
  * @author apete
  */
-public final class PrimitiveFunction extends FunctionSet<Double> {
+public final class PrimitiveFunction extends FunctionSet<Double>
+{
 
     @FunctionalInterface
-    public static interface Binary extends BinaryFunction<Double> {
+    public static interface Binary extends BinaryFunction<Double>
+    {
 
-        default Double invoke(final Double arg1, final Double arg2) {
+        default Double invoke(final Double arg1, final Double arg2)
+        {
             return this.invoke(arg1.doubleValue(), arg2.doubleValue());
         }
 
     }
 
     @FunctionalInterface
-    public static interface Parameter extends ParameterFunction<Double> {
+    public static interface Parameter extends ParameterFunction<Double>
+    {
 
-        default Double invoke(final Double arg, final int param) {
+        default Double invoke(final Double arg, final int param)
+        {
             return this.invoke(arg.doubleValue(), param);
         }
 
     }
 
     @FunctionalInterface
-    public static interface Unary extends UnaryFunction<Double> {
+    public static interface Unary extends UnaryFunction<Double>
+    {
 
-        default Double invoke(final Double arg) {
+        default Double invoke(final Double arg)
+        {
             return this.invoke(arg.doubleValue());
         }
 
     }
 
-    public static final Unary ABS = new Unary() {
+    public static final Unary ABS = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.abs(arg);
         }
 
     };
 
-    public static final Unary ACOS = new Unary() {
+    public static final Unary ACOS = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.acos(arg);
         }
 
     };
 
-    public static final Unary ACOSH = new Unary() {
+    public static final Unary ACOSH = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return LOG.invoke(arg + SQRT.invoke((arg * arg) - ONE));
         }
 
     };
 
-    public static final Binary ADD = new Binary() {
+    public static final Binary ADD = new Binary()
+    {
 
         @Override
-        public final double invoke(final double arg1, final double arg2) {
+        public final double invoke(final double arg1, final double arg2)
+        {
             return arg1 + arg2;
         }
 
     };
 
-    public static final Unary ASIN = new Unary() {
+    public static final Unary ASIN = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.asin(arg);
         }
 
     };
 
-    public static final Unary ASINH = new Unary() {
+    public static final Unary ASINH = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return LOG.invoke(arg + SQRT.invoke((arg * arg) + ONE));
         }
 
     };
 
-    public static final Unary ATAN = new Unary() {
+    public static final Unary ATAN = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.atan(arg);
         }
 
     };
 
-    public static final Binary ATAN2 = new Binary() {
+    public static final Binary ATAN2 = new Binary()
+    {
 
-        public final double invoke(final double arg1, final double arg2) {
+        public final double invoke(final double arg1, final double arg2)
+        {
             return Math.atan2(arg1, arg2);
         }
 
     };
 
-    public static final Unary ATANH = new Unary() {
+    public static final Unary ATANH = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return LOG.invoke((ONE + arg) / (ONE - arg)) / TWO;
         }
 
     };
 
-    public static final Unary CARDINALITY = new Unary() {
+    public static final Unary CARDINALITY = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return PrimitiveScalar.isSmall(PrimitiveMath.ONE, arg) ? ZERO : ONE;
         }
 
     };
 
-    public static final Unary CBRT = new Unary() {
+    public static final Unary CBRT = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.cbrt(arg);
         }
 
     };
 
-    public static final Unary CEIL = new Unary() {
+    public static final Unary CEIL = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.ceil(arg);
         }
 
     };
 
-    public static final Unary CONJUGATE = new Unary() {
+    public static final Unary CONJUGATE = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return arg;
         }
 
     };
 
-    public static final Unary COS = new Unary() {
+    public static final Unary COS = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.cos(arg);
         }
 
     };
 
-    public static final Unary COSH = new Unary() {
+    public static final Unary COSH = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.cosh(arg);
         }
 
     };
 
-    public static final Binary DIVIDE = new Binary() {
+    public static final Binary DIVIDE = new Binary()
+    {
 
         @Override
-        public final double invoke(final double arg1, final double arg2) {
+        public final double invoke(final double arg1, final double arg2)
+        {
             return arg1 / arg2;
         }
 
     };
 
-    public static final Unary EXP = new Unary() {
+    public static final Unary EXP = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.exp(arg);
         }
 
     };
 
-    public static final Unary EXPM1 = new Unary() {
+    public static final Unary EXPM1 = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.expm1(arg);
         }
 
     };
 
-    public static final Unary FLOOR = new Unary() {
+    public static final Unary FLOOR = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.floor(arg);
         }
 
     };
 
-    public static final Binary HYPOT = new Binary() {
+    public static final Binary HYPOT = new Binary()
+    {
 
         @Override
-        public final double invoke(final double arg1, final double arg2) {
+        public final double invoke(final double arg1, final double arg2)
+        {
             double retVal;
-            if (ABS.invoke(arg1) > ABS.invoke(arg2)) {
+            if (ABS.invoke(arg1) > ABS.invoke(arg2))
+            {
                 retVal = arg2 / arg1;
                 retVal = ABS.invoke(arg1) * SQRT.invoke(ONE + (retVal * retVal));
-            } else if (arg2 != ZERO) {
+            } else if (arg2 != ZERO)
+            {
                 retVal = arg1 / arg2;
                 retVal = ABS.invoke(arg2) * SQRT.invoke(ONE + (retVal * retVal));
-            } else {
+            } else
+            {
                 retVal = ZERO;
             }
             return retVal;
@@ -237,96 +287,119 @@ public final class PrimitiveFunction extends FunctionSet<Double> {
 
     };
 
-    public static final Unary INVERT = new Unary() {
+    public static final Unary INVERT = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return ONE / arg;
         }
 
     };
 
-    public static final Unary LOG = new Unary() {
+    public static final Unary LOG = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.log(arg);
         }
 
     };
 
-    public static final Unary LOG10 = new Unary() {
+    public static final Unary LOG10 = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.log10(arg);
         }
 
     };
 
-    public static final Unary LOG1P = new Unary() {
+    public static final Unary LOG1P = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.log1p(arg);
         }
 
     };
 
-    public static final Binary MAX = new Binary() {
+    public static final Binary MAX = new Binary()
+    {
 
         @Override
-        public final double invoke(final double arg1, final double arg2) {
+        public final double invoke(final double arg1, final double arg2)
+        {
             return Math.max(arg1, arg2);
         }
 
     };
 
-    public static final Binary MIN = new Binary() {
+    public static final Binary MIN = new Binary()
+    {
 
         @Override
-        public final double invoke(final double arg1, final double arg2) {
+        public final double invoke(final double arg1, final double arg2)
+        {
             return Math.min(arg1, arg2);
         }
 
     };
 
-    public static final Binary MULTIPLY = new Binary() {
+    public static final Binary MULTIPLY = new Binary()
+    {
 
         @Override
-        public final double invoke(final double arg1, final double arg2) {
+        public final double invoke(final double arg1, final double arg2)
+        {
             return arg1 * arg2;
         }
 
     };
 
-    public static final Unary NEGATE = new Unary() {
+    public static final Unary NEGATE = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return -arg;
         }
 
     };
 
-    public static final Binary POW = new Binary() {
+    public static final Binary POW = new Binary()
+    {
 
         @Override
-        public final double invoke(final double arg1, final double arg2) {
+        public final double invoke(final double arg1, final double arg2)
+        {
             return Math.pow(arg1, arg2);
         }
 
     };
 
-    public static final Parameter POWER = new Parameter() {
+    public static final Parameter POWER = new Parameter()
+    {
 
         @Override
-        public final double invoke(final double arg, int param) {
+        public final double invoke(final double arg, int param)
+        {
 
-            if (param < 0) {
+            if (param < 0)
+            {
 
                 return INVERT.invoke(POWER.invoke(arg, -param));
 
-            } else {
+            } else
+            {
 
                 double retVal = ONE;
 
-                while (param > 0) {
+                while (param > 0)
+                {
                     retVal = retVal * arg;
                     param--;
                 }
@@ -337,41 +410,51 @@ public final class PrimitiveFunction extends FunctionSet<Double> {
 
     };
 
-    public static final Unary RINT = new Unary() {
+    public static final Unary RINT = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.rint(arg);
         }
 
     };
 
-    public static final Parameter ROOT = new Parameter() {
+    public static final Parameter ROOT = new Parameter()
+    {
 
         @Override
-        public final double invoke(final double arg, final int param) {
+        public final double invoke(final double arg, final int param)
+        {
 
-            if (param != 0) {
+            if (param != 0)
+            {
                 return POW.invoke(arg, ONE / param);
-            } else {
+            } else
+            {
                 throw new IllegalArgumentException();
             }
         }
 
     };
 
-    public static final Parameter SCALE = new Parameter() {
+    public static final Parameter SCALE = new Parameter()
+    {
 
         @Override
-        public final double invoke(final double arg, int param) {
+        public final double invoke(final double arg, int param)
+        {
 
-            if (param < 0) {
+            if (param < 0)
+            {
                 throw new ProgrammingError("Cannot have exponents smaller than zero.");
             }
 
             long tmpFactor = 1l;
             final long tmp10 = (long) TEN;
 
-            while (param > 0) {
+            while (param > 0)
+            {
                 tmpFactor *= tmp10;
                 param--;
             }
@@ -381,74 +464,92 @@ public final class PrimitiveFunction extends FunctionSet<Double> {
 
     };
 
-    public static final Unary SIGNUM = new Unary() {
+    public static final Unary SIGNUM = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.signum(arg);
         }
 
     };
 
-    public static final Unary SIN = new Unary() {
+    public static final Unary SIN = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.sin(arg);
         }
 
     };
 
-    public static final Unary SINH = new Unary() {
+    public static final Unary SINH = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.sinh(arg);
         }
 
     };
 
-    public static final Unary SQRT = new Unary() {
+    public static final Unary SQRT = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.sqrt(arg);
         }
 
     };
 
-    public static final Unary SQRT1PX2 = new Unary() {
+    public static final Unary SQRT1PX2 = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return SQRT.invoke(ONE + (arg * arg));
         }
 
     };
 
-    public static final Binary SUBTRACT = new Binary() {
+    public static final Binary SUBTRACT = new Binary()
+    {
 
         @Override
-        public final double invoke(final double arg1, final double arg2) {
+        public final double invoke(final double arg1, final double arg2)
+        {
             return arg1 - arg2;
         }
 
     };
 
-    public static final Unary TAN = new Unary() {
+    public static final Unary TAN = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.tan(arg);
         }
 
     };
 
-    public static final Unary TANH = new Unary() {
+    public static final Unary TANH = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return Math.tanh(arg);
         }
 
     };
 
-    public static final Unary VALUE = new Unary() {
+    public static final Unary VALUE = new Unary()
+    {
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return arg;
         }
 
@@ -456,221 +557,265 @@ public final class PrimitiveFunction extends FunctionSet<Double> {
 
     private static final PrimitiveFunction SET = new PrimitiveFunction();
 
-    public static PrimitiveFunction getSet() {
+    public static PrimitiveFunction getSet()
+    {
         return SET;
     }
 
-    private PrimitiveFunction() {
+    private PrimitiveFunction()
+    {
         super();
     }
 
     @Override
-    public UnaryFunction<Double> abs() {
+    public UnaryFunction<Double> abs()
+    {
         return ABS;
     }
 
     @Override
-    public UnaryFunction<Double> acos() {
+    public UnaryFunction<Double> acos()
+    {
         return ACOS;
     }
 
     @Override
-    public UnaryFunction<Double> acosh() {
+    public UnaryFunction<Double> acosh()
+    {
         return ACOSH;
     }
 
     @Override
-    public BinaryFunction<Double> add() {
+    public BinaryFunction<Double> add()
+    {
         return ADD;
     }
 
     @Override
-    public UnaryFunction<Double> asin() {
+    public UnaryFunction<Double> asin()
+    {
         return ASIN;
     }
 
     @Override
-    public UnaryFunction<Double> asinh() {
+    public UnaryFunction<Double> asinh()
+    {
         return ASINH;
     }
 
     @Override
-    public UnaryFunction<Double> atan() {
+    public UnaryFunction<Double> atan()
+    {
         return ATAN;
     }
 
     @Override
-    public BinaryFunction<Double> atan2() {
+    public BinaryFunction<Double> atan2()
+    {
         return ATAN2;
     }
 
     @Override
-    public UnaryFunction<Double> atanh() {
+    public UnaryFunction<Double> atanh()
+    {
         return ATANH;
     }
 
     @Override
-    public UnaryFunction<Double> cardinality() {
+    public UnaryFunction<Double> cardinality()
+    {
         return CARDINALITY;
     }
 
     @Override
-    public UnaryFunction<Double> cbrt() {
+    public UnaryFunction<Double> cbrt()
+    {
         return CBRT;
     }
 
     @Override
-    public UnaryFunction<Double> ceil() {
+    public UnaryFunction<Double> ceil()
+    {
         return CEIL;
     }
 
     @Override
-    public UnaryFunction<Double> conjugate() {
+    public UnaryFunction<Double> conjugate()
+    {
         return CONJUGATE;
     }
 
     @Override
-    public UnaryFunction<Double> cos() {
+    public UnaryFunction<Double> cos()
+    {
         return COS;
     }
 
     @Override
-    public UnaryFunction<Double> cosh() {
+    public UnaryFunction<Double> cosh()
+    {
         return COSH;
     }
 
     @Override
-    public BinaryFunction<Double> divide() {
+    public BinaryFunction<Double> divide()
+    {
         return DIVIDE;
     }
 
     @Override
-    public UnaryFunction<Double> exp() {
+    public UnaryFunction<Double> exp()
+    {
         return EXP;
     }
 
     @Override
-    public UnaryFunction<Double> expm1() {
+    public UnaryFunction<Double> expm1()
+    {
         return EXPM1;
     }
 
     @Override
-    public UnaryFunction<Double> floor() {
+    public UnaryFunction<Double> floor()
+    {
         return FLOOR;
     }
 
     @Override
-    public BinaryFunction<Double> hypot() {
+    public BinaryFunction<Double> hypot()
+    {
         return HYPOT;
     }
 
     @Override
-    public UnaryFunction<Double> invert() {
+    public UnaryFunction<Double> invert()
+    {
         return INVERT;
     }
 
     @Override
-    public UnaryFunction<Double> log() {
+    public UnaryFunction<Double> log()
+    {
         return LOG;
     }
 
     @Override
-    public UnaryFunction<Double> log10() {
+    public UnaryFunction<Double> log10()
+    {
         return LOG10;
     }
 
     @Override
-    public UnaryFunction<Double> log1p() {
+    public UnaryFunction<Double> log1p()
+    {
         return LOG1P;
     }
 
     @Override
-    public BinaryFunction<Double> max() {
+    public BinaryFunction<Double> max()
+    {
         return MAX;
     }
 
     @Override
-    public BinaryFunction<Double> min() {
+    public BinaryFunction<Double> min()
+    {
         return MIN;
     }
 
     @Override
-    public BinaryFunction<Double> multiply() {
+    public BinaryFunction<Double> multiply()
+    {
         return MULTIPLY;
     }
 
     @Override
-    public UnaryFunction<Double> negate() {
+    public UnaryFunction<Double> negate()
+    {
         return NEGATE;
     }
 
     @Override
-    public BinaryFunction<Double> pow() {
+    public BinaryFunction<Double> pow()
+    {
         return POW;
     }
 
     @Override
-    public ParameterFunction<Double> power() {
+    public ParameterFunction<Double> power()
+    {
         return POWER;
     }
 
     @Override
-    public UnaryFunction<Double> rint() {
+    public UnaryFunction<Double> rint()
+    {
         return RINT;
     }
 
     @Override
-    public ParameterFunction<Double> root() {
+    public ParameterFunction<Double> root()
+    {
         return ROOT;
     }
 
     @Override
-    public ParameterFunction<Double> scale() {
+    public ParameterFunction<Double> scale()
+    {
         return SCALE;
     }
 
     @Override
-    public UnaryFunction<Double> signum() {
+    public UnaryFunction<Double> signum()
+    {
         return SIGNUM;
     }
 
     @Override
-    public UnaryFunction<Double> sin() {
+    public UnaryFunction<Double> sin()
+    {
         return SIN;
     }
 
     @Override
-    public UnaryFunction<Double> sinh() {
+    public UnaryFunction<Double> sinh()
+    {
         return SINH;
     }
 
     @Override
-    public UnaryFunction<Double> sqrt() {
+    public UnaryFunction<Double> sqrt()
+    {
         return SQRT;
     }
 
     @Override
-    public UnaryFunction<Double> sqrt1px2() {
+    public UnaryFunction<Double> sqrt1px2()
+    {
         return SQRT1PX2;
     }
 
     @Override
-    public BinaryFunction<Double> subtract() {
+    public BinaryFunction<Double> subtract()
+    {
         return SUBTRACT;
     }
 
     @Override
-    public UnaryFunction<Double> tan() {
+    public UnaryFunction<Double> tan()
+    {
         return TAN;
     }
 
     @Override
-    public UnaryFunction<Double> tanh() {
+    public UnaryFunction<Double> tanh()
+    {
         return TANH;
     }
 
     @Override
-    public UnaryFunction<Double> value() {
+    public UnaryFunction<Double> value()
+    {
         return VALUE;
     }
 

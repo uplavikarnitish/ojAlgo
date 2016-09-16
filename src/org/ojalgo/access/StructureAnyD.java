@@ -21,12 +21,14 @@
  */
 package org.ojalgo.access;
 
-public interface StructureAnyD extends Structure1D {
+public interface StructureAnyD extends Structure1D
+{
 
     /**
      * count() == count(0) * count(1) * count(2) * count(3) * ...
      */
-    default long count() {
+    default long count()
+    {
         return AccessUtils.count(this.shape());
     }
 

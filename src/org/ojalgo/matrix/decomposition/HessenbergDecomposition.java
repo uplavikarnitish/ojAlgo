@@ -35,27 +35,34 @@ import org.ojalgo.matrix.transformation.HouseholderReference;
 import org.ojalgo.scalar.ComplexNumber;
 import org.ojalgo.type.context.NumberContext;
 
-abstract class HessenbergDecomposition<N extends Number> extends InPlaceDecomposition<N> implements Hessenberg<N> {
+abstract class HessenbergDecomposition<N extends Number> extends InPlaceDecomposition<N> implements Hessenberg<N>
+{
 
-    static final class Big extends HessenbergDecomposition<BigDecimal> {
+    static final class Big extends HessenbergDecomposition<BigDecimal>
+    {
 
-        Big() {
+        Big()
+        {
             super(BigDenseStore.FACTORY);
         }
 
     }
 
-    static final class Complex extends HessenbergDecomposition<ComplexNumber> {
+    static final class Complex extends HessenbergDecomposition<ComplexNumber>
+    {
 
-        Complex() {
+        Complex()
+        {
             super(ComplexDenseStore.FACTORY);
         }
 
     }
 
-    static final class Primitive extends HessenbergDecomposition<Double> {
+    static final class Primitive extends HessenbergDecomposition<Double>
+    {
 
-        Primitive() {
+        Primitive()
+        {
             super(PrimitiveDenseStore.FACTORY);
         }
 
@@ -65,11 +72,13 @@ abstract class HessenbergDecomposition<N extends Number> extends InPlaceDecompos
 
     private boolean myUpper = true;
 
-    protected HessenbergDecomposition(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> aFactory) {
+    protected HessenbergDecomposition(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> aFactory)
+    {
         super(aFactory);
     }
 
-    public final boolean compute(final ElementsSupplier<N> matrix, final boolean upper) {
+    public final boolean compute(final ElementsSupplier<N> matrix, final boolean upper)
+    {
 
         this.reset();
 
@@ -80,27 +89,33 @@ abstract class HessenbergDecomposition<N extends Number> extends InPlaceDecompos
         final int tmpRowDim = this.getRowDim();
         final int tmpColDim = this.getColDim();
 
-        if (upper) {
+        if (upper)
+        {
 
             final Householder<N> tmpHouseholderCol = this.makeHouseholder(tmpRowDim);
 
             final int tmpLimit = Math.min(tmpRowDim, tmpColDim) - 2;
 
-            for (int ij = 0; ij < tmpLimit; ij++) {
-                if (tmpStore.generateApplyAndCopyHouseholderColumn(ij + 1, ij, tmpHouseholderCol)) {
+            for (int ij = 0; ij < tmpLimit; ij++)
+            {
+                if (tmpStore.generateApplyAndCopyHouseholderColumn(ij + 1, ij, tmpHouseholderCol))
+                {
                     tmpStore.transformLeft(tmpHouseholderCol, ij + 1);
                     tmpStore.transformRight(tmpHouseholderCol, 0);
                 }
             }
 
-        } else {
+        } else
+        {
 
             final Householder<N> tmpHouseholderRow = this.makeHouseholder(tmpColDim);
 
             final int tmpLimit = Math.min(tmpRowDim, tmpColDim) - 2;
 
-            for (int ij = 0; ij < tmpLimit; ij++) {
-                if (tmpStore.generateApplyAndCopyHouseholderRow(ij, ij + 1, tmpHouseholderRow)) {
+            for (int ij = 0; ij < tmpLimit; ij++)
+            {
+                if (tmpStore.generateApplyAndCopyHouseholderRow(ij, ij + 1, tmpHouseholderRow))
+                {
                     tmpStore.transformRight(tmpHouseholderRow, ij + 1);
                     tmpStore.transformLeft(tmpHouseholderRow, 0);
                 }
@@ -110,39 +125,48 @@ abstract class HessenbergDecomposition<N extends Number> extends InPlaceDecompos
         return this.computed(true);
     }
 
-    public final boolean decompose(final ElementsSupplier<N> matrix) {
+    public final boolean decompose(final ElementsSupplier<N> matrix)
+    {
         return this.compute(matrix, true);
     }
 
-    public final boolean equals(final MatrixStore<N> aStore, final NumberContext context) {
+    public final boolean equals(final MatrixStore<N> aStore, final NumberContext context)
+    {
         return MatrixUtils.equals(aStore, this, context);
     }
 
-    public final MatrixStore<N> getH() {
+    public final MatrixStore<N> getH()
+    {
         return this.getInPlace().logical().hessenberg(myUpper).get();
     }
 
-    public final MatrixStore<N> getQ() {
-        if (myQ == null) {
+    public final MatrixStore<N> getQ()
+    {
+        if (myQ == null)
+        {
             myQ = this.makeQ(this.makeEye(this.getRowDim(), this.getColDim()), myUpper, true);
         }
         return myQ;
     }
 
-    public final boolean isFullSize() {
+    public final boolean isFullSize()
+    {
         return true;
     }
 
-    public final boolean isSolvable() {
+    public final boolean isSolvable()
+    {
         return false;
     }
 
-    public boolean isUpper() {
+    public boolean isUpper()
+    {
         return myUpper;
     }
 
     @Override
-    public void reset() {
+    public void reset()
+    {
 
         super.reset();
 
@@ -150,21 +174,25 @@ abstract class HessenbergDecomposition<N extends Number> extends InPlaceDecompos
         myUpper = true;
     }
 
-    public MatrixStore<N> solve(final Access2D<N> rhs, final DecompositionStore<N> preallocated) {
+    public MatrixStore<N> solve(final Access2D<N> rhs, final DecompositionStore<N> preallocated)
+    {
         throw new UnsupportedOperationException();
     }
 
-    private final DecompositionStore<N> makeQ(final DecompositionStore<N> storeToTransform, final boolean upper, final boolean eye) {
+    private final DecompositionStore<N> makeQ(final DecompositionStore<N> storeToTransform, final boolean upper, final boolean eye)
+    {
 
         final int tmpRowAndColDim = (int) storeToTransform.countRows();
 
         final HouseholderReference<N> tmpReference = HouseholderReference.make(this.getInPlace(), upper);
 
-        for (int ij = tmpRowAndColDim - 3; ij >= 0; ij--) {
+        for (int ij = tmpRowAndColDim - 3; ij >= 0; ij--)
+        {
 
             tmpReference.point(upper ? ij + 1 : ij, upper ? ij : ij + 1);
 
-            if (!tmpReference.isZero()) {
+            if (!tmpReference.isZero())
+            {
                 storeToTransform.transformLeft(tmpReference, eye ? ij : 0);
             }
         }
@@ -172,7 +200,8 @@ abstract class HessenbergDecomposition<N extends Number> extends InPlaceDecompos
         return storeToTransform;
     }
 
-    final DecompositionStore<N> doQ(final DecompositionStore<N> aStoreToTransform) {
+    final DecompositionStore<N> doQ(final DecompositionStore<N> aStoreToTransform)
+    {
         return this.makeQ(aStoreToTransform, myUpper, false);
     }
 

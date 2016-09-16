@@ -23,12 +23,14 @@ package org.ojalgo.matrix.store;
 
 import org.ojalgo.access.Access1D;
 
-final class MatrixProductSupplier<N extends Number> extends ContextSupplier<N> {
+final class MatrixProductSupplier<N extends Number> extends ContextSupplier<N>
+{
 
     private final Access1D<N> myLeft;
     private final MatrixStore<N> myRight;
 
-    private MatrixProductSupplier(final MatrixStore<N> base) {
+    private MatrixProductSupplier(final MatrixStore<N> base)
+    {
 
         super(base);
 
@@ -36,7 +38,8 @@ final class MatrixProductSupplier<N extends Number> extends ContextSupplier<N> {
         myRight = null;
     }
 
-    MatrixProductSupplier(final Access1D<N> left, final MatrixStore<N> right) {
+    MatrixProductSupplier(final Access1D<N> left, final MatrixStore<N> right)
+    {
 
         super(right);
 
@@ -44,16 +47,19 @@ final class MatrixProductSupplier<N extends Number> extends ContextSupplier<N> {
         myRight = right;
     }
 
-    public long countColumns() {
+    public long countColumns()
+    {
         return myRight.countColumns();
     }
 
-    public long countRows() {
+    public long countRows()
+    {
         return myLeft.count() / myRight.countRows();
     }
 
     @Override
-    public void supplyTo(final ElementsConsumer<N> consumer) {
+    public void supplyTo(final ElementsConsumer<N> consumer)
+    {
         consumer.fillByMultiplying(myLeft, myRight);
     }
 

@@ -31,57 +31,70 @@ import org.ojalgo.matrix.store.RawStore;
  *
  * @author apete
  */
-abstract class RawDecomposition extends AbstractDecomposition<Double> {
+abstract class RawDecomposition extends AbstractDecomposition<Double>
+{
 
     private int myColDim;
     private double[][] myRawInPlaceData;
     private RawStore myRawInPlaceStore;
     private int myRowDim;
 
-    protected RawDecomposition() {
+    protected RawDecomposition()
+    {
         super();
     }
 
     @Override
-    protected PrimitiveDenseStore allocate(final long numberOfRows, final long numberOfColumns) {
+    protected PrimitiveDenseStore allocate(final long numberOfRows, final long numberOfColumns)
+    {
         return PrimitiveDenseStore.FACTORY.makeZero(numberOfRows, numberOfColumns);
     }
 
-    protected boolean checkSymmetry() {
+    protected boolean checkSymmetry()
+    {
         boolean retVal = myRowDim == myColDim;
-        for (int i = 0; retVal && (i < myRowDim); i++) {
-            for (int j = 0; retVal && (j < i); j++) {
+        for (int i = 0; retVal && (i < myRowDim); i++)
+        {
+            for (int j = 0; retVal && (j < i); j++)
+            {
                 retVal &= (myRawInPlaceData[i][j] == myRawInPlaceData[j][i]);
             }
         }
         return retVal;
     }
 
-    protected int getColDim() {
+    protected int getColDim()
+    {
         return myColDim;
     }
 
-    protected int getMaxDim() {
+    protected int getMaxDim()
+    {
         return Math.max(myRowDim, myColDim);
     }
 
-    protected int getMinDim() {
+    protected int getMinDim()
+    {
         return Math.min(myRowDim, myColDim);
     }
 
-    protected double[][] getRawInPlaceData() {
+    protected double[][] getRawInPlaceData()
+    {
         return myRawInPlaceData;
     }
 
-    protected RawStore getRawInPlaceStore() {
+    protected RawStore getRawInPlaceStore()
+    {
         return myRawInPlaceStore;
     }
 
-    protected int getRowDim() {
+    protected int getRowDim()
+    {
         return myRowDim;
     }
 
-    double[][] reset(final Structure2D matrix, final boolean transpose) {
+    double[][] reset(final Structure2D matrix, final boolean transpose)
+    {
 
         this.reset();
 
@@ -91,7 +104,8 @@ abstract class RawDecomposition extends AbstractDecomposition<Double> {
         final int tmpInPlaceRowDim = transpose ? tmpInputColDim : tmpInputRowDim;
         final int tmpInPlaceColDim = transpose ? tmpInputRowDim : tmpInputColDim;
 
-        if ((myRawInPlaceData == null) || (myRowDim != tmpInputRowDim) || (myColDim != tmpInputColDim)) {
+        if ((myRawInPlaceData == null) || (myRowDim != tmpInputRowDim) || (myColDim != tmpInputColDim))
+        {
 
             myRawInPlaceStore = RawStore.FACTORY.makeZero(tmpInPlaceRowDim, tmpInPlaceColDim);
             myRawInPlaceData = myRawInPlaceStore.data;

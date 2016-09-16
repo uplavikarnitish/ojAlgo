@@ -51,18 +51,24 @@ import org.ojalgo.scalar.ComplexNumber;
  * @author apete
  */
 public interface Eigenvalue<N extends Number>
-        extends MatrixDecomposition<N>, MatrixDecomposition.Hermitian<N>, MatrixDecomposition.Determinant<N>, MatrixDecomposition.Values<N> {
+        extends MatrixDecomposition<N>, MatrixDecomposition.Hermitian<N>, MatrixDecomposition.Determinant<N>, MatrixDecomposition.Values<N>
+{
 
-    interface Factory<N extends Number> extends MatrixDecomposition.Factory<Eigenvalue<N>> {
+    interface Factory<N extends Number> extends MatrixDecomposition.Factory<Eigenvalue<N>>
+    {
 
-        default Eigenvalue<N> make(final boolean hermitian) {
+        default Eigenvalue<N> make(final boolean hermitian)
+        {
             return this.make(TYPICAL, hermitian);
         }
 
-        default Eigenvalue<N> make(final Structure2D typical) {
-            if (typical instanceof Access2D) {
+        default Eigenvalue<N> make(final Structure2D typical)
+        {
+            if (typical instanceof Access2D)
+            {
                 return this.make(typical, MatrixUtils.isHermitian((Access2D<?>) typical));
-            } else {
+            } else
+            {
                 return this.make(typical, false);
             }
         }
@@ -75,42 +81,55 @@ public interface Eigenvalue<N extends Number>
 
     public static final Factory<ComplexNumber> COMPLEX = (typical, hermitian) -> hermitian ? new HermitianEvD.Complex() : null;
 
-    public static final Factory<Double> PRIMITIVE = new Factory<Double>() {
+    public static final Factory<Double> PRIMITIVE = new Factory<Double>()
+    {
 
-        public Eigenvalue<Double> make(final Structure2D typical) {
-            if ((8192L < typical.countColumns()) && (typical.count() <= BasicArray.MAX_ARRAY_SIZE)) {
+        public Eigenvalue<Double> make(final Structure2D typical)
+        {
+            if ((8192L < typical.countColumns()) && (typical.count() <= BasicArray.MAX_ARRAY_SIZE))
+            {
                 return new DynamicEvD.Primitive();
-            } else {
+            } else
+            {
                 return new RawEigenvalue.Dynamic();
             }
         }
 
-        public Eigenvalue<Double> make(final Structure2D typical, final boolean hermitian) {
-            if ((8192L < typical.countColumns()) && (typical.count() <= BasicArray.MAX_ARRAY_SIZE)) {
+        public Eigenvalue<Double> make(final Structure2D typical, final boolean hermitian)
+        {
+            if ((8192L < typical.countColumns()) && (typical.count() <= BasicArray.MAX_ARRAY_SIZE))
+            {
                 return hermitian ? new HermitianEvD.Primitive() : new GeneralEvD.Primitive();
-            } else {
+            } else
+            {
                 return hermitian ? new RawEigenvalue.Symmetric() : new RawEigenvalue.General();
             }
         }
 
     };
 
-    public static <N extends Number> Eigenvalue<N> make(final Access2D<N> typical) {
+    public static <N extends Number> Eigenvalue<N> make(final Access2D<N> typical)
+    {
         return Eigenvalue.make(typical, MatrixUtils.isHermitian(typical));
     }
 
     @SuppressWarnings("unchecked")
-    public static <N extends Number> Eigenvalue<N> make(final Access2D<N> typical, final boolean hermitian) {
+    public static <N extends Number> Eigenvalue<N> make(final Access2D<N> typical, final boolean hermitian)
+    {
 
         final N tmpNumber = typical.get(0L, 0L);
 
-        if (tmpNumber instanceof BigDecimal) {
+        if (tmpNumber instanceof BigDecimal)
+        {
             return (Eigenvalue<N>) BIG.make(typical, hermitian);
-        } else if (tmpNumber instanceof ComplexNumber) {
+        } else if (tmpNumber instanceof ComplexNumber)
+        {
             return (Eigenvalue<N>) COMPLEX.make(typical, hermitian);
-        } else if (tmpNumber instanceof Double) {
+        } else if (tmpNumber instanceof Double)
+        {
             return (Eigenvalue<N>) PRIMITIVE.make(typical, hermitian);
-        } else {
+        } else
+        {
             throw new IllegalArgumentException();
         }
     }
@@ -170,7 +189,8 @@ public interface Eigenvalue<N extends Number>
      */
     boolean isOrdered();
 
-    default MatrixStore<N> reconstruct() {
+    default MatrixStore<N> reconstruct()
+    {
         return MatrixUtils.reconstruct(this);
     }
 

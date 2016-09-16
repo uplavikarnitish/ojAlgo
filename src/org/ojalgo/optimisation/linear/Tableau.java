@@ -31,7 +31,8 @@ import org.ojalgo.array.SparseArray;
 import org.ojalgo.function.PrimitiveFunction;
 import org.ojalgo.function.UnaryFunction;
 
-final class Tableau implements Access2D<Double>, Mutate2D {
+final class Tableau implements Access2D<Double>, Mutate2D
+{
 
     private double myInfeasibility;
     private final long myNumberOfConstraints;
@@ -43,7 +44,8 @@ final class Tableau implements Access2D<Double>, Mutate2D {
     private final PrimitiveArray myWeights;
 
     @SuppressWarnings("unchecked")
-    Tableau(final int numberOfConstraints, final int numberOfVariables) {
+    Tableau(final int numberOfConstraints, final int numberOfVariables)
+    {
 
         super();
 
@@ -51,7 +53,8 @@ final class Tableau implements Access2D<Double>, Mutate2D {
         myNumberOfVariables = numberOfVariables;
 
         myRows = new SparseArray[numberOfConstraints];
-        for (int r = 0; r < numberOfConstraints; r++) {
+        for (int r = 0; r < numberOfConstraints; r++)
+        {
             myRows[r] = SparseArray.makePrimitive(myNumberOfVariables, 4);
         }
         myRHS = PrimitiveArray.make((int) myNumberOfConstraints);
@@ -59,121 +62,163 @@ final class Tableau implements Access2D<Double>, Mutate2D {
         myPhase1Weights = PrimitiveArray.make((int) myNumberOfVariables);
     }
 
-    public void add(final long row, final long col, final double addend) {
-        if (row < myNumberOfConstraints) {
-            if (col < myNumberOfVariables) {
+    public void add(final long row, final long col, final double addend)
+    {
+        if (row < myNumberOfConstraints)
+        {
+            if (col < myNumberOfVariables)
+            {
                 myRows[(int) row].add(col, addend);
-            } else {
+            } else
+            {
                 myRHS.add(row, addend);
             }
-        } else if (row == myNumberOfConstraints) {
-            if (col < myNumberOfVariables) {
+        } else if (row == myNumberOfConstraints)
+        {
+            if (col < myNumberOfVariables)
+            {
                 myWeights.add(col, addend);
-            } else {
+            } else
+            {
                 myObjective += addend;
             }
-        } else {
-            if (col < myNumberOfVariables) {
+        } else
+        {
+            if (col < myNumberOfVariables)
+            {
                 myPhase1Weights.add(col, addend);
-            } else {
+            } else
+            {
                 myInfeasibility += addend;
             }
         }
     }
 
-    public void add(final long row, final long col, final Number addend) {
+    public void add(final long row, final long col, final Number addend)
+    {
         this.add(row, col, addend.doubleValue());
     }
 
-    public long countColumns() {
+    public long countColumns()
+    {
         return myNumberOfVariables + 1L;
     }
 
-    public long countConstraints() {
+    public long countConstraints()
+    {
         return myNumberOfConstraints;
     }
 
-    public long countRows() {
+    public long countRows()
+    {
         return myNumberOfConstraints + 2L;
     }
 
-    public long countVariables() {
+    public long countVariables()
+    {
         return myNumberOfVariables;
     }
 
-    public double doubleValue(final long row, final long col) {
-        if (row < myNumberOfConstraints) {
-            if (col < myNumberOfVariables) {
+    public double doubleValue(final long row, final long col)
+    {
+        if (row < myNumberOfConstraints)
+        {
+            if (col < myNumberOfVariables)
+            {
                 return myRows[(int) row].doubleValue(col);
-            } else {
+            } else
+            {
                 return myRHS.doubleValue(row);
             }
-        } else if (row == myNumberOfConstraints) {
-            if (col < myNumberOfVariables) {
+        } else if (row == myNumberOfConstraints)
+        {
+            if (col < myNumberOfVariables)
+            {
                 return myWeights.doubleValue(col);
-            } else {
+            } else
+            {
                 return myObjective;
             }
-        } else {
-            if (col < myNumberOfVariables) {
+        } else
+        {
+            if (col < myNumberOfVariables)
+            {
                 return myPhase1Weights.doubleValue(col);
-            } else {
+            } else
+            {
                 return myInfeasibility;
             }
         }
     }
 
-    public Double get(final long row, final long col) {
+    public Double get(final long row, final long col)
+    {
         return this.doubleValue(row, col);
     }
 
-    public void set(final long row, final long col, final double value) {
-        if (row < myNumberOfConstraints) {
-            if (col < myNumberOfVariables) {
+    public void set(final long row, final long col, final double value)
+    {
+        if (row < myNumberOfConstraints)
+        {
+            if (col < myNumberOfVariables)
+            {
                 myRows[(int) row].set(col, value);
-            } else {
+            } else
+            {
                 myRHS.set(row, value);
             }
-        } else if (row == myNumberOfConstraints) {
-            if (col < myNumberOfVariables) {
+        } else if (row == myNumberOfConstraints)
+        {
+            if (col < myNumberOfVariables)
+            {
                 myWeights.set(col, value);
-            } else {
+            } else
+            {
                 myObjective = value;
             }
-        } else {
-            if (col < myNumberOfVariables) {
+        } else
+        {
+            if (col < myNumberOfVariables)
+            {
                 myPhase1Weights.set(col, value);
-            } else {
+            } else
+            {
                 myInfeasibility = value;
             }
         }
     }
 
-    public void set(final long row, final long col, final Number value) {
+    public void set(final long row, final long col, final Number value)
+    {
         this.set(row, col, value.doubleValue());
     }
 
     /**
      * @return The phase 1 objective function value
      */
-    double getInfeasibility() {
+    double getInfeasibility()
+    {
         return myInfeasibility;
     }
 
-    PrimitiveArray getRHS() {
+    PrimitiveArray getRHS()
+    {
         return myRHS;
     }
 
-    void pivot(final int row, final int col) {
+    void pivot(final int row, final int col)
+    {
 
         final SparseArray<Double> tmpPivotRow = myRows[row];
         final double tmpPivotElement = tmpPivotRow.doubleValue(col);
 
-        if (PrimitiveFunction.ABS.invoke(tmpPivotElement) < ONE) {
+        if (PrimitiveFunction.ABS.invoke(tmpPivotElement) < ONE)
+        {
             final UnaryFunction<Double> tmpModifier = DIVIDE.second(tmpPivotElement);
             tmpPivotRow.modifyAll(tmpModifier);
             myRHS.modifyOne(row, tmpModifier);
-        } else if (tmpPivotElement != ONE) {
+        } else if (tmpPivotElement != ONE)
+        {
             final UnaryFunction<Double> tmpModifier = MULTIPLY.second(ONE / tmpPivotElement);
             tmpPivotRow.modifyAll(tmpModifier);
             myRHS.modifyOne(row, tmpModifier);
@@ -183,13 +228,15 @@ final class Tableau implements Access2D<Double>, Mutate2D {
 
         double tmpVal;
 
-        for (int i = 0; i < row; i++) {
+        for (int i = 0; i < row; i++)
+        {
             final SparseArray<Double> tmpY = myRows[i];
             tmpVal = -tmpY.doubleValue(col);
             tmpPivotRow.daxpy(tmpVal, tmpY);
             myRHS.add(i, (tmpVal * tmpPivotRHS));
         }
-        for (int i = row + 1; i < myRows.length; i++) {
+        for (int i = row + 1; i < myRows.length; i++)
+        {
             final SparseArray<Double> tmpY = myRows[i];
             tmpVal = -tmpY.doubleValue(col);
             tmpPivotRow.daxpy(tmpVal, tmpY);

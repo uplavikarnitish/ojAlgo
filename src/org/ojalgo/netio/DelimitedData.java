@@ -29,21 +29,26 @@ import java.util.List;
  *
  * @author apete
  */
-public final class DelimitedData extends Object {
+public final class DelimitedData extends Object
+{
 
-    public static DelimitedData makeCommaDelimited() {
+    public static DelimitedData makeCommaDelimited()
+    {
         return new DelimitedData(ASCII.COMMA, LineTerminator.WINDOWS);
     }
 
-    public static DelimitedData makeSemicolonDelimited() {
+    public static DelimitedData makeSemicolonDelimited()
+    {
         return new DelimitedData(ASCII.SEMICOLON, LineTerminator.WINDOWS);
     }
 
-    public static DelimitedData makeSpaceDelimited() {
+    public static DelimitedData makeSpaceDelimited()
+    {
         return new DelimitedData(ASCII.SP, LineTerminator.WINDOWS);
     }
 
-    public static DelimitedData makeTabDelimited() {
+    public static DelimitedData makeTabDelimited()
+    {
         return new DelimitedData(ASCII.HT, LineTerminator.WINDOWS);
     }
 
@@ -51,7 +56,8 @@ public final class DelimitedData extends Object {
     private final List<List<Object>> myLines;
     private final LineTerminator myTerminator;
 
-    public DelimitedData(final char aDelimiter, final LineTerminator aTerminator) {
+    public DelimitedData(final char aDelimiter, final LineTerminator aTerminator)
+    {
 
         super();
 
@@ -60,13 +66,16 @@ public final class DelimitedData extends Object {
         myLines = new ArrayList<>();
     }
 
-    public void addEmptyLines(final int aNumberOfLines, final int aNumberOfElementsOnEachLine) {
-        for (int i = 0; i < aNumberOfLines; i++) {
+    public void addEmptyLines(final int aNumberOfLines, final int aNumberOfElementsOnEachLine)
+    {
+        for (int i = 0; i < aNumberOfLines; i++)
+        {
             myLines.add(new ArrayList<>(aNumberOfElementsOnEachLine));
         }
     }
 
-    public void addLine(final List<?> aLine) {
+    public void addLine(final List<?> aLine)
+    {
         myLines.add((List<Object>) aLine);
     }
 
@@ -74,18 +83,23 @@ public final class DelimitedData extends Object {
      * The row and column must already exist. One way to create it is to call
      * {@linkplain #addEmptyLines(int, int)}.
      */
-    public void set(final int aRowIndex, final int aColumnIndex, final Object anElement) {
+    public void set(final int aRowIndex, final int aColumnIndex, final Object anElement)
+    {
         myLines.get(aRowIndex).set(aColumnIndex, anElement);
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
 
         final StringBuilder retVal = new StringBuilder();
 
-        for (final List<Object> tmpLine : myLines) {
-            for (final Object tmpElement : tmpLine) {
-                if (tmpElement != null) {
+        for (final List<Object> tmpLine : myLines)
+        {
+            for (final Object tmpElement : tmpLine)
+            {
+                if (tmpElement != null)
+                {
                     retVal.append(tmpElement);
                 }
                 retVal.append(myDelimiter);

@@ -23,9 +23,11 @@ package org.ojalgo.access;
 
 import java.util.Iterator;
 
-public class ColumnView<N extends Number> implements Access1D<N>, Iterator<ColumnView<N>> {
+public class ColumnView<N extends Number> implements Access1D<N>, Iterator<ColumnView<N>>
+{
 
-    public static <S extends Number> Iterable<ColumnView<S>> makeIterable(final Access2D<S> access) {
+    public static <S extends Number> Iterable<ColumnView<S>> makeIterable(final Access2D<S> access)
+    {
         return new ColumnView<>(access).iterable;
     }
 
@@ -36,15 +38,18 @@ public class ColumnView<N extends Number> implements Access1D<N>, Iterator<Colum
     final Iterable<ColumnView<N>> iterable = () -> ColumnView.this;
 
     @SuppressWarnings("unused")
-    private ColumnView() {
+    private ColumnView()
+    {
         this(null);
     }
 
-    protected ColumnView(final Access2D<N> access) {
+    protected ColumnView(final Access2D<N> access)
+    {
         this(access, -1L);
     }
 
-    ColumnView(final Access2D<N> access, final long column) {
+    ColumnView(final Access2D<N> access, final long column)
+    {
 
         super();
 
@@ -54,45 +59,55 @@ public class ColumnView<N extends Number> implements Access1D<N>, Iterator<Colum
         myColumn = column;
     }
 
-    public long column() {
+    public long column()
+    {
         return myColumn;
     }
 
-    public long count() {
+    public long count()
+    {
         return myDelegate2D.countRows();
     }
 
-    public double doubleValue(final long index) {
+    public double doubleValue(final long index)
+    {
         return myDelegate2D.doubleValue(index, myColumn);
     }
 
-    public N get(final long index) {
+    public N get(final long index)
+    {
         return myDelegate2D.get(index, myColumn);
     }
 
-    public boolean hasNext() {
+    public boolean hasNext()
+    {
         return myColumn < myLastColumn;
     }
 
-    public boolean hasPrevious() {
+    public boolean hasPrevious()
+    {
         return myColumn > 0L;
     }
 
-    public ColumnView<N> next() {
+    public ColumnView<N> next()
+    {
         myColumn++;
         return this;
     }
 
-    public ColumnView<N> previous() {
+    public ColumnView<N> previous()
+    {
         myColumn--;
         return this;
     }
 
-    public void remove() {
+    public void remove()
+    {
         throw new UnsupportedOperationException();
     }
 
-    protected void setColumn(final long column) {
+    protected void setColumn(final long column)
+    {
         myColumn = column;
     }
 

@@ -38,15 +38,18 @@ import org.ojalgo.scalar.Scalar;
  *
  * @author apete
  */
-public interface Access1D<N extends Number> extends Structure1D, Iterable<N> {
+public interface Access1D<N extends Number> extends Structure1D, Iterable<N>
+{
 
-    public interface Aggregatable<N extends Number> extends Structure1D {
+    public interface Aggregatable<N extends Number> extends Structure1D
+    {
 
         N aggregateAll(Aggregator aggregator);
 
     }
 
-    public interface Elements extends Structure1D {
+    public interface Elements extends Structure1D
+    {
 
         /**
          * @see Scalar#isAbsolute()
@@ -56,10 +59,12 @@ public interface Access1D<N extends Number> extends Structure1D, Iterable<N> {
         /**
          * @see Scalar#isSmall(double)
          */
-        default boolean isAllSmall(final double comparedTo) {
+        default boolean isAllSmall(final double comparedTo)
+        {
             boolean retVal = true;
             final long tmpLimit = this.count();
-            for (long i = 0L; retVal && (i < tmpLimit); i++) {
+            for (long i = 0L; retVal && (i < tmpLimit); i++)
+            {
                 retVal &= this.isSmall(i, comparedTo);
             }
             return retVal;
@@ -72,13 +77,15 @@ public interface Access1D<N extends Number> extends Structure1D, Iterable<N> {
 
     }
 
-    public static final class ElementView<N extends Number> implements ElementView1D<N, ElementView<N>> {
+    public static final class ElementView<N extends Number> implements ElementView1D<N, ElementView<N>>
+    {
 
         private long myCursor = -1;
         private final long myLastCursor;
         private final Access1D<N> myValues;
 
-        ElementView(final Access1D<N> values) {
+        ElementView(final Access1D<N> values)
+        {
 
             super();
 
@@ -86,41 +93,50 @@ public interface Access1D<N extends Number> extends Structure1D, Iterable<N> {
             myLastCursor = values.count() - 1;
         }
 
-        public double doubleValue() {
+        public double doubleValue()
+        {
             return myValues.doubleValue(myCursor);
         }
 
-        public N getNumber() {
+        public N getNumber()
+        {
             return myValues.get(myCursor);
         }
 
-        public boolean hasNext() {
+        public boolean hasNext()
+        {
             return myCursor < myLastCursor;
         }
 
-        public boolean hasPrevious() {
+        public boolean hasPrevious()
+        {
             return myCursor > 0;
         }
 
-        public long index() {
+        public long index()
+        {
             return myCursor;
         }
 
-        public ElementView<N> next() {
+        public ElementView<N> next()
+        {
             myCursor++;
             return this;
         }
 
-        public ElementView<N> previous() {
+        public ElementView<N> previous()
+        {
             myCursor--;
             return this;
         }
 
     }
 
-    public interface IndexOf extends Structure1D {
+    public interface IndexOf extends Structure1D
+    {
 
-        default long indexOfLargest() {
+        default long indexOfLargest()
+        {
             return this.indexOfLargestInRange(0L, this.count());
         }
 
@@ -128,22 +144,27 @@ public interface Access1D<N extends Number> extends Structure1D, Iterable<N> {
 
     }
 
-    public interface Sliceable<N extends Number> extends Structure1D {
+    public interface Sliceable<N extends Number> extends Structure1D
+    {
 
         Access1D<N> sliceRange(long first, long limit);
 
     }
 
-    public interface Visitable<N extends Number> extends Structure1D {
+    public interface Visitable<N extends Number> extends Structure1D
+    {
 
-        default void visitAll(final VoidFunction<N> visitor) {
+        default void visitAll(final VoidFunction<N> visitor)
+        {
             this.visitRange(0L, this.count(), visitor);
         }
 
         void visitOne(long index, VoidFunction<N> visitor);
 
-        default void visitRange(final long first, final long limit, final VoidFunction<N> visitor) {
-            for (long i = first; i < limit; i++) {
+        default void visitRange(final long first, final long limit, final VoidFunction<N> visitor)
+        {
+            for (long i = first; i < limit; i++)
+            {
                 this.visitOne(i, visitor);
             }
         }
@@ -155,9 +176,11 @@ public interface Access1D<N extends Number> extends Structure1D, Iterable<N> {
      * @param a The scale
      * @param y The "vector" to update
      */
-    default void daxpy(final double a, final Mutate1D y) {
+    default void daxpy(final double a, final Mutate1D y)
+    {
         final long tmpLimit = Math.min(this.count(), y.count());
-        for (long i = 0L; i < tmpLimit; i++) {
+        for (long i = 0L; i < tmpLimit; i++)
+        {
             y.add(i, a * this.doubleValue(i));
         }
     }
@@ -168,10 +191,12 @@ public interface Access1D<N extends Number> extends Structure1D, Iterable<N> {
      * @param vector Another 1D-structure
      * @return The dot product
      */
-    default double dot(final Access1D<?> vector) {
+    default double dot(final Access1D<?> vector)
+    {
         double retVal = PrimitiveMath.ZERO;
         final long tmpLimit = Math.min(this.count(), vector.count());
-        for (long i = 0L; i < tmpLimit; i++) {
+        for (long i = 0L; i < tmpLimit; i++)
+        {
             retVal += this.doubleValue(i) * vector.doubleValue(i);
         }
         return retVal;
@@ -183,13 +208,15 @@ public interface Access1D<N extends Number> extends Structure1D, Iterable<N> {
      * Returns an Iterable of ElementView1D. It allows to iterate over the instance's element "positions"
      * without actually extracting the elements (unless you explicitly do so).
      */
-    default ElementView1D<N, ?> elements() {
+    default ElementView1D<N, ?> elements()
+    {
         return new Access1D.ElementView<N>(this);
     }
 
     N get(long index);
 
-    default Iterator<N> iterator() {
+    default Iterator<N> iterator()
+    {
         return new Iterator1D<>(this);
     }
 
@@ -197,21 +224,25 @@ public interface Access1D<N extends Number> extends Structure1D, Iterable<N> {
      * Will pass through each matching element position calling the {@code through} function. What happens is
      * entirely dictated by how you implement the callback.
      */
-    default void passMatching(final Callback1D<N> through, final Mutate1D to) {
+    default void passMatching(final Callback1D<N> through, final Mutate1D to)
+    {
         Callback1D.onMatching(this, through, to);
     }
 
-    default BaseStream<N, ? extends BaseStream<N, ?>> stream(final boolean parallel) {
+    default BaseStream<N, ? extends BaseStream<N, ?>> stream(final boolean parallel)
+    {
         return StreamSupport.stream(this.spliterator(), parallel);
     }
 
-    default double[] toRawCopy1D() {
+    default double[] toRawCopy1D()
+    {
 
         final int tmpLength = (int) this.count();
 
         final double[] retVal = new double[tmpLength];
 
-        for (int i = 0; i < tmpLength; i++) {
+        for (int i = 0; i < tmpLength; i++)
+        {
             retVal[i] = this.doubleValue(i);
         }
 

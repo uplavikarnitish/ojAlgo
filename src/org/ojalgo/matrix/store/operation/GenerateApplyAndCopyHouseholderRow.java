@@ -32,13 +32,15 @@ import org.ojalgo.matrix.transformation.Householder;
 import org.ojalgo.scalar.ComplexNumber;
 import org.ojalgo.scalar.PrimitiveScalar;
 
-public final class GenerateApplyAndCopyHouseholderRow extends MatrixOperation {
+public final class GenerateApplyAndCopyHouseholderRow extends MatrixOperation
+{
 
     public static final GenerateApplyAndCopyHouseholderRow SETUP = new GenerateApplyAndCopyHouseholderRow();
 
     public static int THRESHOLD = 128;
 
-    public static boolean invoke(final BigDecimal[] data, final int structure, final int row, final int col, final Householder.Big destination) {
+    public static boolean invoke(final BigDecimal[] data, final int structure, final int row, final int col, final Householder.Big destination)
+    {
 
         final int tmpColDim = data.length / structure;
 
@@ -46,7 +48,8 @@ public final class GenerateApplyAndCopyHouseholderRow extends MatrixOperation {
         destination.first = col;
 
         BigDecimal tmpNormInf = BigMath.ZERO;
-        for (int j = col; j < tmpColDim; j++) {
+        for (int j = col; j < tmpColDim; j++)
+        {
             tmpNormInf = tmpNormInf.max((tmpVector[j] = data[row + (j * structure)]).abs());
         }
 
@@ -54,8 +57,10 @@ public final class GenerateApplyAndCopyHouseholderRow extends MatrixOperation {
         BigDecimal tmpVal;
         BigDecimal tmpNorm2 = BigMath.ZERO;
 
-        if (retVal) {
-            for (int j = col + 1; j < tmpColDim; j++) {
+        if (retVal)
+        {
+            for (int j = col + 1; j < tmpColDim; j++)
+            {
                 tmpVal = BigFunction.DIVIDE.invoke(tmpVector[j], tmpNormInf);
                 tmpNorm2 = BigFunction.ADD.invoke(tmpNorm2, BigFunction.MULTIPLY.invoke(tmpVal, tmpVal));
                 tmpVector[j] = tmpVal;
@@ -63,23 +68,27 @@ public final class GenerateApplyAndCopyHouseholderRow extends MatrixOperation {
             retVal = !PrimitiveScalar.isSmall(PrimitiveMath.ONE, tmpNorm2.doubleValue());
         }
 
-        if (retVal) {
+        if (retVal)
+        {
 
             BigDecimal tmpScale = BigFunction.DIVIDE.invoke(tmpVector[col], tmpNormInf);
             tmpNorm2 = BigFunction.ADD.invoke(tmpNorm2, BigFunction.MULTIPLY.invoke(tmpScale, tmpScale));
             tmpNorm2 = BigFunction.SQRT.invoke(tmpNorm2);
 
-            if (tmpScale.signum() != 1) {
+            if (tmpScale.signum() != 1)
+            {
                 data[(row + (col * structure))] = tmpNorm2.multiply(tmpNormInf);
                 tmpScale = BigFunction.SUBTRACT.invoke(tmpScale, tmpNorm2);
-            } else {
+            } else
+            {
                 data[(row + (col * structure))] = tmpNorm2.negate().multiply(tmpNormInf);
                 tmpScale = BigFunction.ADD.invoke(tmpScale, tmpNorm2);
             }
 
             tmpVector[col] = BigMath.ONE;
 
-            for (int j = col + 1; j < tmpColDim; j++) {
+            for (int j = col + 1; j < tmpColDim; j++)
+            {
                 data[row + (j * structure)] = tmpVector[j] = BigFunction.DIVIDE.invoke(tmpVector[j], tmpScale);
             }
 
@@ -89,7 +98,8 @@ public final class GenerateApplyAndCopyHouseholderRow extends MatrixOperation {
         return retVal;
     }
 
-    public static boolean invoke(final ComplexNumber[] data, final int structure, final int row, final int col, final Householder.Complex destination) {
+    public static boolean invoke(final ComplexNumber[] data, final int structure, final int row, final int col, final Householder.Complex destination)
+    {
 
         final int tmpColDim = data.length / structure;
 
@@ -97,7 +107,8 @@ public final class GenerateApplyAndCopyHouseholderRow extends MatrixOperation {
         destination.first = col;
 
         double tmpNormInf = PrimitiveMath.ZERO;
-        for (int j = col; j < tmpColDim; j++) {
+        for (int j = col; j < tmpColDim; j++)
+        {
             tmpNormInf = PrimitiveFunction.MAX.invoke(tmpNormInf, (tmpVector[j] = data[row + (j * structure)]).norm());
         }
 
@@ -105,8 +116,10 @@ public final class GenerateApplyAndCopyHouseholderRow extends MatrixOperation {
         ComplexNumber tmpVal;
         double tmpNorm2 = PrimitiveMath.ZERO;
 
-        if (retVal) {
-            for (int j = col + 1; j < tmpColDim; j++) {
+        if (retVal)
+        {
+            for (int j = col + 1; j < tmpColDim; j++)
+            {
                 tmpVal = tmpVector[j].divide(tmpNormInf);
                 tmpNorm2 += tmpVal.norm() * tmpVal.norm();
                 tmpVector[j] = tmpVal;
@@ -115,7 +128,8 @@ public final class GenerateApplyAndCopyHouseholderRow extends MatrixOperation {
             retVal = !PrimitiveScalar.isSmall(PrimitiveMath.ONE, value);
         }
 
-        if (retVal) {
+        if (retVal)
+        {
 
             ComplexNumber tmpScale = tmpVector[col].divide(tmpNormInf);
             tmpNorm2 += tmpScale.norm() * tmpScale.norm();
@@ -126,7 +140,8 @@ public final class GenerateApplyAndCopyHouseholderRow extends MatrixOperation {
 
             tmpVector[col] = ComplexNumber.ONE;
 
-            for (int j = col + 1; j < tmpColDim; j++) {
+            for (int j = col + 1; j < tmpColDim; j++)
+            {
                 data[row + (j * structure)] = tmpVector[j] = ComplexFunction.DIVIDE.invoke(tmpVector[j], tmpScale).conjugate();
             }
 
@@ -136,7 +151,8 @@ public final class GenerateApplyAndCopyHouseholderRow extends MatrixOperation {
         return retVal;
     }
 
-    public static boolean invoke(final double[] data, final int structure, final int row, final int col, final Householder.Primitive destination) {
+    public static boolean invoke(final double[] data, final int structure, final int row, final int col, final Householder.Primitive destination)
+    {
 
         final int tmpColDim = data.length / structure;
 
@@ -144,7 +160,8 @@ public final class GenerateApplyAndCopyHouseholderRow extends MatrixOperation {
         destination.first = col;
 
         double tmpNormInf = PrimitiveMath.ZERO; // Copy row and calculate its infinity-norm.
-        for (int j = col; j < tmpColDim; j++) {
+        for (int j = col; j < tmpColDim; j++)
+        {
             tmpNormInf = PrimitiveFunction.MAX.invoke(tmpNormInf, PrimitiveFunction.ABS.invoke(tmpVector[j] = data[row + (j * structure)]));
         }
 
@@ -152,8 +169,10 @@ public final class GenerateApplyAndCopyHouseholderRow extends MatrixOperation {
         double tmpVal;
         double tmpNorm2 = PrimitiveMath.ZERO;
 
-        if (retVal) {
-            for (int j = col + 1; j < tmpColDim; j++) {
+        if (retVal)
+        {
+            for (int j = col + 1; j < tmpColDim; j++)
+            {
                 tmpVal = tmpVector[j] /= tmpNormInf;
                 tmpNorm2 += tmpVal * tmpVal;
             }
@@ -161,23 +180,27 @@ public final class GenerateApplyAndCopyHouseholderRow extends MatrixOperation {
             retVal = !PrimitiveScalar.isSmall(PrimitiveMath.ONE, value);
         }
 
-        if (retVal) {
+        if (retVal)
+        {
 
             double tmpScale = tmpVector[col] / tmpNormInf;
             tmpNorm2 += tmpScale * tmpScale;
             tmpNorm2 = PrimitiveFunction.SQRT.invoke(tmpNorm2); // 2-norm of the vector to transform (scaled by inf-norm)
 
-            if (tmpScale <= PrimitiveMath.ZERO) {
+            if (tmpScale <= PrimitiveMath.ZERO)
+            {
                 data[(row + (col * structure))] = tmpNorm2 * tmpNormInf;
                 tmpScale -= tmpNorm2;
-            } else {
+            } else
+            {
                 data[(row + (col * structure))] = -tmpNorm2 * tmpNormInf;
                 tmpScale += tmpNorm2;
             }
 
             tmpVector[col] = PrimitiveMath.ONE;
 
-            for (int j = col + 1; j < tmpColDim; j++) {
+            for (int j = col + 1; j < tmpColDim; j++)
+            {
                 data[row + (j * structure)] = tmpVector[j] /= tmpScale;
             }
 
@@ -187,12 +210,14 @@ public final class GenerateApplyAndCopyHouseholderRow extends MatrixOperation {
         return retVal;
     }
 
-    private GenerateApplyAndCopyHouseholderRow() {
+    private GenerateApplyAndCopyHouseholderRow()
+    {
         super();
     }
 
     @Override
-    public int threshold() {
+    public int threshold()
+    {
         return THRESHOLD;
     }
 

@@ -25,17 +25,21 @@ import java.util.List;
 
 import org.ojalgo.array.ArrayUtils;
 
-public class Message {
+public class Message
+{
 
     private static String EMPTY = "";
 
-    public static String toString(final List<Message> aCollection) {
+    public static String toString(final List<Message> aCollection)
+    {
 
         final StringBuilder retVal = new StringBuilder();
 
-        if (aCollection.size() >= 1) {
+        if (aCollection.size() >= 1)
+        {
             retVal.append(aCollection.get(0));
-            for (int i = 1; i < aCollection.size(); i++) {
+            for (int i = 1; i < aCollection.size(); i++)
+            {
                 retVal.append(ASCII.LF);
                 retVal.append(aCollection.get(i));
             }
@@ -46,28 +50,32 @@ public class Message {
 
     private final String[] myCommand;
 
-    public Message(final String aCommand) {
+    public Message(final String aCommand)
+    {
 
         super();
 
-        myCommand = new String[] { aCommand };
+        myCommand = new String[]{aCommand};
     }
 
-    public Message(final String aCommand, final String anArgument) {
+    public Message(final String aCommand, final String anArgument)
+    {
 
         super();
 
-        myCommand = new String[] { aCommand, anArgument };
+        myCommand = new String[]{aCommand, anArgument};
     }
 
-    public Message(final String aCommand, final String anArgument, final String aParameter) {
+    public Message(final String aCommand, final String anArgument, final String aParameter)
+    {
 
         super();
 
-        myCommand = new String[] { aCommand, anArgument, aParameter };
+        myCommand = new String[]{aCommand, anArgument, aParameter};
     }
 
-    public Message(final String[] aCommand) {
+    public Message(final String[] aCommand)
+    {
 
         super();
 
@@ -75,17 +83,21 @@ public class Message {
     }
 
     @SuppressWarnings("unused")
-    private Message() {
+    private Message()
+    {
         this(EMPTY);
     }
 
-    public String getArgument() {
+    public String getArgument()
+    {
 
         final StringBuilder retVal = new StringBuilder();
 
-        if (myCommand.length >= 2) {
+        if (myCommand.length >= 2)
+        {
             retVal.append(myCommand[1]);
-            for (int i = 2; i < myCommand.length; i++) {
+            for (int i = 2; i < myCommand.length; i++)
+            {
                 retVal.append(ASCII.SP);
                 retVal.append(myCommand[i]);
             }
@@ -94,17 +106,20 @@ public class Message {
         return retVal.toString();
     }
 
-    public String getCommand() {
+    public String getCommand()
+    {
         return myCommand[0];
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
 
         final StringBuilder retVal = new StringBuilder();
 
         retVal.append(myCommand[0]);
-        for (int i = 1; i < myCommand.length; i++) {
+        for (int i = 1; i < myCommand.length; i++)
+        {
             retVal.append(ASCII.SP);
             retVal.append(myCommand[i]);
         }

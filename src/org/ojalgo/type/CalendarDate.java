@@ -54,60 +54,77 @@ import java.util.TimeZone;
  * {@linkplain TemporalAdjuster} interfaces.
  * </p>
  *
+ * @author apete
  * @see CalendarDateDuration
  * @see CalendarDateUnit
- * @author apete
  */
-public final class CalendarDate implements Temporal, Comparable<CalendarDate> {
+public final class CalendarDate implements Temporal, Comparable<CalendarDate>
+{
 
     static final int NANOS_PER_SECOND = 1_000_000_000;
     static final long SECONDS_PER_DAY = 24L * 60L * 60L;
 
-    public static CalendarDate from(final TemporalAccessor temporal) {
+    public static CalendarDate from(final TemporalAccessor temporal)
+    {
         Objects.requireNonNull(temporal, "temporal");
-        if (temporal instanceof CalendarDate) {
+        if (temporal instanceof CalendarDate)
+        {
             return (CalendarDate) temporal;
-        } else if (temporal instanceof Instant) {
+        } else if (temporal instanceof Instant)
+        {
             return new CalendarDate(((Instant) temporal).toEpochMilli());
-        } else {
-            try {
+        } else
+        {
+            try
+            {
                 final long tmpSeconds = temporal.getLong(ChronoField.INSTANT_SECONDS);
                 final int tmpMillisOfSecond = temporal.get(ChronoField.MILLI_OF_SECOND);
                 return new CalendarDate((tmpSeconds * 1000L) + tmpMillisOfSecond);
-            } catch (final DateTimeException ex) {
+            } catch (final DateTimeException ex)
+            {
                 throw new DateTimeException("Unable to obtain CalendarDate from TemporalAccessor: " + temporal + " of type " + temporal.getClass().getName(),
                         ex);
             }
         }
     }
 
-    public static CalendarDate make(final Calendar calendar, final CalendarDateUnit resolution) {
+    public static CalendarDate make(final Calendar calendar, final CalendarDateUnit resolution)
+    {
         return new CalendarDate(resolution.toTimeInMillis(calendar));
     }
 
-    public static CalendarDate make(final CalendarDateUnit resolution) {
+    public static CalendarDate make(final CalendarDateUnit resolution)
+    {
         return new CalendarDate(resolution.toTimeInMillis(System.currentTimeMillis()));
     }
 
-    public static CalendarDate make(final Date date, final CalendarDateUnit resolution) {
+    public static CalendarDate make(final Date date, final CalendarDateUnit resolution)
+    {
         return new CalendarDate(resolution.toTimeInMillis(date));
     }
 
-    public static CalendarDate make(final long timeInMIllis, final CalendarDateUnit resolution) {
+    public static CalendarDate make(final long timeInMIllis, final CalendarDateUnit resolution)
+    {
         return new CalendarDate(resolution.toTimeInMillis(timeInMIllis));
     }
 
-    static long millis(final TemporalAccessor temporal) {
-        if (temporal instanceof CalendarDate) {
+    static long millis(final TemporalAccessor temporal)
+    {
+        if (temporal instanceof CalendarDate)
+        {
             return ((CalendarDate) temporal).millis;
-        } else if (temporal instanceof Instant) {
+        } else if (temporal instanceof Instant)
+        {
             return ((Instant) temporal).toEpochMilli();
-        } else {
-            try {
+        } else
+        {
+            try
+            {
                 final long tmpSeconds = temporal.getLong(ChronoField.INSTANT_SECONDS);
                 final int tmpMillisOfSecond = temporal.get(ChronoField.MILLI_OF_SECOND);
                 return (tmpSeconds * 1000L) + tmpMillisOfSecond;
-            } catch (final DateTimeException ex) {
+            } catch (final DateTimeException ex)
+            {
                 throw new DateTimeException("No millis!");
             }
         }
@@ -115,125 +132,161 @@ public final class CalendarDate implements Temporal, Comparable<CalendarDate> {
 
     public final long millis;
 
-    public CalendarDate() {
+    public CalendarDate()
+    {
 
         super();
 
         millis = System.currentTimeMillis();
     }
 
-    public CalendarDate(final Calendar calendar) {
+    public CalendarDate(final Calendar calendar)
+    {
 
         super();
 
         millis = calendar.getTimeInMillis();
     }
 
-    public CalendarDate(final Date date) {
+    public CalendarDate(final Date date)
+    {
 
         super();
 
         millis = date.getTime();
     }
 
-    public CalendarDate(final long timeInMillis) {
+    public CalendarDate(final long timeInMillis)
+    {
 
         super();
 
         millis = timeInMillis;
     }
 
-    public CalendarDate(final String anSqlString) {
+    public CalendarDate(final String anSqlString)
+    {
 
         super();
 
         final boolean tmpDatePart = anSqlString.indexOf('-') >= 0;
         final boolean tmpTimePart = anSqlString.indexOf(':') >= 0;
 
-        if (tmpDatePart && tmpTimePart) {
+        if (tmpDatePart && tmpTimePart)
+        {
             millis = StandardType.SQL_DATETIME.parse(anSqlString).getTime();
-        } else if (tmpDatePart && !tmpTimePart) {
+        } else if (tmpDatePart && !tmpTimePart)
+        {
             millis = StandardType.SQL_DATE.parse(anSqlString).getTime();
-        } else if (!tmpDatePart && tmpTimePart) {
+        } else if (!tmpDatePart && tmpTimePart)
+        {
             millis = StandardType.SQL_TIME.parse(anSqlString).getTime();
-        } else {
+        } else
+        {
             millis = 0L;
         }
     }
 
-    public int compareTo(final CalendarDate ref) {
+    public int compareTo(final CalendarDate ref)
+    {
         return Long.signum(millis - ref.millis);
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return false;
         }
-        if (!(obj instanceof CalendarDate)) {
+        if (!(obj instanceof CalendarDate))
+        {
             return false;
         }
         final CalendarDate other = (CalendarDate) obj;
-        if (millis != other.millis) {
+        if (millis != other.millis)
+        {
             return false;
         }
         return true;
     }
 
-    public CalendarDate filter(final CalendarDateUnit resolution) {
-        if (resolution.isCalendarUnit()) {
+    public CalendarDate filter(final CalendarDateUnit resolution)
+    {
+        if (resolution.isCalendarUnit())
+        {
             return new CalendarDate(resolution.toTimeInMillis(this.toCalendar()));
-        } else {
+        } else
+        {
             return new CalendarDate(resolution.toTimeInMillis(millis));
         }
     }
 
-    public long getLong(final TemporalField field) {
-        if (field instanceof ChronoField) {
-            if (field == ChronoField.INSTANT_SECONDS) {
+    public long getLong(final TemporalField field)
+    {
+        if (field instanceof ChronoField)
+        {
+            if (field == ChronoField.INSTANT_SECONDS)
+            {
                 return millis / 1000L;
-            } else {
+            } else
+            {
                 throw new UnsupportedTemporalTypeException("Unsupported field: " + field);
             }
-        } else {
+        } else
+        {
             return field.getFrom(this);
         }
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return (int) (millis ^ (millis >>> 32));
     }
 
-    public boolean isSupported(final TemporalField field) {
-        if (field instanceof ChronoField) {
+    public boolean isSupported(final TemporalField field)
+    {
+        if (field instanceof ChronoField)
+        {
             return (field == ChronoField.INSTANT_SECONDS) || (field == ChronoField.MILLI_OF_SECOND);
-        } else {
+        } else
+        {
             return field.isSupportedBy(this);
         }
     }
 
-    public boolean isSupported(final TemporalUnit unit) {
-        if (unit instanceof CalendarDateUnit) {
+    public boolean isSupported(final TemporalUnit unit)
+    {
+        if (unit instanceof CalendarDateUnit)
+        {
             return true;
-        } else if (unit instanceof ChronoUnit) {
+        } else if (unit instanceof ChronoUnit)
+        {
             return unit.isTimeBased() || (unit == ChronoUnit.DAYS);
-        } else if (unit != null) {
+        } else if (unit != null)
+        {
             return unit.isSupportedBy(this);
-        } else {
+        } else
+        {
             return false;
         }
     }
 
-    public Temporal plus(final long amountToAdd, final TemporalUnit unit) {
-        if (unit instanceof CalendarDateUnit) {
+    public Temporal plus(final long amountToAdd, final TemporalUnit unit)
+    {
+        if (unit instanceof CalendarDateUnit)
+        {
             return this.step((int) amountToAdd, (CalendarDateUnit) unit);
-        } else if (unit instanceof ChronoUnit) {
+        } else if (unit instanceof ChronoUnit)
+        {
             return this.toInstant().plus(amountToAdd, unit);
-        } else {
+        } else
+        {
             return unit.addTo(this, amountToAdd);
         }
     }
@@ -241,80 +294,97 @@ public final class CalendarDate implements Temporal, Comparable<CalendarDate> {
     /**
      * Only steps with the int part of {@linkplain CalendarDateDuration#measure} .
      */
-    public CalendarDate step(final CalendarDateDuration aStepDuration) {
+    public CalendarDate step(final CalendarDateDuration aStepDuration)
+    {
         return this.step((int) aStepDuration.measure, aStepDuration.unit);
     }
 
-    public CalendarDate step(final CalendarDateUnit aStepUnit) {
+    public CalendarDate step(final CalendarDateUnit aStepUnit)
+    {
         return this.step(1, aStepUnit);
     }
 
-    public CalendarDate step(final int aStepCount, final CalendarDateUnit aStepUnit) {
-        if (aStepUnit.isCalendarUnit()) {
+    public CalendarDate step(final int aStepCount, final CalendarDateUnit aStepUnit)
+    {
+        if (aStepUnit.isCalendarUnit())
+        {
             return new CalendarDate(aStepUnit.step(this.toCalendar(), aStepCount));
-        } else {
+        } else
+        {
             return new CalendarDate(aStepUnit.step(millis, aStepCount));
         }
     }
 
-    public Calendar toCalendar() {
+    public Calendar toCalendar()
+    {
         final GregorianCalendar retVal = new GregorianCalendar();
         retVal.setTimeInMillis(millis);
         return retVal;
     }
 
-    public Calendar toCalendar(final Locale locale) {
+    public Calendar toCalendar(final Locale locale)
+    {
         final GregorianCalendar retVal = new GregorianCalendar(locale);
         retVal.setTimeInMillis(millis);
         return retVal;
     }
 
-    public Calendar toCalendar(final TimeZone zone) {
+    public Calendar toCalendar(final TimeZone zone)
+    {
         final GregorianCalendar retVal = new GregorianCalendar(zone);
         retVal.setTimeInMillis(millis);
         return retVal;
     }
 
-    public Calendar toCalendar(final TimeZone zone, final Locale locale) {
+    public Calendar toCalendar(final TimeZone zone, final Locale locale)
+    {
         final GregorianCalendar retVal = new GregorianCalendar(zone, locale);
         retVal.setTimeInMillis(millis);
         return retVal;
     }
 
-    public Date toDate() {
+    public Date toDate()
+    {
         return new Date(millis);
     }
 
-    public Instant toInstant() {
+    public Instant toInstant()
+    {
         return Instant.ofEpochMilli(millis);
     }
 
-    public LocalDate toLocalDate() {
+    public LocalDate toLocalDate()
+    {
         return this.toLocalDate(ZoneOffset.UTC);
     }
 
-    public LocalDate toLocalDate(final ZoneOffset offset) {
+    public LocalDate toLocalDate(final ZoneOffset offset)
+    {
         final long tmpSeconds = Math.floorDiv(millis, 1000L);
         final long tmpLocalSeconds = tmpSeconds + offset.getTotalSeconds();
         final long tmpLocalDay = Math.floorDiv(tmpLocalSeconds, CalendarDate.SECONDS_PER_DAY);
         return LocalDate.ofEpochDay(tmpLocalDay);
     }
 
-    public LocalDateTime toLocalDateTime() {
+    public LocalDateTime toLocalDateTime()
+    {
         return this.toLocalDateTime(ZoneOffset.UTC);
     }
 
-    public LocalDateTime toLocalDateTime(final ZoneOffset offset) {
+    public LocalDateTime toLocalDateTime(final ZoneOffset offset)
+    {
         final long tmpSeconds = Math.floorDiv(millis, 1000L);
         final int tmpNanos = (int) Math.floorMod(millis, 1000L);
         return LocalDateTime.ofEpochSecond(tmpSeconds, tmpNanos, offset);
     }
 
-    public LocalTime toLocalTime() {
+    public LocalTime toLocalTime()
+    {
         return this.toLocalTime(ZoneOffset.UTC);
     }
 
-    public LocalTime toLocalTime(final ZoneOffset offset) {
+    public LocalTime toLocalTime(final ZoneOffset offset)
+    {
 
         final long tmpSeconds = Math.floorDiv(millis, 1000L);
 
@@ -334,7 +404,8 @@ public final class CalendarDate implements Temporal, Comparable<CalendarDate> {
      * @deprecated v39
      */
     @Deprecated
-    public Date toSqlDate() {
+    public Date toSqlDate()
+    {
         final LocalDate tmpDateOnly = this.toLocalDate();
         final int tmpYear = tmpDateOnly.getYear() - 1900;
         final int tmpMonth = tmpDateOnly.getMonthValue() - 1;
@@ -346,7 +417,8 @@ public final class CalendarDate implements Temporal, Comparable<CalendarDate> {
      * @deprecated v39
      */
     @Deprecated
-    public Date toSqlTime() {
+    public Date toSqlTime()
+    {
         final LocalTime tmpTimeOnly = this.toLocalTime();
         final int tmpYear = 0;
         final int tmpMonth = 0;
@@ -361,45 +433,60 @@ public final class CalendarDate implements Temporal, Comparable<CalendarDate> {
      * @deprecated v39
      */
     @Deprecated
-    public Date toSqlTimestamp() {
+    public Date toSqlTimestamp()
+    {
         return new Date(millis);
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return StandardType.SQL_DATETIME.format(this.toDate());
     }
 
-    public long toTimeInMillis(final CalendarDateUnit resolution) {
-        if (resolution.isCalendarUnit()) {
+    public long toTimeInMillis(final CalendarDateUnit resolution)
+    {
+        if (resolution.isCalendarUnit())
+        {
             return resolution.toTimeInMillis(this.toCalendar());
-        } else {
+        } else
+        {
             return resolution.toTimeInMillis(millis);
         }
     }
 
-    public long until(final Temporal endExclusive, final TemporalUnit unit) {
-        if (unit instanceof CalendarDateUnit) {
+    public long until(final Temporal endExclusive, final TemporalUnit unit)
+    {
+        if (unit instanceof CalendarDateUnit)
+        {
             return ((CalendarDateUnit) unit).count(millis, CalendarDate.millis(endExclusive));
-        } else if (unit instanceof ChronoUnit) {
+        } else if (unit instanceof ChronoUnit)
+        {
             return this.toInstant().until(endExclusive, unit);
-        } else {
+        } else
+        {
             return unit.between(this, endExclusive);
         }
     }
 
-    public CalendarDate with(final TemporalField field, final long newValue) {
-        if (field instanceof ChronoField) {
-            if (field == ChronoField.INSTANT_SECONDS) {
+    public CalendarDate with(final TemporalField field, final long newValue)
+    {
+        if (field instanceof ChronoField)
+        {
+            if (field == ChronoField.INSTANT_SECONDS)
+            {
                 final long tmpMillisOfSecond = millis % 1000L;
                 return new CalendarDate((newValue * 1000L) + tmpMillisOfSecond);
-            } else if (field == ChronoField.MILLI_OF_SECOND) {
+            } else if (field == ChronoField.MILLI_OF_SECOND)
+            {
                 final long tmpSeconds = millis / 1000L;
                 return new CalendarDate((tmpSeconds * 1000L) + newValue);
-            } else {
+            } else
+            {
                 throw new UnsupportedTemporalTypeException("Unsupported field: " + field);
             }
-        } else {
+        } else
+        {
             return field.adjustInto(this, newValue);
         }
     }

@@ -32,9 +32,11 @@ import org.ojalgo.type.CalendarDateUnit;
  *
  * @author apete
  */
-public class YahooSymbol extends DataSource<YahooSymbol.Data> {
+public class YahooSymbol extends DataSource<YahooSymbol.Data>
+{
 
-    public static final class Data extends DatePrice {
+    public static final class Data extends DatePrice
+    {
 
         public double adjustedClose;
         public double close;
@@ -43,24 +45,29 @@ public class YahooSymbol extends DataSource<YahooSymbol.Data> {
         public double open;
         public double volume;
 
-        protected Data(final Calendar calendar) {
+        protected Data(final Calendar calendar)
+        {
             super(calendar);
         }
 
-        protected Data(final Date date) {
+        protected Data(final Date date)
+        {
             super(date);
         }
 
-        protected Data(final long millis) {
+        protected Data(final long millis)
+        {
             super(millis);
         }
 
-        protected Data(final String sqlString) {
+        protected Data(final String sqlString)
+        {
             super(sqlString);
         }
 
         @Override
-        public double getPrice() {
+        public double getPrice()
+        {
             return adjustedClose;
         }
 
@@ -76,33 +83,37 @@ public class YahooSymbol extends DataSource<YahooSymbol.Data> {
     private static final String TABLE_CSV = "/table.csv";
     private static final String W = "w";
 
-    public YahooSymbol(final String symbol) {
+    public YahooSymbol(final String symbol)
+    {
         this(symbol, CalendarDateUnit.DAY);
     }
 
-    public YahooSymbol(final String symbol, final CalendarDateUnit resolution) {
+    public YahooSymbol(final String symbol, final CalendarDateUnit resolution)
+    {
 
         super(symbol, resolution);
 
         this.setHost(ICHART_FINANCE_YAHOO_COM);
         this.setPath(TABLE_CSV);
         this.addQueryParameter(S, symbol);
-        switch (resolution) {
-        case MONTH:
-            this.addQueryParameter(G, M);
-            break;
-        case WEEK:
-            this.addQueryParameter(G, W);
-            break;
-        default:
-            this.addQueryParameter(G, D);
-            break;
+        switch (resolution)
+        {
+            case MONTH:
+                this.addQueryParameter(G, M);
+                break;
+            case WEEK:
+                this.addQueryParameter(G, W);
+                break;
+            default:
+                this.addQueryParameter(G, D);
+                break;
         }
         this.addQueryParameter(IGNORE, CSV);
     }
 
     @Override
-    protected YahooSymbol.Data parse(final String line) {
+    protected YahooSymbol.Data parse(final String line)
+    {
 
         Data retVal = null;
 

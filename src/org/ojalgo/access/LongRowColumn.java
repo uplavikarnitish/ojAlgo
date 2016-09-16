@@ -21,12 +21,14 @@
  */
 package org.ojalgo.access;
 
-public final class LongRowColumn implements Comparable<LongRowColumn> {
+public final class LongRowColumn implements Comparable<LongRowColumn>
+{
 
     public final long column;
     public final long row;
 
-    public LongRowColumn(final long aRow, final long aCol) {
+    public LongRowColumn(final long aRow, final long aCol)
+    {
 
         super();
 
@@ -35,45 +37,56 @@ public final class LongRowColumn implements Comparable<LongRowColumn> {
     }
 
     @SuppressWarnings("unused")
-    private LongRowColumn() {
+    private LongRowColumn()
+    {
         this(-1L, -1L);
     }
 
-    public int compareTo(final LongRowColumn ref) {
+    public int compareTo(final LongRowColumn ref)
+    {
 
-        if (column == ref.column) {
+        if (column == ref.column)
+        {
 
             return Long.compare(row, ref.row);
 
-        } else {
+        } else
+        {
 
             return Long.compare(column, ref.column);
         }
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return false;
         }
-        if (!(obj instanceof LongRowColumn)) {
+        if (!(obj instanceof LongRowColumn))
+        {
             return false;
         }
         final LongRowColumn other = (LongRowColumn) obj;
-        if (column != other.column) {
+        if (column != other.column)
+        {
             return false;
         }
-        if (row != other.row) {
+        if (row != other.row)
+        {
             return false;
         }
         return true;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = 1;
         result = (prime * result) + (int) (column ^ (column >>> 32));
@@ -82,7 +95,8 @@ public final class LongRowColumn implements Comparable<LongRowColumn> {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "<" + Long.toString(row) + "," + Long.toString(column) + ">";
     }
 

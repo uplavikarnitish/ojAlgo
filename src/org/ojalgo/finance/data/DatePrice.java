@@ -27,54 +27,63 @@ import java.util.Date;
 import org.ojalgo.type.CalendarDate;
 import org.ojalgo.type.keyvalue.KeyValue;
 
-public abstract class DatePrice implements KeyValue<CalendarDate, Double> {
+public abstract class DatePrice implements KeyValue<CalendarDate, Double>
+{
 
     public final CalendarDate key;
 
-    protected DatePrice(final Calendar calendar) {
+    protected DatePrice(final Calendar calendar)
+    {
 
         super();
 
         key = new CalendarDate(calendar);
     }
 
-    protected DatePrice(final Date date) {
+    protected DatePrice(final Date date)
+    {
 
         super();
 
         key = new CalendarDate(date);
     }
 
-    protected DatePrice(final long millis) {
+    protected DatePrice(final long millis)
+    {
 
         super();
 
         key = new CalendarDate(millis);
     }
 
-    protected DatePrice(final String sqlString) {
+    protected DatePrice(final String sqlString)
+    {
 
         super();
 
         key = new CalendarDate(sqlString);
     }
 
-    public int compareTo(final KeyValue<CalendarDate, ?> ref) {
+    public int compareTo(final KeyValue<CalendarDate, ?> ref)
+    {
         return key.compareTo(ref.getKey());
     }
 
-    public final CalendarDate getKey() {
+    public final CalendarDate getKey()
+    {
         return key;
     }
 
     public abstract double getPrice();
 
-    public final Double getValue() {
+    public final Double getValue()
+    {
         return this.getPrice();
     }
 
     @Override
-    public final String toString() {
+    public final String toString()
+    {
         return key + ": " + this.getPrice();
     }
 

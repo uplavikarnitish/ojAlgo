@@ -31,53 +31,69 @@ import org.ojalgo.scalar.Scalar;
  *
  * @author apete
  */
-final class LowerHessenbergStore<N extends Number> extends ShadingStore<N> {
+final class LowerHessenbergStore<N extends Number> extends ShadingStore<N>
+{
 
     @SuppressWarnings("unused")
-    private LowerHessenbergStore(final int aRowDim, final int aColDim, final MatrixStore<N> base) {
+    private LowerHessenbergStore(final int aRowDim, final int aColDim, final MatrixStore<N> base)
+    {
 
         this(base);
 
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    LowerHessenbergStore(final MatrixStore<N> base) {
+    LowerHessenbergStore(final MatrixStore<N> base)
+    {
         super(base, (int) base.countRows(), (int) Math.min(base.countRows(), base.countColumns()));
     }
 
-    public double doubleValue(final long row, final long col) {
-        if ((row + 1) < col) {
+    public double doubleValue(final long row, final long col)
+    {
+        if ((row + 1) < col)
+        {
             return PrimitiveMath.ZERO;
-        } else {
+        } else
+        {
             return this.getBase().doubleValue(row, col);
         }
     }
 
-    public int firstInColumn(final int col) {
-        if (col == 0) {
+    public int firstInColumn(final int col)
+    {
+        if (col == 0)
+        {
             return 0;
-        } else {
+        } else
+        {
             return col - 1;
         }
     }
 
-    public N get(final long row, final long col) {
-        if ((row + 1) < col) {
+    public N get(final long row, final long col)
+    {
+        if ((row + 1) < col)
+        {
             return this.physical().scalar().zero().getNumber();
-        } else {
+        } else
+        {
             return this.getBase().get(row, col);
         }
     }
 
     @Override
-    public int limitOfRow(final int row) {
+    public int limitOfRow(final int row)
+    {
         return Math.min(row + 2, this.getColDim());
     }
 
-    public Scalar<N> toScalar(final long row, final long col) {
-        if ((row + 1) < col) {
+    public Scalar<N> toScalar(final long row, final long col)
+    {
+        if ((row + 1) < col)
+        {
             return this.physical().scalar().zero();
-        } else {
+        } else
+        {
             return this.getBase().toScalar(row, col);
         }
     }

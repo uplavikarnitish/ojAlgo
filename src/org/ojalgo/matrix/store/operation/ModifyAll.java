@@ -21,18 +21,21 @@
  */
 package org.ojalgo.matrix.store.operation;
 
-public final class ModifyAll extends MatrixOperation {
+public final class ModifyAll extends MatrixOperation
+{
 
     public static final ModifyAll SETUP = new ModifyAll();
 
     public static int THRESHOLD = 64;
 
-    private ModifyAll() {
+    private ModifyAll()
+    {
         super();
     }
 
     @Override
-    public int threshold() {
+    public int threshold()
+    {
         return THRESHOLD;
     }
 

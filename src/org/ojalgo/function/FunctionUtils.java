@@ -24,93 +24,116 @@ package org.ojalgo.function;
 import org.ojalgo.constant.PrimitiveMath;
 import org.ojalgo.scalar.PrimitiveScalar;
 
-public abstract class FunctionUtils {
+public abstract class FunctionUtils
+{
 
-    public static <N extends Number> boolean isZeroModified(final UnaryFunction<N> function) {
+    public static <N extends Number> boolean isZeroModified(final UnaryFunction<N> function)
+    {
         return !PrimitiveScalar.isSmall(PrimitiveMath.ONE, function.invoke(PrimitiveMath.ZERO));
     }
 
-    public static int max(final int... values) {
+    public static int max(final int... values)
+    {
         int retVal = values[0];
-        for (int i = values.length; i-- != 1;) {
+        for (int i = values.length; i-- != 1; )
+        {
             retVal = values[i] > retVal ? values[i] : retVal;
         }
         return retVal;
     }
 
-    public static int max(final int a, final int b) {
+    public static int max(final int a, final int b)
+    {
         return Math.max(a, b);
     }
 
-    public static int max(final int a, final int b, final int c) {
+    public static int max(final int a, final int b, final int c)
+    {
         return Math.max(Math.max(a, b), c);
     }
 
-    public static int max(final int a, final int b, final int c, final int d) {
+    public static int max(final int a, final int b, final int c, final int d)
+    {
         return Math.max(Math.max(a, b), Math.max(c, d));
     }
 
-    public static long max(final long... values) {
+    public static long max(final long... values)
+    {
         long retVal = values[0];
-        for (int i = values.length; i-- != 1;) {
+        for (int i = values.length; i-- != 1; )
+        {
             retVal = values[i] > retVal ? values[i] : retVal;
         }
         return retVal;
     }
 
-    public static long max(final long a, final long b) {
+    public static long max(final long a, final long b)
+    {
         return Math.max(a, b);
     }
 
-    public static long max(final long a, final long b, final long c) {
+    public static long max(final long a, final long b, final long c)
+    {
         return Math.max(Math.max(a, b), c);
     }
 
-    public static long max(final long a, final long b, final long c, final long d) {
+    public static long max(final long a, final long b, final long c, final long d)
+    {
         return Math.max(Math.max(a, b), Math.max(c, d));
     }
 
-    public static int min(final int... values) {
+    public static int min(final int... values)
+    {
         int retVal = values[0];
-        for (int i = values.length; i-- != 1;) {
+        for (int i = values.length; i-- != 1; )
+        {
             retVal = values[i] < retVal ? values[i] : retVal;
         }
         return retVal;
     }
 
-    public static int min(final int a, final int b) {
+    public static int min(final int a, final int b)
+    {
         return Math.min(a, b);
     }
 
-    public static int min(final int a, final int b, final int c) {
+    public static int min(final int a, final int b, final int c)
+    {
         return Math.min(Math.min(a, b), c);
     }
 
-    public static int min(final int a, final int b, final int c, final int d) {
+    public static int min(final int a, final int b, final int c, final int d)
+    {
         return Math.min(Math.min(a, b), Math.min(c, d));
     }
 
-    public static long min(final long... values) {
+    public static long min(final long... values)
+    {
         long retVal = values[0];
-        for (int i = values.length; i-- != 1;) {
+        for (int i = values.length; i-- != 1; )
+        {
             retVal = values[i] < retVal ? values[i] : retVal;
         }
         return retVal;
     }
 
-    public static long min(final long a, final long b) {
+    public static long min(final long a, final long b)
+    {
         return Math.min(a, b);
     }
 
-    public static long min(final long a, final long b, final long c) {
+    public static long min(final long a, final long b, final long c)
+    {
         return Math.min(Math.min(a, b), c);
     }
 
-    public static long min(final long a, final long b, final long c, final long d) {
+    public static long min(final long a, final long b, final long c, final long d)
+    {
         return Math.min(Math.min(a, b), Math.min(c, d));
     }
 
-    private FunctionUtils() {
+    private FunctionUtils()
+    {
         super();
     }
 

@@ -33,27 +33,34 @@ import org.ojalgo.matrix.store.PrimitiveDenseStore;
 import org.ojalgo.matrix.task.TaskException;
 import org.ojalgo.type.context.NumberContext;
 
-public final class JacobiSolver extends StationaryIterativeSolver {
+public final class JacobiSolver extends StationaryIterativeSolver
+{
 
-    public JacobiSolver() {
+    public JacobiSolver()
+    {
         super();
     }
 
     @SuppressWarnings("unchecked")
-    public final MatrixStore<Double> solve(final Access2D<?> body, final Access2D<?> rhs, final DecompositionStore<Double> current) throws TaskException {
+    public final MatrixStore<Double> solve(final Access2D<?> body, final Access2D<?> rhs, final DecompositionStore<Double> current) throws TaskException
+    {
 
         MatrixStore<Double> tmpBody = null;
-        if ((body instanceof MatrixStore<?>) && (body.get(0L) instanceof Double)) {
+        if ((body instanceof MatrixStore<?>) && (body.get(0L) instanceof Double))
+        {
             tmpBody = (MatrixStore<Double>) body;
-        } else {
+        } else
+        {
             tmpBody = MatrixStore.PRIMITIVE.makeWrapper(body).get();
         }
         final MatrixStore<Double> tmpBodyDiagonal = PrimitiveDenseStore.FACTORY.columns(tmpBody.sliceDiagonal(0L, 0L));
 
         MatrixStore<Double> tmpRHS = null;
-        if ((rhs instanceof MatrixStore<?>) && (rhs.get(0L) instanceof Double)) {
+        if ((rhs instanceof MatrixStore<?>) && (rhs.get(0L) instanceof Double))
+        {
             tmpRHS = (MatrixStore<Double>) rhs;
-        } else {
+        } else
+        {
             tmpRHS = MatrixStore.PRIMITIVE.makeWrapper(rhs).get();
         }
 
@@ -66,13 +73,15 @@ public final class JacobiSolver extends StationaryIterativeSolver {
         final int tmpLimit = this.getIterationsLimit();
         final NumberContext tmpCntxt = this.getAccuracyContext();
         final double tmpRelaxation = this.getRelaxationFactor();
-        do {
+        do
+        {
 
             current.premultiply(tmpBody).operateOnMatching(tmpRHS, SUBTRACT).supplyTo(tmpIncrement);
             tmpNormErr = tmpIncrement.aggregateAll(Aggregator.NORM2);
             tmpIncrement.modifyMatching(DIVIDE, tmpBodyDiagonal);
 
-            if (this.getAccuracyContext().isDifferent(ONE, tmpRelaxation)) {
+            if (this.getAccuracyContext().isDifferent(ONE, tmpRelaxation))
+            {
                 tmpIncrement.multiply(tmpRelaxation);
             }
 
@@ -80,7 +89,8 @@ public final class JacobiSolver extends StationaryIterativeSolver {
 
             tmpIterations++;
 
-            if (this.isDebugPrinterSet()) {
+            if (this.isDebugPrinterSet())
+            {
                 this.debug(tmpIterations, current);
             }
 

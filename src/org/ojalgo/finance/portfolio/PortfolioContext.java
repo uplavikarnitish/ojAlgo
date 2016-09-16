@@ -26,14 +26,16 @@ import org.ojalgo.access.Access2D;
 import org.ojalgo.finance.FinanceUtils;
 import org.ojalgo.matrix.PrimitiveMatrix;
 
-public class PortfolioContext implements FinancePortfolio.Context {
+public class PortfolioContext implements FinancePortfolio.Context
+{
 
     private final PrimitiveMatrix myAssetReturns;
     private PrimitiveMatrix myAssetVolatilities = null;
     private PrimitiveMatrix myCorrelations = null;
     private PrimitiveMatrix myCovariances = null;
 
-    public PortfolioContext(final Access1D<?> assetReturns, final Access1D<?> assetVolatilities, final Access2D<?> correlations) {
+    public PortfolioContext(final Access1D<?> assetReturns, final Access1D<?> assetVolatilities, final Access2D<?> correlations)
+    {
 
         super();
 
@@ -43,7 +45,8 @@ public class PortfolioContext implements FinancePortfolio.Context {
         myCorrelations = FinancePortfolio.MATRIX_FACTORY.copy(correlations);
     }
 
-    public PortfolioContext(final Access1D<?> assetReturns, final Access2D<?> covariances) {
+    public PortfolioContext(final Access1D<?> assetReturns, final Access2D<?> covariances)
+    {
 
         super();
 
@@ -53,7 +56,8 @@ public class PortfolioContext implements FinancePortfolio.Context {
     }
 
     @SuppressWarnings("unused")
-    private PortfolioContext() {
+    private PortfolioContext()
+    {
 
         super();
 
@@ -61,42 +65,52 @@ public class PortfolioContext implements FinancePortfolio.Context {
     }
 
     @SuppressWarnings("unchecked")
-    public double calculatePortfolioReturn(final FinancePortfolio weightsPortfolio) {
+    public double calculatePortfolioReturn(final FinancePortfolio weightsPortfolio)
+    {
         return FinancePortfolio.MATRIX_FACTORY.rows(weightsPortfolio.getWeights()).multiply(this.getAssetReturns()).doubleValue(0);
     }
 
     @SuppressWarnings("unchecked")
-    public double calculatePortfolioVariance(final FinancePortfolio weightsPortfolio) {
+    public double calculatePortfolioVariance(final FinancePortfolio weightsPortfolio)
+    {
         final PrimitiveMatrix tmpWeights = FinancePortfolio.MATRIX_FACTORY.columns(weightsPortfolio.getWeights());
         return tmpWeights.transpose().multiply(this.getCovariances().multiply(tmpWeights)).doubleValue(0);
     }
 
-    public PrimitiveMatrix getAssetReturns() {
+    public PrimitiveMatrix getAssetReturns()
+    {
         return myAssetReturns;
     }
 
-    public PrimitiveMatrix getAssetVolatilities() {
-        if (myAssetVolatilities == null) {
+    public PrimitiveMatrix getAssetVolatilities()
+    {
+        if (myAssetVolatilities == null)
+        {
             myAssetVolatilities = FinanceUtils.toVolatilities(myCovariances);
         }
         return myAssetVolatilities;
     }
 
-    public PrimitiveMatrix getCorrelations() {
-        if (myCorrelations == null) {
+    public PrimitiveMatrix getCorrelations()
+    {
+        if (myCorrelations == null)
+        {
             myCorrelations = FinanceUtils.toCorrelations(myCovariances, false);
         }
         return myCorrelations;
     }
 
-    public PrimitiveMatrix getCovariances() {
-        if (myCovariances == null) {
+    public PrimitiveMatrix getCovariances()
+    {
+        if (myCovariances == null)
+        {
             myCovariances = FinanceUtils.toCovariances(myAssetVolatilities, myCorrelations);
         }
         return myCovariances;
     }
 
-    public int size() {
+    public int size()
+    {
         return (int) myAssetReturns.count();
     }
 

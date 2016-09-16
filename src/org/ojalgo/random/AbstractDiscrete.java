@@ -21,9 +21,11 @@
  */
 package org.ojalgo.random;
 
-abstract class AbstractDiscrete extends RandomNumber implements DiscreteDistribution {
+abstract class AbstractDiscrete extends RandomNumber implements DiscreteDistribution
+{
 
-    AbstractDiscrete() {
+    AbstractDiscrete()
+    {
         super();
     }
 

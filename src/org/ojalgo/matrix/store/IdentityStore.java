@@ -30,82 +30,105 @@ import org.ojalgo.scalar.Scalar;
  *
  * @author apete
  */
-final class IdentityStore<N extends Number> extends FactoryStore<N> {
+final class IdentityStore<N extends Number> extends FactoryStore<N>
+{
 
-    private IdentityStore(final org.ojalgo.matrix.store.PhysicalStore.Factory<N, ?> factory, final int rowsCount, final int columnsCount) {
+    private IdentityStore(final org.ojalgo.matrix.store.PhysicalStore.Factory<N, ?> factory, final int rowsCount, final int columnsCount)
+    {
         super(factory, rowsCount, columnsCount);
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    IdentityStore(final PhysicalStore.Factory<N, ?> factory, final int dimension) {
+    IdentityStore(final PhysicalStore.Factory<N, ?> factory, final int dimension)
+    {
         super(factory, dimension, dimension);
     }
 
     @Override
-    public MatrixStore<N> conjugate() {
+    public MatrixStore<N> conjugate()
+    {
         return this;
     }
 
-    public double doubleValue(final long aRow, final long aCol) {
-        if (aRow == aCol) {
+    public double doubleValue(final long aRow, final long aCol)
+    {
+        if (aRow == aCol)
+        {
             return PrimitiveMath.ONE;
-        } else {
+        } else
+        {
             return PrimitiveMath.ZERO;
         }
     }
 
-    public int firstInColumn(final int col) {
+    public int firstInColumn(final int col)
+    {
         return col;
     }
 
-    public int firstInRow(final int row) {
+    public int firstInRow(final int row)
+    {
         return row;
     }
 
-    public N get(final long aRow, final long aCol) {
-        if (aRow == aCol) {
+    public N get(final long aRow, final long aCol)
+    {
+        if (aRow == aCol)
+        {
             return this.physical().scalar().one().getNumber();
-        } else {
+        } else
+        {
             return this.physical().scalar().zero().getNumber();
         }
     }
 
     @Override
-    public int limitOfColumn(final int col) {
+    public int limitOfColumn(final int col)
+    {
         return col + 1;
     }
 
     @Override
-    public int limitOfRow(final int row) {
+    public int limitOfRow(final int row)
+    {
         return row + 1;
     }
 
     @Override
-    public MatrixStore<N> multiply(final MatrixStore<N> right) {
-        if (this.getColDim() == right.count()) {
+    public MatrixStore<N> multiply(final MatrixStore<N> right)
+    {
+        if (this.getColDim() == right.count())
+        {
             return this.physical().columns(right);
-        } else if (right instanceof MatrixStore<?>) {
+        } else if (right instanceof MatrixStore<?>)
+        {
             return right.copy();
-        } else {
+        } else
+        {
             return super.multiply(right);
         }
     }
 
-    public Scalar<N> toScalar(final long row, final long column) {
-        if (row == column) {
+    public Scalar<N> toScalar(final long row, final long column)
+    {
+        if (row == column)
+        {
             return this.physical().scalar().one();
-        } else {
+        } else
+        {
             return this.physical().scalar().zero();
         }
     }
 
     @Override
-    public MatrixStore<N> transpose() {
+    public MatrixStore<N> transpose()
+    {
         return this;
     }
 
     @Override
-    protected void addNonZerosTo(final ElementsConsumer<N> consumer) {
+    protected void addNonZerosTo(final ElementsConsumer<N> consumer)
+    {
         consumer.fillDiagonal(0L, 0L, this.physical().scalar().one().getNumber());
     }
 

@@ -28,17 +28,21 @@ import org.ojalgo.matrix.store.ComplexDenseStore;
 import org.ojalgo.matrix.store.PhysicalStore;
 import org.ojalgo.scalar.ComplexNumber;
 
-public class ComplexPolynomial extends AbstractPolynomial<ComplexNumber> {
+public class ComplexPolynomial extends AbstractPolynomial<ComplexNumber>
+{
 
-    public ComplexPolynomial(final int aDegree) {
+    public ComplexPolynomial(final int aDegree)
+    {
         super(Array1D.COMPLEX.makeZero(aDegree + 1));
     }
 
-    ComplexPolynomial(final Array1D<ComplexNumber> someCoefficients) {
+    ComplexPolynomial(final Array1D<ComplexNumber> someCoefficients)
+    {
         super(someCoefficients);
     }
 
-    public void estimate(final Access1D<?> x, final Access1D<?> y) {
+    public void estimate(final Access1D<?> x, final Access1D<?> y)
+    {
 
         final int tmpRowDim = (int) Math.min(x.count(), y.count());
         final int tmpColDim = this.size();
@@ -46,13 +50,15 @@ public class ComplexPolynomial extends AbstractPolynomial<ComplexNumber> {
         final PhysicalStore<ComplexNumber> tmpBody = ComplexDenseStore.FACTORY.makeZero(tmpRowDim, tmpColDim);
         final PhysicalStore<ComplexNumber> tmpRHS = ComplexDenseStore.FACTORY.makeZero(tmpRowDim, 1);
 
-        for (int i = 0; i < tmpRowDim; i++) {
+        for (int i = 0; i < tmpRowDim; i++)
+        {
 
             ComplexNumber tmpX = ComplexNumber.ONE;
             final ComplexNumber tmpXfactor = ComplexNumber.valueOf(x.get(i));
             final ComplexNumber tmpY = ComplexNumber.valueOf(y.get(i));
 
-            for (int j = 0; j < tmpColDim; j++) {
+            for (int j = 0; j < tmpColDim; j++)
+            {
                 tmpBody.set(i, j, tmpX);
                 tmpX = tmpX.multiply(tmpXfactor);
             }
@@ -64,7 +70,8 @@ public class ComplexPolynomial extends AbstractPolynomial<ComplexNumber> {
         this.set(tmpQR.solve(tmpRHS));
     }
 
-    public ComplexNumber integrate(final ComplexNumber fromPoint, final ComplexNumber toPoint) {
+    public ComplexNumber integrate(final ComplexNumber fromPoint, final ComplexNumber toPoint)
+    {
 
         final PolynomialFunction<ComplexNumber> tmpPrim = this.buildPrimitive();
 
@@ -74,43 +81,52 @@ public class ComplexPolynomial extends AbstractPolynomial<ComplexNumber> {
         return tmpToVal.subtract(tmpFromVal);
     }
 
-    public ComplexNumber invoke(final ComplexNumber arg) {
+    public ComplexNumber invoke(final ComplexNumber arg)
+    {
 
         int tmpPower = this.degree();
 
         ComplexNumber retVal = this.get(tmpPower);
 
-        while (--tmpPower >= 0) {
+        while (--tmpPower >= 0)
+        {
             retVal = this.get(tmpPower).add(arg.multiply(retVal));
         }
 
         return retVal;
     }
 
-    public void set(final Access1D<?> someCoefficient) {
+    public void set(final Access1D<?> someCoefficient)
+    {
         final int tmpLimit = (int) Math.min(this.size(), someCoefficient.count());
-        for (int p = 0; p < tmpLimit; p++) {
+        for (int p = 0; p < tmpLimit; p++)
+        {
             this.set(p, ComplexNumber.valueOf(someCoefficient.get(p)));
         }
     }
 
     @Override
-    protected ComplexNumber getDerivativeFactor(final int aPower) {
+    protected ComplexNumber getDerivativeFactor(final int aPower)
+    {
         final int tmpNextIndex = aPower + 1;
         return this.get(tmpNextIndex).multiply(tmpNextIndex);
     }
 
     @Override
-    protected ComplexNumber getPrimitiveFactor(final int aPower) {
-        if (aPower <= 0) {
+    protected ComplexNumber getPrimitiveFactor(final int aPower)
+    {
+        if (aPower <= 0)
+        {
             return ComplexNumber.ZERO;
-        } else {
+        } else
+        {
             return this.get(aPower - 1).divide(aPower);
         }
     }
 
     @Override
-    protected AbstractPolynomial<ComplexNumber> makeInstance(final int aSize) {
+    protected AbstractPolynomial<ComplexNumber> makeInstance(final int aSize)
+    {
         return new ComplexPolynomial(Array1D.COMPLEX.makeZero(aSize));
     }
 

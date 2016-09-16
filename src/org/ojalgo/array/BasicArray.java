@@ -55,9 +55,11 @@ import org.ojalgo.scalar.RationalNumber;
  * @author apete
  */
 public abstract class BasicArray<N extends Number> implements Access1D<N>, Access1D.Elements, Access1D.IndexOf, Access1D.Visitable<N>, Mutate1D,
-        Mutate1D.Fillable<N>, Mutate1D.Modifiable<N>, Serializable {
+        Mutate1D.Fillable<N>, Mutate1D.Modifiable<N>, Serializable
+{
 
-    static abstract class BasicFactory<N extends Number> extends ArrayFactory<N> {
+    static abstract class BasicFactory<N extends Number> extends ArrayFactory<N>
+    {
 
         abstract DenseArray.DenseFactory<N> getDenseFactory();
 
@@ -66,27 +68,34 @@ public abstract class BasicArray<N extends Number> implements Access1D<N>, Acces
         abstract SparseArray.SparseFactory<N> getSparseFactory();
 
         @Override
-        BasicArray<N> makeStructuredZero(final long... structure) {
+        BasicArray<N> makeStructuredZero(final long... structure)
+        {
 
             final long tmpTotal = AccessUtils.count(structure);
 
-            if (tmpTotal > MAX_ARRAY_SIZE) {
+            if (tmpTotal > MAX_ARRAY_SIZE)
+            {
                 return this.getSegmentedFactory().makeStructuredZero(structure);
-            } else if (tmpTotal > OjAlgoUtils.ENVIRONMENT.getCacheDim1D(this.getDenseFactory().getElementSize())) {
+            } else if (tmpTotal > OjAlgoUtils.ENVIRONMENT.getCacheDim1D(this.getDenseFactory().getElementSize()))
+            {
                 return new SparseArray<>(tmpTotal, this.getDenseFactory(), SparseArray.capacity(tmpTotal));
-            } else {
+            } else
+            {
                 return this.getDenseFactory().makeStructuredZero(structure);
             }
         }
 
         @Override
-        BasicArray<N> makeToBeFilled(final long... structure) {
+        BasicArray<N> makeToBeFilled(final long... structure)
+        {
 
             final long tmpTotal = AccessUtils.count(structure);
 
-            if (tmpTotal > MAX_ARRAY_SIZE) {
+            if (tmpTotal > MAX_ARRAY_SIZE)
+            {
                 return this.getSegmentedFactory().makeToBeFilled(structure);
-            } else {
+            } else
+            {
                 return this.getDenseFactory().makeToBeFilled(structure);
             }
 
@@ -100,157 +109,190 @@ public abstract class BasicArray<N extends Number> implements Access1D<N>, Acces
      */
     public static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
 
-    static final BasicFactory<BigDecimal> BIG = new BasicFactory<BigDecimal>() {
+    static final BasicFactory<BigDecimal> BIG = new BasicFactory<BigDecimal>()
+    {
 
         @Override
-        DenseFactory<BigDecimal> getDenseFactory() {
+        DenseFactory<BigDecimal> getDenseFactory()
+        {
             return BigArray.FACTORY;
         }
 
         @Override
-        long getElementSize() {
+        long getElementSize()
+        {
             return BigArray.ELEMENT_SIZE;
         }
 
         @Override
-        SegmentedFactory<BigDecimal> getSegmentedFactory() {
+        SegmentedFactory<BigDecimal> getSegmentedFactory()
+        {
             return SegmentedArray.BIG;
         }
 
         @Override
-        SparseFactory<BigDecimal> getSparseFactory() {
+        SparseFactory<BigDecimal> getSparseFactory()
+        {
             return SparseArray.BIG;
         }
 
     };
 
-    static final BasicFactory<ComplexNumber> COMPLEX = new BasicFactory<ComplexNumber>() {
+    static final BasicFactory<ComplexNumber> COMPLEX = new BasicFactory<ComplexNumber>()
+    {
 
         @Override
-        DenseFactory<ComplexNumber> getDenseFactory() {
+        DenseFactory<ComplexNumber> getDenseFactory()
+        {
             return ComplexArray.FACTORY;
         }
 
         @Override
-        long getElementSize() {
+        long getElementSize()
+        {
             return ComplexArray.ELEMENT_SIZE;
         }
 
         @Override
-        SegmentedFactory<ComplexNumber> getSegmentedFactory() {
+        SegmentedFactory<ComplexNumber> getSegmentedFactory()
+        {
             return SegmentedArray.COMPLEX;
         }
 
         @Override
-        SparseFactory<ComplexNumber> getSparseFactory() {
+        SparseFactory<ComplexNumber> getSparseFactory()
+        {
             return SparseArray.COMPLEX;
         }
 
     };
 
-    static final BasicFactory<Double> PRIMITIVE = new BasicFactory<Double>() {
+    static final BasicFactory<Double> PRIMITIVE = new BasicFactory<Double>()
+    {
 
         @Override
-        DenseFactory<Double> getDenseFactory() {
+        DenseFactory<Double> getDenseFactory()
+        {
             return PrimitiveArray.FACTORY;
         }
 
         @Override
-        long getElementSize() {
+        long getElementSize()
+        {
             return PrimitiveArray.ELEMENT_SIZE;
         }
 
         @Override
-        SegmentedFactory<Double> getSegmentedFactory() {
+        SegmentedFactory<Double> getSegmentedFactory()
+        {
             return SegmentedArray.PRIMITIVE;
         }
 
         @Override
-        SparseFactory<Double> getSparseFactory() {
+        SparseFactory<Double> getSparseFactory()
+        {
             return SparseArray.PRIMITIVE;
         }
 
     };
 
-    static final BasicFactory<Quaternion> QUATERNION = new BasicFactory<Quaternion>() {
+    static final BasicFactory<Quaternion> QUATERNION = new BasicFactory<Quaternion>()
+    {
 
         @Override
-        DenseFactory<Quaternion> getDenseFactory() {
+        DenseFactory<Quaternion> getDenseFactory()
+        {
             return QuaternionArray.FACTORY;
         }
 
         @Override
-        long getElementSize() {
+        long getElementSize()
+        {
             return QuaternionArray.ELEMENT_SIZE;
         }
 
         @Override
-        SegmentedFactory<Quaternion> getSegmentedFactory() {
+        SegmentedFactory<Quaternion> getSegmentedFactory()
+        {
             return SegmentedArray.QUATERNION;
         }
 
         @Override
-        SparseFactory<Quaternion> getSparseFactory() {
+        SparseFactory<Quaternion> getSparseFactory()
+        {
             return SparseArray.QUATERNION;
         }
 
     };
 
-    static final BasicFactory<RationalNumber> RATIONAL = new BasicFactory<RationalNumber>() {
+    static final BasicFactory<RationalNumber> RATIONAL = new BasicFactory<RationalNumber>()
+    {
 
         @Override
-        DenseFactory<RationalNumber> getDenseFactory() {
+        DenseFactory<RationalNumber> getDenseFactory()
+        {
             return RationalArray.FACTORY;
         }
 
         @Override
-        long getElementSize() {
+        long getElementSize()
+        {
             return RationalArray.ELEMENT_SIZE;
         }
 
         @Override
-        SegmentedFactory<RationalNumber> getSegmentedFactory() {
+        SegmentedFactory<RationalNumber> getSegmentedFactory()
+        {
             return SegmentedArray.RATIONAL;
         }
 
         @Override
-        SparseFactory<RationalNumber> getSparseFactory() {
+        SparseFactory<RationalNumber> getSparseFactory()
+        {
             return SparseArray.RATIONAL;
         }
 
     };
 
-    protected BasicArray() {
+    protected BasicArray()
+    {
         super();
     }
 
-    public long indexOfLargest() {
+    public long indexOfLargest()
+    {
         return this.indexOfLargest(0L, this.count(), 1L);
     }
 
-    public long indexOfLargestInRange(final long first, final long limit) {
+    public long indexOfLargestInRange(final long first, final long limit)
+    {
         return this.indexOfLargest(first, limit, 1L);
     }
 
-    public void modifyAll(final UnaryFunction<N> modifier) {
+    public void modifyAll(final UnaryFunction<N> modifier)
+    {
         this.modify(0L, this.count(), 1L, modifier);
     }
 
-    public void modifyRange(final long first, final long limit, final UnaryFunction<N> modifier) {
+    public void modifyRange(final long first, final long limit, final UnaryFunction<N> modifier)
+    {
         this.modify(first, limit, 1L, modifier);
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
 
         final StringBuilder retVal = new StringBuilder();
 
         retVal.append(ASCII.LCB);
         retVal.append(ASCII.SP);
         final int tmpLength = (int) this.count();
-        if (tmpLength >= 1) {
+        if (tmpLength >= 1)
+        {
             retVal.append(this.get(0).toString());
-            for (int i = 1; i < tmpLength; i++) {
+            for (int i = 1; i < tmpLength; i++)
+            {
                 retVal.append(ASCII.COMMA);
                 retVal.append(ASCII.SP);
                 retVal.append(this.get(i).toString());
@@ -262,11 +304,13 @@ public abstract class BasicArray<N extends Number> implements Access1D<N>, Acces
         return retVal.toString();
     }
 
-    public void visitAll(final VoidFunction<N> visitor) {
+    public void visitAll(final VoidFunction<N> visitor)
+    {
         this.visit(0L, this.count(), 1L, visitor);
     }
 
-    public void visitRange(final long first, final long limit, final VoidFunction<N> visitor) {
+    public void visitRange(final long first, final long limit, final VoidFunction<N> visitor)
+    {
         this.visit(first, limit, 1L, visitor);
     }
 
@@ -280,7 +324,8 @@ public abstract class BasicArray<N extends Number> implements Access1D<N>, Acces
      * Disregards the array structure, and simply treats it as one-domensional.
      * </p>
      */
-    protected final Array1D<N> asArray1D() {
+    protected final Array1D<N> asArray1D()
+    {
         return new Array1D<>(this);
     }
 
@@ -296,7 +341,8 @@ public abstract class BasicArray<N extends Number> implements Access1D<N>, Acces
      * the first plane of the first cube...
      * </p>
      */
-    protected final Array2D<N> asArray2D(final long structure) {
+    protected final Array2D<N> asArray2D(final long structure)
+    {
         return new Array2D<>(this, structure);
     }
 
@@ -307,7 +353,8 @@ public abstract class BasicArray<N extends Number> implements Access1D<N>, Acces
      * facade.
      * </p>
      */
-    protected final ArrayAnyD<N> asArrayAnyD(final long[] structure) {
+    protected final ArrayAnyD<N> asArrayAnyD(final long[] structure)
+    {
         return new ArrayAnyD<>(this, structure);
     }
 
@@ -332,7 +379,8 @@ public abstract class BasicArray<N extends Number> implements Access1D<N>, Acces
     /**
      * Safe to cast as DenseArray.
      */
-    final boolean isDense() {
+    final boolean isDense()
+    {
         return this instanceof DenseArray;
     }
 
@@ -344,14 +392,16 @@ public abstract class BasicArray<N extends Number> implements Access1D<N>, Acces
     /**
      * Safe to cast as SegmentedArray.
      */
-    final boolean isSegmented() {
+    final boolean isSegmented()
+    {
         return this instanceof SegmentedArray;
     }
 
     /**
      * Safe to cast as SparseArray.
      */
-    final boolean isSparse() {
+    final boolean isSparse()
+    {
         return this instanceof SparseArray;
     }
 

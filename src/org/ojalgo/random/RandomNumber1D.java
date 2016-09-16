@@ -25,11 +25,13 @@ import org.ojalgo.access.Access2D;
 import org.ojalgo.array.Array1D;
 import org.ojalgo.function.PrimitiveFunction;
 
-abstract class RandomNumber1D {
+abstract class RandomNumber1D
+{
 
     private final Random1D myRandom;
 
-    protected RandomNumber1D(final Access2D<?> correlations) {
+    protected RandomNumber1D(final Access2D<?> correlations)
+    {
 
         super();
 
@@ -44,7 +46,8 @@ abstract class RandomNumber1D {
      * @see org.ojalgo.random.Distribution#getStandardDeviation()
      * @see org.ojalgo.random.Distribution#getVariance()
      */
-    public Array1D<Double> getStandardDeviation() {
+    public Array1D<Double> getStandardDeviation()
+    {
 
         final Array1D<Double> tmpVar = this.getVariance();
 
@@ -52,7 +55,8 @@ abstract class RandomNumber1D {
 
         final Array1D<Double> retVal = Array1D.PRIMITIVE.makeZero(tmpLength);
 
-        for (int i = 0; i < tmpLength; i++) {
+        for (int i = 0; i < tmpLength; i++)
+        {
             retVal.set(i, PrimitiveFunction.SQRT.invoke(tmpVar.doubleValue(i)));
         }
 
@@ -65,7 +69,8 @@ abstract class RandomNumber1D {
      * @see org.ojalgo.random.Distribution#getStandardDeviation()
      * @see org.ojalgo.random.Distribution#getVariance()
      */
-    public Array1D<Double> getVariance() {
+    public Array1D<Double> getVariance()
+    {
 
         final Array1D<Double> tmpStdDev = this.getStandardDeviation();
 
@@ -74,7 +79,8 @@ abstract class RandomNumber1D {
         final Array1D<Double> retVal = Array1D.PRIMITIVE.makeZero(tmpLength);
 
         double tmpVal;
-        for (int i = 0; i < tmpLength; i++) {
+        for (int i = 0; i < tmpLength; i++)
+        {
             tmpVal = tmpStdDev.doubleValue(i);
             retVal.set(i, tmpVal * tmpVal);
         }
@@ -82,7 +88,8 @@ abstract class RandomNumber1D {
         return retVal;
     }
 
-    protected final Random1D random() {
+    protected final Random1D random()
+    {
         return myRandom;
     }
 

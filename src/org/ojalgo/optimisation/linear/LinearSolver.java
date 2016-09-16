@@ -65,32 +65,40 @@ import org.ojalgo.type.IndexSelector;
  *
  * @author apete
  */
-public abstract class LinearSolver extends BaseSolver {
+public abstract class LinearSolver extends BaseSolver
+{
 
-    public static final class Builder extends AbstractBuilder<LinearSolver.Builder, LinearSolver> {
+    public static final class Builder extends AbstractBuilder<LinearSolver.Builder, LinearSolver>
+    {
 
-        public Builder(final MatrixStore<Double> C) {
+        public Builder(final MatrixStore<Double> C)
+        {
             super(C);
         }
 
-        Builder() {
+        Builder()
+        {
             super();
         }
 
-        Builder(final BaseSolver.AbstractBuilder<LinearSolver.Builder, LinearSolver> matrices) {
+        Builder(final BaseSolver.AbstractBuilder<LinearSolver.Builder, LinearSolver> matrices)
+        {
             super(matrices);
         }
 
-        Builder(final MatrixStore<Double> Q, final MatrixStore<Double> C) {
+        Builder(final MatrixStore<Double> Q, final MatrixStore<Double> C)
+        {
             super(Q, C);
         }
 
-        Builder(final MatrixStore<Double>[] aMtrxArr) {
+        Builder(final MatrixStore<Double>[] aMtrxArr)
+        {
             super(aMtrxArr);
         }
 
         @Override
-        public LinearSolver build(final Optimisation.Options options) {
+        public LinearSolver build(final Optimisation.Options options)
+        {
 
             this.validate();
 
@@ -98,19 +106,22 @@ public abstract class LinearSolver extends BaseSolver {
         }
 
         @Override
-        public Builder equalities(final MatrixStore<Double> AE, final MatrixStore<Double> BE) {
+        public Builder equalities(final MatrixStore<Double> AE, final MatrixStore<Double> BE)
+        {
             return super.equalities(AE, BE);
         }
 
         @Override
-        public Builder objective(final MatrixStore<Double> C) {
+        public Builder objective(final MatrixStore<Double> C)
+        {
             return super.objective(C);
         }
     }
 
     static final Factory<Double, PrimitiveDenseStore> FACTORY = PrimitiveDenseStore.FACTORY;
 
-    public static void copy(final ExpressionsBasedModel sourceModel, final LinearSolver.Builder destinationBuilder) {
+    public static void copy(final ExpressionsBasedModel sourceModel, final LinearSolver.Builder destinationBuilder)
+    {
 
         final boolean tmpMaximisation = sourceModel.isMaximisation();
 
@@ -157,17 +168,20 @@ public abstract class LinearSolver extends BaseSolver {
         final int tmpNegVarsBaseIndex = tmpPosVarsBaseIndex + tmpPosVariables.size();
         final int tmpSlaVarsBaseIndex = tmpNegVarsBaseIndex + tmpNegVariables.size();
 
-        for (final IntIndex tmpKey : tmpObjFunc.getLinearKeySet()) {
+        for (final IntIndex tmpKey : tmpObjFunc.getLinearKeySet())
+        {
 
             final double tmpFactor = tmpMaximisation ? -tmpObjFunc.getAdjustedLinearFactor(tmpKey) : tmpObjFunc.getAdjustedLinearFactor(tmpKey);
 
             final int tmpPosInd = sourceModel.indexOfPositiveVariable(tmpKey.index);
-            if (tmpPosInd >= 0) {
+            if (tmpPosInd >= 0)
+            {
                 tmpC.set(tmpPosInd, 0, tmpFactor);
             }
 
             final int tmpNegInd = sourceModel.indexOfNegativeVariable(tmpKey.index);
-            if (tmpNegInd >= 0) {
+            if (tmpNegInd >= 0)
+            {
                 tmpC.set(tmpNegVarsBaseIndex + tmpNegInd, 0, -tmpFactor);
             }
         }
@@ -176,45 +190,54 @@ public abstract class LinearSolver extends BaseSolver {
         int tmpCurrentSlackVarIndex = tmpSlaVarsBaseIndex;
 
         final int tmpExprsEqLength = tmpExprsEq.size();
-        for (int c = 0; c < tmpExprsEqLength; c++) {
+        for (int c = 0; c < tmpExprsEqLength; c++)
+        {
 
             final Expression tmpExpr = tmpExprsEq.get(c).compensate(tmpFixVariables);
             final double tmpRHS = tmpExpr.getAdjustedLowerLimit();
 
-            if (tmpRHS < ZERO) {
+            if (tmpRHS < ZERO)
+            {
 
                 tmpBE.set(tmpConstrBaseIndex + c, 0, -tmpRHS);
 
-                for (final IntIndex tmpKey : tmpExpr.getLinearKeySet()) {
+                for (final IntIndex tmpKey : tmpExpr.getLinearKeySet())
+                {
 
                     final double tmpFactor = tmpExpr.getAdjustedLinearFactor(tmpKey);
 
                     final int tmpPosInd = sourceModel.indexOfPositiveVariable(tmpKey.index);
-                    if (tmpPosInd >= 0) {
+                    if (tmpPosInd >= 0)
+                    {
                         tmpAE.set(tmpConstrBaseIndex + c, tmpPosVarsBaseIndex + tmpPosInd, -tmpFactor);
                     }
 
                     final int tmpNegInd = sourceModel.indexOfNegativeVariable(tmpKey.index);
-                    if (tmpNegInd >= 0) {
+                    if (tmpNegInd >= 0)
+                    {
                         tmpAE.set(tmpConstrBaseIndex + c, tmpNegVarsBaseIndex + tmpNegInd, tmpFactor);
                     }
                 }
 
-            } else {
+            } else
+            {
 
                 tmpBE.set(tmpConstrBaseIndex + c, 0, tmpRHS);
 
-                for (final IntIndex tmpKey : tmpExpr.getLinearKeySet()) {
+                for (final IntIndex tmpKey : tmpExpr.getLinearKeySet())
+                {
 
                     final double tmpFactor = tmpExpr.getAdjustedLinearFactor(tmpKey);
 
                     final int tmpPosInd = sourceModel.indexOfPositiveVariable(tmpKey.index);
-                    if (tmpPosInd >= 0) {
+                    if (tmpPosInd >= 0)
+                    {
                         tmpAE.set(tmpConstrBaseIndex + c, tmpPosVarsBaseIndex + tmpPosInd, tmpFactor);
                     }
 
                     final int tmpNegInd = sourceModel.indexOfNegativeVariable(tmpKey.index);
-                    if (tmpNegInd >= 0) {
+                    if (tmpNegInd >= 0)
+                    {
                         tmpAE.set(tmpConstrBaseIndex + c, tmpNegVarsBaseIndex + tmpNegInd, -tmpFactor);
                     }
                 }
@@ -223,48 +246,57 @@ public abstract class LinearSolver extends BaseSolver {
         tmpConstrBaseIndex += tmpExprsEqLength;
 
         final int tmpExprsLoLength = tmpExprsLo.size();
-        for (int c = 0; c < tmpExprsLoLength; c++) {
+        for (int c = 0; c < tmpExprsLoLength; c++)
+        {
 
             final Expression tmpExpr = tmpExprsLo.get(c).compensate(tmpFixVariables);
             final double tmpRHS = tmpExpr.getAdjustedLowerLimit();
 
-            if (tmpRHS < ZERO) {
+            if (tmpRHS < ZERO)
+            {
 
                 tmpBE.set(tmpConstrBaseIndex + c, 0, -tmpRHS);
                 tmpBasis[tmpConstrBaseIndex + c] = tmpCurrentSlackVarIndex;
                 tmpAE.set(tmpConstrBaseIndex + c, tmpCurrentSlackVarIndex++, ONE);
 
-                for (final IntIndex tmpKey : tmpExpr.getLinearKeySet()) {
+                for (final IntIndex tmpKey : tmpExpr.getLinearKeySet())
+                {
 
                     final double tmpFactor = tmpExpr.getAdjustedLinearFactor(tmpKey);
 
                     final int tmpPosInd = sourceModel.indexOfPositiveVariable(tmpKey.index);
-                    if (tmpPosInd >= 0) {
+                    if (tmpPosInd >= 0)
+                    {
                         tmpAE.set(tmpConstrBaseIndex + c, tmpPosVarsBaseIndex + tmpPosInd, -tmpFactor);
                     }
 
                     final int tmpNegInd = sourceModel.indexOfNegativeVariable(tmpKey.index);
-                    if (tmpNegInd >= 0) {
+                    if (tmpNegInd >= 0)
+                    {
                         tmpAE.set(tmpConstrBaseIndex + c, tmpNegVarsBaseIndex + tmpNegInd, tmpFactor);
                     }
                 }
 
-            } else {
+            } else
+            {
 
                 tmpBE.set(tmpConstrBaseIndex + c, 0, tmpRHS);
                 tmpAE.set(tmpConstrBaseIndex + c, tmpCurrentSlackVarIndex++, NEG);
 
-                for (final IntIndex tmpKey : tmpExpr.getLinearKeySet()) {
+                for (final IntIndex tmpKey : tmpExpr.getLinearKeySet())
+                {
 
                     final double tmpFactor = tmpExpr.getAdjustedLinearFactor(tmpKey);
 
                     final int tmpPosInd = sourceModel.indexOfPositiveVariable(tmpKey.index);
-                    if (tmpPosInd >= 0) {
+                    if (tmpPosInd >= 0)
+                    {
                         tmpAE.set(tmpConstrBaseIndex + c, tmpPosVarsBaseIndex + tmpPosInd, tmpFactor);
                     }
 
                     final int tmpNegInd = sourceModel.indexOfNegativeVariable(tmpKey.index);
-                    if (tmpNegInd >= 0) {
+                    if (tmpNegInd >= 0)
+                    {
                         tmpAE.set(tmpConstrBaseIndex + c, tmpNegVarsBaseIndex + tmpNegInd, -tmpFactor);
                     }
                 }
@@ -273,48 +305,57 @@ public abstract class LinearSolver extends BaseSolver {
         tmpConstrBaseIndex += tmpExprsLoLength;
 
         final int tmpExprsUpLength = tmpExprsUp.size();
-        for (int c = 0; c < tmpExprsUpLength; c++) {
+        for (int c = 0; c < tmpExprsUpLength; c++)
+        {
 
             final Expression tmpExpr = tmpExprsUp.get(c).compensate(tmpFixVariables);
             final double tmpRHS = tmpExpr.getAdjustedUpperLimit();
 
-            if (tmpRHS < ZERO) {
+            if (tmpRHS < ZERO)
+            {
 
                 tmpBE.set(tmpConstrBaseIndex + c, 0, -tmpRHS);
                 tmpAE.set(tmpConstrBaseIndex + c, tmpCurrentSlackVarIndex++, NEG);
 
-                for (final IntIndex tmpKey : tmpExpr.getLinearKeySet()) {
+                for (final IntIndex tmpKey : tmpExpr.getLinearKeySet())
+                {
 
                     final double tmpFactor = tmpExpr.getAdjustedLinearFactor(tmpKey);
 
                     final int tmpPosInd = sourceModel.indexOfPositiveVariable(tmpKey.index);
-                    if (tmpPosInd >= 0) {
+                    if (tmpPosInd >= 0)
+                    {
                         tmpAE.set(tmpConstrBaseIndex + c, tmpPosVarsBaseIndex + tmpPosInd, -tmpFactor);
                     }
 
                     final int tmpNegInd = sourceModel.indexOfNegativeVariable(tmpKey.index);
-                    if (tmpNegInd >= 0) {
+                    if (tmpNegInd >= 0)
+                    {
                         tmpAE.set(tmpConstrBaseIndex + c, tmpNegVarsBaseIndex + tmpNegInd, tmpFactor);
                     }
                 }
 
-            } else {
+            } else
+            {
 
                 tmpBE.set(tmpConstrBaseIndex + c, 0, tmpRHS);
                 tmpBasis[tmpConstrBaseIndex + c] = tmpCurrentSlackVarIndex;
                 tmpAE.set(tmpConstrBaseIndex + c, tmpCurrentSlackVarIndex++, ONE);
 
-                for (final IntIndex tmpKey : tmpExpr.getLinearKeySet()) {
+                for (final IntIndex tmpKey : tmpExpr.getLinearKeySet())
+                {
 
                     final double tmpFactor = tmpExpr.getAdjustedLinearFactor(tmpKey);
 
                     final int tmpPosInd = sourceModel.indexOfPositiveVariable(tmpKey.index);
-                    if (tmpPosInd >= 0) {
+                    if (tmpPosInd >= 0)
+                    {
                         tmpAE.set(tmpConstrBaseIndex + c, tmpPosVarsBaseIndex + tmpPosInd, tmpFactor);
                     }
 
                     final int tmpNegInd = sourceModel.indexOfNegativeVariable(tmpKey.index);
-                    if (tmpNegInd >= 0) {
+                    if (tmpNegInd >= 0)
+                    {
                         tmpAE.set(tmpConstrBaseIndex + c, tmpNegVarsBaseIndex + tmpNegInd, -tmpFactor);
                     }
                 }
@@ -323,7 +364,8 @@ public abstract class LinearSolver extends BaseSolver {
         tmpConstrBaseIndex += tmpExprsUpLength;
 
         final int tmpVarsPosLoLength = tmpVarsPosLo.size();
-        for (int c = 0; c < tmpVarsPosLoLength; c++) {
+        for (int c = 0; c < tmpVarsPosLoLength; c++)
+        {
 
             final Variable tmpVar = tmpVarsPosLo.get(c);
 
@@ -335,12 +377,14 @@ public abstract class LinearSolver extends BaseSolver {
             final double tmpFactor = tmpVar.getAdjustmentFactor();
 
             final int tmpPosInd = sourceModel.indexOfPositiveVariable(tmpKey);
-            if (tmpPosInd >= 0) {
+            if (tmpPosInd >= 0)
+            {
                 tmpAE.set(tmpConstrBaseIndex + c, tmpPosVarsBaseIndex + tmpPosInd, tmpFactor);
             }
 
             final int tmpNegInd = sourceModel.indexOfNegativeVariable(tmpKey);
-            if (tmpNegInd >= 0) {
+            if (tmpNegInd >= 0)
+            {
                 tmpAE.set(tmpConstrBaseIndex + c, tmpNegVarsBaseIndex + tmpNegInd, -tmpFactor);
             }
 
@@ -348,7 +392,8 @@ public abstract class LinearSolver extends BaseSolver {
         tmpConstrBaseIndex += tmpVarsPosLoLength;
 
         final int tmpVarsPosUpLength = tmpVarsPosUp.size();
-        for (int c = 0; c < tmpVarsPosUpLength; c++) {
+        for (int c = 0; c < tmpVarsPosUpLength; c++)
+        {
 
             final Variable tmpVar = tmpVarsPosUp.get(c);
 
@@ -361,12 +406,14 @@ public abstract class LinearSolver extends BaseSolver {
             final double tmpFactor = tmpVar.getAdjustmentFactor();
 
             final int tmpPosInd = sourceModel.indexOfPositiveVariable(tmpKey);
-            if (tmpPosInd >= 0) {
+            if (tmpPosInd >= 0)
+            {
                 tmpAE.set(tmpConstrBaseIndex + c, tmpPosVarsBaseIndex + tmpPosInd, tmpFactor);
             }
 
             final int tmpNegInd = sourceModel.indexOfNegativeVariable(tmpKey);
-            if (tmpNegInd >= 0) {
+            if (tmpNegInd >= 0)
+            {
                 tmpAE.set(tmpConstrBaseIndex + c, tmpNegVarsBaseIndex + tmpNegInd, -tmpFactor);
             }
 
@@ -374,7 +421,8 @@ public abstract class LinearSolver extends BaseSolver {
         tmpConstrBaseIndex += tmpVarsPosUpLength;
 
         final int tmpVarsNegLoLength = tmpVarsNegLo.size();
-        for (int c = 0; c < tmpVarsNegLoLength; c++) {
+        for (int c = 0; c < tmpVarsNegLoLength; c++)
+        {
 
             final Variable tmpVar = tmpVarsNegLo.get(c);
 
@@ -387,12 +435,14 @@ public abstract class LinearSolver extends BaseSolver {
             final double tmpFactor = tmpVar.getAdjustmentFactor();
 
             final int tmpPosInd = sourceModel.indexOfPositiveVariable(tmpKey);
-            if (tmpPosInd >= 0) {
+            if (tmpPosInd >= 0)
+            {
                 tmpAE.set(tmpConstrBaseIndex + c, tmpPosVarsBaseIndex + tmpPosInd, -tmpFactor);
             }
 
             final int tmpNegInd = sourceModel.indexOfNegativeVariable(tmpKey);
-            if (tmpNegInd >= 0) {
+            if (tmpNegInd >= 0)
+            {
                 tmpAE.set(tmpConstrBaseIndex + c, tmpNegVarsBaseIndex + tmpNegInd, tmpFactor);
             }
 
@@ -400,7 +450,8 @@ public abstract class LinearSolver extends BaseSolver {
         tmpConstrBaseIndex += tmpVarsNegLoLength;
 
         final int tmpVarsNegUpLength = tmpVarsNegUp.size();
-        for (int c = 0; c < tmpVarsNegUpLength; c++) {
+        for (int c = 0; c < tmpVarsNegUpLength; c++)
+        {
 
             final Variable tmpVar = tmpVarsNegUp.get(c);
 
@@ -412,12 +463,14 @@ public abstract class LinearSolver extends BaseSolver {
             final double tmpFactor = tmpVar.getAdjustmentFactor();
 
             final int tmpPosInd = sourceModel.indexOfPositiveVariable(tmpKey);
-            if (tmpPosInd >= 0) {
+            if (tmpPosInd >= 0)
+            {
                 tmpAE.set(tmpConstrBaseIndex + c, tmpPosVarsBaseIndex + tmpPosInd, -tmpFactor);
             }
 
             final int tmpNegInd = sourceModel.indexOfNegativeVariable(tmpKey);
-            if (tmpNegInd >= 0) {
+            if (tmpNegInd >= 0)
+            {
                 tmpAE.set(tmpConstrBaseIndex + c, tmpNegVarsBaseIndex + tmpNegInd, tmpFactor);
             }
 
@@ -426,25 +479,31 @@ public abstract class LinearSolver extends BaseSolver {
 
     }
 
-    public static LinearSolver.Builder getBuilder() {
+    public static LinearSolver.Builder getBuilder()
+    {
         return new LinearSolver.Builder();
     }
 
-    public static LinearSolver.Builder getBuilder(final MatrixStore<Double> C) {
+    public static LinearSolver.Builder getBuilder(final MatrixStore<Double> C)
+    {
         return LinearSolver.getBuilder().objective(C);
     }
 
-    public static Tableau make(final PhysicalStore<Double> transposedTableau) {
+    public static Tableau make(final PhysicalStore<Double> transposedTableau)
+    {
 
         final int tmpNumberOfConstraints = (int) (transposedTableau.countColumns() - 2L);
         final int tmpNumberOfVariables = (int) (transposedTableau.countRows() - 1L);
 
         final Tableau retVal = new Tableau(tmpNumberOfConstraints, tmpNumberOfVariables);
 
-        for (int i = 0; i < retVal.countRows(); i++) {
-            for (int j = 0; j < retVal.countColumns(); j++) {
+        for (int i = 0; i < retVal.countRows(); i++)
+        {
+            for (int j = 0; j < retVal.countColumns(); j++)
+            {
                 final double tmpValue = transposedTableau.doubleValue(j, i);
-                if (tmpValue != 0.0) {
+                if (tmpValue != 0.0)
+                {
                     retVal.set(i, j, tmpValue);
                 }
             }
@@ -455,7 +514,8 @@ public abstract class LinearSolver extends BaseSolver {
 
     private final IndexSelector mySelector;
 
-    protected LinearSolver(final BaseSolver.AbstractBuilder<LinearSolver.Builder, LinearSolver> matrices, final Optimisation.Options solverOptions) {
+    protected LinearSolver(final BaseSolver.AbstractBuilder<LinearSolver.Builder, LinearSolver> matrices, final Optimisation.Options solverOptions)
+    {
 
         super(matrices, solverOptions);
 
@@ -486,39 +546,48 @@ public abstract class LinearSolver extends BaseSolver {
     @Deprecated
     public abstract double[] getResidualCosts();
 
-    protected final int countBasisDeficit() {
+    protected final int countBasisDeficit()
+    {
         return this.countEqualityConstraints() - mySelector.countIncluded();
     }
 
-    protected final int countConstraints() {
+    protected final int countConstraints()
+    {
         return this.countEqualityConstraints();
     }
 
-    protected final void exclude(final int anIndexToExclude) {
+    protected final void exclude(final int anIndexToExclude)
+    {
         mySelector.exclude(anIndexToExclude);
     }
 
-    protected final void excludeAll() {
+    protected final void excludeAll()
+    {
         mySelector.excludeAll();
     }
 
-    protected final int[] getExcluded() {
+    protected final int[] getExcluded()
+    {
         return mySelector.getExcluded();
     }
 
-    protected final int[] getIncluded() {
+    protected final int[] getIncluded()
+    {
         return mySelector.getIncluded();
     }
 
-    protected final boolean hasConstraints() {
+    protected final boolean hasConstraints()
+    {
         return this.hasEqualityConstraints();
     }
 
-    protected final void include(final int anIndexToInclude) {
+    protected final void include(final int anIndexToInclude)
+    {
         mySelector.include(anIndexToInclude);
     }
 
-    protected final void include(final int[] someIndecesToInclude) {
+    protected final void include(final int[] someIndecesToInclude)
+    {
         mySelector.include(someIndecesToInclude);
     }
 }

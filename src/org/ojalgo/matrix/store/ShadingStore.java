@@ -27,33 +27,42 @@ package org.ojalgo.matrix.store;
  *
  * @author apete
  */
-abstract class ShadingStore<N extends Number> extends LogicalStore<N> {
+abstract class ShadingStore<N extends Number> extends LogicalStore<N>
+{
 
-    protected ShadingStore(final MatrixStore<N> base, final int rowsCount, final int columnsCount) {
+    protected ShadingStore(final MatrixStore<N> base, final int rowsCount, final int columnsCount)
+    {
         super(base, rowsCount, columnsCount);
     }
 
     @Override
-    protected void addNonZerosTo(final ElementsConsumer<N> consumer) {
+    protected void addNonZerosTo(final ElementsConsumer<N> consumer)
+    {
 
         final int tmpColDim = this.getColDim();
 
-        if (this.isPrimitive()) {
+        if (this.isPrimitive())
+        {
 
-            for (int j = 0; j < tmpColDim; j++) {
+            for (int j = 0; j < tmpColDim; j++)
+            {
                 final int tmpFirst = this.firstInColumn(j);
                 final int tmpLimit = this.limitOfColumn(j);
-                for (int i = tmpFirst; i < tmpLimit; i++) {
+                for (int i = tmpFirst; i < tmpLimit; i++)
+                {
                     consumer.set(i, j, this.doubleValue(i, j));
                 }
             }
 
-        } else {
+        } else
+        {
 
-            for (int j = 0; j < tmpColDim; j++) {
+            for (int j = 0; j < tmpColDim; j++)
+            {
                 final int tmpFirst = this.firstInColumn(j);
                 final int tmpLimit = this.limitOfColumn(j);
-                for (int i = tmpFirst; i < tmpLimit; i++) {
+                for (int i = tmpFirst; i < tmpLimit; i++)
+                {
                     consumer.fillOne(i, j, this.get(i, j));
                 }
             }

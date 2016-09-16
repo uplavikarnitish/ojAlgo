@@ -45,76 +45,99 @@ import org.ojalgo.type.context.NumberContext;
  *
  * @author apete
  */
-public abstract class BasicLogger {
+public abstract class BasicLogger
+{
 
-    public static class AppendablePrinter implements Printer {
+    public static class AppendablePrinter implements Printer
+    {
 
         private final Appendable myAppendable;
         private transient Formatter myFormatter;
 
-        public AppendablePrinter(final Appendable appendable) {
+        public AppendablePrinter(final Appendable appendable)
+        {
             super();
             myAppendable = appendable;
         }
 
-        public void print(final boolean b) {
+        public void print(final boolean b)
+        {
             this.print(String.valueOf(b));
         }
 
-        public void print(final char c) {
-            try {
+        public void print(final char c)
+        {
+            try
+            {
                 myAppendable.append(c);
-            } catch (final IOException exception) {
+            } catch (final IOException exception)
+            {
                 exception.printStackTrace();
             }
         }
 
-        public void print(final char[] ca) {
-            try {
-                for (int i = 0; i < ca.length; i++) {
+        public void print(final char[] ca)
+        {
+            try
+            {
+                for (int i = 0; i < ca.length; i++)
+                {
                     myAppendable.append(ca[i]);
                 }
-            } catch (final IOException exception) {
+            } catch (final IOException exception)
+            {
                 exception.printStackTrace();
             }
         }
 
-        public void print(final double d) {
+        public void print(final double d)
+        {
             this.print(String.valueOf(d));
         }
 
-        public void print(final float f) {
+        public void print(final float f)
+        {
             this.print(String.valueOf(f));
         }
 
-        public void print(final int i) {
+        public void print(final int i)
+        {
             this.print(String.valueOf(i));
         }
 
-        public void print(final long l) {
+        public void print(final long l)
+        {
             this.print(String.valueOf(l));
         }
 
-        public void print(final Object obj) {
+        public void print(final Object obj)
+        {
             this.print(String.valueOf(obj));
         }
 
-        public void print(final String str) {
-            try {
+        public void print(final String str)
+        {
+            try
+            {
                 myAppendable.append(String.valueOf(str));
-            } catch (final IOException exception) {
+            } catch (final IOException exception)
+            {
                 exception.printStackTrace();
             }
         }
 
-        public void print(final String message, final Object... args) {
+        public void print(final String message, final Object... args)
+        {
             this.print(TypeUtils.format(message, args));
         }
 
-        public Printer printf(final Locale locale, final String format, final Object... args) {
+        public Printer printf(final Locale locale, final String format, final Object... args)
+        {
 
-            synchronized (myAppendable) {
-                if ((myFormatter == null) || (myFormatter.locale() != locale)) {
+            synchronized (myAppendable)
+            {
+                if ((myFormatter == null) || (myFormatter.locale() != locale))
+                {
                     myFormatter = new Formatter(myAppendable, locale);
                 }
                 myFormatter.format(locale, format, args);
@@ -123,10 +146,13 @@ public abstract class BasicLogger {
             return this;
         }
 
-        public Printer printf(final String format, final Object... args) {
+        public Printer printf(final String format, final Object... args)
+        {
 
-            synchronized (myAppendable) {
-                if ((myFormatter == null) || (myFormatter.locale() != Locale.getDefault())) {
+            synchronized (myAppendable)
+            {
+                if ((myFormatter == null) || (myFormatter.locale() != Locale.getDefault()))
+                {
                     myFormatter = new Formatter(myAppendable);
                 }
                 myFormatter.format(Locale.getDefault(), format, args);
@@ -135,71 +161,87 @@ public abstract class BasicLogger {
             return this;
         }
 
-        public void println() {
-            try {
+        public void println()
+        {
+            try
+            {
                 myAppendable.append(ASCII.LF);
-            } catch (final IOException exception) {
+            } catch (final IOException exception)
+            {
                 exception.printStackTrace();
             }
         }
 
-        public void println(final boolean b) {
+        public void println(final boolean b)
+        {
             this.print(b);
             this.println();
         }
 
-        public void println(final char c) {
+        public void println(final char c)
+        {
             this.print(c);
             this.println();
         }
 
-        public void println(final char[] ca) {
+        public void println(final char[] ca)
+        {
             this.print(ca);
             this.println();
         }
 
-        public void println(final double d) {
+        public void println(final double d)
+        {
             this.print(d);
             this.println();
         }
 
-        public void println(final float f) {
+        public void println(final float f)
+        {
             this.print(f);
             this.println();
         }
 
-        public void println(final int i) {
+        public void println(final int i)
+        {
             this.print(i);
             this.println();
         }
 
-        public void println(final long l) {
+        public void println(final long l)
+        {
             this.print(l);
             this.println();
         }
 
-        public void println(final Object obj) {
+        public void println(final Object obj)
+        {
             this.print(obj);
             this.println();
         }
 
-        public void println(final String str) {
+        public void println(final String str)
+        {
             this.print(str);
             this.println();
         }
 
-        public void println(final String message, final Object... args) {
+        public void println(final String message, final Object... args)
+        {
             this.print(message, args);
             this.println();
         }
 
-        public void printmtrx(final String message, final Access2D<?> matrix) {
+        public void printmtrx(final String message, final Access2D<?> matrix)
+        {
             this.printmtrx(message, matrix, MATRIX_ELEMENT_CONTEXT);
 
         }
 
-        public void printmtrx(final String message, final Access2D<?> matrix, final NumberContext context) {
-            if (message != null) {
+        public void printmtrx(final String message, final Access2D<?> matrix, final NumberContext context)
+        {
+            if (message != null)
+            {
                 this.println(message);
             }
             BasicLogger.printmtrx(this, matrix, context);
@@ -208,7 +250,8 @@ public abstract class BasicLogger {
         /**
          * @return the appendable
          */
-        Appendable getAppendable() {
+        Appendable getAppendable()
+        {
             return myAppendable;
         }
 
@@ -219,27 +262,32 @@ public abstract class BasicLogger {
      *
      * @author apete
      */
-    public static interface Buffer {
+    public static interface Buffer
+    {
 
         void clear();
 
-        default void flush(final Appendable receiver) {
+        default void flush(final Appendable receiver)
+        {
             this.flush(new AppendablePrinter(receiver));
         }
 
         void flush(final BasicLogger.Printer receiver);
 
-        default void flush(final PrintStream receiver) {
+        default void flush(final PrintStream receiver)
+        {
             this.flush(new PrintStreamPrinter(receiver));
         }
 
-        default void flush(final PrintWriter receiver) {
+        default void flush(final PrintWriter receiver)
+        {
             this.flush(new PrintWriterPrinter(receiver));
         }
 
     }
 
-    public static interface Printer {
+    public static interface Printer
+    {
 
         /**
          * @see java.io.PrintWriter#print(boolean)
@@ -377,11 +425,13 @@ public abstract class BasicLogger {
 
     }
 
-    public static final class PrintStreamPrinter implements Printer {
+    public static final class PrintStreamPrinter implements Printer
+    {
 
         private final PrintStream myStream;
 
-        public PrintStreamPrinter(final PrintStream stream) {
+        public PrintStreamPrinter(final PrintStream stream)
+        {
             super();
             myStream = stream;
         }
@@ -389,74 +439,85 @@ public abstract class BasicLogger {
         /**
          * @see java.io.PrintStream#print(boolean)
          */
-        public void print(final boolean b) {
+        public void print(final boolean b)
+        {
             myStream.print(b);
         }
 
         /**
          * @see java.io.PrintStream#print(char)
          */
-        public void print(final char c) {
+        public void print(final char c)
+        {
             myStream.print(c);
         }
 
         /**
          * @see java.io.PrintStream#print(char[])
          */
-        public void print(final char[] ca) {
+        public void print(final char[] ca)
+        {
             myStream.print(ca);
         }
 
         /**
          * @see java.io.PrintStream#print(double)
          */
-        public void print(final double d) {
+        public void print(final double d)
+        {
             myStream.print(d);
         }
 
         /**
          * @see java.io.PrintStream#print(float)
          */
-        public void print(final float f) {
+        public void print(final float f)
+        {
             myStream.print(f);
         }
 
         /**
          * @see java.io.PrintStream#print(int)
          */
-        public void print(final int i) {
+        public void print(final int i)
+        {
             myStream.print(i);
         }
 
         /**
          * @see java.io.PrintStream#print(long)
          */
-        public void print(final long l) {
+        public void print(final long l)
+        {
             myStream.print(l);
         }
 
         /**
          * @see java.io.PrintStream#print(java.lang.Object)
          */
-        public void print(final Object obj) {
+        public void print(final Object obj)
+        {
             myStream.print(obj);
         }
 
         /**
          * @see java.io.PrintStream#print(java.lang.String)
          */
-        public void print(final String str) {
+        public void print(final String str)
+        {
             myStream.print(str);
         }
 
-        public void print(final String message, final Object... args) {
+        public void print(final String message, final Object... args)
+        {
             this.print(TypeUtils.format(message, args));
         }
 
         /**
          * @see java.io.PrintStream#printf(java.util.Locale, java.lang.String, java.lang.Object[])
          */
-        public PrintStreamPrinter printf(final Locale locale, final String format, final Object... args) {
+        public PrintStreamPrinter printf(final Locale locale, final String format, final Object... args)
+        {
             myStream.printf(locale, format, args);
             return this;
         }
@@ -464,7 +525,8 @@ public abstract class BasicLogger {
         /**
          * @see java.io.PrintStream#printf(java.lang.String, java.lang.Object[])
          */
-        public PrintStreamPrinter printf(final String format, final Object... args) {
+        public PrintStreamPrinter printf(final String format, final Object... args)
+        {
             myStream.printf(format, args);
             return this;
         }
@@ -472,85 +534,99 @@ public abstract class BasicLogger {
         /**
          * @see java.io.PrintStream#println()
          */
-        public void println() {
+        public void println()
+        {
             myStream.println();
         }
 
         /**
          * @see java.io.PrintStream#println(boolean)
          */
-        public void println(final boolean b) {
+        public void println(final boolean b)
+        {
             myStream.println(b);
         }
 
         /**
          * @see java.io.PrintStream#println(char)
          */
-        public void println(final char c) {
+        public void println(final char c)
+        {
             myStream.println(c);
         }
 
         /**
          * @see java.io.PrintStream#println(char[])
          */
-        public void println(final char[] ca) {
+        public void println(final char[] ca)
+        {
             myStream.println(ca);
         }
 
         /**
          * @see java.io.PrintStream#println(double)
          */
-        public void println(final double d) {
+        public void println(final double d)
+        {
             myStream.println(d);
         }
 
         /**
          * @see java.io.PrintStream#println(float)
          */
-        public void println(final float f) {
+        public void println(final float f)
+        {
             myStream.println(f);
         }
 
         /**
          * @see java.io.PrintStream#println(int)
          */
-        public void println(final int i) {
+        public void println(final int i)
+        {
             myStream.println(i);
         }
 
         /**
          * @see java.io.PrintStream#println(long)
          */
-        public void println(final long l) {
+        public void println(final long l)
+        {
             myStream.println(l);
         }
 
         /**
          * @see java.io.PrintStream#println(java.lang.Object)
          */
-        public void println(final Object obj) {
+        public void println(final Object obj)
+        {
             myStream.println(obj);
         }
 
         /**
          * @see java.io.PrintStream#println(java.lang.String)
          */
-        public void println(final String str) {
+        public void println(final String str)
+        {
             myStream.println(str);
         }
 
-        public void println(final String message, final Object... args) {
+        public void println(final String message, final Object... args)
+        {
             this.print(message, args);
             this.println();
         }
 
-        public void printmtrx(final String message, final Access2D<?> matrix) {
+        public void printmtrx(final String message, final Access2D<?> matrix)
+        {
             this.printmtrx(message, matrix, MATRIX_ELEMENT_CONTEXT);
 
         }
 
-        public void printmtrx(final String message, final Access2D<?> matrix, final NumberContext context) {
-            if (message != null) {
+        public void printmtrx(final String message, final Access2D<?> matrix, final NumberContext context)
+        {
+            if (message != null)
+            {
                 this.println(message);
             }
             BasicLogger.printmtrx(this, matrix, context);
@@ -559,17 +635,20 @@ public abstract class BasicLogger {
         /**
          * @return the stream
          */
-        PrintStream getStream() {
+        PrintStream getStream()
+        {
             return myStream;
         }
 
     }
 
-    public static final class PrintWriterPrinter implements Printer {
+    public static final class PrintWriterPrinter implements Printer
+    {
 
         private final PrintWriter myWriter;
 
-        public PrintWriterPrinter(final PrintWriter writer) {
+        public PrintWriterPrinter(final PrintWriter writer)
+        {
             super();
             myWriter = writer;
         }
@@ -577,74 +656,85 @@ public abstract class BasicLogger {
         /**
          * @see java.io.PrintWriter#print(boolean)
          */
-        public void print(final boolean b) {
+        public void print(final boolean b)
+        {
             myWriter.print(b);
         }
 
         /**
          * @see java.io.PrintWriter#print(char)
          */
-        public void print(final char c) {
+        public void print(final char c)
+        {
             myWriter.print(c);
         }
 
         /**
          * @see java.io.PrintWriter#print(char[])
          */
-        public void print(final char[] ca) {
+        public void print(final char[] ca)
+        {
             myWriter.print(ca);
         }
 
         /**
          * @see java.io.PrintWriter#print(double)
          */
-        public void print(final double d) {
+        public void print(final double d)
+        {
             myWriter.print(d);
         }
 
         /**
          * @see java.io.PrintWriter#print(float)
          */
-        public void print(final float f) {
+        public void print(final float f)
+        {
             myWriter.print(f);
         }
 
         /**
          * @see java.io.PrintWriter#print(int)
          */
-        public void print(final int i) {
+        public void print(final int i)
+        {
             myWriter.print(i);
         }
 
         /**
          * @see java.io.PrintWriter#print(long)
          */
-        public void print(final long l) {
+        public void print(final long l)
+        {
             myWriter.print(l);
         }
 
         /**
          * @see java.io.PrintWriter#print(java.lang.Object)
          */
-        public void print(final Object obj) {
+        public void print(final Object obj)
+        {
             myWriter.print(obj);
         }
 
         /**
          * @see java.io.PrintWriter#print(java.lang.String)
          */
-        public void print(final String str) {
+        public void print(final String str)
+        {
             myWriter.print(str);
         }
 
-        public void print(final String message, final Object... args) {
+        public void print(final String message, final Object... args)
+        {
             this.print(TypeUtils.format(message, args));
         }
 
         /**
          * @see java.io.PrintWriter#printf(Locale, String, Object...)
          */
-        public PrintWriterPrinter printf(final Locale locale, final String format, final Object... args) {
+        public PrintWriterPrinter printf(final Locale locale, final String format, final Object... args)
+        {
             myWriter.printf(locale, format, args);
             return this;
         }
@@ -652,7 +742,8 @@ public abstract class BasicLogger {
         /**
          * @see java.io.PrintWriter#printf(String, Object...)
          */
-        public PrintWriterPrinter printf(final String format, final Object... args) {
+        public PrintWriterPrinter printf(final String format, final Object... args)
+        {
             myWriter.printf(format, args);
             return this;
         }
@@ -660,85 +751,99 @@ public abstract class BasicLogger {
         /**
          * @see java.io.PrintWriter#println()
          */
-        public void println() {
+        public void println()
+        {
             myWriter.println();
         }
 
         /**
          * @see java.io.PrintWriter#println(boolean)
          */
-        public void println(final boolean b) {
+        public void println(final boolean b)
+        {
             myWriter.println(b);
         }
 
         /**
          * @see java.io.PrintWriter#println(char)
          */
-        public void println(final char c) {
+        public void println(final char c)
+        {
             myWriter.println(c);
         }
 
         /**
          * @see java.io.PrintWriter#println(char[])
          */
-        public void println(final char[] ca) {
+        public void println(final char[] ca)
+        {
             myWriter.println(ca);
         }
 
         /**
          * @see java.io.PrintWriter#println(double)
          */
-        public void println(final double d) {
+        public void println(final double d)
+        {
             myWriter.println(d);
         }
 
         /**
          * @see java.io.PrintWriter#println(float)
          */
-        public void println(final float f) {
+        public void println(final float f)
+        {
             myWriter.println(f);
         }
 
         /**
          * @see java.io.PrintWriter#println(int)
          */
-        public void println(final int i) {
+        public void println(final int i)
+        {
             myWriter.println(i);
         }
 
         /**
          * @see java.io.PrintWriter#println(long)
          */
-        public void println(final long l) {
+        public void println(final long l)
+        {
             myWriter.println(l);
         }
 
         /**
          * @see java.io.PrintWriter#println(java.lang.Object)
          */
-        public void println(final Object obj) {
+        public void println(final Object obj)
+        {
             myWriter.println(obj);
         }
 
         /**
          * @see java.io.PrintWriter#println(java.lang.String)
          */
-        public void println(final String str) {
+        public void println(final String str)
+        {
             myWriter.println(str);
         }
 
-        public void println(final String message, final Object... args) {
+        public void println(final String message, final Object... args)
+        {
             this.print(message, args);
             this.println();
         }
 
-        public void printmtrx(final String message, final Access2D<?> matrix) {
+        public void printmtrx(final String message, final Access2D<?> matrix)
+        {
             this.printmtrx(message, matrix, MATRIX_ELEMENT_CONTEXT);
 
         }
 
-        public void printmtrx(final String message, final Access2D<?> matrix, final NumberContext context) {
-            if (message != null) {
+        public void printmtrx(final String message, final Access2D<?> matrix, final NumberContext context)
+        {
+            if (message != null)
+            {
                 this.println(message);
             }
             BasicLogger.printmtrx(this, matrix, context);
@@ -747,7 +852,8 @@ public abstract class BasicLogger {
         /**
          * @return the writer
          */
-        PrintWriter getWriter() {
+        PrintWriter getWriter()
+        {
             return myWriter;
         }
 
@@ -759,53 +865,66 @@ public abstract class BasicLogger {
 
     static final NumberContext MATRIX_ELEMENT_CONTEXT = NumberContext.getGeneral(6);
 
-    public static void debug() {
+    public static void debug()
+    {
         BasicLogger.println(DEBUG);
     }
 
-    public static void debug(final Object message) {
+    public static void debug(final Object message)
+    {
         BasicLogger.println(DEBUG, message);
     }
 
-    public static void debug(final String message, final Access2D<?> matrix) {
+    public static void debug(final String message, final Access2D<?> matrix)
+    {
         BasicLogger.debug(message, matrix, MATRIX_ELEMENT_CONTEXT);
     }
 
-    public static void debug(final String message, final Access2D<?> matrix, final NumberContext context) {
-        if (message != null) {
+    public static void debug(final String message, final Access2D<?> matrix, final NumberContext context)
+    {
+        if (message != null)
+        {
             BasicLogger.println(DEBUG, message);
         }
         BasicLogger.printmtrx(DEBUG, matrix, context);
     }
 
-    public static void debug(final String message, final Object... arguments) {
+    public static void debug(final String message, final Object... arguments)
+    {
         BasicLogger.println(DEBUG, message, arguments);
     }
 
-    public static void error() {
+    public static void error()
+    {
         BasicLogger.println(ERROR);
     }
 
-    public static void error(final Object message) {
+    public static void error(final Object message)
+    {
         BasicLogger.println(ERROR, message);
     }
 
-    public static void error(final String message, final Access2D<?> matrix) {
+    public static void error(final String message, final Access2D<?> matrix)
+    {
         BasicLogger.error(message, matrix, MATRIX_ELEMENT_CONTEXT);
     }
 
-    public static void error(final String message, final Access2D<?> matrix, final NumberContext context) {
-        if (message != null) {
+    public static void error(final String message, final Access2D<?> matrix, final NumberContext context)
+    {
+        if (message != null)
+        {
             BasicLogger.println(ERROR, message);
         }
         BasicLogger.printmtrx(ERROR, matrix, context);
     }
 
-    public static void error(final String message, final Object... arguments) {
+    public static void error(final String message, final Object... arguments)
+    {
         BasicLogger.println(ERROR, message, arguments);
     }
 
-    private static void printmtrx(final Printer appender, final BasicMatrix matrix, final NumberContext context, final boolean plain) {
+    private static void printmtrx(final Printer appender, final BasicMatrix matrix, final NumberContext context, final boolean plain)
+    {
 
         final int tmpRowDim = (int) matrix.countRows();
         final int tmpColDim = (int) matrix.countColumns();
@@ -815,12 +934,16 @@ public abstract class BasicLogger {
         int tmpWidth = 0;
         Scalar<?> tmpElementNumber;
         String tmpElementString;
-        for (int j = 0; j < tmpColDim; j++) {
-            for (int i = 0; i < tmpRowDim; i++) {
+        for (int j = 0; j < tmpColDim; j++)
+        {
+            for (int i = 0; i < tmpRowDim; i++)
+            {
                 tmpElementNumber = matrix.toScalar(i, j);
-                if (plain) {
+                if (plain)
+                {
                     tmpElementString = tmpElementNumber.toPlainString(context);
-                } else {
+                } else
+                {
                     tmpElementString = tmpElementNumber.toString(context);
                 }
                 tmpWidth = Math.max(tmpWidth, tmpElementString.length());
@@ -831,11 +954,14 @@ public abstract class BasicLogger {
 
         int tmpPadding;
         //appender.println();
-        for (int i = 0; i < tmpRowDim; i++) {
-            for (int j = 0; j < tmpColDim; j++) {
+        for (int i = 0; i < tmpRowDim; i++)
+        {
+            for (int j = 0; j < tmpColDim; j++)
+            {
                 tmpElementString = tmpElements[i][j];
                 tmpPadding = tmpWidth - tmpElementString.length();
-                for (int p = 0; p < tmpPadding; p++) {
+                for (int p = 0; p < tmpPadding; p++)
+                {
                     appender.print(ASCII.SP);
                 }
                 appender.print(tmpElementString);
@@ -845,39 +971,52 @@ public abstract class BasicLogger {
 
     }
 
-    static void println(final Printer appender) {
-        if (appender != null) {
+    static void println(final Printer appender)
+    {
+        if (appender != null)
+        {
             appender.println();
         }
     }
 
-    static void println(final Printer appender, final Object message) {
-        if (appender != null) {
+    static void println(final Printer appender, final Object message)
+    {
+        if (appender != null)
+        {
             appender.println(message);
         }
     }
 
-    static void println(final Printer appender, final String messagePattern, final Object... arguments) {
-        if (appender != null) {
+    static void println(final Printer appender, final String messagePattern, final Object... arguments)
+    {
+        if (appender != null)
+        {
             appender.println(messagePattern, arguments);
         }
     }
 
-    static void printmtrx(final Printer appender, final Access2D<?> matrix, final NumberContext context) {
-        if ((appender != null) && (matrix.count() > 0L)) {
-            if (matrix instanceof ComplexMatrix) {
+    static void printmtrx(final Printer appender, final Access2D<?> matrix, final NumberContext context)
+    {
+        if ((appender != null) && (matrix.count() > 0L))
+        {
+            if (matrix instanceof ComplexMatrix)
+            {
                 BasicLogger.printmtrx(appender, (ComplexMatrix) matrix, context, false);
-            } else if (matrix instanceof BasicMatrix) {
+            } else if (matrix instanceof BasicMatrix)
+            {
                 BasicLogger.printmtrx(appender, (BasicMatrix) matrix, context, true);
-            } else if (matrix.get(0, 0) instanceof ComplexNumber) {
+            } else if (matrix.get(0, 0) instanceof ComplexNumber)
+            {
                 BasicLogger.printmtrx(appender, ComplexMatrix.FACTORY.copy(matrix), context, false);
-            } else {
+            } else
+            {
                 BasicLogger.printmtrx(appender, BigMatrix.FACTORY.copy(matrix), context, true);
             }
         }
     }
 
-    private BasicLogger() {
+    private BasicLogger()
+    {
         super();
     }
 

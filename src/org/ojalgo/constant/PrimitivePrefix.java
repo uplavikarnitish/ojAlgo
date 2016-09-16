@@ -21,7 +21,8 @@
  */
 package org.ojalgo.constant;
 
-public abstract class PrimitivePrefix {
+public abstract class PrimitivePrefix
+{
 
     public static final double YOCTO = BigPrefix.YOCTO.doubleValue();
     public static final double ZEPTO = BigPrefix.ZEPTO.doubleValue();
@@ -44,7 +45,8 @@ public abstract class PrimitivePrefix {
     public static final double ZETTA = BigPrefix.ZETTA.doubleValue();
     public static final double YOTTA = BigPrefix.YOTTA.doubleValue();
 
-    private PrimitivePrefix() {
+    private PrimitivePrefix()
+    {
         super();
     }
 

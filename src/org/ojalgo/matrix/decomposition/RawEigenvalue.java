@@ -43,35 +43,42 @@ import org.ojalgo.type.context.NumberContext;
 
 /**
  * Eigenvalues and eigenvectors of a real matrix.
- * <P>
+ * <p>
  * If A is symmetric, then A = V*D*V' where the eigenvalue matrix D is diagonal and the eigenvector matrix V
  * is orthogonal. I.e. A = V.times(D.times(V.transpose())) and V.times(V.transpose()) equals the identity
  * matrix.
- * <P>
+ * <p>
  * If A is not symmetric, then the eigenvalue matrix D is block diagonal with the real eigenvalues in 1-by-1
  * blocks and any complex eigenvalues, lambda + i*mu, in 2-by-2 blocks, [lambda, mu; -mu, lambda]. The columns
  * of V represent the eigenvectors in the sense that A*V = V*D, i.e. A.times(V) equals V.times(D). The matrix
  * V may be badly conditioned, or even singular, so the validity of the equation A = V*D*inverse(V) depends
  * upon V.cond().
  **/
-abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Double> {
+abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Double>
+{
 
-    static final class Dynamic extends RawEigenvalue {
+    static final class Dynamic extends RawEigenvalue
+    {
 
-        Dynamic() {
+        Dynamic()
+        {
             super();
         }
 
-        public boolean isHermitian() {
+        public boolean isHermitian()
+        {
             return this.checkSymmetry();
         }
 
         @Override
-        boolean doDecompose(final double[][] data) {
+        boolean doDecompose(final double[][] data)
+        {
 
-            if (this.checkSymmetry()) {
+            if (this.checkSymmetry())
+            {
                 this.doDecomposeSymmetric(data);
-            } else {
+            } else
+            {
                 this.doDecomposeGeneral(data);
             }
 
@@ -80,18 +87,22 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
 
     }
 
-    static final class General extends RawEigenvalue {
+    static final class General extends RawEigenvalue
+    {
 
-        General() {
+        General()
+        {
             super();
         }
 
-        public boolean isHermitian() {
+        public boolean isHermitian()
+        {
             return false;
         }
 
         @Override
-        boolean doDecompose(final double[][] data) {
+        boolean doDecompose(final double[][] data)
+        {
 
             this.doDecomposeGeneral(data);
 
@@ -100,34 +111,41 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
 
     }
 
-    static final class Symmetric extends RawEigenvalue implements MatrixDecomposition.Solver<Double> {
+    static final class Symmetric extends RawEigenvalue implements MatrixDecomposition.Solver<Double>
+    {
 
-        Symmetric() {
+        Symmetric()
+        {
             super();
         }
 
-        public boolean isHermitian() {
+        public boolean isHermitian()
+        {
             return true;
         }
 
-        public DecompositionStore<Double> preallocate(final Structure2D template) {
+        public DecompositionStore<Double> preallocate(final Structure2D template)
+        {
             final long numberOfEquations = template.countRows();
             return this.allocate(numberOfEquations, numberOfEquations);
         }
 
-        public DecompositionStore<Double> preallocate(final Structure2D templateBody, final Structure2D templateRHS) {
+        public DecompositionStore<Double> preallocate(final Structure2D templateBody, final Structure2D templateRHS)
+        {
             final long numberOfEquations = templateBody.countRows();
             return this.allocate(numberOfEquations, numberOfEquations);
         }
 
-        public MatrixStore<Double> solve(final ElementsSupplier<Double> rhs) {
+        public MatrixStore<Double> solve(final ElementsSupplier<Double> rhs)
+        {
             final long numberOfEquations = rhs.countRows();
             final DecompositionStore<Double> tmpPreallocated = this.allocate(numberOfEquations, numberOfEquations);
             return this.solve(rhs, tmpPreallocated);
         }
 
         @Override
-        boolean doDecompose(final double[][] data) {
+        boolean doDecompose(final double[][] data)
+        {
 
             this.doDecomposeSymmetric(data);
 
@@ -169,11 +187,13 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
      */
     private double[][] Vt;
 
-    protected RawEigenvalue() {
+    protected RawEigenvalue()
+    {
         super();
     }
 
-    public Double calculateDeterminant(final Access2D<?> matrix) {
+    public Double calculateDeterminant(final Access2D<?> matrix)
+    {
 
         final double[][] tmpData = this.reset(matrix, false);
 
@@ -184,7 +204,8 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
         return this.getDeterminant();
     }
 
-    public boolean computeValuesOnly(final ElementsSupplier<Double> matrix) {
+    public boolean computeValuesOnly(final ElementsSupplier<Double> matrix)
+    {
 
         final double[][] tmpData = this.reset(matrix, false);
 
@@ -193,7 +214,8 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
         return this.doDecompose(tmpData);
     }
 
-    public boolean decompose(final ElementsSupplier<Double> matrix) {
+    public boolean decompose(final ElementsSupplier<Double> matrix)
+    {
 
         final double[][] tmpData = this.reset(matrix, false);
 
@@ -202,7 +224,8 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
         return this.doDecompose(tmpData);
     }
 
-    public boolean equals(final MatrixStore<Double> aStore, final NumberContext context) {
+    public boolean equals(final MatrixStore<Double> aStore, final NumberContext context)
+    {
         return MatrixUtils.equals(aStore, this, context);
     }
 
@@ -211,24 +234,30 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
      *
      * @return D
      */
-    public RawStore getD() {
+    public RawStore getD()
+    {
         final RawStore X = new RawStore(n, n);
         final double[][] D = X.data;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
                 D[i][j] = ZERO;
             }
             D[i][i] = d[i];
-            if (e[i] > 0) {
+            if (e[i] > 0)
+            {
                 D[i][i + 1] = e[i];
-            } else if (e[i] < 0) {
+            } else if (e[i] < 0)
+            {
                 D[i][i - 1] = e[i];
             }
         }
         return X;
     }
 
-    public Double getDeterminant() {
+    public Double getDeterminant()
+    {
 
         final AggregatorFunction<ComplexNumber> tmpVisitor = ComplexAggregator.getSet().product();
 
@@ -237,14 +266,16 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
         return tmpVisitor.getNumber().doubleValue();
     }
 
-    public Array1D<ComplexNumber> getEigenvalues() {
+    public Array1D<ComplexNumber> getEigenvalues()
+    {
 
         final double[] tmpRe = this.getRealEigenvalues();
         final double[] tmpIm = this.getImagEigenvalues();
 
         final Array1D<ComplexNumber> retVal = Array1D.COMPLEX.makeZero(tmpRe.length);
 
-        for (int i = 0; i < retVal.size(); i++) {
+        for (int i = 0; i < retVal.size(); i++)
+        {
             retVal.set(i, ComplexNumber.of(tmpRe[i], tmpIm[i]));
         }
 
@@ -253,22 +284,29 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
         return retVal;
     }
 
-    public RawStore getInverse() {
+    public RawStore getInverse()
+    {
 
-        if (myInverse == null) {
+        if (myInverse == null)
+        {
 
             final double[][] tmpQ1 = this.getV().data;
             final double[] tmpEigen = this.getRealEigenvalues();
 
             final RawStore tmpMtrx = new RawStore(tmpEigen.length, tmpQ1.length);
 
-            for (int i = 0; i < tmpEigen.length; i++) {
-                if (PrimitiveScalar.isSmall(PrimitiveMath.ONE, tmpEigen[i])) {
-                    for (int j = 0; j < tmpQ1.length; j++) {
+            for (int i = 0; i < tmpEigen.length; i++)
+            {
+                if (PrimitiveScalar.isSmall(PrimitiveMath.ONE, tmpEigen[i]))
+                {
+                    for (int j = 0; j < tmpQ1.length; j++)
+                    {
                         tmpMtrx.set(i, j, PrimitiveMath.ZERO);
                     }
-                } else {
-                    for (int j = 0; j < tmpQ1.length; j++) {
+                } else
+                {
+                    for (int j = 0; j < tmpQ1.length; j++)
+                    {
                         tmpMtrx.set(i, j, tmpQ1[j][i] / tmpEigen[i]);
                     }
                 }
@@ -280,11 +318,13 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
         return myInverse;
     }
 
-    public MatrixStore<Double> getInverse(final DecompositionStore<Double> preallocated) {
+    public MatrixStore<Double> getInverse(final DecompositionStore<Double> preallocated)
+    {
         return this.doGetInverse((PrimitiveDenseStore) preallocated);
     }
 
-    public ComplexNumber getTrace() {
+    public ComplexNumber getTrace()
+    {
 
         final AggregatorFunction<ComplexNumber> tmpVisitor = ComplexAggregator.getSet().sum();
 
@@ -298,11 +338,13 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
      *
      * @return V
      */
-    public RawStore getV() {
+    public RawStore getV()
+    {
         return new RawStore(Vt, n, n).transpose();
     }
 
-    public MatrixStore<Double> invert(final Access2D<?> original, final DecompositionStore<Double> preallocated) throws TaskException {
+    public MatrixStore<Double> invert(final Access2D<?> original, final DecompositionStore<Double> preallocated) throws TaskException
+    {
 
         final double[][] tmpData = this.reset(original, false);
 
@@ -310,31 +352,38 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
 
         this.doDecompose(tmpData);
 
-        if (this.isSolvable()) {
+        if (this.isSolvable())
+        {
             return this.getInverse(preallocated);
-        } else {
+        } else
+        {
             throw TaskException.newNotInvertible();
         }
     }
 
-    public boolean isOrdered() {
+    public boolean isOrdered()
+    {
         return !this.isHermitian();
     }
 
-    public boolean isSolvable() {
+    public boolean isSolvable()
+    {
         return this.isComputed() && this.isHermitian();
     }
 
-    public MatrixStore<Double> reconstruct() {
+    public MatrixStore<Double> reconstruct()
+    {
         return MatrixUtils.reconstruct(this);
     }
 
     @Override
-    public void reset() {
+    public void reset()
+    {
         myInverse = null;
     }
 
-    public MatrixStore<Double> solve(final Access2D<?> body, final Access2D<?> rhs, final DecompositionStore<Double> preallocated) throws TaskException {
+    public MatrixStore<Double> solve(final Access2D<?> body, final Access2D<?> rhs, final DecompositionStore<Double> preallocated) throws TaskException
+    {
 
         final double[][] tmpData = this.reset(body, false);
 
@@ -342,36 +391,43 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
 
         this.doDecompose(tmpData);
 
-        if (this.isSolvable()) {
+        if (this.isSolvable())
+        {
 
             preallocated.fillMatching(rhs);
 
             return this.getInverse().multiply(preallocated);
 
-        } else {
+        } else
+        {
             throw TaskException.newNotSolvable();
         }
     }
 
-    public MatrixStore<Double> solve(final ElementsSupplier<Double> rhs, final DecompositionStore<Double> preallocated) {
+    public MatrixStore<Double> solve(final ElementsSupplier<Double> rhs, final DecompositionStore<Double> preallocated)
+    {
         return null;
     }
 
-    public MatrixStore<Double> solve(final MatrixStore<Double> rhs, final DecompositionStore<Double> preallocated) {
+    public MatrixStore<Double> solve(final MatrixStore<Double> rhs, final DecompositionStore<Double> preallocated)
+    {
         return null;
     }
 
     /**
      * Complex scalar division.
      */
-    private void cdiv(final double xr, final double xi, final double yr, final double yi) {
+    private void cdiv(final double xr, final double xi, final double yr, final double yi)
+    {
         double r, d;
-        if (PrimitiveFunction.ABS.invoke(yr) > PrimitiveFunction.ABS.invoke(yi)) {
+        if (PrimitiveFunction.ABS.invoke(yr) > PrimitiveFunction.ABS.invoke(yi))
+        {
             r = yi / yr;
             d = yr + (r * yi);
             cdivr = (xr + (r * xi)) / d;
             cdivi = (xi - (r * xr)) / d;
-        } else {
+        } else
+        {
             r = yr / yi;
             d = yi + (r * yr);
             cdivr = ((r * xr) + xi) / d;
@@ -379,7 +435,8 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
         }
     }
 
-    private void hqr2() {
+    private void hqr2()
+    {
 
         //  This is derived from the Algol procedure hqr2,
         //  by Martin and Wilkinson, Handbook for Auto. Comp.,
@@ -399,12 +456,15 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
         // Store roots isolated by balanc and compute matrix norm
 
         double norm = ZERO;
-        for (int i = 0; i < nn; i++) {
-            if ((i < low) | (i > high)) {
+        for (int i = 0; i < nn; i++)
+        {
+            if ((i < low) | (i > high))
+            {
                 d[i] = H[i][i];
                 e[i] = ZERO;
             }
-            for (int j = Math.max(i - 1, 0); j < nn; j++) {
+            for (int j = Math.max(i - 1, 0); j < nn; j++)
+            {
                 norm = norm + PrimitiveFunction.ABS.invoke(H[i][j]);
             }
         }
@@ -412,17 +472,21 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
         // Outer loop over eigenvalue index
 
         int iter = 0;
-        while (n >= low) {
+        while (n >= low)
+        {
 
             // Look for single small sub-diagonal element
 
             int l = n;
-            while (l > low) {
+            while (l > low)
+            {
                 s = PrimitiveFunction.ABS.invoke(H[l - 1][l - 1]) + PrimitiveFunction.ABS.invoke(H[l][l]);
-                if (s == ZERO) {
+                if (s == ZERO)
+                {
                     s = norm;
                 }
-                if (PrimitiveFunction.ABS.invoke(H[l][l - 1]) < (eps * s)) {
+                if (PrimitiveFunction.ABS.invoke(H[l][l - 1]) < (eps * s))
+                {
                     break;
                 }
                 l--;
@@ -431,7 +495,8 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
             // Check for convergence
             // One root found
 
-            if (l == n) {
+            if (l == n)
+            {
                 H[n][n] = H[n][n] + exshift;
                 d[n] = H[n][n];
                 e[n] = ZERO;
@@ -440,7 +505,8 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
 
                 // Two roots found
 
-            } else if (l == (n - 1)) {
+            } else if (l == (n - 1))
+            {
                 w = H[n][n - 1] * H[n - 1][n];
                 p = (H[n - 1][n - 1] - H[n][n]) / TWO;
                 q = (p * p) + w;
@@ -451,15 +517,19 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
 
                 // Real pair
 
-                if (q >= 0) {
-                    if (p >= 0) {
+                if (q >= 0)
+                {
+                    if (p >= 0)
+                    {
                         z = p + z;
-                    } else {
+                    } else
+                    {
                         z = p - z;
                     }
                     d[n - 1] = x + z;
                     d[n] = d[n - 1];
-                    if (z != ZERO) {
+                    if (z != ZERO)
+                    {
                         d[n] = x - (w / z);
                     }
                     e[n - 1] = ZERO;
@@ -474,7 +544,8 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
 
                     // Row modification
 
-                    for (int j = n - 1; j < nn; j++) {
+                    for (int j = n - 1; j < nn; j++)
+                    {
                         z = H[n - 1][j];
                         H[n - 1][j] = (q * z) + (p * H[n][j]);
                         H[n][j] = (q * H[n][j]) - (p * z);
@@ -482,7 +553,8 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
 
                     // Column modification
 
-                    for (int i = 0; i <= n; i++) {
+                    for (int i = 0; i <= n; i++)
+                    {
                         z = H[i][n - 1];
                         H[i][n - 1] = (q * z) + (p * H[i][n]);
                         H[i][n] = (q * H[i][n]) - (p * z);
@@ -490,7 +562,8 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
 
                     // Accumulate transformations
 
-                    for (int i = low; i <= high; i++) {
+                    for (int i = low; i <= high; i++)
+                    {
                         //z = V[i][n - 1];
                         z = Vt[n - 1][i];
                         //V[i][n - 1] = (q * z) + (p * V[i][n]);
@@ -501,7 +574,8 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
 
                     // Complex pair
 
-                } else {
+                } else
+                {
                     d[n - 1] = x + p;
                     d[n] = x + p;
                     e[n - 1] = z;
@@ -512,23 +586,27 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
 
                 // No convergence yet
 
-            } else {
+            } else
+            {
 
                 // Form shift
 
                 x = H[n][n];
                 y = ZERO;
                 w = ZERO;
-                if (l < n) {
+                if (l < n)
+                {
                     y = H[n - 1][n - 1];
                     w = H[n][n - 1] * H[n - 1][n];
                 }
 
                 // Wilkinson's original ad hoc shift
 
-                if (iter == 10) {
+                if (iter == 10)
+                {
                     exshift += x;
-                    for (int i = low; i <= n; i++) {
+                    for (int i = low; i <= n; i++)
+                    {
                         H[i][i] -= x;
                     }
                     s = PrimitiveFunction.ABS.invoke(H[n][n - 1]) + PrimitiveFunction.ABS.invoke(H[n - 1][n - 2]);
@@ -538,16 +616,20 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
 
                 // MATLAB's new ad hoc shift
 
-                if (iter == 30) {
+                if (iter == 30)
+                {
                     s = (y - x) / TWO;
                     s = (s * s) + w;
-                    if (s > 0) {
+                    if (s > 0)
+                    {
                         s = PrimitiveFunction.SQRT.invoke(s);
-                        if (y < x) {
+                        if (y < x)
+                        {
                             s = -s;
                         }
                         s = x - (w / (((y - x) / TWO) + s));
-                        for (int i = low; i <= n; i++) {
+                        for (int i = low; i <= n; i++)
+                        {
                             H[i][i] -= s;
                         }
                         exshift += s;
@@ -560,7 +642,8 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
                 // Look for two consecutive small sub-diagonal elements
 
                 int m = n - 2;
-                while (m >= l) {
+                while (m >= l)
+                {
                     z = H[m][m];
                     r = x - z;
                     s = y - z;
@@ -571,34 +654,41 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
                     p = p / s;
                     q = q / s;
                     r = r / s;
-                    if (m == l) {
+                    if (m == l)
+                    {
                         break;
                     }
                     if ((PrimitiveFunction.ABS.invoke(H[m][m - 1]) * (PrimitiveFunction.ABS.invoke(q) + PrimitiveFunction.ABS.invoke(r))) < (eps
                             * (PrimitiveFunction.ABS.invoke(p) * (PrimitiveFunction.ABS.invoke(H[m - 1][m - 1]) + PrimitiveFunction.ABS.invoke(z)
-                                    + PrimitiveFunction.ABS.invoke(H[m + 1][m + 1]))))) {
+                            + PrimitiveFunction.ABS.invoke(H[m + 1][m + 1])))))
+                    {
                         break;
                     }
                     m--;
                 }
 
-                for (int i = m + 2; i <= n; i++) {
+                for (int i = m + 2; i <= n; i++)
+                {
                     H[i][i - 2] = ZERO;
-                    if (i > (m + 2)) {
+                    if (i > (m + 2))
+                    {
                         H[i][i - 3] = ZERO;
                     }
                 }
 
                 // Double QR step involving rows l:n and columns m:n
 
-                for (int k = m; k <= (n - 1); k++) {
+                for (int k = m; k <= (n - 1); k++)
+                {
                     final boolean notlast = (k != (n - 1));
-                    if (k != m) {
+                    if (k != m)
+                    {
                         p = H[k][k - 1];
                         q = H[k + 1][k - 1];
                         r = (notlast ? H[k + 2][k - 1] : ZERO);
                         x = PrimitiveFunction.ABS.invoke(p) + PrimitiveFunction.ABS.invoke(q) + PrimitiveFunction.ABS.invoke(r);
-                        if (x == ZERO) {
+                        if (x == ZERO)
+                        {
                             continue;
                         }
                         p = p / x;
@@ -607,13 +697,17 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
                     }
 
                     s = PrimitiveFunction.SQRT.invoke((p * p) + (q * q) + (r * r));
-                    if (p < 0) {
+                    if (p < 0)
+                    {
                         s = -s;
                     }
-                    if (s != 0) {
-                        if (k != m) {
+                    if (s != 0)
+                    {
+                        if (k != m)
+                        {
                             H[k][k - 1] = -s * x;
-                        } else if (l != m) {
+                        } else if (l != m)
+                        {
                             H[k][k - 1] = -H[k][k - 1];
                         }
                         p = p + s;
@@ -624,9 +718,11 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
                         r = r / p;
 
                         // Row modification
-                        for (int j = k; j < nn; j++) {
+                        for (int j = k; j < nn; j++)
+                        {
                             p = H[k][j] + (q * H[k + 1][j]);
-                            if (notlast) {
+                            if (notlast)
+                            {
                                 p = p + (r * H[k + 2][j]);
                                 H[k + 2][j] = H[k + 2][j] - (p * z);
                             }
@@ -635,9 +731,11 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
                         }
 
                         // Column modification
-                        for (int i = 0; i <= Math.min(n, k + 3); i++) {
+                        for (int i = 0; i <= Math.min(n, k + 3); i++)
+                        {
                             p = (x * H[i][k]) + (y * H[i][k + 1]);
-                            if (notlast) {
+                            if (notlast)
+                            {
                                 p = p + (z * H[i][k + 2]);
                                 H[i][k + 2] = H[i][k + 2] - (p * r);
                             }
@@ -646,10 +744,12 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
                         }
 
                         // Accumulate transformations
-                        for (int i = low; i <= high; i++) {
+                        for (int i = low; i <= high; i++)
+                        {
                             //p = (x * V[i][k]) + (y * V[i][k + 1]);
                             p = (x * Vt[k][i]) + (y * Vt[k + 1][i]);
-                            if (notlast) {
+                            if (notlast)
+                            {
                                 //p = p + (z * V[i][k + 2]);
                                 p = p + (z * Vt[k + 2][i]);
                                 //V[i][k + 2] = V[i][k + 2] - (p * r);
@@ -667,48 +767,61 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
 
         // Backsubstitute to find vectors of upper triangular form
 
-        if (norm == ZERO) {
+        if (norm == ZERO)
+        {
             return;
         }
 
-        for (n = nn - 1; n >= 0; n--) {
+        for (n = nn - 1; n >= 0; n--)
+        {
             p = d[n];
             q = e[n];
 
             // Real vector
 
-            if (q == 0) {
+            if (q == 0)
+            {
                 int l = n;
                 H[n][n] = ONE;
-                for (int i = n - 1; i >= 0; i--) {
+                for (int i = n - 1; i >= 0; i--)
+                {
                     w = H[i][i] - p;
                     r = ZERO;
-                    for (int j = l; j <= n; j++) {
+                    for (int j = l; j <= n; j++)
+                    {
                         r = r + (H[i][j] * H[j][n]);
                     }
-                    if (e[i] < ZERO) {
+                    if (e[i] < ZERO)
+                    {
                         z = w;
                         s = r;
-                    } else {
+                    } else
+                    {
                         l = i;
-                        if (e[i] == ZERO) {
-                            if (w != ZERO) {
+                        if (e[i] == ZERO)
+                        {
+                            if (w != ZERO)
+                            {
                                 H[i][n] = -r / w;
-                            } else {
+                            } else
+                            {
                                 H[i][n] = -r / (eps * norm);
                             }
 
                             // Solve real equations
 
-                        } else {
+                        } else
+                        {
                             x = H[i][i + 1];
                             y = H[i + 1][i];
                             q = ((d[i] - p) * (d[i] - p)) + (e[i] * e[i]);
                             t = ((x * s) - (z * r)) / q;
                             H[i][n] = t;
-                            if (PrimitiveFunction.ABS.invoke(x) > PrimitiveFunction.ABS.invoke(z)) {
+                            if (PrimitiveFunction.ABS.invoke(x) > PrimitiveFunction.ABS.invoke(z))
+                            {
                                 H[i + 1][n] = (-r - (w * t)) / x;
-                            } else {
+                            } else
+                            {
                                 H[i + 1][n] = (-s - (y * t)) / z;
                             }
                         }
@@ -716,8 +829,10 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
                         // Overflow control
 
                         t = PrimitiveFunction.ABS.invoke(H[i][n]);
-                        if (((eps * t) * t) > 1) {
-                            for (int j = i; j <= n; j++) {
+                        if (((eps * t) * t) > 1)
+                        {
+                            for (int j = i; j <= n; j++)
+                            {
                                 H[j][n] = H[j][n] / t;
                             }
                         }
@@ -726,42 +841,51 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
 
                 // Complex vector
 
-            } else if (q < 0) {
+            } else if (q < 0)
+            {
                 int l = n - 1;
 
                 // Last vector component imaginary so matrix is triangular
 
-                if (PrimitiveFunction.ABS.invoke(H[n][n - 1]) > PrimitiveFunction.ABS.invoke(H[n - 1][n])) {
+                if (PrimitiveFunction.ABS.invoke(H[n][n - 1]) > PrimitiveFunction.ABS.invoke(H[n - 1][n]))
+                {
                     H[n - 1][n - 1] = q / H[n][n - 1];
                     H[n - 1][n] = -(H[n][n] - p) / H[n][n - 1];
-                } else {
+                } else
+                {
                     this.cdiv(ZERO, -H[n - 1][n], H[n - 1][n - 1] - p, q);
                     H[n - 1][n - 1] = cdivr;
                     H[n - 1][n] = cdivi;
                 }
                 H[n][n - 1] = ZERO;
                 H[n][n] = ONE;
-                for (int i = n - 2; i >= 0; i--) {
+                for (int i = n - 2; i >= 0; i--)
+                {
                     double ra, sa, vr, vi;
                     ra = ZERO;
                     sa = ZERO;
-                    for (int j = l; j <= n; j++) {
+                    for (int j = l; j <= n; j++)
+                    {
                         ra = ra + (H[i][j] * H[j][n - 1]);
                         sa = sa + (H[i][j] * H[j][n]);
                     }
                     w = H[i][i] - p;
 
-                    if (e[i] < ZERO) {
+                    if (e[i] < ZERO)
+                    {
                         z = w;
                         r = ra;
                         s = sa;
-                    } else {
+                    } else
+                    {
                         l = i;
-                        if (e[i] == 0) {
+                        if (e[i] == 0)
+                        {
                             this.cdiv(-ra, -sa, w, q);
                             H[i][n - 1] = cdivr;
                             H[i][n] = cdivi;
-                        } else {
+                        } else
+                        {
 
                             // Solve complex equations
 
@@ -769,17 +893,20 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
                             y = H[i + 1][i];
                             vr = (((d[i] - p) * (d[i] - p)) + (e[i] * e[i])) - (q * q);
                             vi = (d[i] - p) * TWO * q;
-                            if ((vr == ZERO) & (vi == ZERO)) {
+                            if ((vr == ZERO) & (vi == ZERO))
+                            {
                                 vr = eps * norm * (PrimitiveFunction.ABS.invoke(w) + PrimitiveFunction.ABS.invoke(q) + PrimitiveFunction.ABS.invoke(x)
                                         + PrimitiveFunction.ABS.invoke(y) + PrimitiveFunction.ABS.invoke(z));
                             }
                             this.cdiv(((x * r) - (z * ra)) + (q * sa), (x * s) - (z * sa) - (q * ra), vr, vi);
                             H[i][n - 1] = cdivr;
                             H[i][n] = cdivi;
-                            if (PrimitiveFunction.ABS.invoke(x) > (PrimitiveFunction.ABS.invoke(z) + PrimitiveFunction.ABS.invoke(q))) {
+                            if (PrimitiveFunction.ABS.invoke(x) > (PrimitiveFunction.ABS.invoke(z) + PrimitiveFunction.ABS.invoke(q)))
+                            {
                                 H[i + 1][n - 1] = ((-ra - (w * H[i][n - 1])) + (q * H[i][n])) / x;
                                 H[i + 1][n] = (-sa - (w * H[i][n]) - (q * H[i][n - 1])) / x;
-                            } else {
+                            } else
+                            {
                                 this.cdiv(-r - (y * H[i][n - 1]), -s - (y * H[i][n]), z, q);
                                 H[i + 1][n - 1] = cdivr;
                                 H[i + 1][n] = cdivi;
@@ -788,8 +915,10 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
 
                         // Overflow control
                         t = PrimitiveFunction.MAX.invoke(PrimitiveFunction.ABS.invoke(H[i][n - 1]), PrimitiveFunction.ABS.invoke(H[i][n]));
-                        if (((eps * t) * t) > 1) {
-                            for (int j = i; j <= n; j++) {
+                        if (((eps * t) * t) > 1)
+                        {
+                            for (int j = i; j <= n; j++)
+                            {
                                 H[j][n - 1] = H[j][n - 1] / t;
                                 H[j][n] = H[j][n] / t;
                             }
@@ -800,9 +929,12 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
         }
 
         // Vectors of isolated roots
-        for (int i = 0; i < nn; i++) {
-            if ((i < low) | (i > high)) {
-                for (int j = i; j < nn; j++) {
+        for (int i = 0; i < nn; i++)
+        {
+            if ((i < low) | (i > high))
+            {
+                for (int j = i; j < nn; j++)
+                {
                     //V[i][j] = H[i][j];
                     Vt[j][i] = H[i][j];
                 }
@@ -810,10 +942,13 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
         }
 
         // Back transformation to get eigenvectors of original matrix
-        for (int j = nn - 1; j >= low; j--) {
-            for (int i = low; i <= high; i++) {
+        for (int j = nn - 1; j >= low; j--)
+        {
+            for (int i = low; i <= high; i++)
+            {
                 z = ZERO;
-                for (int k = low; k <= Math.min(j, high); k++) {
+                for (int k = low; k <= Math.min(j, high); k++)
+                {
                     //z = z + (V[i][k] * H[k][j]);
                     z = z + (Vt[k][i] * H[k][j]);
                 }
@@ -823,7 +958,8 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
         }
     }
 
-    private void orthes() {
+    private void orthes()
+    {
 
         //  This is derived from the Algol procedures orthes and ortran,
         //  by Martin and Wilkinson, Handbook for Auto. Comp.,
@@ -840,25 +976,30 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
          */
         final double[] ort = new double[n];
 
-        for (int m = low + 1; m <= (high - 1); m++) {
+        for (int m = low + 1; m <= (high - 1); m++)
+        {
 
             // Scale column.
 
             double scale = ZERO;
-            for (int i = m; i <= high; i++) {
+            for (int i = m; i <= high; i++)
+            {
                 scale = scale + PrimitiveFunction.ABS.invoke(H[i][m - 1]);
             }
-            if (scale != ZERO) {
+            if (scale != ZERO)
+            {
 
                 // Compute Householder transformation.
 
                 double h = ZERO;
-                for (int i = high; i >= m; i--) {
+                for (int i = high; i >= m; i--)
+                {
                     ort[i] = H[i][m - 1] / scale;
                     h += ort[i] * ort[i];
                 }
                 double g = PrimitiveFunction.SQRT.invoke(h);
-                if (ort[m] > 0) {
+                if (ort[m] > 0)
+                {
                     g = -g;
                 }
                 h = h - (ort[m] * g);
@@ -867,24 +1008,30 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
                 // Apply Householder similarity transformation
                 // H = (I-u*u'/h)*H*(I-u*u')/h)
 
-                for (int j = m; j < n; j++) {
+                for (int j = m; j < n; j++)
+                {
                     double f = ZERO;
-                    for (int i = high; i >= m; i--) {
+                    for (int i = high; i >= m; i--)
+                    {
                         f += ort[i] * H[i][j];
                     }
                     f = f / h;
-                    for (int i = m; i <= high; i++) {
+                    for (int i = m; i <= high; i++)
+                    {
                         H[i][j] -= f * ort[i];
                     }
                 }
 
-                for (int i = 0; i <= high; i++) {
+                for (int i = 0; i <= high; i++)
+                {
                     double f = ZERO;
-                    for (int j = high; j >= m; j--) {
+                    for (int j = high; j >= m; j--)
+                    {
                         f += ort[j] * H[i][j];
                     }
                     f = f / h;
-                    for (int j = m; j <= high; j++) {
+                    for (int j = m; j <= high; j++)
+                    {
                         H[i][j] -= f * ort[j];
                     }
                 }
@@ -894,27 +1041,35 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
         }
 
         // Accumulate transformations (Algol's ortran).
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
                 //V[i][j] = (i == j ? ONE : ZERO);
                 Vt[j][i] = (i == j ? ONE : ZERO);
             }
         }
 
-        for (int m = high - 1; m >= (low + 1); m--) {
-            if (H[m][m - 1] != ZERO) {
-                for (int i = m + 1; i <= high; i++) {
+        for (int m = high - 1; m >= (low + 1); m--)
+        {
+            if (H[m][m - 1] != ZERO)
+            {
+                for (int i = m + 1; i <= high; i++)
+                {
                     ort[i] = H[i][m - 1];
                 }
-                for (int j = m; j <= high; j++) {
+                for (int j = m; j <= high; j++)
+                {
                     double g = ZERO;
-                    for (int i = m; i <= high; i++) {
+                    for (int i = m; i <= high; i++)
+                    {
                         //g += ort[i] * V[i][j];
                         g += ort[i] * Vt[j][i];
                     }
                     // Double division avoids possible underflow
                     g = (g / ort[m]) / H[m][m - 1];
-                    for (int i = m; i <= high; i++) {
+                    for (int i = m; i <= high; i++)
+                    {
                         //V[i][j] += g * ort[i];
                         Vt[j][i] += g * ort[i];
                     }
@@ -923,9 +1078,11 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
         }
     }
 
-    private void rot1(final double[] tmpVt_i, final double[] tmpVt_i1, final double c, final double s) {
+    private void rot1(final double[] tmpVt_i, final double[] tmpVt_i1, final double c, final double s)
+    {
         double h;
-        for (int k = 0; k < n; k++) {
+        for (int k = 0; k < n; k++)
+        {
             //h = V[k][i + 1];
             h = tmpVt_i1[k];
             //V[k][i + 1] = (s * V[k][i]) + (c * h);
@@ -935,35 +1092,42 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
         }
     }
 
-    private void tql2() {
+    private void tql2()
+    {
         //  This is derived from the Algol procedures tql2, by
         //  Bowdler, Martin, Reinsch, and Wilkinson, Handbook for
         //  Auto. Comp., Vol.ii-Linear Algebra, and the corresponding
         //  Fortran subroutine in EISPACK.
 
-        for (int i = 1; i < n; i++) {
+        for (int i = 1; i < n; i++)
+        {
             e[i - 1] = e[i];
         }
         e[n - 1] = ZERO;
 
         double f = ZERO;
         double tst1 = ZERO;
-        for (int l = 0; l < n; l++) {
+        for (int l = 0; l < n; l++)
+        {
 
             // Find small subdiagonal element
             tst1 = PrimitiveFunction.MAX.invoke(tst1, PrimitiveFunction.ABS.invoke(d[l]) + PrimitiveFunction.ABS.invoke(e[l]));
             int m = l;
-            while (m < n) {
-                if (PrimitiveFunction.ABS.invoke(e[m]) <= (MACHINE_EPSILON * tst1)) {
+            while (m < n)
+            {
+                if (PrimitiveFunction.ABS.invoke(e[m]) <= (MACHINE_EPSILON * tst1))
+                {
                     break;
                 }
                 m++;
             }
 
             // If m == l, d[l] is an eigenvalue, otherwise, iterate.
-            if (m > l) {
+            if (m > l)
+            {
                 int iter = 0;
-                do {
+                do
+                {
                     iter = iter + 1; // (Could check iteration count here.)
 
                     // Compute implicit shift
@@ -971,14 +1135,16 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
                     double p = (d[l + 1] - g) / (TWO * e[l]);
                     final double a = p;
                     double r = PrimitiveFunction.HYPOT.invoke(a, ONE);
-                    if (p < 0) {
+                    if (p < 0)
+                    {
                         r = -r;
                     }
                     d[l] = e[l] / (p + r);
                     d[l + 1] = e[l] * (p + r);
                     final double dl1 = d[l + 1];
                     double h = g - d[l];
-                    for (int i = l + 2; i < n; i++) {
+                    for (int i = l + 2; i < n; i++)
+                    {
                         d[i] -= h;
                     }
                     f = f + h;
@@ -991,7 +1157,8 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
                     final double el1 = e[l + 1];
                     double s = ZERO;
                     double s2 = ZERO;
-                    for (int i = m - 1; i >= l; i--) {
+                    for (int i = m - 1; i >= l; i--)
+                    {
                         c3 = c2;
                         c2 = c;
                         s2 = s;
@@ -1020,19 +1187,23 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
         }
 
         // Sort eigenvalues and corresponding vectors.
-        for (int i = 0; i < (n - 1); i++) {
+        for (int i = 0; i < (n - 1); i++)
+        {
 
             double[] tmpCol;
 
             int k = i;
             double p = d[i];
-            for (int j = i + 1; j < n; j++) {
-                if (d[j] > p) {
+            for (int j = i + 1; j < n; j++)
+            {
+                if (d[j] > p)
+                {
                     k = j;
                     p = d[j];
                 }
             }
-            if (k != i) {
+            if (k != i)
+            {
                 d[k] = d[i];
                 d[i] = p;
 
@@ -1052,14 +1223,16 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
         }
     }
 
-    protected MatrixStore<Double> doGetInverse(final PrimitiveDenseStore preallocated) {
+    protected MatrixStore<Double> doGetInverse(final PrimitiveDenseStore preallocated)
+    {
         // TODO Auto-generated method stub
         return null;
     }
 
     abstract boolean doDecompose(double[][] data);
 
-    void doDecomposeGeneral(final double[][] data) {
+    void doDecomposeGeneral(final double[][] data)
+    {
 
         n = data.length;
         Vt = new double[n][n];
@@ -1082,7 +1255,8 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
 
     }
 
-    void doDecomposeSymmetric(final double[][] data) {
+    void doDecomposeSymmetric(final double[][] data)
+    {
 
         n = data.length;
         Vt = data;
@@ -1107,7 +1281,8 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
      *
      * @return imag(diag(D))
      */
-    double[] getImagEigenvalues() {
+    double[] getImagEigenvalues()
+    {
         return e;
     }
 
@@ -1116,7 +1291,8 @@ abstract class RawEigenvalue extends RawDecomposition implements Eigenvalue<Doub
      *
      * @return real(diag(D))
      */
-    double[] getRealEigenvalues() {
+    double[] getRealEigenvalues()
+    {
         return d;
     }
 

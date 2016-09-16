@@ -36,7 +36,8 @@ package org.ojalgo.type.keyvalue;
  *
  * @author apete
  */
-public interface KeyValue<K extends Object, V extends Object> extends Comparable<KeyValue<K, ?>> {
+public interface KeyValue<K extends Object, V extends Object> extends Comparable<KeyValue<K, ?>>
+{
 
     K getKey();
 

@@ -26,7 +26,8 @@ package org.ojalgo.access;
  *
  * @author apete
  */
-public interface Structure1D {
+public interface Structure1D
+{
 
     /**
      * @return The total number of elements in this structure.

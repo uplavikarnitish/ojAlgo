@@ -26,11 +26,13 @@ import org.ojalgo.matrix.store.MatrixStore;
 import org.ojalgo.matrix.store.PhysicalStore;
 import org.ojalgo.matrix.store.PhysicalStore.Factory;
 
-public final class SecondOrderApproximation<N extends Number> extends ApproximateFunction<N> {
+public final class SecondOrderApproximation<N extends Number> extends ApproximateFunction<N>
+{
 
     private final CompoundFunction<N> myDelegate;
 
-    public SecondOrderApproximation(final MultiaryFunction.TwiceDifferentiable<N> function, final Access1D<N> point) {
+    public SecondOrderApproximation(final MultiaryFunction.TwiceDifferentiable<N> function, final Access1D<N> point)
+    {
 
         super(function, point);
 
@@ -46,59 +48,73 @@ public final class SecondOrderApproximation<N extends Number> extends Approximat
         myDelegate.setConstant(function.invoke(point));
     }
 
-    public int arity() {
+    public int arity()
+    {
         return myDelegate.arity();
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (!super.equals(obj)) {
+        if (!super.equals(obj))
+        {
             return false;
         }
-        if (!(obj instanceof SecondOrderApproximation)) {
+        if (!(obj instanceof SecondOrderApproximation))
+        {
             return false;
         }
         final SecondOrderApproximation<?> other = (SecondOrderApproximation<?>) obj;
-        if (myDelegate == null) {
-            if (other.myDelegate != null) {
+        if (myDelegate == null)
+        {
+            if (other.myDelegate != null)
+            {
                 return false;
             }
-        } else if (!myDelegate.equals(other.myDelegate)) {
+        } else if (!myDelegate.equals(other.myDelegate))
+        {
             return false;
         }
         return true;
     }
 
-    public MatrixStore<N> getGradient(final Access1D<N> point) {
+    public MatrixStore<N> getGradient(final Access1D<N> point)
+    {
         return myDelegate.getGradient(this.shift(point));
     }
 
-    public MatrixStore<N> getHessian(final Access1D<N> point) {
+    public MatrixStore<N> getHessian(final Access1D<N> point)
+    {
         return myDelegate.getHessian(null);
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = super.hashCode();
         result = (prime * result) + ((myDelegate == null) ? 0 : myDelegate.hashCode());
         return result;
     }
 
-    public N invoke(final Access1D<N> arg) {
+    public N invoke(final Access1D<N> arg)
+    {
         return myDelegate.invoke(this.shift(arg));
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return myDelegate.toString();
     }
 
     @Override
-    protected Factory<N, ?> factory() {
+    protected Factory<N, ?> factory()
+    {
         return myDelegate.factory();
     }
 

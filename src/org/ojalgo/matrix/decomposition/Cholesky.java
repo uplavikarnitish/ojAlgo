@@ -47,9 +47,11 @@ import org.ojalgo.scalar.ComplexNumber;
  *
  * @author apete
  */
-public interface Cholesky<N extends Number> extends LDU<N>, MatrixDecomposition.Hermitian<N> {
+public interface Cholesky<N extends Number> extends LDU<N>, MatrixDecomposition.Hermitian<N>
+{
 
-    interface Factory<N extends Number> extends MatrixDecomposition.Factory<Cholesky<N>> {
+    interface Factory<N extends Number> extends MatrixDecomposition.Factory<Cholesky<N>>
+    {
 
     }
 
@@ -57,26 +59,34 @@ public interface Cholesky<N extends Number> extends LDU<N>, MatrixDecomposition.
 
     public static final Factory<ComplexNumber> COMPLEX = typical -> new CholeskyDecomposition.Complex();
 
-    public static final Factory<Double> PRIMITIVE = typical -> {
-        if ((32L < typical.countColumns()) && (typical.count() <= BasicArray.MAX_ARRAY_SIZE)) {
+    public static final Factory<Double> PRIMITIVE = typical ->
+    {
+        if ((32L < typical.countColumns()) && (typical.count() <= BasicArray.MAX_ARRAY_SIZE))
+        {
             return new CholeskyDecomposition.Primitive();
-        } else {
+        } else
+        {
             return new RawCholesky();
         }
     };
 
     @SuppressWarnings("unchecked")
-    public static <N extends Number> Cholesky<N> make(final Access2D<N> typical) {
+    public static <N extends Number> Cholesky<N> make(final Access2D<N> typical)
+    {
 
         final N tmpNumber = typical.get(0, 0);
 
-        if (tmpNumber instanceof BigDecimal) {
+        if (tmpNumber instanceof BigDecimal)
+        {
             return (Cholesky<N>) BIG.make(typical);
-        } else if (tmpNumber instanceof ComplexNumber) {
+        } else if (tmpNumber instanceof ComplexNumber)
+        {
             return (Cholesky<N>) COMPLEX.make(typical);
-        } else if (tmpNumber instanceof Double) {
+        } else if (tmpNumber instanceof Double)
+        {
             return (Cholesky<N>) PRIMITIVE.make(typical);
-        } else {
+        } else
+        {
             throw new IllegalArgumentException();
         }
     }
@@ -94,18 +104,21 @@ public interface Cholesky<N extends Number> extends LDU<N>, MatrixDecomposition.
     /**
      * Must implement either {@link #getL()} or {@link #getR()}.
      */
-    default MatrixStore<N> getL() {
+    default MatrixStore<N> getL()
+    {
         return this.getR().conjugate();
     }
 
     /**
      * Must implement either {@link #getL()} or {@link #getR()}.
      */
-    default MatrixStore<N> getR() {
+    default MatrixStore<N> getR()
+    {
         return this.getL().conjugate();
     }
 
-    default MatrixStore<N> reconstruct() {
+    default MatrixStore<N> reconstruct()
+    {
         return MatrixUtils.reconstruct(this);
     }
 

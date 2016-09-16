@@ -30,18 +30,21 @@ import org.ojalgo.function.PrimitiveFunction;
  *
  * @author apete
  */
-public class Weibull extends RandomNumber {
+public class Weibull extends RandomNumber
+{
 
     private static final long serialVersionUID = 7315696913427382955L;
 
     private final double myShape; // beta
     private final double myRate; // lamda
 
-    public Weibull() {
+    public Weibull()
+    {
         this(ONE, ONE);
     }
 
-    public Weibull(final double aLambda, final double aBeta) {
+    public Weibull(final double aLambda, final double aBeta)
+    {
 
         super();
 
@@ -49,12 +52,14 @@ public class Weibull extends RandomNumber {
         myShape = aBeta;
     }
 
-    public double getExpected() {
+    public double getExpected()
+    {
         return RandomUtils.gamma(ONE + (ONE / myShape)) / myRate;
     }
 
     @Override
-    public double getVariance() {
+    public double getVariance()
+    {
 
         final double tmpA = RandomUtils.gamma(ONE + (TWO / myShape));
         final double tmpB = RandomUtils.gamma(ONE + (ONE / myShape));
@@ -63,7 +68,8 @@ public class Weibull extends RandomNumber {
     }
 
     @Override
-    protected double generate() {
+    protected double generate()
+    {
         return PrimitiveFunction.POW.invoke(-PrimitiveFunction.LOG.invoke(this.random().nextDouble()), ONE / myShape) / myRate;
     }
 

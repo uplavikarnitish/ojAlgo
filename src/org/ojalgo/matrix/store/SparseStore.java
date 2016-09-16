@@ -44,9 +44,11 @@ import org.ojalgo.matrix.store.PhysicalStore.TransposedRegion;
 import org.ojalgo.matrix.store.operation.MultiplyBoth;
 import org.ojalgo.scalar.ComplexNumber;
 
-public final class SparseStore<N extends Number> extends FactoryStore<N> implements ElementsConsumer<N> {
+public final class SparseStore<N extends Number> extends FactoryStore<N> implements ElementsConsumer<N>
+{
 
-    public static interface Factory<N extends Number> {
+    public static interface Factory<N extends Number>
+    {
 
         SparseStore<N> make(long rowsCount, long columnsCount);
 
@@ -58,15 +60,18 @@ public final class SparseStore<N extends Number> extends FactoryStore<N> impleme
 
     public static final SparseStore.Factory<Double> PRIMITIVE = (rowsCount, columnsCount) -> SparseStore.makePrimitive((int) rowsCount, (int) columnsCount);
 
-    public static SparseStore<BigDecimal> makeBig(final int rowsCount, final int columnsCount) {
+    public static SparseStore<BigDecimal> makeBig(final int rowsCount, final int columnsCount)
+    {
         return new SparseStore<>(BigDenseStore.FACTORY, rowsCount, columnsCount, SparseArray.makeBig(rowsCount * columnsCount));
     }
 
-    public static SparseStore<ComplexNumber> makeComplex(final int rowsCount, final int columnsCount) {
+    public static SparseStore<ComplexNumber> makeComplex(final int rowsCount, final int columnsCount)
+    {
         return new SparseStore<>(ComplexDenseStore.FACTORY, rowsCount, columnsCount, SparseArray.makeComplex(rowsCount * columnsCount));
     }
 
-    public static SparseStore<Double> makePrimitive(final int rowsCount, final int columnsCount) {
+    public static SparseStore<Double> makePrimitive(final int rowsCount, final int columnsCount)
+    {
         return new SparseStore<>(PrimitiveDenseStore.FACTORY, rowsCount, columnsCount, SparseArray.makePrimitive(rowsCount * columnsCount));
     }
 
@@ -75,7 +80,8 @@ public final class SparseStore<N extends Number> extends FactoryStore<N> impleme
     private final int[] myLimits;
     private final FillByMultiplying<N> myMultiplyer;
 
-    private SparseStore(final org.ojalgo.matrix.store.PhysicalStore.Factory<N, ?> factory, final int rowsCount, final int columnsCount) {
+    private SparseStore(final org.ojalgo.matrix.store.PhysicalStore.Factory<N, ?> factory, final int rowsCount, final int columnsCount)
+    {
         super(factory, rowsCount, columnsCount);
         myElements = null;
         myFirsts = null;
@@ -84,7 +90,8 @@ public final class SparseStore<N extends Number> extends FactoryStore<N> impleme
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    SparseStore(final PhysicalStore.Factory<N, ?> factory, final int rowsCount, final int columnsCount, final SparseArray<N> elements) {
+    SparseStore(final PhysicalStore.Factory<N, ?> factory, final int rowsCount, final int columnsCount, final SparseArray<N> elements)
+    {
 
         super(factory, rowsCount, columnsCount);
 
@@ -95,58 +102,72 @@ public final class SparseStore<N extends Number> extends FactoryStore<N> impleme
         // Arrays.fill(myLimits, 0); // Behövs inte, redan 0
 
         final Class<? extends Number> tmpType = factory.scalar().zero().getNumber().getClass();
-        if (tmpType.equals(Double.class)) {
+        if (tmpType.equals(Double.class))
+        {
             myMultiplyer = (FillByMultiplying<N>) MultiplyBoth.getPrimitive(rowsCount, columnsCount);
-        } else if (tmpType.equals(ComplexNumber.class)) {
+        } else if (tmpType.equals(ComplexNumber.class))
+        {
             myMultiplyer = (FillByMultiplying<N>) MultiplyBoth.getComplex(rowsCount, columnsCount);
-        } else if (tmpType.equals(BigDecimal.class)) {
+        } else if (tmpType.equals(BigDecimal.class))
+        {
             myMultiplyer = (FillByMultiplying<N>) MultiplyBoth.getBig(rowsCount, columnsCount);
-        } else {
+        } else
+        {
             myMultiplyer = null;
         }
     }
 
-    public void add(final long row, final long col, final double addend) {
-        if (addend != PrimitiveMath.ZERO) {
+    public void add(final long row, final long col, final double addend)
+    {
+        if (addend != PrimitiveMath.ZERO)
+        {
             myElements.add(AccessUtils.index(myFirsts.length, row, col), addend);
             this.updateNonZeros(row, col);
         }
     }
 
-    public void add(final long row, final long col, final Number addend) {
+    public void add(final long row, final long col, final Number addend)
+    {
         myElements.add(AccessUtils.index(myFirsts.length, row, col), addend);
         this.updateNonZeros(row, col);
     }
 
-    public double doubleValue(final long row, final long col) {
+    public double doubleValue(final long row, final long col)
+    {
         return myElements.doubleValue(AccessUtils.index(myFirsts.length, row, col));
     }
 
-    public void empty() {
+    public void empty()
+    {
         myElements.empty();
         Arrays.fill(myFirsts, (int) this.countColumns());
         Arrays.fill(myLimits, 0);
     }
 
-    public void fillByMultiplying(final Access1D<N> left, final Access1D<N> right) {
+    public void fillByMultiplying(final Access1D<N> left, final Access1D<N> right)
+    {
         myMultiplyer.invoke(this, left, (int) (left.count() / this.countRows()), right);
     }
 
-    public void fillOne(final long row, final long col, final Access1D<?> values, final long valueIndex) {
+    public void fillOne(final long row, final long col, final Access1D<?> values, final long valueIndex)
+    {
         this.set(row, col, values.get(valueIndex));
     }
 
-    public void fillOne(final long row, final long col, final N value) {
+    public void fillOne(final long row, final long col, final N value)
+    {
         myElements.fillOne(AccessUtils.index(myFirsts.length, row, col), value);
         this.updateNonZeros(row, col);
     }
 
-    public void fillOne(final long row, final long col, final NullaryFunction<N> supplier) {
+    public void fillOne(final long row, final long col, final NullaryFunction<N> supplier)
+    {
         myElements.fillOne(AccessUtils.index(myFirsts.length, row, col), supplier);
         this.updateNonZeros(row, col);
     }
 
-    public int firstInColumn(final int col) {
+    public int firstInColumn(final int col)
+    {
 
         final int tmpRowDim = myFirsts.length;
 
@@ -155,23 +176,28 @@ public final class SparseStore<N extends Number> extends FactoryStore<N> impleme
 
         final long tmpFirstInRange = myElements.firstInRange(tmpRangeFirst, tmpRangeLimit);
 
-        if (tmpRangeFirst == tmpFirstInRange) {
+        if (tmpRangeFirst == tmpFirstInRange)
+        {
             return 0;
-        } else {
+        } else
+        {
             return (int) (tmpFirstInRange % tmpRowDim);
         }
     }
 
-    public int firstInRow(final int row) {
+    public int firstInRow(final int row)
+    {
         return myFirsts[row];
     }
 
-    public N get(final long row, final long col) {
+    public N get(final long row, final long col)
+    {
         return myElements.get(AccessUtils.index(myFirsts.length, row, col));
     }
 
     @Override
-    public int limitOfColumn(final int col) {
+    public int limitOfColumn(final int col)
+    {
 
         final int tmpRowDim = myFirsts.length;
 
@@ -180,79 +206,105 @@ public final class SparseStore<N extends Number> extends FactoryStore<N> impleme
 
         final long tmpLimitOfRange = myElements.limitOfRange(tmpRangeFirst, tmpRangeLimit);
 
-        if (tmpRangeLimit == tmpLimitOfRange) {
+        if (tmpRangeLimit == tmpLimitOfRange)
+        {
             return tmpRowDim;
-        } else {
+        } else
+        {
             return (int) tmpLimitOfRange % tmpRowDim;
         }
     }
 
     @Override
-    public int limitOfRow(final int row) {
+    public int limitOfRow(final int row)
+    {
         return myLimits[row];
     }
 
-    public void modifyAll(final UnaryFunction<N> modifier) {
+    public void modifyAll(final UnaryFunction<N> modifier)
+    {
         final long tmpLimit = this.count();
-        if (this.isPrimitive()) {
-            for (long i = 0L; i < tmpLimit; i++) {
+        if (this.isPrimitive())
+        {
+            for (long i = 0L; i < tmpLimit; i++)
+            {
                 this.set(i, modifier.invoke(this.doubleValue(i)));
             }
-        } else {
-            for (long i = 0L; i < tmpLimit; i++) {
+        } else
+        {
+            for (long i = 0L; i < tmpLimit; i++)
+            {
                 this.set(i, modifier.invoke(this.get(i)));
             }
         }
     }
 
-    public void modifyMatching(final Access1D<N> left, final BinaryFunction<N> function) {
+    public void modifyMatching(final Access1D<N> left, final BinaryFunction<N> function)
+    {
         final long tmpLimit = Math.min(left.count(), this.count());
-        if (this.isPrimitive()) {
-            for (long i = 0L; i < tmpLimit; i++) {
+        if (this.isPrimitive())
+        {
+            for (long i = 0L; i < tmpLimit; i++)
+            {
                 this.set(i, function.invoke(left.doubleValue(i), this.doubleValue(i)));
             }
-        } else {
-            for (long i = 0L; i < tmpLimit; i++) {
+        } else
+        {
+            for (long i = 0L; i < tmpLimit; i++)
+            {
                 this.set(i, function.invoke(left.get(i), this.get(i)));
             }
         }
     }
 
-    public void modifyMatching(final BinaryFunction<N> function, final Access1D<N> right) {
+    public void modifyMatching(final BinaryFunction<N> function, final Access1D<N> right)
+    {
         final long tmpLimit = Math.min(this.count(), right.count());
-        if (this.isPrimitive()) {
-            for (long i = 0L; i < tmpLimit; i++) {
+        if (this.isPrimitive())
+        {
+            for (long i = 0L; i < tmpLimit; i++)
+            {
                 this.set(i, function.invoke(this.doubleValue(i), right.doubleValue(i)));
             }
-        } else {
-            for (long i = 0L; i < tmpLimit; i++) {
+        } else
+        {
+            for (long i = 0L; i < tmpLimit; i++)
+            {
                 this.set(i, function.invoke(this.get(i), right.get(i)));
             }
         }
     }
 
-    public void modifyOne(final long row, final long col, final UnaryFunction<N> modifier) {
-        if (this.isPrimitive()) {
+    public void modifyOne(final long row, final long col, final UnaryFunction<N> modifier)
+    {
+        if (this.isPrimitive())
+        {
             this.set(row, col, modifier.invoke(this.doubleValue(row, col)));
-        } else {
+        } else
+        {
             this.set(row, col, modifier.invoke(this.get(row, col)));
         }
     }
 
-    public void multiply(final Access1D<N> right, final ElementsConsumer<N> target) {
+    public void multiply(final Access1D<N> right, final ElementsConsumer<N> target)
+    {
 
-        if (this.isPrimitive()) {
+        if (this.isPrimitive())
+        {
 
             final long tmpRightStructure = this.countColumns();
             final long tmpRightColumns = (int) target.countColumns();
 
-            if (target instanceof SparseStore) {
+            if (target instanceof SparseStore)
+            {
                 ((SparseStore<?>) target).empty();
-            } else {
+            } else
+            {
                 target.fillAll(this.physical().scalar().zero().getNumber());
             }
 
-            for (final ElementView2D<N, ?> tmpNonzero : this.nonzeros()) {
+            for (final ElementView2D<N, ?> tmpNonzero : this.nonzeros())
+            {
                 final long tmpRow = tmpNonzero.row();
                 final long tmpCol = tmpNonzero.column();
                 final double tmpValue = tmpNonzero.doubleValue();
@@ -260,12 +312,14 @@ public final class SparseStore<N extends Number> extends FactoryStore<N> impleme
                 final long tmpFirst = MatrixUtils.firstInRow(right, tmpRow, 0L);
                 final long tmpLimit = MatrixUtils.limitOfRow(right, tmpRow, tmpRightColumns);
 
-                for (long j = tmpFirst; j < tmpLimit; j++) {
+                for (long j = tmpFirst; j < tmpLimit; j++)
+                {
                     target.add(tmpRow, j, tmpValue * right.doubleValue(AccessUtils.index(tmpRightStructure, tmpCol, j)));
                 }
             }
 
-        } else {
+        } else
+        {
 
             super.multiply(right, target);
         }
@@ -278,50 +332,61 @@ public final class SparseStore<N extends Number> extends FactoryStore<N> impleme
      * @deprecated v40
      */
     @Deprecated
-    public ElementView2D<N, ?> nonzeros() {
+    public ElementView2D<N, ?> nonzeros()
+    {
         return new Access2D.ElementView<N>(myElements.nonzeros(), this.countRows());
     }
 
-    public final ElementsConsumer<N> regionByColumns(final int... columns) {
+    public final ElementsConsumer<N> regionByColumns(final int... columns)
+    {
         return new ColumnsRegion<>(this, myMultiplyer, columns);
     }
 
-    public final ElementsConsumer<N> regionByLimits(final int rowLimit, final int columnLimit) {
+    public final ElementsConsumer<N> regionByLimits(final int rowLimit, final int columnLimit)
+    {
         return new LimitRegion<>(this, myMultiplyer, rowLimit, columnLimit);
     }
 
-    public final ElementsConsumer<N> regionByOffsets(final int rowOffset, final int columnOffset) {
+    public final ElementsConsumer<N> regionByOffsets(final int rowOffset, final int columnOffset)
+    {
         return new OffsetRegion<>(this, myMultiplyer, rowOffset, columnOffset);
     }
 
-    public final ElementsConsumer<N> regionByRows(final int... rows) {
+    public final ElementsConsumer<N> regionByRows(final int... rows)
+    {
         return new RowsRegion<>(this, myMultiplyer, rows);
     }
 
-    public final ElementsConsumer<N> regionByTransposing() {
+    public final ElementsConsumer<N> regionByTransposing()
+    {
         return new TransposedRegion<>(this, myMultiplyer);
     }
 
-    public void set(final long row, final long col, final double value) {
+    public void set(final long row, final long col, final double value)
+    {
         myElements.set(AccessUtils.index(myFirsts.length, row, col), value);
         this.updateNonZeros(row, col);
     }
 
-    public void set(final long row, final long col, final Number value) {
+    public void set(final long row, final long col, final Number value)
+    {
         myElements.set(AccessUtils.index(myFirsts.length, row, col), value);
         this.updateNonZeros(row, col);
     }
 
-    private void updateNonZeros(final long row, final long col) {
+    private void updateNonZeros(final long row, final long col)
+    {
         this.updateNonZeros((int) row, (int) col);
     }
 
     @Override
-    protected void addNonZerosTo(final ElementsConsumer<N> consumer) {
+    protected void addNonZerosTo(final ElementsConsumer<N> consumer)
+    {
         myElements.supplyNonZerosTo(consumer);
     }
 
-    void updateNonZeros(final int row, final int col) {
+    void updateNonZeros(final int row, final int col)
+    {
         myFirsts[row] = Math.min(col, myFirsts[row]);
         myLimits[row] = Math.max(col + 1, myLimits[row]);
     }

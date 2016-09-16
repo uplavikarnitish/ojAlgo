@@ -37,27 +37,32 @@ import org.ojalgo.type.format.DateStyle;
  *
  * @author apete
  */
-public final class DateContext extends FormatContext<Date> {
+public final class DateContext extends FormatContext<Date>
+{
 
     private static final DatePart DEFAULT_PART = DatePart.DATETIME;
     private static final DateStyle DEFAULT_STYLE = DateStyle.SHORT;
 
-    public static Format toFormat(final DatePart part, final DateStyle style, final Locale locale) {
+    public static Format toFormat(final DatePart part, final DateStyle style, final Locale locale)
+    {
         return part != null ? part.getFormat(style, locale) : DEFAULT_PART.getFormat(style, locale);
     }
 
     private DatePart myPart = DEFAULT_PART;
     private DateStyle myStyle = DEFAULT_STYLE;
 
-    public DateContext() {
+    public DateContext()
+    {
         super(StandardType.SQL_DATETIME.getFormat());
     }
 
-    public DateContext(final DatePart part) {
+    public DateContext(final DatePart part)
+    {
         this(part, DEFAULT_STYLE, Locale.getDefault());
     }
 
-    public DateContext(final DatePart part, final DateStyle style, final Locale locale) {
+    public DateContext(final DatePart part, final DateStyle style, final Locale locale)
+    {
 
         super(part != null ? part.getFormat(style, locale) : DEFAULT_PART.getFormat(style, locale));
 
@@ -65,53 +70,61 @@ public final class DateContext extends FormatContext<Date> {
         myStyle = style != null ? style : DEFAULT_STYLE;
     }
 
-    private DateContext(final Format format) {
+    private DateContext(final Format format)
+    {
         super(format);
         ProgrammingError.throwForIllegalInvocation();
     }
 
     @Override
-    public Date enforce(final Date object) {
+    public Date enforce(final Date object)
+    {
 
-        switch (myPart) {
+        switch (myPart)
+        {
 
-        case DATE:
+            case DATE:
 
-            return new CalendarDate(object.getTime()).toSqlDate();
+                return new CalendarDate(object.getTime()).toSqlDate();
 
-        case TIME:
+            case TIME:
 
-            return new CalendarDate(object.getTime()).toSqlTime();
+                return new CalendarDate(object.getTime()).toSqlTime();
 
-        default:
+            default:
 
-            return new CalendarDate(object.getTime()).toSqlTimestamp();
+                return new CalendarDate(object.getTime()).toSqlTimestamp();
         }
     }
 
-    public DatePart getPart() {
+    public DatePart getPart()
+    {
         return myPart;
     }
 
-    public DateStyle getStyle() {
+    public DateStyle getStyle()
+    {
         return myStyle;
     }
 
-    public CalendarDateUnit getUnit() {
+    public CalendarDateUnit getUnit()
+    {
 
-        switch (myPart) {
+        switch (myPart)
+        {
 
-        case DATE:
+            case DATE:
 
-            return CalendarDateUnit.DAY;
+                return CalendarDateUnit.DAY;
 
-        default:
+            default:
 
-            return CalendarDateUnit.SECOND;
+                return CalendarDateUnit.SECOND;
         }
     }
 
-    public TypeContext<Date> newFormat(final DatePart part, final DateStyle style, final Locale locale) {
+    public TypeContext<Date> newFormat(final DatePart part, final DateStyle style, final Locale locale)
+    {
 
         final DatePart tmpPart = part != null ? part : this.getPart();
         final DateStyle tmpStyle = style != null ? style : this.getStyle();
@@ -121,17 +134,20 @@ public final class DateContext extends FormatContext<Date> {
     }
 
     @Override
-    protected void configureFormat(final Format format, final Object object) {
+    protected void configureFormat(final Format format, final Object object)
+    {
         // No need to do anything
     }
 
     @Override
-    protected String handleFormatException(final Format format, final Object object) {
+    protected String handleFormatException(final Format format, final Object object)
+    {
         return "";
     }
 
     @Override
-    protected Date handleParseException(final Format format, final String string) {
+    protected Date handleParseException(final Format format, final String string)
+    {
         return new Date();
     }
 

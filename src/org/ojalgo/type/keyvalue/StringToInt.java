@@ -23,12 +23,14 @@ package org.ojalgo.type.keyvalue;
 
 import org.ojalgo.netio.ASCII;
 
-public final class StringToInt implements KeyValue<String, Integer> {
+public final class StringToInt implements KeyValue<String, Integer>
+{
 
     public final String key;
     public final int value;
 
-    public StringToInt(final String aKey, final int aValue) {
+    public StringToInt(final String aKey, final int aValue)
+    {
 
         super();
 
@@ -36,46 +38,58 @@ public final class StringToInt implements KeyValue<String, Integer> {
         value = aValue;
     }
 
-    StringToInt() {
+    StringToInt()
+    {
         this(null, 0);
     }
 
-    public int compareTo(final KeyValue<String, ?> aReference) {
+    public int compareTo(final KeyValue<String, ?> aReference)
+    {
         return key.compareTo(aReference.getKey());
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return false;
         }
-        if (!(obj instanceof StringToInt)) {
+        if (!(obj instanceof StringToInt))
+        {
             return false;
         }
         final StringToInt other = (StringToInt) obj;
-        if (key == null) {
-            if (other.key != null) {
+        if (key == null)
+        {
+            if (other.key != null)
+            {
                 return false;
             }
-        } else if (!key.equals(other.key)) {
+        } else if (!key.equals(other.key))
+        {
             return false;
         }
         return true;
     }
 
-    public String getKey() {
+    public String getKey()
+    {
         return key;
     }
 
-    public Integer getValue() {
+    public Integer getValue()
+    {
         return value;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = 1;
         result = (prime * result) + ((key == null) ? 0 : key.hashCode());
@@ -83,7 +97,8 @@ public final class StringToInt implements KeyValue<String, Integer> {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return String.valueOf(key) + String.valueOf(ASCII.EQUALS) + String.valueOf(value);
     }
 

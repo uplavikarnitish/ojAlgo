@@ -34,7 +34,8 @@ import org.ojalgo.series.CalendarDateSeries;
 import org.ojalgo.type.CalendarDateUnit;
 import org.ojalgo.type.TypeCache;
 
-public abstract class DataSource<DP extends DatePrice> {
+public abstract class DataSource<DP extends DatePrice>
+{
 
     protected static final boolean DEBUG = false;
 
@@ -43,14 +44,16 @@ public abstract class DataSource<DP extends DatePrice> {
     private final String mySymbol;
 
     @SuppressWarnings("unused")
-    private DataSource() {
+    private DataSource()
+    {
 
         this(null, null);
 
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    protected DataSource(final String symbol, final CalendarDateUnit resolution) {
+    protected DataSource(final String symbol, final CalendarDateUnit resolution)
+    {
 
         super();
 
@@ -59,53 +62,68 @@ public abstract class DataSource<DP extends DatePrice> {
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return false;
         }
-        if (!(obj instanceof DataSource)) {
+        if (!(obj instanceof DataSource))
+        {
             return false;
         }
         final DataSource<?> other = (DataSource<?>) obj;
-        if (myResolution != other.myResolution) {
+        if (myResolution != other.myResolution)
+        {
             return false;
         }
-        if (!this.getClass().equals(other.getClass())) {
+        if (!this.getClass().equals(other.getClass()))
+        {
             return false;
         }
-        if (mySymbol == null) {
-            if (other.mySymbol != null) {
+        if (mySymbol == null)
+        {
+            if (other.mySymbol != null)
+            {
                 return false;
             }
-        } else if (!mySymbol.equals(other.mySymbol)) {
+        } else if (!mySymbol.equals(other.mySymbol))
+        {
             return false;
         }
         return true;
     }
 
-    public List<DP> getHistoricalPrices() {
+    public List<DP> getHistoricalPrices()
+    {
         return this.getHistoricalPrices(myResourceLocator.getStreamReader());
     }
 
-    public List<DP> getHistoricalPrices(final BufferedReader reader) {
+    public List<DP> getHistoricalPrices(final BufferedReader reader)
+    {
 
         final ArrayList<DP> retVal = new ArrayList<>();
 
         String tmpLine;
         DP tmpHistPrice;
-        try {
+        try
+        {
             tmpLine = reader.readLine();
 
-            if (DEBUG) {
+            if (DEBUG)
+            {
                 BasicLogger.debug(tmpLine);
             }
 
-            while ((tmpLine = reader.readLine()) != null) {
+            while ((tmpLine = reader.readLine()) != null)
+            {
 
-                if (DEBUG) {
+                if (DEBUG)
+                {
                     BasicLogger.debug(tmpLine);
                 }
 
@@ -113,7 +131,8 @@ public abstract class DataSource<DP extends DatePrice> {
                 retVal.add(tmpHistPrice);
             }
             reader.close();
-        } catch (final IOException anException) {
+        } catch (final IOException anException)
+        {
             anException.printStackTrace();
         }
 
@@ -122,41 +141,50 @@ public abstract class DataSource<DP extends DatePrice> {
         return retVal;
     }
 
-    public CalendarDateSeries<Double> getPriceSeries() {
+    public CalendarDateSeries<Double> getPriceSeries()
+    {
         return this.getPriceSeries(myResourceLocator.getStreamReader());
     }
 
-    public CalendarDateSeries<Double> getPriceSeries(final BufferedReader reader) {
+    public CalendarDateSeries<Double> getPriceSeries(final BufferedReader reader)
+    {
 
         final CalendarDateSeries<Double> retVal = new CalendarDateSeries<Double>(myResolution).name(mySymbol);
 
-        for (final DatePrice tmpDatePrice : this.getHistoricalPrices(reader)) {
+        for (final DatePrice tmpDatePrice : this.getHistoricalPrices(reader))
+        {
             retVal.put(tmpDatePrice.getKey(), tmpDatePrice.getValue());
         }
 
         return retVal;
     }
 
-    public CalendarDateUnit getResolution() {
+    public CalendarDateUnit getResolution()
+    {
         return myResolution;
     }
 
-    public String getSymbol() {
+    public String getSymbol()
+    {
         return mySymbol;
     }
 
-    public TypeCache<? extends List<DP>> getSymbolCache(final long purgeIntervalMeassure, final CalendarDateUnit purgeIntervalUnit) {
-        return new TypeCache<List<DP>>(purgeIntervalMeassure, purgeIntervalUnit) {
+    public TypeCache<? extends List<DP>> getSymbolCache(final long purgeIntervalMeassure, final CalendarDateUnit purgeIntervalUnit)
+    {
+        return new TypeCache<List<DP>>(purgeIntervalMeassure, purgeIntervalUnit)
+        {
 
             @Override
-            protected List<DP> recreateCache() {
+            protected List<DP> recreateCache()
+            {
                 return DataSource.this.getHistoricalPrices();
             }
         };
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = 1;
         result = (prime * result) + ((myResolution == null) ? 0 : myResolution.hashCode());
@@ -164,17 +192,20 @@ public abstract class DataSource<DP extends DatePrice> {
         return result;
     }
 
-    protected String addQueryParameter(final String key, final String value) {
+    protected String addQueryParameter(final String key, final String value)
+    {
         return myResourceLocator.addQueryParameter(key, value);
     }
 
     protected abstract DP parse(String line);
 
-    protected void setHost(final String host) {
+    protected void setHost(final String host)
+    {
         myResourceLocator.setHost(host);
     }
 
-    protected void setPath(final String path) {
+    protected void setPath(final String path)
+    {
         myResourceLocator.setPath(path);
     }
 

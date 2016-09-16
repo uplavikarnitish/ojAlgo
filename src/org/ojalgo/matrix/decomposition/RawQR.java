@@ -39,15 +39,16 @@ import org.ojalgo.matrix.task.TaskException;
 import org.ojalgo.type.context.NumberContext;
 
 /**
- * <P>
+ * <p>
  * For an m-by-n matrix A with m &gt;= n, the QR decomposition is an m-by-n orthogonal matrix Q and an n-by-n
  * upper triangular matrix R so that A = Q*R.
- * <P>
+ * <p>
  * The QR decompostion always exists, even if the matrix does not have full rank, so the constructor will
  * never fail. The primary use of the QR decomposition is in the least squares solution of nonsquare systems
  * of simultaneous linear equations. This will fail if isFullRank() returns false.
  */
-final class RawQR extends RawDecomposition implements QR<Double> {
+final class RawQR extends RawDecomposition implements QR<Double>
+{
 
     /**
      * Array for internal storage of diagonal of R.
@@ -62,11 +63,13 @@ final class RawQR extends RawDecomposition implements QR<Double> {
      * Not recommended to use this constructor directly. Consider using the static factory method
      * {@linkplain org.ojalgo.matrix.decomposition.QR#make(Access2D)} instead.
      */
-    RawQR() {
+    RawQR()
+    {
         super();
     }
 
-    public Double calculateDeterminant(final Access2D<?> matrix) {
+    public Double calculateDeterminant(final Access2D<?> matrix)
+    {
 
         final double[][] retVal = this.reset(matrix, true);
 
@@ -83,7 +86,8 @@ final class RawQR extends RawDecomposition implements QR<Double> {
      *
      * @param matrix Rectangular matrix
      */
-    public boolean decompose(final ElementsSupplier<Double> matrix) {
+    public boolean decompose(final ElementsSupplier<Double> matrix)
+    {
 
         final double[][] retVal = this.reset(matrix, true);
 
@@ -92,11 +96,13 @@ final class RawQR extends RawDecomposition implements QR<Double> {
         return this.doDecompose(retVal);
     }
 
-    public boolean equals(final MatrixStore<Double> aStore, final NumberContext context) {
+    public boolean equals(final MatrixStore<Double> aStore, final NumberContext context)
+    {
         return MatrixUtils.equals(aStore, this, context);
     }
 
-    public Double getDeterminant() {
+    public Double getDeterminant()
+    {
 
         final AggregatorFunction<Double> tmpAggrFunc = PrimitiveAggregator.getSet().product();
 
@@ -105,12 +111,14 @@ final class RawQR extends RawDecomposition implements QR<Double> {
         return tmpAggrFunc.getNumber();
     }
 
-    public MatrixStore<Double> getInverse() {
+    public MatrixStore<Double> getInverse()
+    {
         final int tmpRowDim = this.getRowDim();
         return this.doGetInverse(this.allocate(tmpRowDim, tmpRowDim));
     }
 
-    public MatrixStore<Double> getInverse(final DecompositionStore<Double> preallocated) {
+    public MatrixStore<Double> getInverse(final DecompositionStore<Double> preallocated)
+    {
         return this.doGetInverse((PrimitiveDenseStore) preallocated);
     }
 
@@ -119,7 +127,8 @@ final class RawQR extends RawDecomposition implements QR<Double> {
      *
      * @return Q
      */
-    public RawStore getQ() {
+    public RawStore getQ()
+    {
 
         final int m = this.getRowDim();
         final int n = this.getColDim();
@@ -129,19 +138,25 @@ final class RawQR extends RawDecomposition implements QR<Double> {
         final RawStore retVal = new RawStore(m, n);
         final double[][] retData = retVal.data;
 
-        for (int k = n - 1; k >= 0; k--) {
-            for (int i = 0; i < m; i++) {
+        for (int k = n - 1; k >= 0; k--)
+        {
+            for (int i = 0; i < m; i++)
+            {
                 retData[i][k] = ZERO;
             }
             retData[k][k] = ONE;
-            for (int j = k; j < n; j++) {
-                if (tmpData[k][k] != 0) {
+            for (int j = k; j < n; j++)
+            {
+                if (tmpData[k][k] != 0)
+                {
                     double s = ZERO;
-                    for (int i = k; i < m; i++) {
+                    for (int i = k; i < m; i++)
+                    {
                         s += tmpData[k][i] * retData[i][j];
                     }
                     s = -s / tmpData[k][k];
-                    for (int i = k; i < m; i++) {
+                    for (int i = k; i < m; i++)
+                    {
                         retData[i][j] += s * tmpData[k][i];
                     }
                 }
@@ -155,7 +170,8 @@ final class RawQR extends RawDecomposition implements QR<Double> {
      *
      * @return R
      */
-    public MatrixStore<Double> getR() {
+    public MatrixStore<Double> getR()
+    {
 
         final int tmpColDim = this.getColDim();
 
@@ -165,10 +181,12 @@ final class RawQR extends RawDecomposition implements QR<Double> {
         final double[][] retData = retVal.data;
 
         double[] tmpRow;
-        for (int i = 0; i < tmpColDim; i++) {
+        for (int i = 0; i < tmpColDim; i++)
+        {
             tmpRow = retData[i];
             tmpRow[i] = myDiagonalR[i];
-            for (int j = i + 1; j < tmpColDim; j++) {
+            for (int j = i + 1; j < tmpColDim; j++)
+            {
                 tmpRow[j] = tmpData[j][i];
             }
         }
@@ -176,7 +194,8 @@ final class RawQR extends RawDecomposition implements QR<Double> {
         return retVal;
     }
 
-    public int getRank() {
+    public int getRank()
+    {
 
         int retVal = 0;
 
@@ -187,8 +206,10 @@ final class RawQR extends RawDecomposition implements QR<Double> {
         tmpR.visitDiagonal(0L, 0L, tmpLargest);
         final double tmpLargestValue = tmpLargest.doubleValue();
 
-        for (int ij = 0; ij < tmpMinDim; ij++) {
-            if (!tmpR.isSmall(ij, ij, tmpLargestValue)) {
+        for (int ij = 0; ij < tmpMinDim; ij++)
+        {
+            if (!tmpR.isSmall(ij, ij, tmpLargestValue))
+            {
                 retVal++;
             }
         }
@@ -197,7 +218,8 @@ final class RawQR extends RawDecomposition implements QR<Double> {
     }
 
     @Override
-    public MatrixStore<Double> invert(final Access2D<?> original, final DecompositionStore<Double> preallocated) throws TaskException {
+    public MatrixStore<Double> invert(final Access2D<?> original, final DecompositionStore<Double> preallocated) throws TaskException
+    {
 
         final double[][] tmpData = this.reset(MatrixStore.PRIMITIVE.makeWrapper(original), true);
 
@@ -205,9 +227,11 @@ final class RawQR extends RawDecomposition implements QR<Double> {
 
         this.doDecompose(tmpData);
 
-        if (this.isSolvable()) {
+        if (this.isSolvable())
+        {
             return this.getInverse(preallocated);
-        } else {
+        } else
+        {
             throw TaskException.newNotInvertible();
         }
     }
@@ -217,48 +241,59 @@ final class RawQR extends RawDecomposition implements QR<Double> {
      *
      * @return true if R, and hence A, has full rank.
      */
-    public boolean isFullColumnRank() {
+    public boolean isFullColumnRank()
+    {
 
         final int n = this.getColDim();
 
-        for (int j = 0; j < n; j++) {
-            if (myDiagonalR[j] == 0) {
+        for (int j = 0; j < n; j++)
+        {
+            if (myDiagonalR[j] == 0)
+            {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean isFullSize() {
+    public boolean isFullSize()
+    {
         return myFullSize;
     }
 
-    public boolean isSolvable() {
+    public boolean isSolvable()
+    {
         return this.isFullColumnRank();
     }
 
-    public DecompositionStore<Double> preallocate(final Structure2D template) {
+    public DecompositionStore<Double> preallocate(final Structure2D template)
+    {
         return this.allocate(template.countRows(), template.countRows());
     }
 
-    public DecompositionStore<Double> preallocate(final Structure2D templateBody, final Structure2D templateRHS) {
+    public DecompositionStore<Double> preallocate(final Structure2D templateBody, final Structure2D templateRHS)
+    {
         return this.allocate(templateBody.countRows(), templateRHS.countColumns());
     }
 
-    public MatrixStore<Double> reconstruct() {
+    public MatrixStore<Double> reconstruct()
+    {
         return MatrixUtils.reconstruct(this);
     }
 
-    public void setFullSize(final boolean fullSize) {
+    public void setFullSize(final boolean fullSize)
+    {
         myFullSize = fullSize;
     }
 
-    public MatrixStore<Double> solve(final Access2D<?> body, final Access2D<?> rhs) throws TaskException {
+    public MatrixStore<Double> solve(final Access2D<?> body, final Access2D<?> rhs) throws TaskException
+    {
         return this.solve(body, rhs, this.preallocate(body, rhs));
     }
 
     @Override
-    public MatrixStore<Double> solve(final Access2D<?> body, final Access2D<?> rhs, final DecompositionStore<Double> preallocated) throws TaskException {
+    public MatrixStore<Double> solve(final Access2D<?> body, final Access2D<?> rhs, final DecompositionStore<Double> preallocated) throws TaskException
+    {
 
         final double[][] tmpData = this.reset(body, true);
 
@@ -266,32 +301,37 @@ final class RawQR extends RawDecomposition implements QR<Double> {
 
         this.doDecompose(tmpData);
 
-        if (this.isSolvable()) {
+        if (this.isSolvable())
+        {
 
             preallocated.fillMatching(rhs);
 
             return this.doSolve((PrimitiveDenseStore) preallocated);
 
-        } else {
+        } else
+        {
 
             throw TaskException.newNotSolvable();
         }
     }
 
-    public MatrixStore<Double> solve(final ElementsSupplier<Double> rhs) {
+    public MatrixStore<Double> solve(final ElementsSupplier<Double> rhs)
+    {
         final DecompositionStore<Double> tmpPreallocated = this.allocate(rhs.countRows(), rhs.countColumns());
         return this.solve(rhs, tmpPreallocated);
     }
 
     @Override
-    public MatrixStore<Double> solve(final ElementsSupplier<Double> rhs, final DecompositionStore<Double> preallocated) {
+    public MatrixStore<Double> solve(final ElementsSupplier<Double> rhs, final DecompositionStore<Double> preallocated)
+    {
 
         rhs.supplyTo(preallocated);
 
         return this.doSolve((PrimitiveDenseStore) preallocated);
     }
 
-    private boolean doDecompose(final double[][] data) {
+    private boolean doDecompose(final double[][] data)
+    {
 
         final int m = this.getRowDim();
         final int n = this.getColDim();
@@ -302,30 +342,36 @@ final class RawQR extends RawDecomposition implements QR<Double> {
         double nrm;
 
         // Main loop.
-        for (int k = 0; k < n; k++) {
+        for (int k = 0; k < n; k++)
+        {
 
             tmpColK = data[k];
 
             // Compute 2-norm of k-th column without under/overflow.
             nrm = ZERO;
-            for (int i = k; i < m; i++) {
+            for (int i = k; i < m; i++)
+            {
                 final double a = nrm;
                 nrm = PrimitiveFunction.HYPOT.invoke(a, tmpColK[i]);
             }
 
-            if (nrm != ZERO) {
+            if (nrm != ZERO)
+            {
 
                 // Form k-th Householder vector.
-                if (tmpColK[k] < 0) {
+                if (tmpColK[k] < 0)
+                {
                     nrm = -nrm;
                 }
-                for (int i = k; i < m; i++) {
+                for (int i = k; i < m; i++)
+                {
                     tmpColK[i] /= nrm;
                 }
                 tmpColK[k] += ONE;
 
                 // Apply transformation to remaining columns.
-                for (int j = k + 1; j < n; j++) {
+                for (int j = k + 1; j < n; j++)
+                {
                     SubtractScaledVector.invoke(data[j], 0, tmpColK, 0, DotProduct.invoke(tmpColK, 0, data[j], 0, k, m) / tmpColK[k], k, m);
                 }
             }
@@ -340,14 +386,16 @@ final class RawQR extends RawDecomposition implements QR<Double> {
      *
      * @see org.ojalgo.matrix.decomposition.MatrixDecomposition#doGetInverse(org.ojalgo.matrix.decomposition.DecompositionStore)
      */
-    private MatrixStore<Double> doGetInverse(final PrimitiveDenseStore preallocated) {
+    private MatrixStore<Double> doGetInverse(final PrimitiveDenseStore preallocated)
+    {
 
         MatrixStore.PRIMITIVE.makeIdentity(this.getRowDim()).supplyTo(preallocated);
 
         return this.doSolve(preallocated);
     }
 
-    private MatrixStore<Double> doSolve(final PrimitiveDenseStore preallocated) {
+    private MatrixStore<Double> doSolve(final PrimitiveDenseStore preallocated)
+    {
 
         final double[] tmpRHSdata = preallocated.data;
 
@@ -355,10 +403,12 @@ final class RawQR extends RawDecomposition implements QR<Double> {
         final int n = this.getColDim();
         final int s = (int) preallocated.countColumns();
 
-        if ((int) preallocated.countRows() != m) {
+        if ((int) preallocated.countRows() != m)
+        {
             throw new IllegalArgumentException("RawStore row dimensions must agree.");
         }
-        if (!this.isFullColumnRank()) {
+        if (!this.isFullColumnRank())
+        {
             throw new RuntimeException("RawStore is rank deficient.");
         }
 
@@ -367,23 +417,27 @@ final class RawQR extends RawDecomposition implements QR<Double> {
         double[] tmpColK;
 
         // Compute Y = transpose(Q)*B
-        for (int k = 0; k < n; k++) {
+        for (int k = 0; k < n; k++)
+        {
 
             tmpColK = tmpData[k];
 
-            for (int j = 0; j < s; j++) {
+            for (int j = 0; j < s; j++)
+            {
                 final double tmpVal = DotProduct.invoke(tmpColK, 0, tmpRHSdata, m * j, k, m);
                 SubtractScaledVector.invoke(tmpRHSdata, m * j, tmpColK, 0, tmpVal / tmpColK[k], k, m);
             }
         }
 
         // Solve R*X = Y;
-        for (int k = n - 1; k >= 0; k--) {
+        for (int k = n - 1; k >= 0; k--)
+        {
 
             tmpColK = tmpData[k];
             final double tmpDiagK = myDiagonalR[k];
 
-            for (int j = 0; j < s; j++) {
+            for (int j = 0; j < s; j++)
+            {
                 tmpRHSdata[k + (j * m)] /= tmpDiagK;
                 SubtractScaledVector.invoke(tmpRHSdata, j * m, tmpColK, 0, tmpRHSdata[k + (j * m)], 0, k);
             }

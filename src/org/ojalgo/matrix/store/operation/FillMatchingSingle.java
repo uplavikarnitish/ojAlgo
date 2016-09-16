@@ -27,17 +27,21 @@ import org.ojalgo.access.Access1D;
 import org.ojalgo.scalar.ComplexNumber;
 import org.ojalgo.type.TypeUtils;
 
-public final class FillMatchingSingle extends MatrixOperation {
+public final class FillMatchingSingle extends MatrixOperation
+{
 
     public static final FillMatchingSingle SETUP = new FillMatchingSingle();
 
     public static int THRESHOLD = 64;
 
     public static void invoke(final BigDecimal[] data, final int structure, final int firstColumn, final int limitColumn,
-            final Access1D<? extends Number> source) {
+                              final Access1D<? extends Number> source)
+    {
         int tmpIndex = structure * firstColumn;
-        for (int j = firstColumn; j < limitColumn; j++) {
-            for (int i = 0; i < structure; i++) {
+        for (int j = firstColumn; j < limitColumn; j++)
+        {
+            for (int i = 0; i < structure; i++)
+            {
                 data[tmpIndex] = TypeUtils.toBigDecimal(source.get(tmpIndex));
                 tmpIndex++;
             }
@@ -45,32 +49,40 @@ public final class FillMatchingSingle extends MatrixOperation {
     }
 
     public static void invoke(final ComplexNumber[] data, final int structure, final int firstColumn, final int limitColumn,
-            final Access1D<? extends Number> source) {
+                              final Access1D<? extends Number> source)
+    {
         int tmpIndex = structure * firstColumn;
-        for (int j = firstColumn; j < limitColumn; j++) {
-            for (int i = 0; i < structure; i++) {
+        for (int j = firstColumn; j < limitColumn; j++)
+        {
+            for (int i = 0; i < structure; i++)
+            {
                 data[tmpIndex] = ComplexNumber.valueOf(source.get(tmpIndex));
                 tmpIndex++;
             }
         }
     }
 
-    public static void invoke(final double[] data, final int structure, final int firstColumn, final int limitColumn, final Access1D<? extends Number> source) {
+    public static void invoke(final double[] data, final int structure, final int firstColumn, final int limitColumn, final Access1D<? extends Number> source)
+    {
         int tmpIndex = structure * firstColumn;
-        for (int j = firstColumn; j < limitColumn; j++) {
-            for (int i = 0; i < structure; i++) {
+        for (int j = firstColumn; j < limitColumn; j++)
+        {
+            for (int i = 0; i < structure; i++)
+            {
                 data[tmpIndex] = source.doubleValue(tmpIndex);
                 tmpIndex++;
             }
         }
     }
 
-    private FillMatchingSingle() {
+    private FillMatchingSingle()
+    {
         super();
     }
 
     @Override
-    public int threshold() {
+    public int threshold()
+    {
         return THRESHOLD;
     }
 

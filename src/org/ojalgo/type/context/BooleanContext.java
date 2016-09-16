@@ -31,36 +31,43 @@ import org.ojalgo.type.format.BooleanFormat;
  *
  * @author apete
  */
-public final class BooleanContext extends FormatContext<Boolean> {
+public final class BooleanContext extends FormatContext<Boolean>
+{
 
     private static final Format DEFAULT_FORMAT = new BooleanFormat();
 
-    public BooleanContext() {
+    public BooleanContext()
+    {
         super(DEFAULT_FORMAT);
     }
 
-    private BooleanContext(final Format format) {
+    private BooleanContext(final Format format)
+    {
         super(format);
         ProgrammingError.throwForIllegalInvocation();
     }
 
     @Override
-    public Boolean enforce(final Boolean object) {
+    public Boolean enforce(final Boolean object)
+    {
         return object;
     }
 
     @Override
-    protected void configureFormat(final Format format, final Object object) {
+    protected void configureFormat(final Format format, final Object object)
+    {
 
     }
 
     @Override
-    protected String handleFormatException(final Format format, final Object object) {
+    protected String handleFormatException(final Format format, final Object object)
+    {
         return "";
     }
 
     @Override
-    protected Boolean handleParseException(final Format format, final String string) {
+    protected Boolean handleParseException(final Format format, final String string)
+    {
         return false;
     }
 }

@@ -39,21 +39,26 @@ import org.ojalgo.scalar.ComplexNumber;
  *
  * @author apete
  */
-public interface Schur<N extends Number> extends MatrixDecomposition<N> {
+public interface Schur<N extends Number> extends MatrixDecomposition<N>
+{
 
     @SuppressWarnings("unchecked")
-    public static <N extends Number> Schur<N> make(final Access2D<N> typical) {
+    public static <N extends Number> Schur<N> make(final Access2D<N> typical)
+    {
 
         final N tmpNumber = typical.get(0, 0);
 
-        if (tmpNumber instanceof Double) {
+        if (tmpNumber instanceof Double)
+        {
             return (Schur<N>) new SchurDecomposition.Primitive();
-        } else {
+        } else
+        {
             throw new IllegalArgumentException();
         }
     }
 
-    public static Schur<Double> makePrimitive() {
+    public static Schur<Double> makePrimitive()
+    {
         return new SchurDecomposition.Primitive();
     }
 
@@ -65,7 +70,8 @@ public interface Schur<N extends Number> extends MatrixDecomposition<N> {
 
     boolean isOrdered();
 
-    default MatrixStore<N> reconstruct() {
+    default MatrixStore<N> reconstruct()
+    {
         return MatrixUtils.reconstruct(this);
     }
 

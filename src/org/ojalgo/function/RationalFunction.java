@@ -30,49 +30,62 @@ import org.ojalgo.scalar.RationalNumber;
  *
  * @author apete
  */
-public final class RationalFunction extends FunctionSet<RationalNumber> {
+public final class RationalFunction extends FunctionSet<RationalNumber>
+{
 
     @FunctionalInterface
-    public static interface Binary extends BinaryFunction<RationalNumber> {
+    public static interface Binary extends BinaryFunction<RationalNumber>
+    {
 
-        default double invoke(final double arg1, final double arg2) {
+        default double invoke(final double arg1, final double arg2)
+        {
             return this.invoke(RationalNumber.valueOf(arg1), RationalNumber.valueOf(arg2)).doubleValue();
         }
 
     }
 
     @FunctionalInterface
-    public static interface Parameter extends ParameterFunction<RationalNumber> {
+    public static interface Parameter extends ParameterFunction<RationalNumber>
+    {
 
-        default double invoke(final double arg, final int param) {
+        default double invoke(final double arg, final int param)
+        {
             return this.invoke(RationalNumber.valueOf(arg), param).doubleValue();
         }
 
     }
 
     @FunctionalInterface
-    public static interface Unary extends UnaryFunction<RationalNumber> {
+    public static interface Unary extends UnaryFunction<RationalNumber>
+    {
 
-        default double invoke(final double arg) {
+        default double invoke(final double arg)
+        {
             return this.invoke(RationalNumber.valueOf(arg)).doubleValue();
         }
 
     }
 
-    public static final Unary ABS = new Unary() {
+    public static final Unary ABS = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
-            if (arg.compareTo(RationalNumber.ZERO) == -1) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
+            if (arg.compareTo(RationalNumber.ZERO) == -1)
+            {
                 return arg.negate();
-            } else {
+            } else
+            {
                 return arg;
             }
         }
     };
 
-    public static final Unary ACOS = new Unary() {
+    public static final Unary ACOS = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             final BigDecimal tmpArg = arg.toBigDecimal();
 
@@ -82,9 +95,11 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Unary ACOSH = new Unary() {
+    public static final Unary ACOSH = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             final RationalNumber tmpNmbr = arg.multiply(arg).subtract(RationalNumber.ONE);
 
@@ -92,17 +107,21 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Binary ADD = new Binary() {
+    public static final Binary ADD = new Binary()
+    {
 
         @Override
-        public final RationalNumber invoke(final RationalNumber arg1, final RationalNumber arg2) {
+        public final RationalNumber invoke(final RationalNumber arg1, final RationalNumber arg2)
+        {
             return arg1.add(arg2);
         }
     };
 
-    public static final Unary ASIN = new Unary() {
+    public static final Unary ASIN = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             final BigDecimal tmpArg = arg.toBigDecimal();
 
@@ -112,9 +131,11 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Unary ASINH = new Unary() {
+    public static final Unary ASINH = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             final RationalNumber tmpNmbr = arg.multiply(arg).add(RationalNumber.ONE);
 
@@ -122,9 +143,11 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Unary ATAN = new Unary() {
+    public static final Unary ATAN = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             final BigDecimal tmpArg = arg.toBigDecimal();
 
@@ -134,10 +157,12 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Binary ATAN2 = new Binary() {
+    public static final Binary ATAN2 = new Binary()
+    {
 
         @Override
-        public final RationalNumber invoke(final RationalNumber arg1, final RationalNumber arg2) {
+        public final RationalNumber invoke(final RationalNumber arg1, final RationalNumber arg2)
+        {
 
             final BigDecimal tmpArg1 = arg1.toBigDecimal();
             final BigDecimal tmpArg2 = arg2.toBigDecimal();
@@ -148,9 +173,11 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Unary ATANH = new Unary() {
+    public static final Unary ATANH = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             final RationalNumber tmpNmbr = arg.add(RationalNumber.ONE).divide(RationalNumber.ONE.subtract(arg));
 
@@ -158,16 +185,20 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Unary CARDINALITY = new Unary() {
+    public static final Unary CARDINALITY = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
             return arg.compareTo(RationalNumber.ZERO) == 0 ? RationalNumber.ZERO : RationalNumber.ONE;
         }
     };
 
-    public static final Unary CBRT = new Unary() {
+    public static final Unary CBRT = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             final BigDecimal tmpArg = arg.toBigDecimal();
 
@@ -178,9 +209,11 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
 
     };
 
-    public static final Unary CEIL = new Unary() {
+    public static final Unary CEIL = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             final BigDecimal tmpArg = arg.toBigDecimal();
 
@@ -190,16 +223,20 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Unary CONJUGATE = new Unary() {
+    public static final Unary CONJUGATE = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
             return arg.conjugate();
         }
     };
 
-    public static final Unary COS = new Unary() {
+    public static final Unary COS = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             final BigDecimal tmpArg = arg.toBigDecimal();
 
@@ -209,24 +246,30 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Unary COSH = new Unary() {
+    public static final Unary COSH = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
             return (EXP.invoke(arg).add(EXP.invoke(arg.negate()))).divide(RationalNumber.TWO);
         }
     };
 
-    public static final Binary DIVIDE = new Binary() {
+    public static final Binary DIVIDE = new Binary()
+    {
 
         @Override
-        public final RationalNumber invoke(final RationalNumber arg1, final RationalNumber arg2) {
+        public final RationalNumber invoke(final RationalNumber arg1, final RationalNumber arg2)
+        {
             return arg1.divide(arg2);
         }
     };
 
-    public static final Unary EXP = new Unary() {
+    public static final Unary EXP = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             final BigDecimal tmpArg = arg.toBigDecimal();
 
@@ -236,9 +279,11 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Unary EXPM1 = new Unary() {
+    public static final Unary EXPM1 = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             final BigDecimal tmpArg = arg.toBigDecimal();
 
@@ -248,9 +293,11 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Unary FLOOR = new Unary() {
+    public static final Unary FLOOR = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             final BigDecimal tmpArg = arg.toBigDecimal();
 
@@ -260,10 +307,12 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Binary HYPOT = new Binary() {
+    public static final Binary HYPOT = new Binary()
+    {
 
         @Override
-        public final RationalNumber invoke(final RationalNumber arg1, final RationalNumber arg2) {
+        public final RationalNumber invoke(final RationalNumber arg1, final RationalNumber arg2)
+        {
 
             final BigDecimal tmpArg1 = arg1.toBigDecimal();
             final BigDecimal tmpArg2 = arg2.toBigDecimal();
@@ -274,16 +323,20 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Unary INVERT = new Unary() {
+    public static final Unary INVERT = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
             return arg.invert();
         }
     };
 
-    public static final Unary LOG = new Unary() {
+    public static final Unary LOG = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             final BigDecimal tmpArg = arg.toBigDecimal();
 
@@ -293,9 +346,11 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Unary LOG10 = new Unary() {
+    public static final Unary LOG10 = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             final BigDecimal tmpArg = arg.toBigDecimal();
 
@@ -305,9 +360,11 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Unary LOG1P = new Unary() {
+    public static final Unary LOG1P = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             final BigDecimal tmpArg = arg.toBigDecimal();
 
@@ -317,16 +374,20 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Binary MAX = new Binary() {
+    public static final Binary MAX = new Binary()
+    {
 
         @Override
-        public final RationalNumber invoke(final RationalNumber arg1, final RationalNumber arg2) {
+        public final RationalNumber invoke(final RationalNumber arg1, final RationalNumber arg2)
+        {
 
             RationalNumber retVal = null;
 
-            if (arg1.compareTo(arg2) >= 0) {
+            if (arg1.compareTo(arg2) >= 0)
+            {
                 retVal = arg1;
-            } else {
+            } else
+            {
                 retVal = arg2;
             }
 
@@ -334,16 +395,20 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Binary MIN = new Binary() {
+    public static final Binary MIN = new Binary()
+    {
 
         @Override
-        public final RationalNumber invoke(final RationalNumber arg1, final RationalNumber arg2) {
+        public final RationalNumber invoke(final RationalNumber arg1, final RationalNumber arg2)
+        {
 
             RationalNumber retVal = null;
 
-            if (arg1.compareTo(arg2) <= 0) {
+            if (arg1.compareTo(arg2) <= 0)
+            {
                 retVal = arg1;
-            } else {
+            } else
+            {
                 retVal = arg2;
             }
 
@@ -351,33 +416,41 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Binary MULTIPLY = new Binary() {
+    public static final Binary MULTIPLY = new Binary()
+    {
 
         @Override
-        public final RationalNumber invoke(final RationalNumber arg1, final RationalNumber arg2) {
+        public final RationalNumber invoke(final RationalNumber arg1, final RationalNumber arg2)
+        {
             return arg1.multiply(arg2);
         }
     };
 
-    public static final Unary NEGATE = new Unary() {
+    public static final Unary NEGATE = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
             return arg.negate();
         }
     };
 
-    public static final Binary POW = new Binary() {
+    public static final Binary POW = new Binary()
+    {
 
         @Override
-        public final RationalNumber invoke(final RationalNumber arg1, final RationalNumber arg2) {
+        public final RationalNumber invoke(final RationalNumber arg1, final RationalNumber arg2)
+        {
             return EXP.invoke(LOG.invoke(arg1).multiply(arg2));
         }
     };
 
-    public static final Parameter POWER = new Parameter() {
+    public static final Parameter POWER = new Parameter()
+    {
 
         @Override
-        public final RationalNumber invoke(final RationalNumber arg, final int param) {
+        public final RationalNumber invoke(final RationalNumber arg, final int param)
+        {
 
             final BigDecimal tmpArg = arg.toBigDecimal();
 
@@ -387,9 +460,11 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Unary RINT = new Unary() {
+    public static final Unary RINT = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             final BigDecimal tmpArg = arg.toBigDecimal();
 
@@ -399,10 +474,12 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Parameter ROOT = new Parameter() {
+    public static final Parameter ROOT = new Parameter()
+    {
 
         @Override
-        public final RationalNumber invoke(final RationalNumber arg, final int param) {
+        public final RationalNumber invoke(final RationalNumber arg, final int param)
+        {
 
             final BigDecimal tmpArg = arg.toBigDecimal();
 
@@ -412,10 +489,12 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Parameter SCALE = new Parameter() {
+    public static final Parameter SCALE = new Parameter()
+    {
 
         @Override
-        public final RationalNumber invoke(final RationalNumber arg, final int param) {
+        public final RationalNumber invoke(final RationalNumber arg, final int param)
+        {
 
             final BigDecimal tmpArg = arg.toBigDecimal();
 
@@ -425,16 +504,20 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Unary SIGNUM = new Unary() {
+    public static final Unary SIGNUM = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
             return arg.signum();
         }
     };
 
-    public static final Unary SIN = new Unary() {
+    public static final Unary SIN = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             final BigDecimal tmpArg = arg.toBigDecimal();
 
@@ -444,16 +527,20 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Unary SINH = new Unary() {
+    public static final Unary SINH = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
             return (EXP.invoke(arg).subtract(EXP.invoke(arg.negate()))).divide(RationalNumber.TWO);
         }
     };
 
-    public static final Unary SQRT = new Unary() {
+    public static final Unary SQRT = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             final BigDecimal tmpArg = arg.toBigDecimal();
 
@@ -463,24 +550,30 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Unary SQRT1PX2 = new Unary() {
+    public static final Unary SQRT1PX2 = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
             return SQRT.invoke(RationalNumber.ONE.add(arg.multiply(arg)));
         }
     };
 
-    public static final Binary SUBTRACT = new Binary() {
+    public static final Binary SUBTRACT = new Binary()
+    {
 
         @Override
-        public final RationalNumber invoke(final RationalNumber arg1, final RationalNumber arg2) {
+        public final RationalNumber invoke(final RationalNumber arg1, final RationalNumber arg2)
+        {
             return arg1.subtract(arg2);
         }
     };
 
-    public static final Unary TAN = new Unary() {
+    public static final Unary TAN = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             final BigDecimal tmpArg = arg.toBigDecimal();
 
@@ -490,9 +583,11 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Unary TANH = new Unary() {
+    public static final Unary TANH = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
 
             RationalNumber retVal;
 
@@ -502,11 +597,14 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
             final RationalNumber tmpDividend = tmpPlus.subtract(tmpMinus);
             final RationalNumber tmpDivisor = tmpPlus.add(tmpMinus);
 
-            if (tmpDividend.equals(tmpDivisor)) {
+            if (tmpDividend.equals(tmpDivisor))
+            {
                 retVal = RationalNumber.ONE;
-            } else if (tmpDividend.equals(tmpDivisor.negate())) {
+            } else if (tmpDividend.equals(tmpDivisor.negate()))
+            {
                 retVal = RationalNumber.ONE.negate();
-            } else {
+            } else
+            {
                 retVal = tmpDividend.divide(tmpDivisor);
             }
 
@@ -514,230 +612,276 @@ public final class RationalFunction extends FunctionSet<RationalNumber> {
         }
     };
 
-    public static final Unary VALUE = new Unary() {
+    public static final Unary VALUE = new Unary()
+    {
 
-        public final RationalNumber invoke(final RationalNumber arg) {
+        public final RationalNumber invoke(final RationalNumber arg)
+        {
             return arg;
         }
     };
 
     private static final RationalFunction SET = new RationalFunction();
 
-    public static RationalFunction getSet() {
+    public static RationalFunction getSet()
+    {
         return SET;
     }
 
-    private RationalFunction() {
+    private RationalFunction()
+    {
         super();
     }
 
     @Override
-    public UnaryFunction<RationalNumber> abs() {
+    public UnaryFunction<RationalNumber> abs()
+    {
         return ABS;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> acos() {
+    public UnaryFunction<RationalNumber> acos()
+    {
         return ACOS;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> acosh() {
+    public UnaryFunction<RationalNumber> acosh()
+    {
         return ACOSH;
     }
 
     @Override
-    public BinaryFunction<RationalNumber> add() {
+    public BinaryFunction<RationalNumber> add()
+    {
         return ADD;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> asin() {
+    public UnaryFunction<RationalNumber> asin()
+    {
         return ASIN;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> asinh() {
+    public UnaryFunction<RationalNumber> asinh()
+    {
         return ASINH;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> atan() {
+    public UnaryFunction<RationalNumber> atan()
+    {
         return ATAN;
     }
 
     @Override
-    public BinaryFunction<RationalNumber> atan2() {
+    public BinaryFunction<RationalNumber> atan2()
+    {
         return ATAN2;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> atanh() {
+    public UnaryFunction<RationalNumber> atanh()
+    {
         return ATANH;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> cardinality() {
+    public UnaryFunction<RationalNumber> cardinality()
+    {
         return CARDINALITY;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> cbrt() {
+    public UnaryFunction<RationalNumber> cbrt()
+    {
         return CBRT;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> ceil() {
+    public UnaryFunction<RationalNumber> ceil()
+    {
         return CEIL;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> conjugate() {
+    public UnaryFunction<RationalNumber> conjugate()
+    {
         return CONJUGATE;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> cos() {
+    public UnaryFunction<RationalNumber> cos()
+    {
         return COS;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> cosh() {
+    public UnaryFunction<RationalNumber> cosh()
+    {
         return COSH;
     }
 
     @Override
-    public BinaryFunction<RationalNumber> divide() {
+    public BinaryFunction<RationalNumber> divide()
+    {
         return DIVIDE;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> exp() {
+    public UnaryFunction<RationalNumber> exp()
+    {
         return EXP;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> expm1() {
+    public UnaryFunction<RationalNumber> expm1()
+    {
         return EXPM1;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> floor() {
+    public UnaryFunction<RationalNumber> floor()
+    {
         return FLOOR;
     }
 
     @Override
-    public BinaryFunction<RationalNumber> hypot() {
+    public BinaryFunction<RationalNumber> hypot()
+    {
         return HYPOT;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> invert() {
+    public UnaryFunction<RationalNumber> invert()
+    {
         return INVERT;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> log() {
+    public UnaryFunction<RationalNumber> log()
+    {
         return LOG;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> log10() {
+    public UnaryFunction<RationalNumber> log10()
+    {
         return LOG10;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> log1p() {
+    public UnaryFunction<RationalNumber> log1p()
+    {
         return LOG1P;
     }
 
     @Override
-    public BinaryFunction<RationalNumber> max() {
+    public BinaryFunction<RationalNumber> max()
+    {
         return MAX;
     }
 
     @Override
-    public BinaryFunction<RationalNumber> min() {
+    public BinaryFunction<RationalNumber> min()
+    {
         return MIN;
     }
 
     @Override
-    public BinaryFunction<RationalNumber> multiply() {
+    public BinaryFunction<RationalNumber> multiply()
+    {
         return MULTIPLY;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> negate() {
+    public UnaryFunction<RationalNumber> negate()
+    {
         return NEGATE;
     }
 
     @Override
-    public BinaryFunction<RationalNumber> pow() {
+    public BinaryFunction<RationalNumber> pow()
+    {
         return POW;
     }
 
     @Override
-    public ParameterFunction<RationalNumber> power() {
+    public ParameterFunction<RationalNumber> power()
+    {
         return POWER;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> rint() {
+    public UnaryFunction<RationalNumber> rint()
+    {
         return RINT;
     }
 
     @Override
-    public ParameterFunction<RationalNumber> root() {
+    public ParameterFunction<RationalNumber> root()
+    {
         return ROOT;
     }
 
     @Override
-    public ParameterFunction<RationalNumber> scale() {
+    public ParameterFunction<RationalNumber> scale()
+    {
         return SCALE;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> signum() {
+    public UnaryFunction<RationalNumber> signum()
+    {
         return SIGNUM;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> sin() {
+    public UnaryFunction<RationalNumber> sin()
+    {
         return SIN;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> sinh() {
+    public UnaryFunction<RationalNumber> sinh()
+    {
         return SINH;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> sqrt() {
+    public UnaryFunction<RationalNumber> sqrt()
+    {
         return SQRT;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> sqrt1px2() {
+    public UnaryFunction<RationalNumber> sqrt1px2()
+    {
         return SQRT1PX2;
     }
 
     @Override
-    public BinaryFunction<RationalNumber> subtract() {
+    public BinaryFunction<RationalNumber> subtract()
+    {
         return SUBTRACT;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> tan() {
+    public UnaryFunction<RationalNumber> tan()
+    {
         return TAN;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> tanh() {
+    public UnaryFunction<RationalNumber> tanh()
+    {
         return TANH;
     }
 
     @Override
-    public UnaryFunction<RationalNumber> value() {
+    public UnaryFunction<RationalNumber> value()
+    {
         return VALUE;
     }
 

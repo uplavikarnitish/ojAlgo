@@ -25,20 +25,24 @@ import org.ojalgo.matrix.store.ElementsSupplier;
 import org.ojalgo.matrix.store.PhysicalStore;
 import org.ojalgo.matrix.store.PrimitiveDenseStore;
 
-public abstract class MatrixSupplier<T> implements ElementsSupplier<Double> {
+public abstract class MatrixSupplier<T> implements ElementsSupplier<Double>
+{
 
     private final T mySource;
 
-    public MatrixSupplier(final T source) {
+    public MatrixSupplier(final T source)
+    {
         super();
         mySource = source;
     }
 
-    public PhysicalStore.Factory<Double, PrimitiveDenseStore> physical() {
+    public PhysicalStore.Factory<Double, PrimitiveDenseStore> physical()
+    {
         return PrimitiveDenseStore.FACTORY;
     }
 
-    protected final T getSource() {
+    protected final T getSource()
+    {
         return mySource;
     }
 

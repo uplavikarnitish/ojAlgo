@@ -24,35 +24,42 @@ package org.ojalgo.matrix.decomposition;
 /**
  * @author apete
  */
-abstract class AbstractDecomposition<N extends Number> implements MatrixDecomposition<N> {
+abstract class AbstractDecomposition<N extends Number> implements MatrixDecomposition<N>
+{
 
     private boolean myAspectRatioNormal = true;
     private boolean myComputed = false;
 
-    AbstractDecomposition() {
+    AbstractDecomposition()
+    {
         super();
     }
 
-    public final boolean isComputed() {
+    public final boolean isComputed()
+    {
         return myComputed;
     }
 
-    public void reset() {
+    public void reset()
+    {
         myAspectRatioNormal = true;
         myComputed = false;
     }
 
     protected abstract DecompositionStore<N> allocate(long numberOfRows, long numberOfColumns);
 
-    protected final boolean aspectRatioNormal(final boolean aspectRatioNormal) {
+    protected final boolean aspectRatioNormal(final boolean aspectRatioNormal)
+    {
         return (myAspectRatioNormal = aspectRatioNormal);
     }
 
-    protected final boolean computed(final boolean computed) {
+    protected final boolean computed(final boolean computed)
+    {
         return (myComputed = computed);
     }
 
-    protected final boolean isAspectRatioNormal() {
+    protected final boolean isAspectRatioNormal()
+    {
         return myAspectRatioNormal;
     }
 }

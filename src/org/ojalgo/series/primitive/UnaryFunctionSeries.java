@@ -23,12 +23,14 @@ package org.ojalgo.series.primitive;
 
 import org.ojalgo.function.UnaryFunction;
 
-final class UnaryFunctionSeries extends PrimitiveSeries {
+final class UnaryFunctionSeries extends PrimitiveSeries
+{
 
     private final PrimitiveSeries mySeries;
     private final UnaryFunction<Double> myFunction;
 
-    public UnaryFunctionSeries(final PrimitiveSeries aSeries, final UnaryFunction<Double> aFunction) {
+    public UnaryFunctionSeries(final PrimitiveSeries aSeries, final UnaryFunction<Double> aFunction)
+    {
 
         super();
 
@@ -37,12 +39,14 @@ final class UnaryFunctionSeries extends PrimitiveSeries {
     }
 
     @Override
-    public final int size() {
+    public final int size()
+    {
         return mySeries.size();
     }
 
     @Override
-    public final double value(final int index) {
+    public final double value(final int index)
+    {
         return myFunction.invoke(mySeries.value(index));
     }
 

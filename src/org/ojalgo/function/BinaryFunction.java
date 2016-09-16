@@ -24,26 +24,30 @@ package org.ojalgo.function;
 import java.util.function.BinaryOperator;
 import java.util.function.DoubleBinaryOperator;
 
-public interface BinaryFunction<N extends Number> extends BasicFunction<N>, BinaryOperator<N>, DoubleBinaryOperator {
+public interface BinaryFunction<N extends Number> extends BasicFunction<N>, BinaryOperator<N>, DoubleBinaryOperator
+{
 
     /**
      * A {@linkplain BinaryFunction} with a set/fixed first argument.
      *
      * @author apete
      */
-    public static final class FixedFirst<N extends Number> implements UnaryFunction<N> {
+    public static final class FixedFirst<N extends Number> implements UnaryFunction<N>
+    {
 
         private final BinaryFunction<N> myFunction;
         private final N myNumber;
         private final double myValue;
 
         @SuppressWarnings("unused")
-        private FixedFirst() {
+        private FixedFirst()
+        {
             this(null, null);
         }
 
         @SuppressWarnings("unchecked")
-        FixedFirst(final double arg1, final BinaryFunction<N> function) {
+        FixedFirst(final double arg1, final BinaryFunction<N> function)
+        {
 
             super();
 
@@ -53,7 +57,8 @@ public interface BinaryFunction<N extends Number> extends BasicFunction<N>, Bina
             myValue = arg1;
         }
 
-        FixedFirst(final N arg1, final BinaryFunction<N> function) {
+        FixedFirst(final N arg1, final BinaryFunction<N> function)
+        {
 
             super();
 
@@ -63,23 +68,28 @@ public interface BinaryFunction<N extends Number> extends BasicFunction<N>, Bina
             myValue = arg1.doubleValue();
         }
 
-        public final double doubleValue() {
+        public final double doubleValue()
+        {
             return myValue;
         }
 
-        public final BinaryFunction<N> getFunction() {
+        public final BinaryFunction<N> getFunction()
+        {
             return myFunction;
         }
 
-        public final N getNumber() {
+        public final N getNumber()
+        {
             return myNumber;
         }
 
-        public final double invoke(final double arg2) {
+        public final double invoke(final double arg2)
+        {
             return myFunction.invoke(myValue, arg2);
         }
 
-        public final N invoke(final N arg2) {
+        public final N invoke(final N arg2)
+        {
             return myFunction.invoke(myNumber, arg2);
         }
 
@@ -90,19 +100,22 @@ public interface BinaryFunction<N extends Number> extends BasicFunction<N>, Bina
      *
      * @author apete
      */
-    public static final class FixedSecond<N extends Number> implements UnaryFunction<N> {
+    public static final class FixedSecond<N extends Number> implements UnaryFunction<N>
+    {
 
         private final BinaryFunction<N> myFunction;
         private final N myNumber;
         private final double myValue;
 
         @SuppressWarnings("unused")
-        private FixedSecond() {
+        private FixedSecond()
+        {
             this(null, null);
         }
 
         @SuppressWarnings("unchecked")
-        FixedSecond(final BinaryFunction<N> function, final double arg2) {
+        FixedSecond(final BinaryFunction<N> function, final double arg2)
+        {
 
             super();
 
@@ -112,7 +125,8 @@ public interface BinaryFunction<N extends Number> extends BasicFunction<N>, Bina
             myValue = arg2;
         }
 
-        FixedSecond(final BinaryFunction<N> function, final N arg2) {
+        FixedSecond(final BinaryFunction<N> function, final N arg2)
+        {
 
             super();
 
@@ -122,23 +136,28 @@ public interface BinaryFunction<N extends Number> extends BasicFunction<N>, Bina
             myValue = arg2.doubleValue();
         }
 
-        public final double doubleValue() {
+        public final double doubleValue()
+        {
             return myValue;
         }
 
-        public final BinaryFunction<N> getFunction() {
+        public final BinaryFunction<N> getFunction()
+        {
             return myFunction;
         }
 
-        public final N getNumber() {
+        public final N getNumber()
+        {
             return myNumber;
         }
 
-        public final double invoke(final double arg1) {
+        public final double invoke(final double arg1)
+        {
             return myFunction.invoke(arg1, myValue);
         }
 
-        public final N invoke(final N arg1) {
+        public final N invoke(final N arg1)
+        {
             return myFunction.invoke(arg1, myNumber);
         }
 
@@ -151,21 +170,24 @@ public interface BinaryFunction<N extends Number> extends BasicFunction<N>, Bina
     /**
      * @see java.util.function.BiFunction#apply(java.lang.Object, java.lang.Object)
      */
-    default N apply(final N arg1, final N arg2) {
+    default N apply(final N arg1, final N arg2)
+    {
         return this.invoke(arg1, arg2);
     }
 
     /**
      * @see java.util.function.DoubleBinaryOperator#applyAsDouble(double, double)
      */
-    default double applyAsDouble(final double arg1, final double arg2) {
+    default double applyAsDouble(final double arg1, final double arg2)
+    {
         return this.invoke(arg1, arg2);
     }
 
     /**
      * @see #first(Number)
      */
-    default UnaryFunction<N> first(final double arg1) {
+    default UnaryFunction<N> first(final double arg1)
+    {
         return new FixedFirst<N>(arg1, this);
     }
 
@@ -176,14 +198,16 @@ public interface BinaryFunction<N extends Number> extends BasicFunction<N>, Bina
      * @param arg1 The first argument of the binary function.
      * @return The resulting unary function.
      */
-    default UnaryFunction<N> first(final N arg1) {
+    default UnaryFunction<N> first(final N arg1)
+    {
         return new FixedFirst<N>(arg1, this);
     }
 
     /**
      * @see #second(Number)
      */
-    default UnaryFunction<N> second(final double arg2) {
+    default UnaryFunction<N> second(final double arg2)
+    {
         return new FixedSecond<N>(this, arg2);
     }
 
@@ -194,7 +218,8 @@ public interface BinaryFunction<N extends Number> extends BasicFunction<N>, Bina
      * @param arg2 The second argument of the binary function.
      * @return The resulting unary function.
      */
-    default UnaryFunction<N> second(final N arg2) {
+    default UnaryFunction<N> second(final N arg2)
+    {
         return new FixedSecond<N>(this, arg2);
     }
 

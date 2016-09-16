@@ -29,14 +29,16 @@ import org.ojalgo.constant.PrimitiveMath;
 import org.ojalgo.function.BigFunction;
 import org.ojalgo.scalar.ComplexNumber;
 
-public final class SubstituteBackwards extends MatrixOperation {
+public final class SubstituteBackwards extends MatrixOperation
+{
 
     public static final SubstituteBackwards SETUP = new SubstituteBackwards();
 
     public static int THRESHOLD = 64;
 
     public static void invoke(final BigDecimal[] data, final int structure, final int firstColumn, final int columnLimit, final Access2D<BigDecimal> body,
-            final boolean unitDiagonal, final boolean conjugated, final boolean hermitian) {
+                              final boolean unitDiagonal, final boolean conjugated, final boolean hermitian)
+    {
 
         final int tmpDiagDim = (int) Math.min(body.countRows(), body.countColumns());
         final BigDecimal[] tmpBodyRow = new BigDecimal[tmpDiagDim];
@@ -44,23 +46,28 @@ public final class SubstituteBackwards extends MatrixOperation {
         int tmpColBaseIndex;
 
         final int tmpFirstRow = hermitian ? firstColumn : 0;
-        for (int i = tmpDiagDim - 1; i >= tmpFirstRow; i--) {
+        for (int i = tmpDiagDim - 1; i >= tmpFirstRow; i--)
+        {
 
-            for (int j = i; j < tmpDiagDim; j++) {
+            for (int j = i; j < tmpDiagDim; j++)
+            {
                 tmpBodyRow[j] = conjugated ? body.get(j, i) : body.get(i, j);
             }
 
             final int tmpColumnLimit = hermitian ? Math.min(i + 1, columnLimit) : columnLimit;
-            for (int s = firstColumn; s < tmpColumnLimit; s++) {
+            for (int s = firstColumn; s < tmpColumnLimit; s++)
+            {
 
                 tmpColBaseIndex = s * structure;
 
                 tmpVal = BigMath.ZERO;
-                for (int j = i + 1; j < tmpDiagDim; j++) {
+                for (int j = i + 1; j < tmpDiagDim; j++)
+                {
                     tmpVal = tmpVal.add(tmpBodyRow[j].multiply(data[j + tmpColBaseIndex]));
                 }
                 tmpVal = data[i + tmpColBaseIndex].subtract(tmpVal);
-                if (!unitDiagonal) {
+                if (!unitDiagonal)
+                {
                     tmpVal = BigFunction.DIVIDE.invoke(tmpVal, tmpBodyRow[i]);
                 }
 
@@ -70,7 +77,8 @@ public final class SubstituteBackwards extends MatrixOperation {
     }
 
     public static void invoke(final ComplexNumber[] data, final int structure, final int firstColumn, final int columnLimit, final Access2D<ComplexNumber> body,
-            final boolean unitDiagonal, final boolean conjugated, final boolean hermitian) {
+                              final boolean unitDiagonal, final boolean conjugated, final boolean hermitian)
+    {
 
         final int tmpDiagDim = (int) Math.min(body.countRows(), body.countColumns());
         final ComplexNumber[] tmpBodyRow = new ComplexNumber[tmpDiagDim];
@@ -78,23 +86,28 @@ public final class SubstituteBackwards extends MatrixOperation {
         int tmpColBaseIndex;
 
         final int tmpFirstRow = hermitian ? firstColumn : 0;
-        for (int i = tmpDiagDim - 1; i >= tmpFirstRow; i--) {
+        for (int i = tmpDiagDim - 1; i >= tmpFirstRow; i--)
+        {
 
-            for (int j = i; j < tmpDiagDim; j++) {
+            for (int j = i; j < tmpDiagDim; j++)
+            {
                 tmpBodyRow[j] = conjugated ? body.get(j, i).conjugate() : body.get(i, j);
             }
 
             final int tmpColumnLimit = hermitian ? Math.min(i + 1, columnLimit) : columnLimit;
-            for (int s = firstColumn; s < tmpColumnLimit; s++) {
+            for (int s = firstColumn; s < tmpColumnLimit; s++)
+            {
 
                 tmpColBaseIndex = s * structure;
 
                 tmpVal = ComplexNumber.ZERO;
-                for (int j = i + 1; j < tmpDiagDim; j++) {
+                for (int j = i + 1; j < tmpDiagDim; j++)
+                {
                     tmpVal = tmpVal.add(tmpBodyRow[j].multiply(data[j + tmpColBaseIndex]));
                 }
                 tmpVal = data[i + tmpColBaseIndex].subtract(tmpVal);
-                if (!unitDiagonal) {
+                if (!unitDiagonal)
+                {
                     tmpVal = tmpVal.divide(tmpBodyRow[i]);
                 }
 
@@ -104,7 +117,8 @@ public final class SubstituteBackwards extends MatrixOperation {
     }
 
     public static void invoke(final double[] data, final int structure, final int firstColumn, final int columnLimit, final Access2D<Double> body,
-            final boolean unitDiagonal, final boolean conjugated, final boolean hermitian) {
+                              final boolean unitDiagonal, final boolean conjugated, final boolean hermitian)
+    {
 
         final int tmpDiagDim = (int) Math.min(body.countRows(), body.countColumns());
         final double[] tmpBodyRow = new double[tmpDiagDim];
@@ -112,22 +126,27 @@ public final class SubstituteBackwards extends MatrixOperation {
         int tmpColBaseIndex;
 
         final int tmpFirstRow = hermitian ? firstColumn : 0;
-        for (int i = tmpDiagDim - 1; i >= tmpFirstRow; i--) {
+        for (int i = tmpDiagDim - 1; i >= tmpFirstRow; i--)
+        {
 
-            for (int j = i; j < tmpDiagDim; j++) {
+            for (int j = i; j < tmpDiagDim; j++)
+            {
                 tmpBodyRow[j] = conjugated ? body.doubleValue(j, i) : body.doubleValue(i, j);
             }
 
             final int tmpColumnLimit = hermitian ? Math.min(i + 1, columnLimit) : columnLimit;
-            for (int s = firstColumn; s < tmpColumnLimit; s++) {
+            for (int s = firstColumn; s < tmpColumnLimit; s++)
+            {
                 tmpColBaseIndex = s * structure;
 
                 tmpVal = PrimitiveMath.ZERO;
-                for (int j = i + 1; j < tmpDiagDim; j++) {
+                for (int j = i + 1; j < tmpDiagDim; j++)
+                {
                     tmpVal += tmpBodyRow[j] * data[j + tmpColBaseIndex];
                 }
                 tmpVal = data[i + tmpColBaseIndex] - tmpVal;
-                if (!unitDiagonal) {
+                if (!unitDiagonal)
+                {
                     tmpVal /= tmpBodyRow[i];
                 }
 
@@ -136,12 +155,14 @@ public final class SubstituteBackwards extends MatrixOperation {
         }
     }
 
-    private SubstituteBackwards() {
+    private SubstituteBackwards()
+    {
         super();
     }
 
     @Override
-    public int threshold() {
+    public int threshold()
+    {
         return THRESHOLD;
     }
 

@@ -23,11 +23,13 @@ package org.ojalgo.series.primitive;
 
 import org.ojalgo.access.Access1D;
 
-final class AccessSeries extends PrimitiveSeries {
+final class AccessSeries extends PrimitiveSeries
+{
 
     private final Access1D<?> myValues;
 
-    AccessSeries(final Access1D<?> values) {
+    AccessSeries(final Access1D<?> values)
+    {
 
         super();
 
@@ -35,12 +37,14 @@ final class AccessSeries extends PrimitiveSeries {
     }
 
     @Override
-    public final int size() {
+    public final int size()
+    {
         return (int) myValues.count();
     }
 
     @Override
-    public final double value(final int index) {
+    public final double value(final int index)
+    {
         return myValues.doubleValue(index);
     }
 

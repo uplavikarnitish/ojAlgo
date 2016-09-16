@@ -24,7 +24,8 @@ package org.ojalgo.matrix.store;
 import org.ojalgo.access.Access1D;
 import org.ojalgo.access.Consumer2D;
 
-public interface ElementsConsumer<N extends Number> extends Consumer2D.Elements<N> {
+public interface ElementsConsumer<N extends Number> extends Consumer2D.Elements<N>
+{
 
     void fillByMultiplying(final Access1D<N> left, final Access1D<N> right);
 

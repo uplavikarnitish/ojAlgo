@@ -23,21 +23,26 @@ package org.ojalgo.optimisation.convex;
 
 import org.ojalgo.matrix.store.MatrixStore;
 
-final class DirectPureASS extends DirectASS {
+final class DirectPureASS extends DirectASS
+{
 
-    DirectPureASS(final Builder matrices, final Options solverOptions) {
+    DirectPureASS(final Builder matrices, final Options solverOptions)
+    {
         super(matrices, solverOptions);
     }
 
     @Override
-    MatrixStore<Double> getIterationA(final int[] included) {
+    MatrixStore<Double> getIterationA(final int[] included)
+    {
 
         final MatrixStore<Double> tmpAI = this.getAI();
 
         MatrixStore<Double> retVal = null;
-        if (included.length == 0) {
+        if (included.length == 0)
+        {
             retVal = MatrixStore.PRIMITIVE.makeZero(0, this.countVariables()).get();
-        } else {
+        } else
+        {
             retVal = tmpAI.logical().row(included).get();
         }
 
@@ -45,16 +50,19 @@ final class DirectPureASS extends DirectASS {
     }
 
     @Override
-    MatrixStore<Double> getIterationB(final int[] included) {
+    MatrixStore<Double> getIterationB(final int[] included)
+    {
 
         // return MatrixStore.PRIMITIVE.makeZero(included.length, 1).get();
 
         final MatrixStore<Double> tmpBI = this.getBI();
 
         MatrixStore<Double> retVal = null;
-        if (included.length == 0) {
+        if (included.length == 0)
+        {
             retVal = MatrixStore.PRIMITIVE.makeZero(0, 1).get();
-        } else {
+        } else
+        {
             retVal = tmpBI.logical().row(included).get();
         }
 

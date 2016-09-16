@@ -39,9 +39,11 @@ import org.ojalgo.scalar.ComplexNumber;
  *
  * @author apete
  */
-public interface Hessenberg<N extends Number> extends MatrixDecomposition<N> {
+public interface Hessenberg<N extends Number> extends MatrixDecomposition<N>
+{
 
-    interface Factory<N extends Number> extends MatrixDecomposition.Factory<Hessenberg<N>> {
+    interface Factory<N extends Number> extends MatrixDecomposition.Factory<Hessenberg<N>>
+    {
 
     }
 
@@ -52,17 +54,22 @@ public interface Hessenberg<N extends Number> extends MatrixDecomposition<N> {
     public static final Factory<Double> PRIMITIVE = typical -> new HessenbergDecomposition.Primitive();
 
     @SuppressWarnings("unchecked")
-    public static <N extends Number> Hessenberg<N> make(final Access2D<N> typical) {
+    public static <N extends Number> Hessenberg<N> make(final Access2D<N> typical)
+    {
 
         final N tmpNumber = typical.get(0, 0);
 
-        if (tmpNumber instanceof BigDecimal) {
+        if (tmpNumber instanceof BigDecimal)
+        {
             return (Hessenberg<N>) BIG.make(typical);
-        } else if (tmpNumber instanceof ComplexNumber) {
+        } else if (tmpNumber instanceof ComplexNumber)
+        {
             return (Hessenberg<N>) COMPLEX.make(typical);
-        } else if (tmpNumber instanceof Double) {
+        } else if (tmpNumber instanceof Double)
+        {
             return (Hessenberg<N>) PRIMITIVE.make(typical);
-        } else {
+        } else
+        {
             throw new IllegalArgumentException();
         }
     }
@@ -75,7 +82,8 @@ public interface Hessenberg<N extends Number> extends MatrixDecomposition<N> {
 
     boolean isUpper();
 
-    default MatrixStore<N> reconstruct() {
+    default MatrixStore<N> reconstruct()
+    {
         return MatrixUtils.reconstruct(this);
     }
 }

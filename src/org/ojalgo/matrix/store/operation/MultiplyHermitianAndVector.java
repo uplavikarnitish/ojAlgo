@@ -34,25 +34,30 @@ import org.ojalgo.scalar.ComplexNumber;
  *
  * @author apete
  */
-public final class MultiplyHermitianAndVector extends MatrixOperation {
+public final class MultiplyHermitianAndVector extends MatrixOperation
+{
 
     public static final MultiplyHermitianAndVector SETUP = new MultiplyHermitianAndVector();
 
     public static int THRESHOLD = 64;
 
     public static void invoke(final BigDecimal[] productMtrx, final int aFirst, final int aLimit, final BigDecimal[] aSymmetric, final BigDecimal[] aVector,
-            final int aFirstNonZero) {
+                              final int aFirstNonZero)
+    {
 
         final int tmpRowDim = aVector.length;
 
         BigDecimal tmpVal;
-        for (int i = aFirst; i < aLimit; i++) {
+        for (int i = aFirst; i < aLimit; i++)
+        {
             tmpVal = BigMath.ZERO;
-            for (int c = aFirstNonZero; c < i; c++) {
+            for (int c = aFirstNonZero; c < i; c++)
+            {
                 //tmpVal += aSymmetric[i + c * tmpRowDim] * aVector[c];
                 tmpVal = tmpVal.add(aSymmetric[i + (c * tmpRowDim)].multiply(aVector[c]));
             }
-            for (int c = i; c < tmpRowDim; c++) {
+            for (int c = i; c < tmpRowDim; c++)
+            {
                 //tmpVal += aSymmetric[c + i * tmpRowDim] * aVector[c];
                 tmpVal = tmpVal.add(aSymmetric[c + (i * tmpRowDim)].multiply(aVector[c]));
             }
@@ -61,18 +66,22 @@ public final class MultiplyHermitianAndVector extends MatrixOperation {
     }
 
     public static void invoke(final ComplexNumber[] productMtrx, final int aFirst, final int aLimit, final ComplexNumber[] aSymmetric,
-            final ComplexNumber[] aVector, final int aFirstNonZero) {
+                              final ComplexNumber[] aVector, final int aFirstNonZero)
+    {
 
         final int tmpRowDim = aVector.length;
 
         ComplexNumber tmpVal;
-        for (int i = aFirst; i < aLimit; i++) {
+        for (int i = aFirst; i < aLimit; i++)
+        {
             tmpVal = ComplexNumber.ZERO;
-            for (int c = aFirstNonZero; c < i; c++) {
+            for (int c = aFirstNonZero; c < i; c++)
+            {
                 //tmpVal += aSymmetric[i + c * tmpRowDim] * aVector[c];
                 tmpVal = tmpVal.add(aSymmetric[i + (c * tmpRowDim)].multiply(aVector[c]));
             }
-            for (int c = i; c < tmpRowDim; c++) {
+            for (int c = i; c < tmpRowDim; c++)
+            {
                 //tmpVal += aSymmetric[c + i * tmpRowDim] * aVector[c];
                 tmpVal = tmpVal.add(aSymmetric[c + (i * tmpRowDim)].conjugate().multiply(aVector[c]));
             }
@@ -81,29 +90,35 @@ public final class MultiplyHermitianAndVector extends MatrixOperation {
     }
 
     public static void invoke(final double[] productMtrx, final int aFirst, final int aLimit, final double[] aSymmetric, final double[] aVector,
-            final int aFirstNonZero) {
+                              final int aFirstNonZero)
+    {
 
         final int tmpRowDim = aVector.length;
 
         double tmpVal;
-        for (int i = aFirst; i < aLimit; i++) {
+        for (int i = aFirst; i < aLimit; i++)
+        {
             tmpVal = ZERO;
-            for (int c = aFirstNonZero; c < i; c++) {
+            for (int c = aFirstNonZero; c < i; c++)
+            {
                 tmpVal += aSymmetric[i + (c * tmpRowDim)] * aVector[c];
             }
-            for (int c = i; c < tmpRowDim; c++) {
+            for (int c = i; c < tmpRowDim; c++)
+            {
                 tmpVal += aSymmetric[c + (i * tmpRowDim)] * aVector[c];
             }
             productMtrx[i] = tmpVal;
         }
     }
 
-    private MultiplyHermitianAndVector() {
+    private MultiplyHermitianAndVector()
+    {
         super();
     }
 
     @Override
-    public int threshold() {
+    public int threshold()
+    {
         return THRESHOLD;
     }
 

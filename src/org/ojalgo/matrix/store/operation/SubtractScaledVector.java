@@ -29,7 +29,8 @@ import org.ojalgo.scalar.ComplexNumber;
 /**
  * y -= ax
  */
-public final class SubtractScaledVector extends MatrixOperation {
+public final class SubtractScaledVector extends MatrixOperation
+{
 
     public static final SubtractScaledVector SETUP = new SubtractScaledVector();
 
@@ -38,41 +39,49 @@ public final class SubtractScaledVector extends MatrixOperation {
     /**
      * y -= ax
      *
-     * @param data y-data
-     * @param dataIndexBase y-column base index
-     * @param vector x-data
+     * @param data            y-data
+     * @param dataIndexBase   y-column base index
+     * @param vector          x-data
      * @param vectorIndexBase x-column base index
-     * @param scalar a
-     * @param first First index
-     * @param limit Index limit
+     * @param scalar          a
+     * @param first           First index
+     * @param limit           Index limit
      */
     public static void invoke(final BigDecimal[] data, final int dataIndexBase, final BigDecimal[] vector, final int vectorIndexBase, final BigDecimal scalar,
-            final int first, final int limit) {
-        for (int i = first; i < limit; i++) {
+                              final int first, final int limit)
+    {
+        for (int i = first; i < limit; i++)
+        {
             data[dataIndexBase + i] = BigFunction.SUBTRACT.invoke(data[dataIndexBase + i], BigFunction.MULTIPLY.invoke(scalar, vector[vectorIndexBase + i])); // y -= ax
         }
     }
 
     public static void invoke(final ComplexNumber[] data, final int dataIndexBase, final ComplexNumber[] vector, final int vectorIndexBase,
-            final ComplexNumber scalar, final int first, final int limit) {
-        for (int i = first; i < limit; i++) {
+                              final ComplexNumber scalar, final int first, final int limit)
+    {
+        for (int i = first; i < limit; i++)
+        {
             data[dataIndexBase + i] = data[dataIndexBase + i].subtract(scalar.multiply(vector[vectorIndexBase + i])); // y -= ax
         }
     }
 
     public static void invoke(final double[] data, final int dataIndexBase, final double[] vector, final int vectorIndexBase, final double scalar,
-            final int first, final int limit) {
-        for (int i = first; i < limit; i++) {
+                              final int first, final int limit)
+    {
+        for (int i = first; i < limit; i++)
+        {
             data[dataIndexBase + i] -= scalar * vector[vectorIndexBase + i]; // y -= ax
         }
     }
 
-    private SubtractScaledVector() {
+    private SubtractScaledVector()
+    {
         super();
     }
 
     @Override
-    public int threshold() {
+    public int threshold()
+    {
         return THRESHOLD;
     }
 

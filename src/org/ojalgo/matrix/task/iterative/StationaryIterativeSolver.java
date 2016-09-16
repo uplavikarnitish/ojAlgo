@@ -26,24 +26,28 @@ import static org.ojalgo.constant.PrimitiveMath.*;
 /**
  * StationaryIterativeSolver
  *
- * @see <a href="https://en.wikipedia.org/wiki/Iterative_method#Stationary_iterative_methods">Iterative_method
- *      </a>
- * @see <a href="https://mathworld.wolfram.com/StationaryIterativeMethod.html">StationaryIterativeMethod</a>
  * @author apete
+ * @see <a href="https://en.wikipedia.org/wiki/Iterative_method#Stationary_iterative_methods">Iterative_method
+ * </a>
+ * @see <a href="https://mathworld.wolfram.com/StationaryIterativeMethod.html">StationaryIterativeMethod</a>
  */
-abstract class StationaryIterativeSolver extends IterativeSolverTask {
+abstract class StationaryIterativeSolver extends IterativeSolverTask
+{
 
     private double myRelaxationFactor = ONE;
 
-    StationaryIterativeSolver() {
+    StationaryIterativeSolver()
+    {
         super();
     }
 
-    public final double getRelaxationFactor() {
+    public final double getRelaxationFactor()
+    {
         return myRelaxationFactor;
     }
 
-    public final void setRelaxationFactor(final double relaxation) {
+    public final void setRelaxationFactor(final double relaxation)
+    {
         myRelaxationFactor = relaxation;
     }
 

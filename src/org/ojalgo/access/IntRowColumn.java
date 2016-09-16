@@ -21,12 +21,14 @@
  */
 package org.ojalgo.access;
 
-public final class IntRowColumn implements Comparable<IntRowColumn> {
+public final class IntRowColumn implements Comparable<IntRowColumn>
+{
 
     public final int column;
     public final int row;
 
-    public IntRowColumn(final int aRow, final int aCol) {
+    public IntRowColumn(final int aRow, final int aCol)
+    {
 
         super();
 
@@ -35,45 +37,56 @@ public final class IntRowColumn implements Comparable<IntRowColumn> {
     }
 
     @SuppressWarnings("unused")
-    private IntRowColumn() {
+    private IntRowColumn()
+    {
         this(-1, -1);
     }
 
-    public int compareTo(final IntRowColumn ref) {
+    public int compareTo(final IntRowColumn ref)
+    {
 
-        if (column == ref.column) {
+        if (column == ref.column)
+        {
 
             return Integer.compare(row, ref.row);
 
-        } else {
+        } else
+        {
 
             return Integer.compare(column, ref.column);
         }
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return false;
         }
-        if (this.getClass() != obj.getClass()) {
+        if (this.getClass() != obj.getClass())
+        {
             return false;
         }
         final IntRowColumn other = (IntRowColumn) obj;
-        if (column != other.column) {
+        if (column != other.column)
+        {
             return false;
         }
-        if (row != other.row) {
+        if (row != other.row)
+        {
             return false;
         }
         return true;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = 1;
         result = (prime * result) + column;
@@ -82,7 +95,8 @@ public final class IntRowColumn implements Comparable<IntRowColumn> {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "<" + Integer.toString(row) + "," + Integer.toString(column) + ">";
     }
 

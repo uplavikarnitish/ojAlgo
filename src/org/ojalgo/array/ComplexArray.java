@@ -36,48 +36,58 @@ import org.ojalgo.scalar.Scalar;
  *
  * @author apete
  */
-public class ComplexArray extends ReferenceTypeArray<ComplexNumber> {
+public class ComplexArray extends ReferenceTypeArray<ComplexNumber>
+{
 
     static final long ELEMENT_SIZE = MemoryEstimator.estimateObject(ComplexNumber.class);
 
-    static final DenseFactory<ComplexNumber> FACTORY = new DenseFactory<ComplexNumber>() {
+    static final DenseFactory<ComplexNumber> FACTORY = new DenseFactory<ComplexNumber>()
+    {
 
         @Override
-        long getElementSize() {
+        long getElementSize()
+        {
             return ELEMENT_SIZE;
         }
 
         @Override
-        DenseArray<ComplexNumber> make(final int size) {
+        DenseArray<ComplexNumber> make(final int size)
+        {
             return ComplexArray.make(size);
         }
 
         @Override
-        Scalar<ComplexNumber> zero() {
+        Scalar<ComplexNumber> zero()
+        {
             return ComplexNumber.ZERO;
         }
 
     };
 
-    public static final ComplexArray make(final int size) {
+    public static final ComplexArray make(final int size)
+    {
         return new ComplexArray(size);
     }
 
-    public static final SegmentedArray<ComplexNumber> makeSegmented(final long count) {
+    public static final SegmentedArray<ComplexNumber> makeSegmented(final long count)
+    {
         return SegmentedArray.make(FACTORY, count);
     }
 
-    public static final ComplexArray wrap(final ComplexNumber[] data) {
+    public static final ComplexArray wrap(final ComplexNumber[] data)
+    {
         return new ComplexArray(data);
     }
 
-    protected ComplexArray(final ComplexNumber[] data) {
+    protected ComplexArray(final ComplexNumber[] data)
+    {
 
         super(data);
 
     }
 
-    protected ComplexArray(final int size) {
+    protected ComplexArray(final int size)
+    {
 
         super(new ComplexNumber[size]);
 
@@ -85,46 +95,57 @@ public class ComplexArray extends ReferenceTypeArray<ComplexNumber> {
     }
 
     @Override
-    public boolean equals(final Object anObj) {
-        if (anObj instanceof ComplexArray) {
+    public boolean equals(final Object anObj)
+    {
+        if (anObj instanceof ComplexArray)
+        {
             return Arrays.equals(data, ((ComplexArray) anObj).data);
-        } else {
+        } else
+        {
             return super.equals(anObj);
         }
     }
 
-    public final void fillMatching(final Access1D<?> values) {
+    public final void fillMatching(final Access1D<?> values)
+    {
         final int tmpLimit = (int) FunctionUtils.min(this.count(), values.count());
-        for (int i = 0; i < tmpLimit; i++) {
+        for (int i = 0; i < tmpLimit; i++)
+        {
             data[i] = ComplexNumber.valueOf(values.get(i));
         }
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return Arrays.hashCode(data);
     }
 
     @Override
-    protected final void add(final int index, final double addend) {
+    protected final void add(final int index, final double addend)
+    {
         this.fillOne(index, this.get(index).add(this.valueOf(addend)));
     }
 
     @Override
-    protected final void add(final int index, final Number addend) {
+    protected final void add(final int index, final Number addend)
+    {
         this.fillOne(index, this.get(index).add(this.valueOf(addend)));
     }
 
     @Override
-    protected int indexOfLargest(final int first, final int limit, final int step) {
+    protected int indexOfLargest(final int first, final int limit, final int step)
+    {
 
         int retVal = first;
         double tmpLargest = ZERO;
         double tmpValue;
 
-        for (int i = first; i < limit; i += step) {
+        for (int i = first; i < limit; i += step)
+        {
             tmpValue = data[i].norm();
-            if (tmpValue > tmpLargest) {
+            if (tmpValue > tmpLargest)
+            {
                 tmpLargest = tmpValue;
                 retVal = i;
             }
@@ -134,27 +155,32 @@ public class ComplexArray extends ReferenceTypeArray<ComplexNumber> {
     }
 
     @Override
-    protected boolean isAbsolute(final int index) {
+    protected boolean isAbsolute(final int index)
+    {
         return ComplexNumber.isAbsolute(data[index]);
     }
 
     @Override
-    protected boolean isSmall(final int index, final double comparedTo) {
+    protected boolean isSmall(final int index, final double comparedTo)
+    {
         return ComplexNumber.isSmall(comparedTo, data[index]);
     }
 
     @Override
-    DenseArray<ComplexNumber> newInstance(final int capacity) {
+    DenseArray<ComplexNumber> newInstance(final int capacity)
+    {
         return new ComplexArray(capacity);
     }
 
     @Override
-    ComplexNumber valueOf(final double value) {
+    ComplexNumber valueOf(final double value)
+    {
         return ComplexNumber.valueOf(value);
     }
 
     @Override
-    ComplexNumber valueOf(final Number number) {
+    ComplexNumber valueOf(final Number number)
+    {
         return ComplexNumber.valueOf(number);
     }
 

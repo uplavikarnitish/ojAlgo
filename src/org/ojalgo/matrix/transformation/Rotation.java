@@ -30,22 +30,27 @@ import org.ojalgo.function.ComplexFunction;
 import org.ojalgo.function.PrimitiveFunction;
 import org.ojalgo.scalar.ComplexNumber;
 
-public abstract class Rotation<N extends Number> extends Object {
+public abstract class Rotation<N extends Number> extends Object
+{
 
-    public static final class Big extends Rotation<BigDecimal> {
+    public static final class Big extends Rotation<BigDecimal>
+    {
 
         public final BigDecimal cos;
         public final BigDecimal sin;
 
-        public Big(final int index) {
+        public Big(final int index)
+        {
             this(index, index, null, null);
         }
 
-        public Big(final int aLowerIndex, final int aHigherIndex) {
+        public Big(final int aLowerIndex, final int aHigherIndex)
+        {
             this(aLowerIndex, aHigherIndex, null, null);
         }
 
-        public Big(final int aLowerIndex, final int aHigherIndex, final BigDecimal aCosine, final BigDecimal aSine) {
+        public Big(final int aLowerIndex, final int aHigherIndex, final BigDecimal aCosine, final BigDecimal aSine)
+        {
 
             super(aLowerIndex, aHigherIndex);
 
@@ -53,7 +58,8 @@ public abstract class Rotation<N extends Number> extends Object {
             sin = aSine;
         }
 
-        public Big(final Rotation<BigDecimal> aRotation) {
+        public Big(final Rotation<BigDecimal> aRotation)
+        {
 
             super(aRotation.low, aRotation.high);
 
@@ -62,46 +68,55 @@ public abstract class Rotation<N extends Number> extends Object {
         }
 
         @Override
-        public double doubleCosineValue() {
+        public double doubleCosineValue()
+        {
             return cos.doubleValue();
         }
 
         @Override
-        public double doubleSineValue() {
+        public double doubleSineValue()
+        {
             return sin.doubleValue();
         }
 
         @Override
-        public BigDecimal getCosine() {
+        public BigDecimal getCosine()
+        {
             return cos;
         }
 
         @Override
-        public BigDecimal getSine() {
+        public BigDecimal getSine()
+        {
             return sin;
         }
 
         @Override
-        public Big invert() {
+        public Big invert()
+        {
             return new Big(high, low, cos, sin);
         }
 
     }
 
-    public static final class Complex extends Rotation<ComplexNumber> {
+    public static final class Complex extends Rotation<ComplexNumber>
+    {
 
         public final ComplexNumber cos;
         public final ComplexNumber sin;
 
-        public Complex(final int index) {
+        public Complex(final int index)
+        {
             this(index, index, null, null);
         }
 
-        public Complex(final int aLowerIndex, final int aHigherIndex) {
+        public Complex(final int aLowerIndex, final int aHigherIndex)
+        {
             this(aLowerIndex, aHigherIndex, null, null);
         }
 
-        public Complex(final int aLowerIndex, final int aHigherIndex, final ComplexNumber aCosine, final ComplexNumber aSine) {
+        public Complex(final int aLowerIndex, final int aHigherIndex, final ComplexNumber aCosine, final ComplexNumber aSine)
+        {
 
             super(aLowerIndex, aHigherIndex);
 
@@ -109,7 +124,8 @@ public abstract class Rotation<N extends Number> extends Object {
             sin = aSine;
         }
 
-        public Complex(final Rotation<ComplexNumber> aRotation) {
+        public Complex(final Rotation<ComplexNumber> aRotation)
+        {
 
             super(aRotation.low, aRotation.high);
 
@@ -118,46 +134,55 @@ public abstract class Rotation<N extends Number> extends Object {
         }
 
         @Override
-        public double doubleCosineValue() {
+        public double doubleCosineValue()
+        {
             return cos.doubleValue();
         }
 
         @Override
-        public double doubleSineValue() {
+        public double doubleSineValue()
+        {
             return sin.doubleValue();
         }
 
         @Override
-        public ComplexNumber getCosine() {
+        public ComplexNumber getCosine()
+        {
             return cos;
         }
 
         @Override
-        public ComplexNumber getSine() {
+        public ComplexNumber getSine()
+        {
             return sin;
         }
 
         @Override
-        public Complex invert() {
+        public Complex invert()
+        {
             return new Complex(high, low, cos, sin);
         }
 
     }
 
-    public static final class Primitive extends Rotation<Double> {
+    public static final class Primitive extends Rotation<Double>
+    {
 
         public final double cos;
         public final double sin;
 
-        public Primitive(final int index) {
+        public Primitive(final int index)
+        {
             this(index, index, PrimitiveMath.NaN, PrimitiveMath.NaN);
         }
 
-        public Primitive(final int aLowerIndex, final int aHigherIndex) {
+        public Primitive(final int aLowerIndex, final int aHigherIndex)
+        {
             this(aLowerIndex, aHigherIndex, PrimitiveMath.NaN, PrimitiveMath.NaN);
         }
 
-        public Primitive(final int aLowerIndex, final int aHigherIndex, final double aCosine, final double aSine) {
+        public Primitive(final int aLowerIndex, final int aHigherIndex, final double aCosine, final double aSine)
+        {
 
             super(aLowerIndex, aHigherIndex);
 
@@ -165,59 +190,72 @@ public abstract class Rotation<N extends Number> extends Object {
             sin = aSine;
         }
 
-        public Primitive(final Rotation<Double> aRotation) {
+        public Primitive(final Rotation<Double> aRotation)
+        {
 
             super(aRotation.low, aRotation.high);
 
-            if ((aRotation.getCosine() != null) && !Double.isNaN(aRotation.doubleCosineValue())) {
+            if ((aRotation.getCosine() != null) && !Double.isNaN(aRotation.doubleCosineValue()))
+            {
                 cos = aRotation.doubleCosineValue();
-            } else {
+            } else
+            {
                 cos = Double.NaN;
             }
 
-            if ((aRotation.getSine() != null) && !Double.isNaN(aRotation.doubleSineValue())) {
+            if ((aRotation.getSine() != null) && !Double.isNaN(aRotation.doubleSineValue()))
+            {
                 sin = aRotation.doubleSineValue();
-            } else {
+            } else
+            {
                 sin = Double.NaN;
             }
         }
 
         @Override
-        public double doubleCosineValue() {
+        public double doubleCosineValue()
+        {
             return cos;
         }
 
         @Override
-        public double doubleSineValue() {
+        public double doubleSineValue()
+        {
             return sin;
         }
 
         @Override
-        public Double getCosine() {
+        public Double getCosine()
+        {
             return cos;
         }
 
         @Override
-        public Double getSine() {
+        public Double getSine()
+        {
             return sin;
         }
 
         @Override
-        public Primitive invert() {
+        public Primitive invert()
+        {
             return new Primitive(high, low, cos, sin);
         }
 
     }
 
-    public static Big makeBig(final int aLowerIndex, final int aHigherIndex, final BigDecimal anAngle) {
+    public static Big makeBig(final int aLowerIndex, final int aHigherIndex, final BigDecimal anAngle)
+    {
         return new Big(aLowerIndex, aHigherIndex, BigFunction.COS.invoke(anAngle), BigFunction.SIN.invoke(anAngle));
     }
 
-    public static Complex makeComplex(final int aLowerIndex, final int aHigherIndex, final ComplexNumber anAngle) {
+    public static Complex makeComplex(final int aLowerIndex, final int aHigherIndex, final ComplexNumber anAngle)
+    {
         return new Complex(aLowerIndex, aHigherIndex, ComplexFunction.COS.invoke(anAngle), ComplexFunction.SIN.invoke(anAngle));
     }
 
-    public static Primitive makePrimitive(final int aLowerIndex, final int aHigherIndex, final double anAngle) {
+    public static Primitive makePrimitive(final int aLowerIndex, final int aHigherIndex, final double anAngle)
+    {
         return new Primitive(aLowerIndex, aHigherIndex, PrimitiveFunction.COS.invoke(anAngle), PrimitiveFunction.SIN.invoke(anAngle));
     }
 
@@ -225,14 +263,16 @@ public abstract class Rotation<N extends Number> extends Object {
     public final int low;
 
     @SuppressWarnings("unused")
-    private Rotation() {
+    private Rotation()
+    {
 
         this(0, 0);
 
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    protected Rotation(final int aLowerIndex, final int aHigherIndex) {
+    protected Rotation(final int aLowerIndex, final int aHigherIndex)
+    {
 
         super();
 
@@ -251,7 +291,8 @@ public abstract class Rotation<N extends Number> extends Object {
     public abstract Rotation<N> invert();
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "low=" + low + ", high=" + high + ", cos=" + this.getCosine() + ", sin=" + this.getSine();
     }
 

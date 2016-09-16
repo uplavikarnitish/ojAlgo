@@ -26,15 +26,18 @@ import org.ojalgo.OjAlgoUtils;
 /**
  * @author apete
  */
-abstract class MatrixOperation {
+abstract class MatrixOperation
+{
 
-    protected MatrixOperation() {
+    protected MatrixOperation()
+    {
         super();
     }
 
     public abstract int threshold();
 
-    public int workers() {
+    public int workers()
+    {
         return OjAlgoUtils.ENVIRONMENT.threads;
     }
 

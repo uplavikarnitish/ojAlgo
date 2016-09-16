@@ -37,40 +37,47 @@ import org.ojalgo.scalar.Scalar;
  * @author apete
  */
 public final class CompoundFunction<N extends Number> extends AbstractMultiary<N, CompoundFunction<N>>
-        implements MultiaryFunction.Linear<N>, MultiaryFunction.Quadratic<N> {
+        implements MultiaryFunction.Linear<N>, MultiaryFunction.Quadratic<N>
+{
 
-    public static CompoundFunction<BigDecimal> makeBig(final Access2D<? extends Number> quadraticFactors, final Access1D<? extends Number> linearFactors) {
+    public static CompoundFunction<BigDecimal> makeBig(final Access2D<? extends Number> quadraticFactors, final Access1D<? extends Number> linearFactors)
+    {
         final QuadraticFunction<BigDecimal> tmpQuadratic = QuadraticFunction.makeBig(quadraticFactors);
         final LinearFunction<BigDecimal> tmpLinear = LinearFunction.makeBig(linearFactors);
         return new CompoundFunction<>(tmpQuadratic, tmpLinear);
     }
 
-    public static CompoundFunction<BigDecimal> makeBig(final int arity) {
+    public static CompoundFunction<BigDecimal> makeBig(final int arity)
+    {
         final QuadraticFunction<BigDecimal> tmpQuadratic = QuadraticFunction.makeBig(arity);
         final LinearFunction<BigDecimal> tmpLinear = LinearFunction.makeBig(arity);
         return new CompoundFunction<>(tmpQuadratic, tmpLinear);
     }
 
     public static CompoundFunction<ComplexNumber> makeComplex(final Access2D<? extends Number> quadraticFactors,
-            final Access1D<? extends Number> linearFactors) {
+                                                              final Access1D<? extends Number> linearFactors)
+    {
         final QuadraticFunction<ComplexNumber> tmpQuadratic = QuadraticFunction.makeComplex(quadraticFactors);
         final LinearFunction<ComplexNumber> tmpLinear = LinearFunction.makeComplex(linearFactors);
         return new CompoundFunction<>(tmpQuadratic, tmpLinear);
     }
 
-    public static CompoundFunction<ComplexNumber> makeComplex(final int arity) {
+    public static CompoundFunction<ComplexNumber> makeComplex(final int arity)
+    {
         final QuadraticFunction<ComplexNumber> tmpQuadratic = QuadraticFunction.makeComplex(arity);
         final LinearFunction<ComplexNumber> tmpLinear = LinearFunction.makeComplex(arity);
         return new CompoundFunction<>(tmpQuadratic, tmpLinear);
     }
 
-    public static CompoundFunction<Double> makePrimitive(final Access2D<? extends Number> quadraticFactors, final Access1D<? extends Number> linearFactors) {
+    public static CompoundFunction<Double> makePrimitive(final Access2D<? extends Number> quadraticFactors, final Access1D<? extends Number> linearFactors)
+    {
         final QuadraticFunction<Double> tmpQuadratic = QuadraticFunction.makePrimitive(quadraticFactors);
         final LinearFunction<Double> tmpLinear = LinearFunction.makePrimitive(linearFactors);
         return new CompoundFunction<>(tmpQuadratic, tmpLinear);
     }
 
-    public static CompoundFunction<Double> makePrimitive(final int arity) {
+    public static CompoundFunction<Double> makePrimitive(final int arity)
+    {
         final QuadraticFunction<Double> tmpQuadratic = QuadraticFunction.makePrimitive(arity);
         final LinearFunction<Double> tmpLinear = LinearFunction.makePrimitive(arity);
         return new CompoundFunction<>(tmpQuadratic, tmpLinear);
@@ -80,38 +87,45 @@ public final class CompoundFunction<N extends Number> extends AbstractMultiary<N
     private final QuadraticFunction<N> myQuadratic;
 
     @SuppressWarnings("unused")
-    private CompoundFunction() {
+    private CompoundFunction()
+    {
         this((QuadraticFunction<N>) null, (LinearFunction<N>) null);
     }
 
-    CompoundFunction(final QuadraticFunction<N> quadratic, final LinearFunction<N> linear) {
+    CompoundFunction(final QuadraticFunction<N> quadratic, final LinearFunction<N> linear)
+    {
 
         super();
 
         myQuadratic = quadratic;
         myLinear = linear;
 
-        if (myQuadratic.arity() != myLinear.arity()) {
+        if (myQuadratic.arity() != myLinear.arity())
+        {
             throw new IllegalArgumentException("Must have the same dim()!");
         }
     }
 
-    public int arity() {
+    public int arity()
+    {
         return myLinear.arity();
     }
 
     @Override
-    public MatrixStore<N> getGradient(final Access1D<N> point) {
+    public MatrixStore<N> getGradient(final Access1D<N> point)
+    {
         return myQuadratic.getGradient(point).logical().superimpose(0, 0, myLinear.getGradient(point)).get();
     }
 
     @Override
-    public MatrixStore<N> getHessian(final Access1D<N> point) {
+    public MatrixStore<N> getHessian(final Access1D<N> point)
+    {
         return myQuadratic.getHessian(point);
     }
 
     @Override
-    public N invoke(final Access1D<N> arg) {
+    public N invoke(final Access1D<N> arg)
+    {
 
         Scalar<N> retVal = this.getScalarConstant();
 
@@ -122,16 +136,19 @@ public final class CompoundFunction<N extends Number> extends AbstractMultiary<N
         return retVal.getNumber();
     }
 
-    public PhysicalStore<N> linear() {
+    public PhysicalStore<N> linear()
+    {
         return myLinear.linear();
     }
 
-    public PhysicalStore<N> quadratic() {
+    public PhysicalStore<N> quadratic()
+    {
         return myQuadratic.quadratic();
     }
 
     @Override
-    protected Factory<N, ?> factory() {
+    protected Factory<N, ?> factory()
+    {
         return myLinear.factory();
     }
 

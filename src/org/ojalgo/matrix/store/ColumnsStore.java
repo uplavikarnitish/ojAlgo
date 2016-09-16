@@ -29,20 +29,23 @@ import org.ojalgo.scalar.Scalar;
  *
  * @author apete
  */
-final class ColumnsStore<N extends Number> extends SelectingStore<N> {
+final class ColumnsStore<N extends Number> extends SelectingStore<N>
+{
 
     private final int[] myColumns;
 
     /**
      * @deprecated v40 Use {@link LogicalBuilder#offsets(int, int)} and/or
-     *             {@link LogicalBuilder#limits(int, int)} instead
+     * {@link LogicalBuilder#limits(int, int)} instead
      */
     @Deprecated
-    ColumnsStore(final int first, final int limit, final MatrixStore<N> base) {
+    ColumnsStore(final int first, final int limit, final MatrixStore<N> base)
+    {
         this(base, AccessUtils.makeIncreasingRange(first, limit - first));
     }
 
-    ColumnsStore(final MatrixStore<N> base, final int... columns) {
+    ColumnsStore(final MatrixStore<N> base, final int... columns)
+    {
 
         super(base, (int) base.countRows(), columns.length);
 
@@ -52,31 +55,38 @@ final class ColumnsStore<N extends Number> extends SelectingStore<N> {
     /**
      * @see org.ojalgo.matrix.store.MatrixStore#doubleValue(long, long)
      */
-    public double doubleValue(final long row, final long col) {
+    public double doubleValue(final long row, final long col)
+    {
         return this.getBase().doubleValue(row, myColumns[(int) col]);
     }
 
-    public int firstInColumn(final int col) {
+    public int firstInColumn(final int col)
+    {
         return this.getBase().firstInColumn(myColumns[col]);
     }
 
-    public N get(final long row, final long col) {
+    public N get(final long row, final long col)
+    {
         return this.getBase().get(row, myColumns[(int) col]);
     }
 
     @Override
-    public int limitOfColumn(final int col) {
+    public int limitOfColumn(final int col)
+    {
         return this.getBase().limitOfColumn(myColumns[col]);
     }
 
-    public Scalar<N> toScalar(final long row, final long column) {
+    public Scalar<N> toScalar(final long row, final long column)
+    {
         return this.getBase().toScalar(row, myColumns[(int) column]);
     }
 
     @Override
-    protected void addNonZerosTo(final ElementsConsumer<N> consumer) {
+    protected void addNonZerosTo(final ElementsConsumer<N> consumer)
+    {
         final MatrixStore<N> tmpBase = this.getBase();
-        for (int c = 0; c < myColumns.length; c++) {
+        for (int c = 0; c < myColumns.length; c++)
+        {
             consumer.fillColumn(0, c, tmpBase.sliceColumn(0, myColumns[c]));
         }
     }

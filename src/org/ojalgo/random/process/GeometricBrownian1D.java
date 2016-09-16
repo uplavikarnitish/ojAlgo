@@ -26,13 +26,16 @@ import java.util.List;
 import org.ojalgo.access.Access2D;
 import org.ojalgo.random.LogNormal;
 
-public class GeometricBrownian1D extends Process1D<LogNormal, GeometricBrownianMotion> {
+public class GeometricBrownian1D extends Process1D<LogNormal, GeometricBrownianMotion>
+{
 
-    public GeometricBrownian1D(final Access2D<?> correlations, final List<? extends GeometricBrownianMotion> processes) {
+    public GeometricBrownian1D(final Access2D<?> correlations, final List<? extends GeometricBrownianMotion> processes)
+    {
         super(correlations, processes);
     }
 
-    public GeometricBrownian1D(final List<? extends GeometricBrownianMotion> processes) {
+    public GeometricBrownian1D(final List<? extends GeometricBrownianMotion> processes)
+    {
         super(processes);
     }
 

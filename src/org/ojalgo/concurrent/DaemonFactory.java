@@ -24,7 +24,8 @@ package org.ojalgo.concurrent;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
-final class DaemonFactory implements ThreadFactory {
+final class DaemonFactory implements ThreadFactory
+{
 
     static final DaemonFactory INSTANCE = new DaemonFactory();
 
@@ -35,14 +36,16 @@ final class DaemonFactory implements ThreadFactory {
     private final AtomicInteger myNextThreadID = new AtomicInteger(1);
     private final ThreadGroup myThreadGroup;
 
-    private DaemonFactory() {
+    private DaemonFactory()
+    {
 
         super();
 
         myThreadGroup = new ThreadGroup(OJALGO_DAEMON_GROUP);
     }
 
-    public Thread newThread(final Runnable runnable) {
+    public Thread newThread(final Runnable runnable)
+    {
 
         final String tmpName = PREFIX + myNextThreadID.getAndIncrement();
 

@@ -21,9 +21,11 @@
  */
 package org.ojalgo.matrix.task.iterative;
 
-abstract class KrylovSubspaceSolver extends IterativeSolverTask {
+abstract class KrylovSubspaceSolver extends IterativeSolverTask
+{
 
-    protected KrylovSubspaceSolver() {
+    protected KrylovSubspaceSolver()
+    {
         super();
     }
 

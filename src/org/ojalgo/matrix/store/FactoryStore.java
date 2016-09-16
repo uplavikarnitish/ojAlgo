@@ -23,19 +23,22 @@ package org.ojalgo.matrix.store;
 
 import org.ojalgo.ProgrammingError;
 
-abstract class FactoryStore<N extends Number> extends AbstractStore<N> {
+abstract class FactoryStore<N extends Number> extends AbstractStore<N>
+{
 
     private final PhysicalStore.Factory<N, ?> myFactory;
 
     @SuppressWarnings("unused")
-    private FactoryStore(final int rowsCount, final int columnsCount) {
+    private FactoryStore(final int rowsCount, final int columnsCount)
+    {
 
         this(null, rowsCount, columnsCount);
 
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    protected FactoryStore(final PhysicalStore.Factory<N, ?> factory, final int rowsCount, final int columnsCount) {
+    protected FactoryStore(final PhysicalStore.Factory<N, ?> factory, final int rowsCount, final int columnsCount)
+    {
 
         super(rowsCount, columnsCount);
 
@@ -45,11 +48,13 @@ abstract class FactoryStore<N extends Number> extends AbstractStore<N> {
     /**
      * @deprecated Use {@link #physical()} instead
      */
-    public final PhysicalStore.Factory<N, ?> factory() {
+    public final PhysicalStore.Factory<N, ?> factory()
+    {
         return physical();
     }
 
-    public final PhysicalStore.Factory<N, ?> physical() {
+    public final PhysicalStore.Factory<N, ?> physical()
+    {
         return myFactory;
     }
 

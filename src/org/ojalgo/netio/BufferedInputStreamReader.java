@@ -29,45 +29,56 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 
-public final class BufferedInputStreamReader extends BufferedReader {
+public final class BufferedInputStreamReader extends BufferedReader
+{
 
-    public BufferedInputStreamReader(final InputStream aStream) {
+    public BufferedInputStreamReader(final InputStream aStream)
+    {
         super(new InputStreamReader(aStream));
     }
 
-    public BufferedInputStreamReader(final InputStream aStream, final Charset aCharset) {
+    public BufferedInputStreamReader(final InputStream aStream, final Charset aCharset)
+    {
         super(new InputStreamReader(aStream, aCharset));
     }
 
-    public BufferedInputStreamReader(final InputStream aStream, final Charset aCharset, final int aSize) {
+    public BufferedInputStreamReader(final InputStream aStream, final Charset aCharset, final int aSize)
+    {
         super(new InputStreamReader(aStream, aCharset), aSize);
     }
 
-    public BufferedInputStreamReader(final InputStream aStream, final CharsetDecoder aDecoder) {
+    public BufferedInputStreamReader(final InputStream aStream, final CharsetDecoder aDecoder)
+    {
         super(new InputStreamReader(aStream, aDecoder));
     }
 
-    public BufferedInputStreamReader(final InputStream aStream, final CharsetDecoder aDecoder, final int aSize) {
+    public BufferedInputStreamReader(final InputStream aStream, final CharsetDecoder aDecoder, final int aSize)
+    {
         super(new InputStreamReader(aStream, aDecoder), aSize);
     }
 
-    public BufferedInputStreamReader(final InputStream aStream, final int aSize) {
+    public BufferedInputStreamReader(final InputStream aStream, final int aSize)
+    {
         super(new InputStreamReader(aStream), aSize);
     }
 
-    public BufferedInputStreamReader(final InputStream aStream, final String aCharsetName) throws UnsupportedEncodingException {
+    public BufferedInputStreamReader(final InputStream aStream, final String aCharsetName) throws UnsupportedEncodingException
+    {
         super(new InputStreamReader(aStream, aCharsetName));
     }
 
-    public BufferedInputStreamReader(final InputStream aStream, final String aCharsetName, final int aSize) throws UnsupportedEncodingException {
+    public BufferedInputStreamReader(final InputStream aStream, final String aCharsetName, final int aSize) throws UnsupportedEncodingException
+    {
         super(new InputStreamReader(aStream, aCharsetName), aSize);
     }
 
-    protected BufferedInputStreamReader(final Reader aReader) {
+    protected BufferedInputStreamReader(final Reader aReader)
+    {
         super(aReader);
     }
 
-    protected BufferedInputStreamReader(final Reader aReader, final int aSize) {
+    protected BufferedInputStreamReader(final Reader aReader, final int aSize)
+    {
         super(aReader, aSize);
     }
 

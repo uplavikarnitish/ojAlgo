@@ -11,7 +11,7 @@ public class Matrix
 
     public Matrix(int m, int n)
     {
-        System.out.println("Creating matrix of sixe: ("+m+" x "+n+")");
+        System.out.println("Creating matrix of size: ("+m+" x "+n+")");
         mat = new double[m][n];
         this.m = m;
         this.n = n;
@@ -48,7 +48,7 @@ public class Matrix
                 c.mat[i][j] = 0;
                 for ( int k = 0; k<a.n; k++ )
                 {
-                    c.mat[i][j] += a.mat[i][k] + b.mat[k][j];
+                    c.mat[i][j] += (a.mat[i][k] * b.mat[k][j]);
                 }
             }
         }

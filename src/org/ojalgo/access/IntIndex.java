@@ -21,11 +21,13 @@
  */
 package org.ojalgo.access;
 
-public final class IntIndex implements Comparable<IntIndex> {
+public final class IntIndex implements Comparable<IntIndex>
+{
 
     public final int index;
 
-    public IntIndex(final int anIndex) {
+    public IntIndex(final int anIndex)
+    {
 
         super();
 
@@ -33,34 +35,42 @@ public final class IntIndex implements Comparable<IntIndex> {
     }
 
     @SuppressWarnings("unused")
-    private IntIndex() {
+    private IntIndex()
+    {
         this(-1);
     }
 
-    public int compareTo(final IntIndex ref) {
+    public int compareTo(final IntIndex ref)
+    {
         return Integer.compare(index, ref.index);
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return false;
         }
-        if (!(obj instanceof IntIndex)) {
+        if (!(obj instanceof IntIndex))
+        {
             return false;
         }
         final IntIndex other = (IntIndex) obj;
-        if (index != other.index) {
+        if (index != other.index)
+        {
             return false;
         }
         return true;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = 1;
         result = (prime * result) + index;
@@ -68,7 +78,8 @@ public final class IntIndex implements Comparable<IntIndex> {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return Integer.toString(index);
     }
 

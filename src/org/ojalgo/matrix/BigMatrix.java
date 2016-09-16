@@ -39,80 +39,99 @@ import org.ojalgo.type.context.NumberContext;
  *
  * @author apete
  */
-public final class BigMatrix extends AbstractMatrix<BigDecimal, BigMatrix> {
+public final class BigMatrix extends AbstractMatrix<BigDecimal, BigMatrix>
+{
 
     public static final BasicMatrix.Factory<BigMatrix> FACTORY = new MatrixFactory<>(BigMatrix.class, BigDenseStore.FACTORY);
 
-    public static Builder<BigMatrix> getBuilder(final int aLength) {
+    public static Builder<BigMatrix> getBuilder(final int aLength)
+    {
         return FACTORY.getBuilder(aLength);
     }
 
-    public static Builder<BigMatrix> getBuilder(final int aRowDim, final int aColDim) {
+    public static Builder<BigMatrix> getBuilder(final int aRowDim, final int aColDim)
+    {
         return FACTORY.getBuilder(aRowDim, aColDim);
     }
 
     /**
      * This method is for internal use only - YOU should NOT use it!
      */
-    BigMatrix(final MatrixStore<BigDecimal> aStore) {
+    BigMatrix(final MatrixStore<BigDecimal> aStore)
+    {
         super(aStore);
     }
 
-    public BigMatrix enforce(final NumberContext context) {
+    public BigMatrix enforce(final NumberContext context)
+    {
         return this.modify(context.getBigFunction());
     }
 
-    public BigDecimal toBigDecimal(final int row, final int column) {
+    public BigDecimal toBigDecimal(final int row, final int column)
+    {
         return this.getStore().get(row, column);
     }
 
     @Override
-    public PhysicalStore<BigDecimal> toBigStore() {
+    public PhysicalStore<BigDecimal> toBigStore()
+    {
         return this.getStore().copy();
     }
 
-    public ComplexNumber toComplexNumber(final int row, final int column) {
+    public ComplexNumber toComplexNumber(final int row, final int column)
+    {
         return ComplexNumber.valueOf(this.getStore().doubleValue(row, column));
     }
 
-    public String toString(final int row, final int col) {
+    public String toString(final int row, final int col)
+    {
         return this.toBigDecimal(row, col).toPlainString();
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    MatrixStore<BigDecimal> cast(final Access1D<?> matrix) {
-        if (matrix instanceof BigMatrix) {
+    MatrixStore<BigDecimal> cast(final Access1D<?> matrix)
+    {
+        if (matrix instanceof BigMatrix)
+        {
             return ((BigMatrix) matrix).getStore();
-        } else if (matrix instanceof BigDenseStore) {
+        } else if (matrix instanceof BigDenseStore)
+        {
             return (BigDenseStore) matrix;
-        } else if ((matrix instanceof MatrixStore) && !this.isEmpty() && (matrix.get(0) instanceof BigDecimal)) {
+        } else if ((matrix instanceof MatrixStore) && !this.isEmpty() && (matrix.get(0) instanceof BigDecimal))
+        {
             return (MatrixStore<BigDecimal>) matrix;
-        } else if (matrix instanceof Access2D<?>) {
+        } else if (matrix instanceof Access2D<?>)
+        {
             return this.getStore().physical().copy((Access2D<?>) matrix);
-        } else {
+        } else
+        {
             return this.getStore().physical().columns(matrix);
         }
     }
 
     @Override
-    DeterminantTask<BigDecimal> getDeterminantTask(final MatrixStore<BigDecimal> template) {
+    DeterminantTask<BigDecimal> getDeterminantTask(final MatrixStore<BigDecimal> template)
+    {
         return DeterminantTask.BIG.make(template, this.isHermitian(), false);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    MatrixFactory<BigDecimal, BigMatrix> getFactory() {
+    MatrixFactory<BigDecimal, BigMatrix> getFactory()
+    {
         return (MatrixFactory<BigDecimal, BigMatrix>) FACTORY;
     }
 
     @Override
-    InverterTask<BigDecimal> getInverterTask(final MatrixStore<BigDecimal> base) {
+    InverterTask<BigDecimal> getInverterTask(final MatrixStore<BigDecimal> base)
+    {
         return InverterTask.BIG.make(base, this.isHermitian(), false);
     }
 
     @Override
-    SolverTask<BigDecimal> getSolverTask(final MatrixStore<BigDecimal> templateBody, final MatrixStore<BigDecimal> templateRHS) {
+    SolverTask<BigDecimal> getSolverTask(final MatrixStore<BigDecimal> templateBody, final MatrixStore<BigDecimal> templateRHS)
+    {
         return SolverTask.BIG.make(templateBody, templateRHS, this.isHermitian(), false);
     }
 

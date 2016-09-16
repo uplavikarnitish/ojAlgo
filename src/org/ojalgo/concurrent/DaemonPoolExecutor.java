@@ -25,7 +25,8 @@ import java.util.concurrent.*;
 
 import org.ojalgo.OjAlgoUtils;
 
-public final class DaemonPoolExecutor extends ThreadPoolExecutor {
+public final class DaemonPoolExecutor extends ThreadPoolExecutor
+{
 
     static final DaemonPoolExecutor INSTANCE = new DaemonPoolExecutor(OjAlgoUtils.ENVIRONMENT.cores, Integer.MAX_VALUE, 2L, TimeUnit.SECONDS,
             new SynchronousQueue<Runnable>(), DaemonFactory.INSTANCE);
@@ -33,49 +34,58 @@ public final class DaemonPoolExecutor extends ThreadPoolExecutor {
     /**
      * @see java.util.concurrent.AbstractExecutorService#submit(java.util.concurrent.Callable)
      */
-    public static <T> Future<T> invoke(final Callable<T> task) {
+    public static <T> Future<T> invoke(final Callable<T> task)
+    {
         return INSTANCE.submit(task);
     }
 
     /**
      * @see java.util.concurrent.AbstractExecutorService#submit(java.lang.Runnable)
      */
-    public static Future<?> invoke(final Runnable task) {
+    public static Future<?> invoke(final Runnable task)
+    {
         return INSTANCE.submit(task);
     }
 
     /**
      * @see java.util.concurrent.AbstractExecutorService#submit(java.lang.Runnable, java.lang.Object)
      */
-    public static <T> Future<T> invoke(final Runnable task, final T result) {
+    public static <T> Future<T> invoke(final Runnable task, final T result)
+    {
         return INSTANCE.submit(task, result);
     }
 
-    public static boolean isDaemonAvailable() {
+    public static boolean isDaemonAvailable()
+    {
         return INSTANCE.getActiveCount() < OjAlgoUtils.ENVIRONMENT.threads;
     }
 
-    static final DaemonPoolExecutor makeSingle() {
+    static final DaemonPoolExecutor makeSingle()
+    {
         return new DaemonPoolExecutor(1, 1, Long.MAX_VALUE, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), DaemonFactory.INSTANCE);
     }
 
     DaemonPoolExecutor(final int corePoolSize, final int maximumPoolSize, final long keepAliveTime, final TimeUnit unit,
-            final BlockingQueue<Runnable> workQueue) {
+                       final BlockingQueue<Runnable> workQueue)
+    {
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
     }
 
     DaemonPoolExecutor(final int corePoolSize, final int maximumPoolSize, final long keepAliveTime, final TimeUnit unit,
-            final BlockingQueue<Runnable> workQueue, final RejectedExecutionHandler handler) {
+                       final BlockingQueue<Runnable> workQueue, final RejectedExecutionHandler handler)
+    {
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, handler);
     }
 
     DaemonPoolExecutor(final int corePoolSize, final int maximumPoolSize, final long keepAliveTime, final TimeUnit unit,
-            final BlockingQueue<Runnable> workQueue, final ThreadFactory threadFactory) {
+                       final BlockingQueue<Runnable> workQueue, final ThreadFactory threadFactory)
+    {
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory);
     }
 
     DaemonPoolExecutor(final int corePoolSize, final int maximumPoolSize, final long keepAliveTime, final TimeUnit unit,
-            final BlockingQueue<Runnable> workQueue, final ThreadFactory threadFactory, final RejectedExecutionHandler handler) {
+                       final BlockingQueue<Runnable> workQueue, final ThreadFactory threadFactory, final RejectedExecutionHandler handler)
+    {
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, handler);
     }
 

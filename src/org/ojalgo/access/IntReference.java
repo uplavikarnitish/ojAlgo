@@ -23,11 +23,13 @@ package org.ojalgo.access;
 
 import java.util.Arrays;
 
-public final class IntReference implements Comparable<IntReference> {
+public final class IntReference implements Comparable<IntReference>
+{
 
     public final int[] reference;
 
-    public IntReference(final int... aReference) {
+    public IntReference(final int... aReference)
+    {
 
         super();
 
@@ -35,16 +37,19 @@ public final class IntReference implements Comparable<IntReference> {
     }
 
     @SuppressWarnings("unused")
-    private IntReference() {
+    private IntReference()
+    {
         this(-1);
     }
 
-    public int compareTo(final IntReference ref) {
+    public int compareTo(final IntReference ref)
+    {
 
         int retVal = reference.length - ref.reference.length;
 
         int i = reference.length - 1;
-        while ((retVal == 0) && (i >= 0)) {
+        while ((retVal == 0) && (i >= 0))
+        {
             retVal = reference[i] - ref.reference[i];
             i--;
         }
@@ -53,25 +58,31 @@ public final class IntReference implements Comparable<IntReference> {
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return false;
         }
-        if (!(obj instanceof IntReference)) {
+        if (!(obj instanceof IntReference))
+        {
             return false;
         }
         final IntReference other = (IntReference) obj;
-        if (!Arrays.equals(reference, other.reference)) {
+        if (!Arrays.equals(reference, other.reference))
+        {
             return false;
         }
         return true;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = 1;
         result = (prime * result) + Arrays.hashCode(reference);
@@ -79,7 +90,8 @@ public final class IntReference implements Comparable<IntReference> {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return Arrays.toString(reference);
     }
 

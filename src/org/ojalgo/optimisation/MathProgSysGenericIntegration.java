@@ -21,28 +21,34 @@
  */
 package org.ojalgo.optimisation;
 
-final class MathProgSysGenericIntegration extends MathProgSysModel.Integration<GenericSolver> {
+final class MathProgSysGenericIntegration extends MathProgSysModel.Integration<GenericSolver>
+{
 
-    public GenericSolver build(final MathProgSysModel model) {
+    public GenericSolver build(final MathProgSysModel model)
+    {
         final ExpressionsBasedModel tmpDelegate = model.getExpressionsBasedModel();
         return (GenericSolver) tmpDelegate.getIntegration().build(tmpDelegate);
     }
 
-    public Result extractSolverState(final MathProgSysModel model) {
+    public Result extractSolverState(final MathProgSysModel model)
+    {
         final ExpressionsBasedModel tmpDelegate = model.getExpressionsBasedModel();
         return tmpDelegate.getIntegration().extractSolverState(tmpDelegate);
     }
 
-    public boolean isCapable(final MathProgSysModel model) {
+    public boolean isCapable(final MathProgSysModel model)
+    {
         return !model.getExpressionsBasedModel().isAnyExpressionQuadratic();
     }
 
-    public Result toModelState(final Result solverState, final MathProgSysModel model) {
+    public Result toModelState(final Result solverState, final MathProgSysModel model)
+    {
         final ExpressionsBasedModel tmpDelegate = model.getExpressionsBasedModel();
         return tmpDelegate.getIntegration().toModelState(solverState, tmpDelegate);
     }
 
-    public Result toSolverState(final Result modelState, final MathProgSysModel model) {
+    public Result toSolverState(final Result modelState, final MathProgSysModel model)
+    {
         final ExpressionsBasedModel tmpDelegate = model.getExpressionsBasedModel();
         return tmpDelegate.getIntegration().toSolverState(modelState, tmpDelegate);
     }

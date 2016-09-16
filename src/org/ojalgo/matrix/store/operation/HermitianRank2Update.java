@@ -32,13 +32,15 @@ import org.ojalgo.scalar.ComplexNumber;
  *
  * @author apete
  */
-public final class HermitianRank2Update extends MatrixOperation {
+public final class HermitianRank2Update extends MatrixOperation
+{
 
     public static final HermitianRank2Update SETUP = new HermitianRank2Update();
 
     public static int THRESHOLD = 64;
 
-    public static void invoke(final BigDecimal[] aData, final int aFirstCol, final int aColLimit, final BigDecimal[] aVector1, final BigDecimal[] aVector2) {
+    public static void invoke(final BigDecimal[] aData, final int aFirstCol, final int aColLimit, final BigDecimal[] aVector1, final BigDecimal[] aVector2)
+    {
 
         final int tmpLength = aVector1.length; // Should be the same as aVector1.length and the "row-dim" of aData.
 
@@ -46,13 +48,15 @@ public final class HermitianRank2Update extends MatrixOperation {
         BigDecimal tmpVal2j;
 
         int tmpIndex;
-        for (int j = aFirstCol; j < aColLimit; j++) {
+        for (int j = aFirstCol; j < aColLimit; j++)
+        {
 
             tmpVal1j = aVector1[j];
             tmpVal2j = aVector2[j];
 
             tmpIndex = j + (j * tmpLength);
-            for (int i = j; i < tmpLength; i++) {
+            for (int i = j; i < tmpLength; i++)
+            {
                 aData[tmpIndex] = aData[tmpIndex].subtract(aVector2[i].multiply(tmpVal1j).add(aVector1[i].multiply(tmpVal2j)));
                 tmpIndex++;
             }
@@ -60,7 +64,8 @@ public final class HermitianRank2Update extends MatrixOperation {
     }
 
     public static void invoke(final ComplexNumber[] aData, final int aFirstCol, final int aColLimit, final ComplexNumber[] aVector1,
-            final ComplexNumber[] aVector2) {
+                              final ComplexNumber[] aVector2)
+    {
 
         final int tmpLength = aVector1.length; // Should be the same as aVector1.length and the "row-dim" of aData.
 
@@ -68,20 +73,23 @@ public final class HermitianRank2Update extends MatrixOperation {
         ComplexNumber tmpVal2j;
 
         int tmpIndex;
-        for (int j = aFirstCol; j < aColLimit; j++) {
+        for (int j = aFirstCol; j < aColLimit; j++)
+        {
 
             tmpVal1j = aVector1[j].conjugate();
             tmpVal2j = aVector2[j].conjugate();
 
             tmpIndex = j + (j * tmpLength);
-            for (int i = j; i < tmpLength; i++) {
+            for (int i = j; i < tmpLength; i++)
+            {
                 aData[tmpIndex] = aData[tmpIndex].subtract(aVector2[i].multiply(tmpVal1j).add(aVector1[i].multiply(tmpVal2j)));
                 tmpIndex++;
             }
         }
     }
 
-    public static void invoke(final double[] aData, final int aFirstCol, final int aColLimit, final double[] aVector1, final double[] aVector2) {
+    public static void invoke(final double[] aData, final int aFirstCol, final int aColLimit, final double[] aVector1, final double[] aVector2)
+    {
 
         final int tmpLength = aVector1.length; // Should be the same as aVector1.length and the "row-dim" of aData.
 
@@ -89,24 +97,28 @@ public final class HermitianRank2Update extends MatrixOperation {
         double tmpVal2j;
 
         int tmpIndex;
-        for (int j = aFirstCol; j < aColLimit; j++) {
+        for (int j = aFirstCol; j < aColLimit; j++)
+        {
 
             tmpVal1j = aVector1[j];
             tmpVal2j = aVector2[j];
 
             tmpIndex = j + (j * tmpLength);
-            for (int i = j; i < tmpLength; i++) {
+            for (int i = j; i < tmpLength; i++)
+            {
                 aData[tmpIndex++] -= ((aVector2[i] * tmpVal1j) + (aVector1[i] * tmpVal2j));
             }
         }
     }
 
-    private HermitianRank2Update() {
+    private HermitianRank2Update()
+    {
         super();
     }
 
     @Override
-    public int threshold() {
+    public int threshold()
+    {
         return THRESHOLD;
     }
 

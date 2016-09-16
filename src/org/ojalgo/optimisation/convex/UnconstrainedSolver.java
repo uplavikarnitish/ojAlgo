@@ -33,36 +33,43 @@ import org.ojalgo.optimisation.Optimisation;
  *
  * @author apete
  */
-final class UnconstrainedSolver extends ConvexSolver {
+final class UnconstrainedSolver extends ConvexSolver
+{
 
-    UnconstrainedSolver(final ConvexSolver.Builder matrices, final Optimisation.Options solverOptions) {
+    UnconstrainedSolver(final ConvexSolver.Builder matrices, final Optimisation.Options solverOptions)
+    {
         super(matrices, solverOptions);
     }
 
     @Override
-    protected MatrixStore<Double> getIterationKKT() {
+    protected MatrixStore<Double> getIterationKKT()
+    {
         return this.getQ();
     }
 
     @Override
-    protected MatrixStore<Double> getIterationRHS() {
+    protected MatrixStore<Double> getIterationRHS()
+    {
         return this.getC();
     }
 
     @Override
-    protected boolean initialise(final Result kickStarter) {
+    protected boolean initialise(final Result kickStarter)
+    {
         myCholesky.compute(this.getQ());
         this.resetX();
         return true;
     }
 
     @Override
-    protected boolean needsAnotherIteration() {
+    protected boolean needsAnotherIteration()
+    {
         return this.countIterations() < 1;
     }
 
     @Override
-    protected void performIteration() {
+    protected void performIteration()
+    {
 
         final MatrixStore<Double> tmpQ = this.getQ();
         final MatrixStore<Double> tmpC = this.getC();
@@ -70,27 +77,32 @@ final class UnconstrainedSolver extends ConvexSolver {
 
         boolean tmpSolvable = true;
 
-        if (tmpSolvable = myCholesky.isSolvable()) {
+        if (tmpSolvable = myCholesky.isSolvable())
+        {
             // Q is SPD
 
             myCholesky.solve(tmpC, tmpX);
 
-        } else if (tmpSolvable = myLU.compute(tmpQ)) {
+        } else if (tmpSolvable = myLU.compute(tmpQ))
+        {
             // The above failed, but the KKT system is solvable
             // Try solving the full KKT system instaed
 
             myLU.solve(tmpC, tmpX);
         }
 
-        if (!tmpSolvable && this.isDebug()) {
+        if (!tmpSolvable && this.isDebug())
+        {
             options.debug_appender.println("KKT system unsolvable!");
             options.debug_appender.printmtrx("KKT", this.getIterationKKT());
             options.debug_appender.printmtrx("RHS", this.getIterationRHS());
         }
 
-        if (tmpSolvable) {
+        if (tmpSolvable)
+        {
             this.setState(State.DISTINCT);
-        } else {
+        } else
+        {
             this.setState(State.UNBOUNDED);
             this.resetX();
         }

@@ -33,15 +33,18 @@ import org.ojalgo.random.ContinuousDistribution;
 import org.ojalgo.random.Distribution;
 import org.ojalgo.type.keyvalue.ComparableToDouble;
 
-abstract class AbstractProcess<D extends Distribution> implements RandomProcess<D> {
+abstract class AbstractProcess<D extends Distribution> implements RandomProcess<D>
+{
 
     private final TreeSet<ComparableToDouble<Double>> myObservations = new TreeSet<>();
 
-    protected AbstractProcess() {
+    protected AbstractProcess()
+    {
         super();
     }
 
-    public final boolean addObservation(final Double x, final double y) {
+    public final boolean addObservation(final Double x, final double y)
+    {
         return myObservations.add(new ComparableToDouble<>(x, y));
     }
 
@@ -49,7 +52,8 @@ abstract class AbstractProcess<D extends Distribution> implements RandomProcess<
      * Equivalent to calling {@link RandomProcess#getDistribution(double)} with argumant <code>1.0</code>, and
      * then {@link Distribution#getExpected()}.
      */
-    public final double getExpected() {
+    public final double getExpected()
+    {
         return this.getExpected(ONE);
     }
 
@@ -58,7 +62,8 @@ abstract class AbstractProcess<D extends Distribution> implements RandomProcess<
      * argumant <code>1.0</code>, and then {@link ContinuousDistribution#getQuantile(double)} (but with
      * different input argument).
      */
-    public final double getLowerConfidenceQuantile(final double confidence) {
+    public final double getLowerConfidenceQuantile(final double confidence)
+    {
         return this.getLowerConfidenceQuantile(ONE, confidence);
     }
 
@@ -66,7 +71,8 @@ abstract class AbstractProcess<D extends Distribution> implements RandomProcess<
      * Equivalent to calling {@link RandomProcess#getDistribution(double)} with argumant <code>1.0</code>, and
      * then {@link Distribution#getStandardDeviation()}.
      */
-    public final double getStandardDeviation() {
+    public final double getStandardDeviation()
+    {
         return this.getStandardDeviation(ONE);
     }
 
@@ -75,11 +81,13 @@ abstract class AbstractProcess<D extends Distribution> implements RandomProcess<
      * argumant <code>1.0</code>, and then {@link ContinuousDistribution#getQuantile(double)} (but with
      * different input argument).
      */
-    public final double getUpperConfidenceQuantile(final double confidence) {
+    public final double getUpperConfidenceQuantile(final double confidence)
+    {
         return this.getUpperConfidenceQuantile(ONE, confidence);
     }
 
-    public final double getValue() {
+    public final double getValue()
+    {
         return myObservations.last().value;
     }
 
@@ -87,32 +95,39 @@ abstract class AbstractProcess<D extends Distribution> implements RandomProcess<
      * Equivalent to calling {@link RandomProcess#getDistribution(double)} with argumant <code>1.0</code>, and
      * then {@link Distribution#getVariance()}.
      */
-    public final double getVariance() {
+    public final double getVariance()
+    {
         return this.getVariance(ONE);
     }
 
-    public final void setValue(final double newValue) {
-        if (myObservations.size() <= 0) {
+    public final void setValue(final double newValue)
+    {
+        if (myObservations.size() <= 0)
+        {
             myObservations.add(new ComparableToDouble<>(ZERO, newValue));
-        } else {
+        } else
+        {
             myObservations.add(new ComparableToDouble<>(myObservations.pollLast().key, newValue));
         }
     }
 
     /**
      * @return An array of sample sets. The array has aNumberOfSteps elements, and each sample set has
-     *         aNumberOfRealisations samples.
+     * aNumberOfRealisations samples.
      */
-    public final RandomProcess.SimulationResults simulate(final int numberOfRealisations, final int numberOfSteps, final double stepSize) {
+    public final RandomProcess.SimulationResults simulate(final int numberOfRealisations, final int numberOfSteps, final double stepSize)
+    {
 
         final List<ComparableToDouble<Double>> tmpInitialState = new ArrayList<>(myObservations);
         final double tmpInitialValue = this.getValue();
 
         final Array2D<Double> tmpRealisationValues = Array2D.PRIMITIVE.makeZero(numberOfRealisations, numberOfSteps);
 
-        for (int r = 0; r < numberOfRealisations; r++) {
+        for (int r = 0; r < numberOfRealisations; r++)
+        {
             double tmpCurrentValue = tmpInitialValue;
-            for (int s = 0; s < numberOfSteps; s++) {
+            for (int s = 0; s < numberOfSteps; s++)
+            {
                 tmpCurrentValue = this.step(tmpCurrentValue, stepSize, this.getNormalisedRandomIncrement());
                 tmpRealisationValues.set(r, s, tmpCurrentValue);
             }
@@ -124,7 +139,8 @@ abstract class AbstractProcess<D extends Distribution> implements RandomProcess<
 
     protected abstract double getNormalisedRandomIncrement();
 
-    protected final void setObservations(final Collection<? extends ComparableToDouble<Double>> c) {
+    protected final void setObservations(final Collection<? extends ComparableToDouble<Double>> c)
+    {
         myObservations.clear();
         myObservations.addAll(c);
     }
@@ -135,7 +151,8 @@ abstract class AbstractProcess<D extends Distribution> implements RandomProcess<
 
     abstract double getLowerConfidenceQuantile(double stepSize, final double confidence);
 
-    final TreeSet<ComparableToDouble<Double>> getObservations() {
+    final TreeSet<ComparableToDouble<Double>> getObservations()
+    {
         return myObservations;
     }
 
@@ -145,7 +162,8 @@ abstract class AbstractProcess<D extends Distribution> implements RandomProcess<
 
     abstract double getVariance(double stepSize);
 
-    final double step(final double stepSize) {
+    final double step(final double stepSize)
+    {
         return this.step(this.getValue(), stepSize, this.getNormalisedRandomIncrement());
     }
 

@@ -28,34 +28,40 @@ import org.ojalgo.ProgrammingError;
  *
  * @author apete
  */
-abstract class LogicalStore<N extends Number> extends AbstractStore<N> {
+abstract class LogicalStore<N extends Number> extends AbstractStore<N>
+{
 
     private MatrixStore<N> myBase;
 
     @SuppressWarnings("unused")
-    private LogicalStore(final int rowsCount, final int columnsCount) {
+    private LogicalStore(final int rowsCount, final int columnsCount)
+    {
 
         this(null, rowsCount, columnsCount);
 
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    protected LogicalStore(final MatrixStore<N>base, final int rowsCount, final int columnsCount) {
+    protected LogicalStore(final MatrixStore<N> base, final int rowsCount, final int columnsCount)
+    {
 
         super(rowsCount, columnsCount);
 
         myBase = base;
 
-        if (myBase == null) {
+        if (myBase == null)
+        {
             throw new IllegalArgumentException(this.getClass().getName() + " cannot have a null 'base'!");
         }
     }
 
-    public final PhysicalStore.Factory<N, ?> physical() {
+    public final PhysicalStore.Factory<N, ?> physical()
+    {
         return myBase.physical();
     }
 
-    protected final MatrixStore<N> getBase() {
+    protected final MatrixStore<N> getBase()
+    {
         return myBase;
     }
 

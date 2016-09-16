@@ -39,144 +39,187 @@ import org.ojalgo.matrix.store.PhysicalStore;
  *
  * @author apete
  */
-final class MatrixFactory<N extends Number, I extends BasicMatrix> implements BasicMatrix.Factory<I> {
+final class MatrixFactory<N extends Number, I extends BasicMatrix> implements BasicMatrix.Factory<I>
+{
 
-    final class MatrixBuilder implements Builder<I> {
+    final class MatrixBuilder implements Builder<I>
+    {
 
         private final PhysicalStore<N> myStore;
         private boolean mySafe = true;
 
         @SuppressWarnings("unused")
-        private MatrixBuilder() {
+        private MatrixBuilder()
+        {
             this(null, 0, 0);
         }
 
-        protected MatrixBuilder(final PhysicalStore.Factory<N, ?> factory, final int rowDim, final int colDim) {
+        protected MatrixBuilder(final PhysicalStore.Factory<N, ?> factory, final int rowDim, final int colDim)
+        {
 
             super();
 
             myStore = factory.makeZero(rowDim, colDim);
         }
 
-        MatrixBuilder(final PhysicalStore<N> physicalStore) {
+        MatrixBuilder(final PhysicalStore<N> physicalStore)
+        {
 
             super();
 
             myStore = physicalStore;
         }
 
-        public final void add(final long row, final long col, final double value) {
-            if (mySafe) {
+        public final void add(final long row, final long col, final double value)
+        {
+            if (mySafe)
+            {
                 myStore.add(row, col, value);
-            } else {
+            } else
+            {
                 throw new IllegalStateException();
             }
         }
 
-        public final void add(final long row, final long col, final Number value) {
-            if (mySafe) {
+        public final void add(final long row, final long col, final Number value)
+        {
+            if (mySafe)
+            {
                 myStore.add(row, col, value);
-            } else {
+            } else
+            {
                 throw new IllegalStateException();
             }
         }
 
-        public final long count() {
+        public final long count()
+        {
             return myStore.count();
         }
 
-        public final long countColumns() {
+        public final long countColumns()
+        {
             return myStore.countColumns();
         }
 
-        public final long countRows() {
+        public final long countRows()
+        {
             return myStore.countRows();
         }
 
-        public final MatrixBuilder fillAll(final Number value) {
-            if (mySafe) {
+        public final MatrixBuilder fillAll(final Number value)
+        {
+            if (mySafe)
+            {
                 myStore.fillAll(myStore.physical().scalar().cast(value));
-            } else {
+            } else
+            {
                 throw new IllegalStateException();
             }
             return this;
         }
 
-        public final MatrixBuilder fillColumn(final long row, final long column, final Number value) {
-            if (mySafe) {
+        public final MatrixBuilder fillColumn(final long row, final long column, final Number value)
+        {
+            if (mySafe)
+            {
                 myStore.fillColumn((int) row, (int) column, myStore.physical().scalar().cast(value));
-            } else {
+            } else
+            {
                 throw new IllegalStateException();
             }
             return this;
         }
 
-        public final MatrixBuilder fillDiagonal(final long row, final long column, final Number value) {
-            if (mySafe) {
+        public final MatrixBuilder fillDiagonal(final long row, final long column, final Number value)
+        {
+            if (mySafe)
+            {
                 myStore.fillDiagonal((int) row, (int) column, myStore.physical().scalar().cast(value));
-            } else {
+            } else
+            {
                 throw new IllegalStateException();
             }
             return this;
         }
 
-        public final MatrixBuilder fillRow(final long row, final long column, final Number value) {
-            if (mySafe) {
+        public final MatrixBuilder fillRow(final long row, final long column, final Number value)
+        {
+            if (mySafe)
+            {
                 myStore.fillRow((int) row, (int) column, myStore.physical().scalar().cast(value));
-            } else {
+            } else
+            {
                 throw new IllegalStateException();
             }
             return this;
         }
 
         @Override
-        public final I get() {
+        public final I get()
+        {
             mySafe = false;
             return MatrixFactory.this.instantiate(myStore);
         }
 
-        public final void set(final long index, final double value) {
-            if (mySafe) {
+        public final void set(final long index, final double value)
+        {
+            if (mySafe)
+            {
                 myStore.set(index, value);
-            } else {
+            } else
+            {
                 throw new IllegalStateException();
             }
         }
 
-        public final void set(final long row, final long col, final double value) {
-            if (mySafe) {
+        public final void set(final long row, final long col, final double value)
+        {
+            if (mySafe)
+            {
                 myStore.set(row, col, value);
-            } else {
+            } else
+            {
                 throw new IllegalStateException();
             }
         }
 
-        public final void set(final long row, final long col, final Number value) {
-            if (mySafe) {
+        public final void set(final long row, final long col, final Number value)
+        {
+            if (mySafe)
+            {
                 myStore.set(row, col, value);
-            } else {
+            } else
+            {
                 throw new IllegalStateException();
             }
         }
 
-        public final void set(final long index, final Number value) {
-            if (mySafe) {
+        public final void set(final long index, final Number value)
+        {
+            if (mySafe)
+            {
                 myStore.set(index, myStore.physical().scalar().cast(value));
-            } else {
+            } else
+            {
                 throw new IllegalStateException();
             }
         }
 
     }
 
-    private static Constructor<? extends BasicMatrix> getConstructor(final Class<? extends BasicMatrix> aTemplate) {
-        try {
+    private static Constructor<? extends BasicMatrix> getConstructor(final Class<? extends BasicMatrix> aTemplate)
+    {
+        try
+        {
             final Constructor<? extends BasicMatrix> retVal = aTemplate.getDeclaredConstructor(MatrixStore.class);
             retVal.setAccessible(true);
             return retVal;
-        } catch (final SecurityException anException) {
+        } catch (final SecurityException anException)
+        {
             return null;
-        } catch (final NoSuchMethodException anException) {
+        } catch (final NoSuchMethodException anException)
+        {
             return null;
         }
     }
@@ -185,7 +228,8 @@ final class MatrixFactory<N extends Number, I extends BasicMatrix> implements Ba
     private final PhysicalStore.Factory<N, ?> myPhysicalFactory;
 
     @SuppressWarnings("unused")
-    private MatrixFactory() {
+    private MatrixFactory()
+    {
 
         this(null, null);
 
@@ -193,7 +237,8 @@ final class MatrixFactory<N extends Number, I extends BasicMatrix> implements Ba
     }
 
     @SuppressWarnings("unchecked")
-    MatrixFactory(final Class<I> template, final PhysicalStore.Factory<N, ?> factory) {
+    MatrixFactory(final Class<I> template, final PhysicalStore.Factory<N, ?> factory)
+    {
 
         super();
 
@@ -201,93 +246,116 @@ final class MatrixFactory<N extends Number, I extends BasicMatrix> implements Ba
         myConstructor = (Constructor<I>) MatrixFactory.getConstructor(template);
     }
 
-    public I columns(final Access1D<?>... source) {
+    public I columns(final Access1D<?>... source)
+    {
         return this.instantiate(myPhysicalFactory.columns(source));
     }
 
-    public I columns(final double[]... source) {
+    public I columns(final double[]... source)
+    {
         return this.instantiate(myPhysicalFactory.columns(source));
     }
 
-    public I columns(final List<? extends Number>... source) {
+    public I columns(final List<? extends Number>... source)
+    {
         return this.instantiate(myPhysicalFactory.columns(source));
     }
 
-    public I columns(final Number[]... source) {
+    public I columns(final Number[]... source)
+    {
         return this.instantiate(myPhysicalFactory.columns(source));
     }
 
-    public I copy(final Access2D<?> source) {
+    public I copy(final Access2D<?> source)
+    {
         return this.instantiate(myPhysicalFactory.copy(source));
     }
 
-    public Builder<I> getBuilder(final int count) {
+    public Builder<I> getBuilder(final int count)
+    {
         return this.getBuilder(count, 1);
     }
 
-    public Builder<I> getBuilder(final int rows, final int columns) {
+    public Builder<I> getBuilder(final int rows, final int columns)
+    {
         return new MatrixBuilder(myPhysicalFactory, rows, columns);
     }
 
-    public I makeEye(final long rows, final long columns) {
+    public I makeEye(final long rows, final long columns)
+    {
 
         final int tmpMinDim = (int) Math.min(rows, columns);
 
         MatrixStore.LogicalBuilder<N> retVal = myPhysicalFactory.builder().makeIdentity(tmpMinDim);
 
-        if (rows > tmpMinDim) {
+        if (rows > tmpMinDim)
+        {
             retVal = retVal.below((int) rows - tmpMinDim);
-        } else if (columns > tmpMinDim) {
+        } else if (columns > tmpMinDim)
+        {
             retVal = retVal.right((int) columns - tmpMinDim);
         }
 
         return this.instantiate(retVal.get());
     }
 
-    public I makeFilled(final long rows, final long columns, final NullaryFunction<?> supplier) {
+    public I makeFilled(final long rows, final long columns, final NullaryFunction<?> supplier)
+    {
         return this.instantiate(myPhysicalFactory.makeFilled(rows, columns, supplier));
     }
 
-    public I makeZero(final long rows, final long columns) {
+    public I makeZero(final long rows, final long columns)
+    {
         //return this.instantiate(new ZeroStore<N>(myPhysicalFactory, (int) rows, (int) columns));
         return this.instantiate(myPhysicalFactory.builder().makeZero((int) rows, (int) columns).get());
     }
 
-    public I rows(final Access1D<?>... source) {
+    public I rows(final Access1D<?>... source)
+    {
         return this.instantiate(myPhysicalFactory.rows(source));
     }
 
-    public I rows(final double[]... source) {
+    public I rows(final double[]... source)
+    {
         return this.instantiate(myPhysicalFactory.rows(source));
     }
 
     @SuppressWarnings("unchecked")
-    public I rows(final List<? extends Number>... source) {
+    public I rows(final List<? extends Number>... source)
+    {
         return this.instantiate(myPhysicalFactory.rows(source));
     }
 
-    public I rows(final Number[]... source) {
+    public I rows(final Number[]... source)
+    {
         return this.instantiate(myPhysicalFactory.rows(source));
     }
 
     /**
      * This method is for internal use only - YOU should NOT use it!
      */
-    final I instantiate(final MatrixStore<N> store) {
-        try {
+    final I instantiate(final MatrixStore<N> store)
+    {
+        try
+        {
             return myConstructor.newInstance(store);
-        } catch (final IllegalArgumentException anException) {
+        } catch (final IllegalArgumentException anException)
+        {
             throw new ProgrammingError(anException);
-        } catch (final InstantiationException anException) {
+        } catch (final InstantiationException anException)
+        {
             throw new ProgrammingError(anException);
-        } catch (final IllegalAccessException anException) {
+        } catch (final IllegalAccessException anException)
+        {
             throw new ProgrammingError(anException);
-        } catch (final InvocationTargetException anException) {
+        } catch (final InvocationTargetException anException)
+        {
             throw new ProgrammingError(anException);
         }
     }
 
-    final MatrixBuilder wrap(final PhysicalStore<N> store) {
+    final MatrixBuilder wrap(final PhysicalStore<N> store)
+    {
         return new MatrixBuilder(store);
     }
 

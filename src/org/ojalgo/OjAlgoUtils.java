@@ -28,7 +28,8 @@ import org.ojalgo.machine.VirtualMachine;
 import org.ojalgo.netio.BasicLogger;
 import org.ojalgo.type.StandardType;
 
-public abstract class OjAlgoUtils {
+public abstract class OjAlgoUtils
+{
 
     /**
      * This is set for you, but you may want to set it to something different/better. Create a
@@ -36,19 +37,23 @@ public abstract class OjAlgoUtils {
      */
     public static VirtualMachine ENVIRONMENT = null;
 
-    static {
+    static
+    {
 
         final String tmpArchitecture = VirtualMachine.getArchitecture();
         final long tmpMemory = VirtualMachine.getMemory();
         final int tmpThreads = VirtualMachine.getThreads();
 
-        for (final Hardware tmpHardware : Hardware.PREDEFINED) {
-            if (tmpHardware.architecture.equals(tmpArchitecture) && (tmpHardware.threads == tmpThreads) && (tmpHardware.memory >= tmpMemory)) {
+        for (final Hardware tmpHardware : Hardware.PREDEFINED)
+        {
+            if (tmpHardware.architecture.equals(tmpArchitecture) && (tmpHardware.threads == tmpThreads) && (tmpHardware.memory >= tmpMemory))
+            {
                 ENVIRONMENT = tmpHardware.virtualise();
             }
         }
 
-        if (ENVIRONMENT == null) {
+        if (ENVIRONMENT == null)
+        {
             BasicLogger.debug("ojAlgo includes a small set of predefined hardware profiles,");
             BasicLogger.debug("none of which were deemed suitable for the hardware you're currently using.");
             BasicLogger.debug("You should set org.ojalgo.OjAlgoUtils.ENVIRONMENT to something that matches the hardware/OS/JVM you're running on.");
@@ -62,7 +67,8 @@ public abstract class OjAlgoUtils {
     /**
      * @see Package#getSpecificationVersion()
      */
-    public static String getDate() {
+    public static String getDate()
+    {
 
         final String tmpManifestValue = OjAlgoUtils.class.getPackage().getSpecificationVersion();
 
@@ -72,7 +78,8 @@ public abstract class OjAlgoUtils {
     /**
      * @see Package#getImplementationTitle()
      */
-    public static String getTitle() {
+    public static String getTitle()
+    {
 
         final String tmpManifestValue = OjAlgoUtils.class.getPackage().getImplementationTitle();
 
@@ -82,7 +89,8 @@ public abstract class OjAlgoUtils {
     /**
      * @see Package#getImplementationVendor()
      */
-    public static String getVendor() {
+    public static String getVendor()
+    {
 
         final String tmpManifestValue = OjAlgoUtils.class.getPackage().getImplementationVendor();
 
@@ -92,14 +100,16 @@ public abstract class OjAlgoUtils {
     /**
      * @see Package#getImplementationVersion()
      */
-    public static String getVersion() {
+    public static String getVersion()
+    {
 
         final String tmpManifestValue = OjAlgoUtils.class.getPackage().getImplementationVersion();
 
         return tmpManifestValue != null ? tmpManifestValue : "X.X";
     }
 
-    private OjAlgoUtils() {
+    private OjAlgoUtils()
+    {
         super();
     }
 

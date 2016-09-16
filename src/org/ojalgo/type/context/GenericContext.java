@@ -26,11 +26,13 @@ import java.text.Format;
 /**
  * @author apete
  */
-public final class GenericContext<T> extends FormatContext<T> {
+public final class GenericContext<T> extends FormatContext<T>
+{
 
     private final TypeContext<T> myDelegate;
 
-    public GenericContext(final Format format) {
+    public GenericContext(final Format format)
+    {
 
         super(format);
 
@@ -38,32 +40,39 @@ public final class GenericContext<T> extends FormatContext<T> {
     }
 
     @SuppressWarnings("unchecked")
-    GenericContext(final TypeContext<?> delegate, final Format format) {
+    GenericContext(final TypeContext<?> delegate, final Format format)
+    {
 
         super(format);
 
         myDelegate = (TypeContext<T>) delegate;
     }
 
-    public T enforce(final T object) {
-        if (myDelegate != null) {
+    public T enforce(final T object)
+    {
+        if (myDelegate != null)
+        {
             return myDelegate.enforce(object);
-        } else {
+        } else
+        {
             return this.parse(this.format(object));
         }
     }
 
     @Override
-    protected void configureFormat(final Format format, final Object object) {
+    protected void configureFormat(final Format format, final Object object)
+    {
     }
 
     @Override
-    protected String handleFormatException(final Format format, final Object object) {
+    protected String handleFormatException(final Format format, final Object object)
+    {
         return myDelegate.format(object);
     }
 
     @Override
-    protected T handleParseException(final Format format, final String string) {
+    protected T handleParseException(final Format format, final String string)
+    {
         return myDelegate.parse(string);
     }
 

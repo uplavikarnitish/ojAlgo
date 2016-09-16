@@ -29,7 +29,8 @@ import org.ojalgo.access.Access2D;
 import org.ojalgo.matrix.store.MatrixStore;
 import org.ojalgo.netio.BasicLogger;
 
-public abstract class GenericSolver implements Optimisation.Solver, Serializable {
+public abstract class GenericSolver implements Optimisation.Solver, Serializable
+{
 
     public final Optimisation.Options options;
 
@@ -38,25 +39,30 @@ public abstract class GenericSolver implements Optimisation.Solver, Serializable
     private State myState = State.UNEXPLORED;
 
     @SuppressWarnings("unused")
-    private GenericSolver() {
+    private GenericSolver()
+    {
         this(null);
     }
 
     /**
      */
-    protected GenericSolver(final Optimisation.Options solverOptions) {
+    protected GenericSolver(final Optimisation.Options solverOptions)
+    {
 
         super();
 
-        if (solverOptions != null) {
+        if (solverOptions != null)
+        {
             options = solverOptions;
-        } else {
+        } else
+        {
             options = new Optimisation.Options();
         }
 
     }
 
-    protected Optimisation.Result buildResult() {
+    protected Optimisation.Result buildResult()
+    {
 
         final MatrixStore<Double> tmpSolution = this.extractSolution();
         final double tmpValue = this.evaluateFunction(tmpSolution);
@@ -65,27 +71,34 @@ public abstract class GenericSolver implements Optimisation.Solver, Serializable
         return new Optimisation.Result(tmpState, tmpValue, tmpSolution);
     }
 
-    protected final int countIterations() {
+    protected final int countIterations()
+    {
         return myIterationsCount.get();
     }
 
-    protected final long countTime() {
+    protected final long countTime()
+    {
         return System.currentTimeMillis() - myResetTime;
     }
 
-    protected final void debug(final String descripttion, final Access2D<?> matrix) {
-        if (options.debug_appender != null) {
+    protected final void debug(final String descripttion, final Access2D<?> matrix)
+    {
+        if (options.debug_appender != null)
+        {
             options.debug_appender.printmtrx(descripttion, matrix, options.print);
         }
     }
 
-    protected final void debug(final String messagePattern, final Object... arguments) {
-        if (options.debug_appender != null) {
+    protected final void debug(final String messagePattern, final Object... arguments)
+    {
+        if (options.debug_appender != null)
+        {
             options.debug_appender.println(messagePattern, arguments);
         }
     }
 
-    protected final void error(final String messagePattern, final Object... arguments) {
+    protected final void error(final String messagePattern, final Object... arguments)
+    {
         BasicLogger.error(messagePattern, arguments);
     }
 
@@ -96,7 +109,8 @@ public abstract class GenericSolver implements Optimisation.Solver, Serializable
      */
     protected abstract MatrixStore<Double> extractSolution();
 
-    protected final State getState() {
+    protected final State getState()
+    {
         return myState;
     }
 
@@ -104,13 +118,15 @@ public abstract class GenericSolver implements Optimisation.Solver, Serializable
      * Should be called after a completed iteration. The iterations count is not "1" untill the first
      * iteration is completed.
      */
-    protected final int incrementIterationsCount() {
+    protected final int incrementIterationsCount()
+    {
         return myIterationsCount.incrementAndGet();
     }
 
     protected abstract boolean initialise(Result kickStarter);
 
-    protected final boolean isDebug() {
+    protected final boolean isDebug()
+    {
         return (options.debug_appender != null) && (options.debug_solver.isAssignableFrom(this.getClass()));
     }
 
@@ -119,7 +135,8 @@ public abstract class GenericSolver implements Optimisation.Solver, Serializable
      * instead. Will return false if either the iterations count or the execution time has reached their
      * respective limits.
      */
-    protected final boolean isIterationAllowed() {
+    protected final boolean isIterationAllowed()
+    {
 
         final int tmpIterations = this.countIterations();
         final long tmpTime = this.countTime();
@@ -137,12 +154,14 @@ public abstract class GenericSolver implements Optimisation.Solver, Serializable
 
     protected abstract boolean needsAnotherIteration();
 
-    protected final void resetIterationsCount() {
+    protected final void resetIterationsCount()
+    {
         myIterationsCount.set(0);
         myResetTime = System.currentTimeMillis();
     }
 
-    protected final void setState(final State aState) {
+    protected final void setState(final State aState)
+    {
         myState = aState;
     }
 

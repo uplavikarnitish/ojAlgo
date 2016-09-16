@@ -28,9 +28,11 @@ import org.ojalgo.function.BasicFunction;
 import org.ojalgo.matrix.store.MatrixStore;
 import org.ojalgo.matrix.store.PhysicalStore;
 
-public interface MultiaryFunction<N extends Number> extends BasicFunction<N>, Function<Access1D<N>, N> {
+public interface MultiaryFunction<N extends Number> extends BasicFunction<N>, Function<Access1D<N>, N>
+{
 
-    public static interface Constant<N extends Number, F extends Constant<N, ?>> extends MultiaryFunction<N> {
+    public static interface Constant<N extends Number, F extends Constant<N, ?>> extends MultiaryFunction<N>
+    {
 
         F constant(Number constant);
 
@@ -40,17 +42,20 @@ public interface MultiaryFunction<N extends Number> extends BasicFunction<N>, Fu
 
     }
 
-    public static interface Convex<N extends Number> extends MultiaryFunction<N> {
+    public static interface Convex<N extends Number> extends MultiaryFunction<N>
+    {
 
     }
 
-    public static interface Linear<N extends Number> extends MultiaryFunction<N> {
+    public static interface Linear<N extends Number> extends MultiaryFunction<N>
+    {
 
         PhysicalStore<N> linear();
 
     }
 
-    public static interface Quadratic<N extends Number> extends MultiaryFunction<N> {
+    public static interface Quadratic<N extends Number> extends MultiaryFunction<N>
+    {
 
         PhysicalStore<N> quadratic();
 
@@ -61,7 +66,8 @@ public interface MultiaryFunction<N extends Number> extends BasicFunction<N>, Fu
      *
      * @author apete
      */
-    public static interface TwiceDifferentiable<N extends Number> extends MultiaryFunction<N> {
+    public static interface TwiceDifferentiable<N extends Number> extends MultiaryFunction<N>
+    {
 
         /**
          * <p>
@@ -101,7 +107,8 @@ public interface MultiaryFunction<N extends Number> extends BasicFunction<N>, Fu
 
     }
 
-    default N apply(final Access1D<N> arg) {
+    default N apply(final Access1D<N> arg)
+    {
         return this.invoke(arg);
     }
 

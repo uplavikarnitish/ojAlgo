@@ -64,41 +64,50 @@ import org.ojalgo.type.context.NumberContext;
  *
  * @author apete
  */
-public final class BigDenseStore extends BigArray implements PhysicalStore<BigDecimal>, DecompositionStore<BigDecimal> {
+public final class BigDenseStore extends BigArray implements PhysicalStore<BigDecimal>, DecompositionStore<BigDecimal>
+{
 
-    public static interface BigMultiplyBoth extends FillByMultiplying<BigDecimal> {
+    public static interface BigMultiplyBoth extends FillByMultiplying<BigDecimal>
+    {
 
     }
 
-    public static interface BigMultiplyLeft {
+    public static interface BigMultiplyLeft
+    {
 
         void invoke(BigDecimal[] product, Access1D<BigDecimal> left, int complexity, BigDecimal[] right);
 
     }
 
-    public static interface BigMultiplyNeither {
+    public static interface BigMultiplyNeither
+    {
 
         void invoke(BigDecimal[] product, BigDecimal[] left, int complexity, BigDecimal[] right);
 
     }
 
-    public static interface BigMultiplyRight {
+    public static interface BigMultiplyRight
+    {
 
         void invoke(BigDecimal[] product, BigDecimal[] left, int complexity, Access1D<BigDecimal> right);
 
     }
 
-    public static final PhysicalStore.Factory<BigDecimal, BigDenseStore> FACTORY = new PhysicalStore.Factory<BigDecimal, BigDenseStore>() {
+    public static final PhysicalStore.Factory<BigDecimal, BigDenseStore> FACTORY = new PhysicalStore.Factory<BigDecimal, BigDenseStore>()
+    {
 
-        public AggregatorSet<BigDecimal> aggregator() {
+        public AggregatorSet<BigDecimal> aggregator()
+        {
             return BigAggregator.getSet();
         }
 
-        public MatrixStore.Factory<BigDecimal> builder() {
+        public MatrixStore.Factory<BigDecimal> builder()
+        {
             return MatrixStore.BIG;
         }
 
-        public BigDenseStore columns(final Access1D<?>... source) {
+        public BigDenseStore columns(final Access1D<?>... source)
+        {
 
             final int tmpRowDim = (int) source[0].count();
             final int tmpColDim = source.length;
@@ -106,9 +115,11 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
             final BigDecimal[] tmpData = new BigDecimal[tmpRowDim * tmpColDim];
 
             Access1D<?> tmpColumn;
-            for (int j = 0; j < tmpColDim; j++) {
+            for (int j = 0; j < tmpColDim; j++)
+            {
                 tmpColumn = source[j];
-                for (int i = 0; i < tmpRowDim; i++) {
+                for (int i = 0; i < tmpRowDim; i++)
+                {
                     tmpData[i + (tmpRowDim * j)] = TypeUtils.toBigDecimal(tmpColumn.get(i));
                 }
             }
@@ -116,7 +127,8 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
             return new BigDenseStore(tmpRowDim, tmpColDim, tmpData);
         }
 
-        public BigDenseStore columns(final double[]... source) {
+        public BigDenseStore columns(final double[]... source)
+        {
 
             final int tmpRowDim = source[0].length;
             final int tmpColDim = source.length;
@@ -124,9 +136,11 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
             final BigDecimal[] tmpData = new BigDecimal[tmpRowDim * tmpColDim];
 
             double[] tmpColumn;
-            for (int j = 0; j < tmpColDim; j++) {
+            for (int j = 0; j < tmpColDim; j++)
+            {
                 tmpColumn = source[j];
-                for (int i = 0; i < tmpRowDim; i++) {
+                for (int i = 0; i < tmpRowDim; i++)
+                {
                     tmpData[i + (tmpRowDim * j)] = TypeUtils.toBigDecimal(tmpColumn[i]);
                 }
             }
@@ -134,7 +148,8 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
             return new BigDenseStore(tmpRowDim, tmpColDim, tmpData);
         }
 
-        public BigDenseStore columns(final List<? extends Number>... source) {
+        public BigDenseStore columns(final List<? extends Number>... source)
+        {
 
             final int tmpRowDim = source[0].size();
             final int tmpColDim = source.length;
@@ -142,9 +157,11 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
             final BigDecimal[] tmpData = new BigDecimal[tmpRowDim * tmpColDim];
 
             List<? extends Number> tmpColumn;
-            for (int j = 0; j < tmpColDim; j++) {
+            for (int j = 0; j < tmpColDim; j++)
+            {
                 tmpColumn = source[j];
-                for (int i = 0; i < tmpRowDim; i++) {
+                for (int i = 0; i < tmpRowDim; i++)
+                {
                     tmpData[i + (tmpRowDim * j)] = TypeUtils.toBigDecimal(tmpColumn.get(i));
                 }
             }
@@ -152,7 +169,8 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
             return new BigDenseStore(tmpRowDim, tmpColDim, tmpData);
         }
 
-        public BigDenseStore columns(final Number[]... source) {
+        public BigDenseStore columns(final Number[]... source)
+        {
 
             final int tmpRowDim = source[0].length;
             final int tmpColDim = source.length;
@@ -160,9 +178,11 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
             final BigDecimal[] tmpData = new BigDecimal[tmpRowDim * tmpColDim];
 
             Number[] tmpColumn;
-            for (int j = 0; j < tmpColDim; j++) {
+            for (int j = 0; j < tmpColDim; j++)
+            {
                 tmpColumn = source[j];
-                for (int i = 0; i < tmpRowDim; i++) {
+                for (int i = 0; i < tmpRowDim; i++)
+                {
                     tmpData[i + (tmpRowDim * j)] = TypeUtils.toBigDecimal(tmpColumn[i]);
                 }
             }
@@ -170,23 +190,28 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
             return new BigDenseStore(tmpRowDim, tmpColDim, tmpData);
         }
 
-        public BigDenseStore conjugate(final Access2D<?> source) {
+        public BigDenseStore conjugate(final Access2D<?> source)
+        {
             return this.transpose(source);
         }
 
-        public BigDenseStore copy(final Access2D<?> source) {
+        public BigDenseStore copy(final Access2D<?> source)
+        {
 
             final int tmpRowDim = (int) source.countRows();
             final int tmpColDim = (int) source.countColumns();
 
             final BigDenseStore retVal = new BigDenseStore(tmpRowDim, tmpColDim);
 
-            if (tmpColDim > FillMatchingSingle.THRESHOLD) {
+            if (tmpColDim > FillMatchingSingle.THRESHOLD)
+            {
 
-                final DivideAndConquer tmpConquerer = new DivideAndConquer() {
+                final DivideAndConquer tmpConquerer = new DivideAndConquer()
+                {
 
                     @Override
-                    public void conquer(final int aFirst, final int aLimit) {
+                    public void conquer(final int aFirst, final int aLimit)
+                    {
                         FillMatchingSingle.invoke(retVal.data, tmpRowDim, aFirst, aLimit, source);
                     }
 
@@ -194,7 +219,8 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
 
                 tmpConquerer.invoke(0, tmpColDim, FillMatchingSingle.THRESHOLD);
 
-            } else {
+            } else
+            {
 
                 FillMatchingSingle.invoke(retVal.data, tmpRowDim, 0, tmpColDim, source);
             }
@@ -202,15 +228,18 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
             return retVal;
         }
 
-        public FunctionSet<BigDecimal> function() {
+        public FunctionSet<BigDecimal> function()
+        {
             return BigFunction.getSet();
         }
 
-        public BigArray makeArray(final int length) {
+        public BigArray makeArray(final int length)
+        {
             return BigArray.make(length);
         }
 
-        public BigDenseStore makeEye(final long rows, final long columns) {
+        public BigDenseStore makeEye(final long rows, final long columns)
+        {
 
             final BigDenseStore retVal = this.makeZero(rows, columns);
 
@@ -219,7 +248,8 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
             return retVal;
         }
 
-        public BigDenseStore makeFilled(final long rows, final long columns, final NullaryFunction<?> supplier) {
+        public BigDenseStore makeFilled(final long rows, final long columns, final NullaryFunction<?> supplier)
+        {
 
             final int tmpRowDim = (int) rows;
             final int tmpColDim = (int) columns;
@@ -228,30 +258,36 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
 
             final BigDecimal[] tmpData = new BigDecimal[tmpLength];
 
-            for (int i = 0; i < tmpLength; i++) {
+            for (int i = 0; i < tmpLength; i++)
+            {
                 tmpData[i] = TypeUtils.toBigDecimal(supplier.get());
             }
 
             return new BigDenseStore(tmpRowDim, tmpColDim, tmpData);
         }
 
-        public Householder.Big makeHouseholder(final int length) {
+        public Householder.Big makeHouseholder(final int length)
+        {
             return new Householder.Big(length);
         }
 
-        public Rotation.Big makeRotation(final int low, final int high, final BigDecimal cos, final BigDecimal sin) {
+        public Rotation.Big makeRotation(final int low, final int high, final BigDecimal cos, final BigDecimal sin)
+        {
             return new Rotation.Big(low, high, cos, sin);
         }
 
-        public Rotation.Big makeRotation(final int low, final int high, final double cos, final double sin) {
+        public Rotation.Big makeRotation(final int low, final int high, final double cos, final double sin)
+        {
             return this.makeRotation(low, high, new BigDecimal(cos), new BigDecimal(sin));
         }
 
-        public BigDenseStore makeZero(final long rows, final long columns) {
+        public BigDenseStore makeZero(final long rows, final long columns)
+        {
             return new BigDenseStore((int) rows, (int) columns);
         }
 
-        public BigDenseStore rows(final Access1D<?>... source) {
+        public BigDenseStore rows(final Access1D<?>... source)
+        {
 
             final int tmpRowDim = source.length;
             final int tmpColDim = (int) source[0].count();
@@ -259,9 +295,11 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
             final BigDecimal[] tmpData = new BigDecimal[tmpRowDim * tmpColDim];
 
             Access1D<?> tmpRow;
-            for (int i = 0; i < tmpRowDim; i++) {
+            for (int i = 0; i < tmpRowDim; i++)
+            {
                 tmpRow = source[i];
-                for (int j = 0; j < tmpColDim; j++) {
+                for (int j = 0; j < tmpColDim; j++)
+                {
                     tmpData[i + (tmpRowDim * j)] = TypeUtils.toBigDecimal(tmpRow.get(j));
                 }
             }
@@ -269,7 +307,8 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
             return new BigDenseStore(tmpRowDim, tmpColDim, tmpData);
         }
 
-        public BigDenseStore rows(final double[]... source) {
+        public BigDenseStore rows(final double[]... source)
+        {
 
             final int tmpRowDim = source.length;
             final int tmpColDim = source[0].length;
@@ -277,9 +316,11 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
             final BigDecimal[] tmpData = new BigDecimal[tmpRowDim * tmpColDim];
 
             double[] tmpRow;
-            for (int i = 0; i < tmpRowDim; i++) {
+            for (int i = 0; i < tmpRowDim; i++)
+            {
                 tmpRow = source[i];
-                for (int j = 0; j < tmpColDim; j++) {
+                for (int j = 0; j < tmpColDim; j++)
+                {
                     tmpData[i + (tmpRowDim * j)] = TypeUtils.toBigDecimal(tmpRow[j]);
                 }
             }
@@ -287,7 +328,8 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
             return new BigDenseStore(tmpRowDim, tmpColDim, tmpData);
         }
 
-        public BigDenseStore rows(final List<? extends Number>... source) {
+        public BigDenseStore rows(final List<? extends Number>... source)
+        {
 
             final int tmpRowDim = source.length;
             final int tmpColDim = source[0].size();
@@ -295,9 +337,11 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
             final BigDecimal[] tmpData = new BigDecimal[tmpRowDim * tmpColDim];
 
             List<? extends Number> tmpRow;
-            for (int i = 0; i < tmpRowDim; i++) {
+            for (int i = 0; i < tmpRowDim; i++)
+            {
                 tmpRow = source[i];
-                for (int j = 0; j < tmpColDim; j++) {
+                for (int j = 0; j < tmpColDim; j++)
+                {
                     tmpData[i + (tmpRowDim * j)] = TypeUtils.toBigDecimal(tmpRow.get(j));
                 }
             }
@@ -305,7 +349,8 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
             return new BigDenseStore(tmpRowDim, tmpColDim, tmpData);
         }
 
-        public BigDenseStore rows(final Number[]... source) {
+        public BigDenseStore rows(final Number[]... source)
+        {
 
             final int tmpRowDim = source.length;
             final int tmpColDim = source[0].length;
@@ -313,9 +358,11 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
             final BigDecimal[] tmpData = new BigDecimal[tmpRowDim * tmpColDim];
 
             Number[] tmpRow;
-            for (int i = 0; i < tmpRowDim; i++) {
+            for (int i = 0; i < tmpRowDim; i++)
+            {
                 tmpRow = source[i];
-                for (int j = 0; j < tmpColDim; j++) {
+                for (int j = 0; j < tmpColDim; j++)
+                {
                     tmpData[i + (tmpRowDim * j)] = TypeUtils.toBigDecimal(tmpRow[j]);
                 }
             }
@@ -323,23 +370,28 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
             return new BigDenseStore(tmpRowDim, tmpColDim, tmpData);
         }
 
-        public Scalar.Factory<BigDecimal> scalar() {
+        public Scalar.Factory<BigDecimal> scalar()
+        {
             return BigScalar.FACTORY;
         }
 
-        public BigDenseStore transpose(final Access2D<?> source) {
+        public BigDenseStore transpose(final Access2D<?> source)
+        {
 
             final BigDenseStore retVal = new BigDenseStore((int) source.countColumns(), (int) source.countRows());
 
             final int tmpRowDim = retVal.getRowDim();
             final int tmpColDim = retVal.getColDim();
 
-            if (tmpColDim > FillTransposed.THRESHOLD) {
+            if (tmpColDim > FillTransposed.THRESHOLD)
+            {
 
-                final DivideAndConquer tmpConquerer = new DivideAndConquer() {
+                final DivideAndConquer tmpConquerer = new DivideAndConquer()
+                {
 
                     @Override
-                    public void conquer(final int aFirst, final int aLimit) {
+                    public void conquer(final int aFirst, final int aLimit)
+                    {
                         FillTransposed.invoke(retVal.data, tmpRowDim, aFirst, aLimit, source);
                     }
 
@@ -347,7 +399,8 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
 
                 tmpConquerer.invoke(0, tmpColDim, FillTransposed.THRESHOLD);
 
-            } else {
+            } else
+            {
 
                 FillTransposed.invoke(retVal.data, tmpRowDim, 0, tmpColDim, source);
             }
@@ -356,30 +409,41 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
         }
     };
 
-    static BigDenseStore cast(final Access1D<BigDecimal> matrix) {
-        if (matrix instanceof BigDenseStore) {
+    static BigDenseStore cast(final Access1D<BigDecimal> matrix)
+    {
+        if (matrix instanceof BigDenseStore)
+        {
             return (BigDenseStore) matrix;
-        } else if (matrix instanceof Access2D<?>) {
+        } else if (matrix instanceof Access2D<?>)
+        {
             return FACTORY.copy((Access2D<?>) matrix);
-        } else {
+        } else
+        {
             return FACTORY.columns(matrix);
         }
     }
 
-    static Householder.Big cast(final Householder<BigDecimal> transformation) {
-        if (transformation instanceof Householder.Big) {
+    static Householder.Big cast(final Householder<BigDecimal> transformation)
+    {
+        if (transformation instanceof Householder.Big)
+        {
             return (Householder.Big) transformation;
-        } else if (transformation instanceof HouseholderReference<?>) {
+        } else if (transformation instanceof HouseholderReference<?>)
+        {
             return ((Householder.Big) ((HouseholderReference<BigDecimal>) transformation).getWorker(FACTORY)).copy(transformation);
-        } else {
+        } else
+        {
             return new Householder.Big(transformation);
         }
     }
 
-    static Rotation.Big cast(final Rotation<BigDecimal> transformation) {
-        if (transformation instanceof Rotation.Big) {
+    static Rotation.Big cast(final Rotation<BigDecimal> transformation)
+    {
+        if (transformation instanceof Rotation.Big)
+        {
             return (Rotation.Big) transformation;
-        } else {
+        } else
+        {
             return new Rotation.Big(transformation);
         }
     }
@@ -392,7 +456,8 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
     private final int myRowDim;
     private final Array2D<BigDecimal> myUtility;
 
-    BigDenseStore(final BigDecimal[] anArray) {
+    BigDenseStore(final BigDecimal[] anArray)
+    {
 
         super(anArray);
 
@@ -407,7 +472,8 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
         multiplyNeither = MultiplyNeither.getBig(myRowDim, myColDim);
     }
 
-    BigDenseStore(final int aLength) {
+    BigDenseStore(final int aLength)
+    {
 
         super(aLength);
 
@@ -422,7 +488,8 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
         multiplyNeither = MultiplyNeither.getBig(myRowDim, myColDim);
     }
 
-    BigDenseStore(final int aRowDim, final int aColDim) {
+    BigDenseStore(final int aRowDim, final int aColDim)
+    {
 
         super(aRowDim * aColDim);
 
@@ -437,7 +504,8 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
         multiplyNeither = MultiplyNeither.getBig(myRowDim, myColDim);
     }
 
-    BigDenseStore(final int aRowDim, final int aColDim, final BigDecimal[] anArray) {
+    BigDenseStore(final int aRowDim, final int aColDim, final BigDecimal[] anArray)
+    {
 
         super(anArray);
 
@@ -452,41 +520,51 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
         multiplyNeither = MultiplyNeither.getBig(myRowDim, myColDim);
     }
 
-    public void accept(final Access2D<?> supplied) {
-        for (long j = 0L; j < supplied.countColumns(); j++) {
-            for (long i = 0L; i < supplied.countRows(); i++) {
+    public void accept(final Access2D<?> supplied)
+    {
+        for (long j = 0L; j < supplied.countColumns(); j++)
+        {
+            for (long i = 0L; i < supplied.countRows(); i++)
+            {
                 this.set(i, j, supplied.get(i, j));
             }
         }
     }
 
-    public void add(final long row, final long col, final double addend) {
+    public void add(final long row, final long col, final double addend)
+    {
         myUtility.add(row, col, addend);
     }
 
-    public void add(final long row, final long col, final Number addend) {
+    public void add(final long row, final long col, final Number addend)
+    {
         myUtility.add(row, col, addend);
     }
 
-    public BigDecimal aggregateAll(final Aggregator aggregator) {
+    public BigDecimal aggregateAll(final Aggregator aggregator)
+    {
 
         final int tmpRowDim = myRowDim;
         final int tmpColDim = myColDim;
 
         final AggregatorFunction<BigDecimal> tmpMainAggr = aggregator.getBigFunction();
 
-        if (tmpColDim > AggregateAll.THRESHOLD) {
+        if (tmpColDim > AggregateAll.THRESHOLD)
+        {
 
-            final DivideAndConquer tmpConquerer = new DivideAndConquer() {
+            final DivideAndConquer tmpConquerer = new DivideAndConquer()
+            {
 
                 @Override
-                public void conquer(final int aFirst, final int aLimit) {
+                public void conquer(final int aFirst, final int aLimit)
+                {
 
                     final AggregatorFunction<BigDecimal> tmpPartAggr = aggregator.getBigFunction();
 
                     BigDenseStore.this.visit(tmpRowDim * aFirst, tmpRowDim * aLimit, 1, tmpPartAggr);
 
-                    synchronized (tmpMainAggr) {
+                    synchronized (tmpMainAggr)
+                    {
                         tmpMainAggr.merge(tmpPartAggr.getNumber());
                     }
                 }
@@ -494,7 +572,8 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
 
             tmpConquerer.invoke(0, tmpColDim, AggregateAll.THRESHOLD);
 
-        } else {
+        } else
+        {
 
             BigDenseStore.this.visit(0, this.size(), 1, tmpMainAggr);
         }
@@ -502,104 +581,127 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
         return tmpMainAggr.getNumber();
     }
 
-    public void applyCholesky(final int iterationPoint, final BasicArray<BigDecimal> multipliers) {
+    public void applyCholesky(final int iterationPoint, final BasicArray<BigDecimal> multipliers)
+    {
 
         final BigDecimal[] tmpData = data;
         final BigDecimal[] tmpColumn = ((BigArray) multipliers).data;
 
-        if ((myColDim - iterationPoint - 1) > ApplyCholesky.THRESHOLD) {
+        if ((myColDim - iterationPoint - 1) > ApplyCholesky.THRESHOLD)
+        {
 
-            final DivideAndConquer tmpConquerer = new DivideAndConquer() {
+            final DivideAndConquer tmpConquerer = new DivideAndConquer()
+            {
 
                 @Override
-                protected void conquer(final int aFirst, final int aLimit) {
+                protected void conquer(final int aFirst, final int aLimit)
+                {
                     ApplyCholesky.invoke(tmpData, myRowDim, aFirst, aLimit, tmpColumn);
                 }
             };
 
             tmpConquerer.invoke(iterationPoint + 1, myColDim, ApplyCholesky.THRESHOLD);
 
-        } else {
+        } else
+        {
 
             ApplyCholesky.invoke(tmpData, myRowDim, iterationPoint + 1, myColDim, tmpColumn);
         }
     }
 
-    public void applyLDL(final int iterationPoint, final BasicArray<BigDecimal> multipliers) {
+    public void applyLDL(final int iterationPoint, final BasicArray<BigDecimal> multipliers)
+    {
 
         final BigDecimal[] tmpData = data;
         final BigDecimal[] tmpColumn = ((BigArray) multipliers).data;
 
-        if ((myColDim - iterationPoint - 1) > ApplyLDL.THRESHOLD) {
+        if ((myColDim - iterationPoint - 1) > ApplyLDL.THRESHOLD)
+        {
 
-            final DivideAndConquer tmpConquerer = new DivideAndConquer() {
+            final DivideAndConquer tmpConquerer = new DivideAndConquer()
+            {
 
                 @Override
-                protected void conquer(final int first, final int limit) {
+                protected void conquer(final int first, final int limit)
+                {
                     ApplyLDL.invoke(tmpData, myRowDim, first, limit, tmpColumn, iterationPoint);
                 }
             };
 
             tmpConquerer.invoke(iterationPoint + 1, myColDim, ApplyLDL.THRESHOLD);
 
-        } else {
+        } else
+        {
 
             ApplyLDL.invoke(tmpData, myRowDim, iterationPoint + 1, myColDim, tmpColumn, iterationPoint);
         }
     }
 
-    public void applyLU(final int iterationPoint, final BasicArray<BigDecimal> multipliers) {
+    public void applyLU(final int iterationPoint, final BasicArray<BigDecimal> multipliers)
+    {
 
         final BigDecimal[] tmpData = data;
         final BigDecimal[] tmpColumn = ((BigArray) multipliers).data;
 
-        if ((myColDim - iterationPoint - 1) > ApplyLU.THRESHOLD) {
+        if ((myColDim - iterationPoint - 1) > ApplyLU.THRESHOLD)
+        {
 
-            final DivideAndConquer tmpConquerer = new DivideAndConquer() {
+            final DivideAndConquer tmpConquerer = new DivideAndConquer()
+            {
 
                 @Override
-                protected void conquer(final int aFirst, final int aLimit) {
+                protected void conquer(final int aFirst, final int aLimit)
+                {
                     ApplyLU.invoke(tmpData, myRowDim, aFirst, aLimit, tmpColumn, iterationPoint);
                 }
             };
 
             tmpConquerer.invoke(iterationPoint + 1, myColDim, ApplyLU.THRESHOLD);
 
-        } else {
+        } else
+        {
 
             ApplyLU.invoke(tmpData, myRowDim, iterationPoint + 1, myColDim, tmpColumn, iterationPoint);
         }
     }
 
-    public Array1D<BigDecimal> asList() {
+    public Array1D<BigDecimal> asList()
+    {
         return myUtility.asArray1D();
     }
 
-    public void caxpy(final BigDecimal scalarA, final int columnX, final int columnY, final int firstRow) {
+    public void caxpy(final BigDecimal scalarA, final int columnX, final int columnY, final int firstRow)
+    {
         AXPY.invoke(data, (columnY * myRowDim) + firstRow, 1, scalarA, data, (columnX * myRowDim) + firstRow, 1, myRowDim - firstRow);
     }
 
-    public Array1D<ComplexNumber> computeInPlaceSchur(final PhysicalStore<BigDecimal> transformationCollector, final boolean eigenvalue) {
+    public Array1D<ComplexNumber> computeInPlaceSchur(final PhysicalStore<BigDecimal> transformationCollector, final boolean eigenvalue)
+    {
         throw new UnsupportedOperationException();
     }
 
-    public MatrixStore<BigDecimal> conjugate() {
+    public MatrixStore<BigDecimal> conjugate()
+    {
         return this.transpose();
     }
 
-    public BigDenseStore copy() {
+    public BigDenseStore copy()
+    {
         return new BigDenseStore(myRowDim, myColDim, this.copyOfData());
     }
 
-    public long countColumns() {
+    public long countColumns()
+    {
         return myColDim;
     }
 
-    public long countRows() {
+    public long countRows()
+    {
         return myRowDim;
     }
 
-    public void divideAndCopyColumn(final int row, final int column, final BasicArray<BigDecimal> destination) {
+    public void divideAndCopyColumn(final int row, final int column, final BasicArray<BigDecimal> destination)
+    {
 
         final BigDecimal[] tmpData = data;
         final int tmpRowDim = myRowDim;
@@ -609,41 +711,50 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
         int tmpIndex = row + (column * tmpRowDim);
         final BigDecimal tmpDenominator = tmpData[tmpIndex];
 
-        for (int i = row + 1; i < tmpRowDim; i++) {
+        for (int i = row + 1; i < tmpRowDim; i++)
+        {
             tmpIndex++;
             tmpDestination[i] = tmpData[tmpIndex] = BigFunction.DIVIDE.invoke(tmpData[tmpIndex], tmpDenominator);
         }
     }
 
-    public double doubleValue(final long aRow, final long aCol) {
+    public double doubleValue(final long aRow, final long aCol)
+    {
         return myUtility.doubleValue(aRow, aCol);
     }
 
-    public boolean equals(final MatrixStore<BigDecimal> other, final NumberContext context) {
+    public boolean equals(final MatrixStore<BigDecimal> other, final NumberContext context)
+    {
         return AccessUtils.equals(this, other, context);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean equals(final Object anObj) {
-        if (anObj instanceof MatrixStore) {
+    public boolean equals(final Object anObj)
+    {
+        if (anObj instanceof MatrixStore)
+        {
             return this.equals((MatrixStore<BigDecimal>) anObj, NumberContext.getGeneral(6));
-        } else {
+        } else
+        {
             return super.equals(anObj);
         }
     }
 
-    public void exchangeColumns(final long colA, final long colB) {
+    public void exchangeColumns(final long colA, final long colB)
+    {
         myUtility.exchangeColumns(colA, colB);
     }
 
-    public void exchangeHermitian(final int indexA, final int indexB) {
+    public void exchangeHermitian(final int indexA, final int indexB)
+    {
 
         final int tmpMin = Math.min(indexA, indexB);
         final int tmpMax = Math.max(indexA, indexB);
 
         BigDecimal tmpVal;
-        for (int j = 0; j < tmpMin; j++) {
+        for (int j = 0; j < tmpMin; j++)
+        {
             tmpVal = this.get(tmpMin, j);
             this.set(tmpMin, j, this.get(tmpMax, j));
             this.set(tmpMax, j, tmpVal);
@@ -653,69 +764,87 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
         this.set(tmpMin, tmpMin, this.get(tmpMax, tmpMax));
         this.set(tmpMax, tmpMax, tmpVal);
 
-        for (int ij = tmpMin + 1; ij < tmpMax; ij++) {
+        for (int ij = tmpMin + 1; ij < tmpMax; ij++)
+        {
             tmpVal = this.get(ij, tmpMin);
             this.set(ij, tmpMin, this.get(tmpMax, ij));
             this.set(tmpMax, ij, tmpVal);
         }
 
-        for (int i = tmpMax + 1; i < myRowDim; i++) {
+        for (int i = tmpMax + 1; i < myRowDim; i++)
+        {
             tmpVal = this.get(i, tmpMin);
             this.set(i, tmpMin, this.get(i, tmpMax));
             this.set(i, tmpMax, tmpVal);
         }
     }
 
-    public void exchangeRows(final long rowA, final long rowB) {
+    public void exchangeRows(final long rowA, final long rowB)
+    {
         myUtility.exchangeRows(rowA, rowB);
     }
 
-    public void fillByMultiplying(final Access1D<BigDecimal> left, final Access1D<BigDecimal> right) {
+    public void fillByMultiplying(final Access1D<BigDecimal> left, final Access1D<BigDecimal> right)
+    {
 
         final int tmpComplexity = ((int) left.count()) / myRowDim;
 
-        if (left instanceof BigDenseStore) {
-            if (right instanceof BigDenseStore) {
+        if (left instanceof BigDenseStore)
+        {
+            if (right instanceof BigDenseStore)
+            {
                 multiplyNeither.invoke(data, BigDenseStore.cast(left).data, tmpComplexity, BigDenseStore.cast(right).data);
-            } else {
+            } else
+            {
                 multiplyRight.invoke(data, BigDenseStore.cast(left).data, tmpComplexity, right);
             }
-        } else {
-            if (right instanceof BigDenseStore) {
+        } else
+        {
+            if (right instanceof BigDenseStore)
+            {
                 multiplyLeft.invoke(data, left, tmpComplexity, BigDenseStore.cast(right).data);
-            } else {
+            } else
+            {
                 multiplyBoth.invoke(this, left, tmpComplexity, right);
             }
         }
     }
 
-    public void fillColumn(final long row, final long col, final BigDecimal value) {
+    public void fillColumn(final long row, final long col, final BigDecimal value)
+    {
         myUtility.fillColumn(row, col, value);
     }
 
-    public void fillColumn(final long row, final long col, final NullaryFunction<BigDecimal> supplier) {
+    public void fillColumn(final long row, final long col, final NullaryFunction<BigDecimal> supplier)
+    {
         myUtility.fillColumn(row, col, supplier);
     }
 
-    public void fillDiagonal(final long row, final long col, final BigDecimal value) {
+    public void fillDiagonal(final long row, final long col, final BigDecimal value)
+    {
         myUtility.fillDiagonal(row, col, value);
     }
 
-    public void fillDiagonal(final long row, final long col, final NullaryFunction<BigDecimal> supplier) {
+    public void fillDiagonal(final long row, final long col, final NullaryFunction<BigDecimal> supplier)
+    {
         myUtility.fillDiagonal(row, col, supplier);
     }
 
-    public void fillMatching(final Access1D<BigDecimal> aLeftArg, final BinaryFunction<BigDecimal> aFunc, final BigDecimal aRightArg) {
+    public void fillMatching(final Access1D<BigDecimal> aLeftArg, final BinaryFunction<BigDecimal> aFunc, final BigDecimal aRightArg)
+    {
 
         final int tmpRowDim = myRowDim;
         final int tmpColDim = myColDim;
 
-        if (tmpColDim > FillMatchingLeft.THRESHOLD) {
+        if (tmpColDim > FillMatchingLeft.THRESHOLD)
+        {
 
-            final DivideAndConquer tmpConquerer = new DivideAndConquer() {
+            final DivideAndConquer tmpConquerer = new DivideAndConquer()
+            {
 
                 @Override
-                protected void conquer(final int aFirst, final int aLimit) {
+                protected void conquer(final int aFirst, final int aLimit)
+                {
                     BigDenseStore.this.fill(tmpRowDim * aFirst, tmpRowDim * aLimit, aLeftArg, aFunc, aRightArg);
                 }
 
@@ -723,23 +852,28 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
 
             tmpConquerer.invoke(0, tmpColDim, FillMatchingLeft.THRESHOLD);
 
-        } else {
+        } else
+        {
 
             this.fill(0, tmpRowDim * tmpColDim, aLeftArg, aFunc, aRightArg);
         }
     }
 
-    public void fillMatching(final BigDecimal aLeftArg, final BinaryFunction<BigDecimal> aFunc, final Access1D<BigDecimal> aRightArg) {
+    public void fillMatching(final BigDecimal aLeftArg, final BinaryFunction<BigDecimal> aFunc, final Access1D<BigDecimal> aRightArg)
+    {
 
         final int tmpRowDim = myRowDim;
         final int tmpColDim = myColDim;
 
-        if (tmpColDim > FillMatchingRight.THRESHOLD) {
+        if (tmpColDim > FillMatchingRight.THRESHOLD)
+        {
 
-            final DivideAndConquer tmpConquerer = new DivideAndConquer() {
+            final DivideAndConquer tmpConquerer = new DivideAndConquer()
+            {
 
                 @Override
-                protected void conquer(final int aFirst, final int aLimit) {
+                protected void conquer(final int aFirst, final int aLimit)
+                {
                     BigDenseStore.this.fill(tmpRowDim * aFirst, tmpRowDim * aLimit, aLeftArg, aFunc, aRightArg);
                 }
 
@@ -747,92 +881,114 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
 
             tmpConquerer.invoke(0, tmpColDim, FillMatchingRight.THRESHOLD);
 
-        } else {
+        } else
+        {
 
             this.fill(0, tmpRowDim * tmpColDim, aLeftArg, aFunc, aRightArg);
         }
     }
 
-    public void fillOne(final long row, final long col, final Access1D<?> values, final long valueIndex) {
+    public void fillOne(final long row, final long col, final Access1D<?> values, final long valueIndex)
+    {
         this.set(row, col, values.get(valueIndex));
     }
 
-    public void fillOne(final long row, final long col, final BigDecimal value) {
+    public void fillOne(final long row, final long col, final BigDecimal value)
+    {
         myUtility.fillOne(row, col, value);
     }
 
-    public void fillOne(final long row, final long col, final NullaryFunction<BigDecimal> supplier) {
+    public void fillOne(final long row, final long col, final NullaryFunction<BigDecimal> supplier)
+    {
         myUtility.fillOne(row, col, supplier);
     }
 
-    public void fillRow(final long row, final long col, final BigDecimal value) {
+    public void fillRow(final long row, final long col, final BigDecimal value)
+    {
         myUtility.fillRow(row, col, value);
     }
 
-    public void fillRow(final long row, final long col, final NullaryFunction<BigDecimal> supplier) {
+    public void fillRow(final long row, final long col, final NullaryFunction<BigDecimal> supplier)
+    {
         myUtility.fillRow(row, col, supplier);
     }
 
-    public boolean generateApplyAndCopyHouseholderColumn(final int row, final int column, final Householder<BigDecimal> destination) {
+    public boolean generateApplyAndCopyHouseholderColumn(final int row, final int column, final Householder<BigDecimal> destination)
+    {
         return GenerateApplyAndCopyHouseholderColumn.invoke(data, myRowDim, row, column, (Householder.Big) destination);
     }
 
-    public boolean generateApplyAndCopyHouseholderRow(final int row, final int column, final Householder<BigDecimal> destination) {
+    public boolean generateApplyAndCopyHouseholderRow(final int row, final int column, final Householder<BigDecimal> destination)
+    {
         return GenerateApplyAndCopyHouseholderRow.invoke(data, myRowDim, row, column, (Householder.Big) destination);
     }
 
-    public final MatrixStore<BigDecimal> get() {
+    public final MatrixStore<BigDecimal> get()
+    {
         return this;
     }
 
-    public BigDecimal get(final long aRow, final long aCol) {
+    public BigDecimal get(final long aRow, final long aCol)
+    {
         return myUtility.get(aRow, aCol);
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return MatrixUtils.hashCode(this);
     }
 
-    public long indexOfLargestInColumn(final long row, final long col) {
+    public long indexOfLargestInColumn(final long row, final long col)
+    {
         return myUtility.indexOfLargestInColumn(row, col);
     }
 
-    public long indexOfLargestInDiagonal(final long row, final long col) {
+    public long indexOfLargestInDiagonal(final long row, final long col)
+    {
         return myUtility.indexOfLargestInDiagonal(row, col);
     }
 
-    public long indexOfLargestInRow(final long row, final long col) {
+    public long indexOfLargestInRow(final long row, final long col)
+    {
         return myUtility.indexOfLargestInRow(row, col);
     }
 
-    public boolean isAbsolute(final long row, final long col) {
+    public boolean isAbsolute(final long row, final long col)
+    {
         return myUtility.isAbsolute(row, col);
     }
 
-    public boolean isColumnSmall(final long row, final long col, final double comparedTo) {
+    public boolean isColumnSmall(final long row, final long col, final double comparedTo)
+    {
         return myUtility.isColumnSmall(row, col, comparedTo);
     }
 
-    public boolean isRowSmall(final long row, final long col, final double comparedTo) {
+    public boolean isRowSmall(final long row, final long col, final double comparedTo)
+    {
         return myUtility.isRowSmall(row, col, comparedTo);
     }
 
-    public boolean isSmall(final long row, final long col, final double comparedTo) {
+    public boolean isSmall(final long row, final long col, final double comparedTo)
+    {
         return myUtility.isSmall(row, col, comparedTo);
     }
 
-    public void maxpy(final BigDecimal aSclrA, final MatrixStore<BigDecimal> aMtrxX) {
+    public void maxpy(final BigDecimal aSclrA, final MatrixStore<BigDecimal> aMtrxX)
+    {
 
         final int tmpRowDim = myRowDim;
         final int tmpColDim = myColDim;
 
-        if (tmpColDim > MAXPY.THRESHOLD) {
+        if (tmpColDim > MAXPY.THRESHOLD)
+        {
 
-            final DivideAndConquer tmpConquerer = new DivideAndConquer() {
+            final DivideAndConquer tmpConquerer = new DivideAndConquer()
+            {
 
                 @Override
-                public void conquer(final int aFirst, final int aLimit) {
+                public void conquer(final int aFirst, final int aLimit)
+                {
                     MAXPY.invoke(BigDenseStore.this.data, tmpRowDim, aFirst, aLimit, aSclrA, aMtrxX);
                 }
 
@@ -840,24 +996,29 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
 
             tmpConquerer.invoke(0, tmpColDim, MAXPY.THRESHOLD);
 
-        } else {
+        } else
+        {
 
             MAXPY.invoke(data, tmpRowDim, 0, tmpColDim, aSclrA, aMtrxX);
         }
     }
 
     @Override
-    public void modifyAll(final UnaryFunction<BigDecimal> aFunc) {
+    public void modifyAll(final UnaryFunction<BigDecimal> aFunc)
+    {
 
         final int tmpRowDim = myRowDim;
         final int tmpColDim = myColDim;
 
-        if (tmpColDim > ModifyAll.THRESHOLD) {
+        if (tmpColDim > ModifyAll.THRESHOLD)
+        {
 
-            final DivideAndConquer tmpConquerer = new DivideAndConquer() {
+            final DivideAndConquer tmpConquerer = new DivideAndConquer()
+            {
 
                 @Override
-                public void conquer(final int aFirst, final int aLimit) {
+                public void conquer(final int aFirst, final int aLimit)
+                {
                     BigDenseStore.this.modify(tmpRowDim * aFirst, tmpRowDim * aLimit, 1, aFunc);
                 }
 
@@ -865,35 +1026,43 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
 
             tmpConquerer.invoke(0, tmpColDim, ModifyAll.THRESHOLD);
 
-        } else {
+        } else
+        {
 
             this.modify(tmpRowDim * 0, tmpRowDim * tmpColDim, 1, aFunc);
         }
     }
 
-    public void modifyColumn(final long row, final long col, final UnaryFunction<BigDecimal> modifier) {
+    public void modifyColumn(final long row, final long col, final UnaryFunction<BigDecimal> modifier)
+    {
         myUtility.modifyColumn(row, col, modifier);
     }
 
-    public void modifyDiagonal(final long row, final long col, final UnaryFunction<BigDecimal> modifier) {
+    public void modifyDiagonal(final long row, final long col, final UnaryFunction<BigDecimal> modifier)
+    {
         myUtility.modifyDiagonal(row, col, modifier);
     }
 
-    public void modifyMatching(final Access1D<BigDecimal> left, final BinaryFunction<BigDecimal> function) {
+    public void modifyMatching(final Access1D<BigDecimal> left, final BinaryFunction<BigDecimal> function)
+    {
         final long tmpLimit = FunctionUtils.min(left.count(), this.count(), this.count());
-        for (long i = 0L; i < tmpLimit; i++) {
+        for (long i = 0L; i < tmpLimit; i++)
+        {
             this.fillOne(i, function.invoke(left.get(i), this.get(i)));
         }
     }
 
-    public void modifyMatching(final BinaryFunction<BigDecimal> function, final Access1D<BigDecimal> right) {
+    public void modifyMatching(final BinaryFunction<BigDecimal> function, final Access1D<BigDecimal> right)
+    {
         final long tmpLimit = FunctionUtils.min(this.count(), right.count(), this.count());
-        for (long i = 0L; i < tmpLimit; i++) {
+        for (long i = 0L; i < tmpLimit; i++)
+        {
             this.fillOne(i, function.invoke(this.get(i), right.get(i)));
         }
     }
 
-    public void modifyOne(final long row, final long col, final UnaryFunction<BigDecimal> modifier) {
+    public void modifyOne(final long row, final long col, final UnaryFunction<BigDecimal> modifier)
+    {
 
         BigDecimal tmpValue = this.get(row, col);
 
@@ -902,24 +1071,29 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
         this.set(row, col, tmpValue);
     }
 
-    public void modifyRow(final long row, final long col, final UnaryFunction<BigDecimal> modifier) {
+    public void modifyRow(final long row, final long col, final UnaryFunction<BigDecimal> modifier)
+    {
         myUtility.modifyRow(row, col, modifier);
     }
 
-    public MatrixStore<BigDecimal> multiply(final MatrixStore<BigDecimal> right) {
+    public MatrixStore<BigDecimal> multiply(final MatrixStore<BigDecimal> right)
+    {
 
         final BigDenseStore retVal = FACTORY.makeZero(myRowDim, right.count() / myColDim);
 
-        if (right instanceof BigDenseStore) {
+        if (right instanceof BigDenseStore)
+        {
             retVal.multiplyNeither.invoke(retVal.data, data, myColDim, BigDenseStore.cast(right).data);
-        } else {
+        } else
+        {
             retVal.multiplyRight.invoke(retVal.data, data, myColDim, right);
         }
 
         return retVal;
     }
 
-    public BigDecimal multiplyBoth(final Access1D<BigDecimal> leftAndRight) {
+    public BigDecimal multiplyBoth(final Access1D<BigDecimal> leftAndRight)
+    {
 
         final PhysicalStore<BigDecimal> tmpStep1 = FACTORY.makeZero(1L, leftAndRight.count());
         final PhysicalStore<BigDecimal> tmpStep2 = FACTORY.makeZero(1L, 1L);
@@ -930,83 +1104,103 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
         return tmpStep2.get(0L);
     }
 
-    public void negateColumn(final int column) {
+    public void negateColumn(final int column)
+    {
         myUtility.modifyColumn(0, column, BigFunction.NEGATE);
     }
 
-    public PhysicalStore.Factory<BigDecimal, BigDenseStore> physical() {
+    public PhysicalStore.Factory<BigDecimal, BigDenseStore> physical()
+    {
         return FACTORY;
     }
 
-    public void raxpy(final BigDecimal scalarA, final int rowX, final int rowY, final int firstColumn) {
+    public void raxpy(final BigDecimal scalarA, final int rowX, final int rowY, final int firstColumn)
+    {
         AXPY.invoke(data, rowY + (firstColumn * (data.length / myColDim)), data.length / myColDim, scalarA, data,
                 rowX + (firstColumn * (data.length / myColDim)), data.length / myColDim, myColDim - firstColumn);
     }
 
-    public final ElementsConsumer<BigDecimal> regionByColumns(final int... columns) {
+    public final ElementsConsumer<BigDecimal> regionByColumns(final int... columns)
+    {
         return new ColumnsRegion<>(this, multiplyBoth, columns);
     }
 
-    public final ElementsConsumer<BigDecimal> regionByLimits(final int rowLimit, final int columnLimit) {
+    public final ElementsConsumer<BigDecimal> regionByLimits(final int rowLimit, final int columnLimit)
+    {
         return new LimitRegion<>(this, multiplyBoth, rowLimit, columnLimit);
     }
 
-    public final ElementsConsumer<BigDecimal> regionByOffsets(final int rowOffset, final int columnOffset) {
+    public final ElementsConsumer<BigDecimal> regionByOffsets(final int rowOffset, final int columnOffset)
+    {
         return new OffsetRegion<>(this, multiplyBoth, rowOffset, columnOffset);
     }
 
-    public final ElementsConsumer<BigDecimal> regionByRows(final int... rows) {
+    public final ElementsConsumer<BigDecimal> regionByRows(final int... rows)
+    {
         return new RowsRegion<>(this, multiplyBoth, rows);
     }
 
-    public final ElementsConsumer<BigDecimal> regionByTransposing() {
+    public final ElementsConsumer<BigDecimal> regionByTransposing()
+    {
         return new TransposedRegion<>(this, multiplyBoth);
     }
 
-    public void rotateRight(final int aLow, final int aHigh, final double aCos, final double aSin) {
+    public void rotateRight(final int aLow, final int aHigh, final double aCos, final double aSin)
+    {
         RotateRight.invoke(data, myRowDim, aLow, aHigh, FACTORY.scalar().cast(aCos), FACTORY.scalar().cast(aSin));
     }
 
-    public void set(final long aRow, final long aCol, final double aNmbr) {
+    public void set(final long aRow, final long aCol, final double aNmbr)
+    {
         myUtility.set(aRow, aCol, aNmbr);
     }
 
-    public void set(final long aRow, final long aCol, final Number aNmbr) {
+    public void set(final long aRow, final long aCol, final Number aNmbr)
+    {
         myUtility.set(aRow, aCol, aNmbr);
     }
 
-    public void setToIdentity(final int aCol) {
+    public void setToIdentity(final int aCol)
+    {
         myUtility.set(aCol, aCol, ONE);
         myUtility.fillColumn(aCol + 1, aCol, ZERO);
     }
 
-    public Array1D<BigDecimal> sliceColumn(final long row, final long col) {
+    public Array1D<BigDecimal> sliceColumn(final long row, final long col)
+    {
         return myUtility.sliceColumn(row, col);
     }
 
-    public Array1D<BigDecimal> sliceDiagonal(final long row, final long col) {
+    public Array1D<BigDecimal> sliceDiagonal(final long row, final long col)
+    {
         return myUtility.sliceDiagonal(row, col);
     }
 
-    public Array1D<BigDecimal> sliceRange(final long first, final long limit) {
+    public Array1D<BigDecimal> sliceRange(final long first, final long limit)
+    {
         return myUtility.sliceRange(first, limit);
     }
 
-    public Array1D<BigDecimal> sliceRow(final long row, final long col) {
+    public Array1D<BigDecimal> sliceRow(final long row, final long col)
+    {
         return myUtility.sliceRow(row, col);
     }
 
-    public void substituteBackwards(final Access2D<BigDecimal> body, final boolean unitDiagonal, final boolean conjugated, final boolean hermitian) {
+    public void substituteBackwards(final Access2D<BigDecimal> body, final boolean unitDiagonal, final boolean conjugated, final boolean hermitian)
+    {
 
         final int tmpRowDim = myRowDim;
         final int tmpColDim = myColDim;
 
-        if (tmpColDim > SubstituteBackwards.THRESHOLD) {
+        if (tmpColDim > SubstituteBackwards.THRESHOLD)
+        {
 
-            final DivideAndConquer tmpConquerer = new DivideAndConquer() {
+            final DivideAndConquer tmpConquerer = new DivideAndConquer()
+            {
 
                 @Override
-                public void conquer(final int aFirst, final int aLimit) {
+                public void conquer(final int aFirst, final int aLimit)
+                {
                     SubstituteBackwards.invoke(BigDenseStore.this.data, tmpRowDim, aFirst, aLimit, body, unitDiagonal, conjugated, hermitian);
                 }
 
@@ -1014,23 +1208,28 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
 
             tmpConquerer.invoke(0, tmpColDim, SubstituteBackwards.THRESHOLD);
 
-        } else {
+        } else
+        {
 
             SubstituteBackwards.invoke(data, tmpRowDim, 0, tmpColDim, body, unitDiagonal, conjugated, hermitian);
         }
     }
 
-    public void substituteForwards(final Access2D<BigDecimal> body, final boolean unitDiagonal, final boolean conjugated, final boolean identity) {
+    public void substituteForwards(final Access2D<BigDecimal> body, final boolean unitDiagonal, final boolean conjugated, final boolean identity)
+    {
 
         final int tmpRowDim = myRowDim;
         final int tmpColDim = myColDim;
 
-        if (tmpColDim > SubstituteForwards.THRESHOLD) {
+        if (tmpColDim > SubstituteForwards.THRESHOLD)
+        {
 
-            final DivideAndConquer tmpConquerer = new DivideAndConquer() {
+            final DivideAndConquer tmpConquerer = new DivideAndConquer()
+            {
 
                 @Override
-                public void conquer(final int aFirst, final int aLimit) {
+                public void conquer(final int aFirst, final int aLimit)
+                {
                     SubstituteForwards.invoke(BigDenseStore.this.data, tmpRowDim, aFirst, aLimit, body, unitDiagonal, conjugated, identity);
                 }
 
@@ -1038,26 +1237,31 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
 
             tmpConquerer.invoke(0, tmpColDim, SubstituteForwards.THRESHOLD);
 
-        } else {
+        } else
+        {
 
             SubstituteForwards.invoke(data, tmpRowDim, 0, tmpColDim, body, unitDiagonal, conjugated, identity);
         }
     }
 
-    public void supplyTo(final ElementsConsumer<BigDecimal> consumer) {
+    public void supplyTo(final ElementsConsumer<BigDecimal> consumer)
+    {
         consumer.fillMatching(this);
     }
 
-    public BigScalar toScalar(final long row, final long column) {
+    public BigScalar toScalar(final long row, final long column)
+    {
         return BigScalar.of(this.get(row, column));
     }
 
     @Override
-    public final String toString() {
+    public final String toString()
+    {
         return MatrixUtils.toString(this);
     }
 
-    public void transformLeft(final Householder<BigDecimal> transformation, final int firstColumn) {
+    public void transformLeft(final Householder<BigDecimal> transformation, final int firstColumn)
+    {
 
         final Householder.Big tmpTransf = BigDenseStore.cast(transformation);
 
@@ -1066,12 +1270,15 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
         final int tmpRowDim = myRowDim;
         final int tmpColDim = myColDim;
 
-        if ((tmpColDim - firstColumn) > HouseholderLeft.THRESHOLD) {
+        if ((tmpColDim - firstColumn) > HouseholderLeft.THRESHOLD)
+        {
 
-            final DivideAndConquer tmpConquerer = new DivideAndConquer() {
+            final DivideAndConquer tmpConquerer = new DivideAndConquer()
+            {
 
                 @Override
-                public void conquer(final int aFirst, final int aLimit) {
+                public void conquer(final int aFirst, final int aLimit)
+                {
                     HouseholderLeft.invoke(tmpData, tmpRowDim, aFirst, aLimit, tmpTransf);
                 }
 
@@ -1079,37 +1286,47 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
 
             tmpConquerer.invoke(firstColumn, tmpColDim, HouseholderLeft.THRESHOLD);
 
-        } else {
+        } else
+        {
 
             HouseholderLeft.invoke(tmpData, tmpRowDim, firstColumn, tmpColDim, tmpTransf);
         }
     }
 
-    public void transformLeft(final Rotation<BigDecimal> transformation) {
+    public void transformLeft(final Rotation<BigDecimal> transformation)
+    {
 
         final Rotation.Big tmpTransf = BigDenseStore.cast(transformation);
 
         final int tmpLow = tmpTransf.low;
         final int tmpHigh = tmpTransf.high;
 
-        if (tmpLow != tmpHigh) {
-            if ((tmpTransf.cos != null) && (tmpTransf.sin != null)) {
+        if (tmpLow != tmpHigh)
+        {
+            if ((tmpTransf.cos != null) && (tmpTransf.sin != null))
+            {
                 RotateLeft.invoke(data, myColDim, tmpLow, tmpHigh, tmpTransf.cos, tmpTransf.sin);
-            } else {
+            } else
+            {
                 myUtility.exchangeRows(tmpLow, tmpHigh);
             }
-        } else {
-            if (tmpTransf.cos != null) {
+        } else
+        {
+            if (tmpTransf.cos != null)
+            {
                 myUtility.modifyRow(tmpLow, 0, MULTIPLY.second(tmpTransf.cos));
-            } else if (tmpTransf.sin != null) {
+            } else if (tmpTransf.sin != null)
+            {
                 myUtility.modifyRow(tmpLow, 0, DIVIDE.second(tmpTransf.sin));
-            } else {
+            } else
+            {
                 myUtility.modifyRow(tmpLow, 0, NEGATE);
             }
         }
     }
 
-    public void transformRight(final Householder<BigDecimal> transformation, final int firstRow) {
+    public void transformRight(final Householder<BigDecimal> transformation, final int firstRow)
+    {
 
         final Householder.Big tmpTransf = BigDenseStore.cast(transformation);
 
@@ -1118,12 +1335,15 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
         final int tmpRowDim = myRowDim;
         final int tmpColDim = myColDim;
 
-        if ((tmpRowDim - firstRow) > HouseholderRight.THRESHOLD) {
+        if ((tmpRowDim - firstRow) > HouseholderRight.THRESHOLD)
+        {
 
-            final DivideAndConquer tmpConquerer = new DivideAndConquer() {
+            final DivideAndConquer tmpConquerer = new DivideAndConquer()
+            {
 
                 @Override
-                public void conquer(final int aFirst, final int aLimit) {
+                public void conquer(final int aFirst, final int aLimit)
+                {
                     HouseholderRight.invoke(tmpData, aFirst, aLimit, tmpColDim, tmpTransf);
                 }
 
@@ -1131,73 +1351,92 @@ public final class BigDenseStore extends BigArray implements PhysicalStore<BigDe
 
             tmpConquerer.invoke(firstRow, tmpRowDim, HouseholderRight.THRESHOLD);
 
-        } else {
+        } else
+        {
 
             HouseholderRight.invoke(tmpData, firstRow, tmpRowDim, tmpColDim, tmpTransf);
         }
     }
 
-    public void transformRight(final Rotation<BigDecimal> transformation) {
+    public void transformRight(final Rotation<BigDecimal> transformation)
+    {
 
         final Rotation.Big tmpTransf = BigDenseStore.cast(transformation);
 
         final int tmpLow = tmpTransf.low;
         final int tmpHigh = tmpTransf.high;
 
-        if (tmpLow != tmpHigh) {
-            if ((tmpTransf.cos != null) && (tmpTransf.sin != null)) {
+        if (tmpLow != tmpHigh)
+        {
+            if ((tmpTransf.cos != null) && (tmpTransf.sin != null))
+            {
                 RotateRight.invoke(data, myRowDim, tmpLow, tmpHigh, tmpTransf.cos, tmpTransf.sin);
-            } else {
+            } else
+            {
                 myUtility.exchangeColumns(tmpLow, tmpHigh);
             }
-        } else {
-            if (tmpTransf.cos != null) {
+        } else
+        {
+            if (tmpTransf.cos != null)
+            {
                 myUtility.modifyColumn(0, tmpHigh, MULTIPLY.second(tmpTransf.cos));
-            } else if (tmpTransf.sin != null) {
+            } else if (tmpTransf.sin != null)
+            {
                 myUtility.modifyColumn(0, tmpHigh, DIVIDE.second(tmpTransf.sin));
-            } else {
+            } else
+            {
                 myUtility.modifyColumn(0, tmpHigh, NEGATE);
             }
         }
     }
 
-    public void transformSymmetric(final Householder<BigDecimal> transformation) {
+    public void transformSymmetric(final Householder<BigDecimal> transformation)
+    {
         HouseholderHermitian.invoke(data, BigDenseStore.cast(transformation), new BigDecimal[(int) transformation.count()]);
     }
 
-    public MatrixStore<BigDecimal> transpose() {
+    public MatrixStore<BigDecimal> transpose()
+    {
         return new TransposedStore<>(this);
     }
 
-    public void tred2(final BasicArray<BigDecimal> mainDiagonal, final BasicArray<BigDecimal> offDiagonal, final boolean yesvecs) {
+    public void tred2(final BasicArray<BigDecimal> mainDiagonal, final BasicArray<BigDecimal> offDiagonal, final boolean yesvecs)
+    {
         throw new UnsupportedOperationException();
     }
 
-    public void visitColumn(final long row, final long col, final VoidFunction<BigDecimal> visitor) {
+    public void visitColumn(final long row, final long col, final VoidFunction<BigDecimal> visitor)
+    {
         myUtility.visitColumn(row, col, visitor);
     }
 
-    public void visitDiagonal(final long row, final long col, final VoidFunction<BigDecimal> visitor) {
+    public void visitDiagonal(final long row, final long col, final VoidFunction<BigDecimal> visitor)
+    {
         myUtility.visitDiagonal(row, col, visitor);
     }
 
-    public void visitRow(final long row, final long col, final VoidFunction<BigDecimal> visitor) {
+    public void visitRow(final long row, final long col, final VoidFunction<BigDecimal> visitor)
+    {
         myUtility.visitRow(row, col, visitor);
     }
 
-    int getColDim() {
+    int getColDim()
+    {
         return myColDim;
     }
 
-    int getMaxDim() {
+    int getMaxDim()
+    {
         return Math.max(myRowDim, myColDim);
     }
 
-    int getMinDim() {
+    int getMinDim()
+    {
         return Math.min(myRowDim, myColDim);
     }
 
-    int getRowDim() {
+    int getRowDim()
+    {
         return myRowDim;
     }
 

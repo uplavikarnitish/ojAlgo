@@ -24,16 +24,19 @@ package org.ojalgo.optimisation.convex;
 import org.ojalgo.matrix.store.MatrixStore;
 import org.ojalgo.matrix.store.PhysicalStore;
 
-abstract class ConstrainedSolver extends ConvexSolver {
+abstract class ConstrainedSolver extends ConvexSolver
+{
 
     private transient PhysicalStore<Double> myIterationQ = null;
 
-    protected ConstrainedSolver(final Builder matrices, final Options solverOptions) {
+    protected ConstrainedSolver(final Builder matrices, final Options solverOptions)
+    {
         super(matrices, solverOptions);
     }
 
     @Override
-    protected boolean initialise(final Result kickStarter) {
+    protected boolean initialise(final Result kickStarter)
+    {
 
         myCholesky.compute(this.getIterationQ());
 
@@ -41,20 +44,24 @@ abstract class ConstrainedSolver extends ConvexSolver {
     }
 
     @Override
-    protected boolean validate() {
+    protected boolean validate()
+    {
 
         super.validate();
 
         final MatrixStore<Double> tmpA = this.getIterationA();
         final MatrixStore<Double> tmpB = this.getIterationB();
 
-        if (((tmpA != null) && (tmpB == null)) || ((tmpA == null) && (tmpB != null))) {
+        if (((tmpA != null) && (tmpB == null)) || ((tmpA == null) && (tmpB != null)))
+        {
             throw new IllegalArgumentException("Either A or B is null, and the other one is not!");
         }
 
-        if (tmpA != null) {
+        if (tmpA != null)
+        {
             myLU.decompose(tmpA.countRows() < tmpA.countColumns() ? tmpA.transpose() : tmpA);
-            if (myLU.getRank() != tmpA.countRows()) {
+            if (myLU.getRank() != tmpA.countRows())
+            {
                 throw new IllegalArgumentException("A must have full (row) rank!");
             }
         }
@@ -69,15 +76,19 @@ abstract class ConstrainedSolver extends ConvexSolver {
 
     abstract MatrixStore<Double> getIterationC();
 
-    final PhysicalStore<Double> getIterationQ() {
+    final PhysicalStore<Double> getIterationQ()
+    {
 
-        if (myIterationQ == null) {
+        if (myIterationQ == null)
+        {
 
             final MatrixStore<Double> tmpQ = this.getQ();
 
-            if (tmpQ instanceof PhysicalStore) {
+            if (tmpQ instanceof PhysicalStore)
+            {
                 myIterationQ = (PhysicalStore<Double>) tmpQ;
-            } else {
+            } else
+            {
                 myIterationQ = tmpQ.copy();
             }
         }

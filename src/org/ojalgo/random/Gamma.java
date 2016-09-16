@@ -32,18 +32,21 @@ import org.ojalgo.scalar.PrimitiveScalar;
  *
  * @author apete
  */
-public class Gamma extends RandomNumber {
+public class Gamma extends RandomNumber
+{
 
     private static final long serialVersionUID = 6544837857838057678L;
 
     private final double myShape;
     private final double myRate;
 
-    public Gamma() {
+    public Gamma()
+    {
         this(ONE, ONE);
     }
 
-    public Gamma(final double aShape, final double aRate) {
+    public Gamma(final double aShape, final double aRate)
+    {
 
         super();
 
@@ -51,12 +54,14 @@ public class Gamma extends RandomNumber {
         myRate = aRate;
     }
 
-    public double getExpected() {
+    public double getExpected()
+    {
         return myShape / myRate;
     }
 
     @Override
-    public double getVariance() {
+    public double getVariance()
+    {
         return myShape / (myRate * myRate);
     }
 
@@ -66,18 +71,21 @@ public class Gamma extends RandomNumber {
      * @see org.ojalgo.random.RandomNumber#generate()
      */
     @Override
-    protected double generate() {
+    protected double generate()
+    {
 
         final int tmpInteger = (int) myShape;
         final double tmpFraction = myShape - tmpInteger;
 
         double tmpIntegralPart = ZERO;
-        for (int i = 0; i < tmpInteger; i++) {
+        for (int i = 0; i < tmpInteger; i++)
+        {
             tmpIntegralPart -= PrimitiveFunction.LOG.invoke(this.random().nextDouble());
         }
 
         double tmpFractionalPart = ZERO;
-        if (!PrimitiveScalar.isSmall(PrimitiveMath.ONE, tmpFraction)) {
+        if (!PrimitiveScalar.isSmall(PrimitiveMath.ONE, tmpFraction))
+        {
 
             final double tmpFractionMinusOne = tmpFraction - ONE;
 
@@ -85,7 +93,8 @@ public class Gamma extends RandomNumber {
             double tmpNumer;
             double tmpDenom;
 
-            do {
+            do
+            {
 
                 tmpFractionalPart = -TWO * PrimitiveFunction.LOG.invoke(ONE - PrimitiveFunction.POW.invoke(this.random().nextDouble(), ONE / tmpFraction));
                 tmpNegHalfFraction = -tmpFractionalPart / TWO;

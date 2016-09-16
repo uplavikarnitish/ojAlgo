@@ -25,7 +25,8 @@ import org.ojalgo.access.AccessScalar;
 import org.ojalgo.function.VoidFunction;
 import org.ojalgo.scalar.Scalar;
 
-public interface AggregatorFunction<N extends Number> extends VoidFunction<N>, AccessScalar<N> {
+public interface AggregatorFunction<N extends Number> extends VoidFunction<N>, AccessScalar<N>
+{
 
     void merge(N result);
 

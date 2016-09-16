@@ -23,24 +23,28 @@ package org.ojalgo.function;
 
 import java.util.function.BiFunction;
 
-public interface ParameterFunction<N extends Number> extends BasicFunction<N>, BiFunction<N, Integer, N> {
+public interface ParameterFunction<N extends Number> extends BasicFunction<N>, BiFunction<N, Integer, N>
+{
 
     /**
      * A {@linkplain ParameterFunction} with a set/fixed parameter.
      *
      * @author apete
      */
-    public static final class FixedParameter<N extends Number> implements UnaryFunction<N> {
+    public static final class FixedParameter<N extends Number> implements UnaryFunction<N>
+    {
 
         private final ParameterFunction<N> myFunction;
         private final int myParameter;
 
         @SuppressWarnings("unused")
-        private FixedParameter() {
+        private FixedParameter()
+        {
             this(null, 0);
         }
 
-        FixedParameter(final ParameterFunction<N> function, final int param) {
+        FixedParameter(final ParameterFunction<N> function, final int param)
+        {
 
             super();
 
@@ -48,19 +52,23 @@ public interface ParameterFunction<N extends Number> extends BasicFunction<N>, B
             myParameter = param;
         }
 
-        public final ParameterFunction<N> getFunction() {
+        public final ParameterFunction<N> getFunction()
+        {
             return myFunction;
         }
 
-        public final int getParameter() {
+        public final int getParameter()
+        {
             return myParameter;
         }
 
-        public final double invoke(final double arg) {
+        public final double invoke(final double arg)
+        {
             return myFunction.invoke(arg, myParameter);
         }
 
-        public final N invoke(final N arg) {
+        public final N invoke(final N arg)
+        {
             return myFunction.invoke(arg, myParameter);
         }
 
@@ -70,7 +78,8 @@ public interface ParameterFunction<N extends Number> extends BasicFunction<N>, B
 
     public abstract N invoke(N arg, int param);
 
-    default N apply(final N arg, final Integer param) {
+    default N apply(final N arg, final Integer param)
+    {
         return this.invoke(arg, param);
     }
 
@@ -81,7 +90,8 @@ public interface ParameterFunction<N extends Number> extends BasicFunction<N>, B
      * @param param The parameter of the parameter function.
      * @return The resulting unary function.
      */
-    default UnaryFunction<N> parameter(final int param) {
+    default UnaryFunction<N> parameter(final int param)
+    {
         return new FixedParameter<N>(this, param);
     }
 

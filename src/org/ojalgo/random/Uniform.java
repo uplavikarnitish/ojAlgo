@@ -30,43 +30,50 @@ import org.ojalgo.function.PrimitiveFunction;
  *
  * @author apete
  */
-public class Uniform extends AbstractContinuous {
+public class Uniform extends AbstractContinuous
+{
 
     private static final long serialVersionUID = -8198257914507986404L;
 
     /**
      * @return An integer: 0 &lt;= ? &lt; limit
      */
-    public static int randomInteger(final int limit) {
+    public static int randomInteger(final int limit)
+    {
         return (int) PrimitiveFunction.FLOOR.invoke(limit * Math.random());
     }
 
     /**
      * @return An integer: lower &lt;= ? &lt; higher
      */
-    public static int randomInteger(final int lower, final int higher) {
+    public static int randomInteger(final int lower, final int higher)
+    {
         return lower + Uniform.randomInteger(higher - lower);
     }
 
     /**
      * @return An integer: 0 &lt;= ? &lt; limit
      */
-    public static long randomInteger(final long limit) {
+    public static long randomInteger(final long limit)
+    {
         return (long) PrimitiveFunction.FLOOR.invoke(limit * Math.random());
     }
 
     private final double myLower;
     private final double myRange;
 
-    public Uniform() {
+    public Uniform()
+    {
         this(ZERO, ONE);
     }
 
-    public Uniform(final double lower, final double range) {
+    public Uniform(final double lower, final double range)
+    {
 
         super();
 
-        if (range <= ZERO) {
+        if (range <= ZERO)
+        {
             throw new IllegalArgumentException("The range must be larger than 0.0!");
         }
 
@@ -74,35 +81,42 @@ public class Uniform extends AbstractContinuous {
         myRange = range;
     }
 
-    public double getDistribution(final double aValue) {
+    public double getDistribution(final double aValue)
+    {
 
         double retVal = ZERO;
 
-        if ((aValue <= (myLower + myRange)) && (myLower <= aValue)) {
+        if ((aValue <= (myLower + myRange)) && (myLower <= aValue))
+        {
             retVal = (aValue - myLower) / myRange;
-        } else if (myLower <= aValue) {
+        } else if (myLower <= aValue)
+        {
             retVal = ONE;
         }
 
         return retVal;
     }
 
-    public double getExpected() {
+    public double getExpected()
+    {
         return myLower + (myRange / TWO);
     }
 
-    public double getProbability(final double aValue) {
+    public double getProbability(final double aValue)
+    {
 
         double retVal = ZERO;
 
-        if ((myLower <= aValue) && (aValue <= (myLower + myRange))) {
+        if ((myLower <= aValue) && (aValue <= (myLower + myRange)))
+        {
             retVal = ONE / myRange;
         }
 
         return retVal;
     }
 
-    public double getQuantile(final double aProbality) {
+    public double getQuantile(final double aProbality)
+    {
 
         this.checkProbabilty(aProbality);
 
@@ -110,12 +124,14 @@ public class Uniform extends AbstractContinuous {
     }
 
     @Override
-    public double getVariance() {
+    public double getVariance()
+    {
         return (myRange * myRange) / TWELVE;
     }
 
     @Override
-    protected double generate() {
+    protected double generate()
+    {
         return myLower + (myRange * this.random().nextDouble());
     }
 }

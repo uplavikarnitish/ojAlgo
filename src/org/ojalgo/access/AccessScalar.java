@@ -21,19 +21,23 @@
  */
 package org.ojalgo.access;
 
-public interface AccessScalar<N extends Number> {
+public interface AccessScalar<N extends Number>
+{
 
-    default double doubleValue() {
+    default double doubleValue()
+    {
         return this.getNumber().doubleValue();
     }
 
     N getNumber();
 
-    default int intValue() {
+    default int intValue()
+    {
         return this.getNumber().intValue();
     }
 
-    default long longValue() {
+    default long longValue()
+    {
         return this.getNumber().longValue();
     }
 

@@ -26,13 +26,15 @@ import java.math.BigDecimal;
 import org.ojalgo.function.BigFunction;
 import org.ojalgo.scalar.ComplexNumber;
 
-public final class RotateRight extends MatrixOperation {
+public final class RotateRight extends MatrixOperation
+{
 
     public static final RotateRight SETUP = new RotateRight();
 
     public static int THRESHOLD = 128;
 
-    public static void invoke(final BigDecimal[] aData, final int aRowDim, final int aColA, final int aColB, final BigDecimal aCos, final BigDecimal aSin) {
+    public static void invoke(final BigDecimal[] aData, final int aRowDim, final int aColA, final int aColB, final BigDecimal aCos, final BigDecimal aSin)
+    {
 
         BigDecimal tmpOldA;
         BigDecimal tmpOldB;
@@ -40,7 +42,8 @@ public final class RotateRight extends MatrixOperation {
         int tmpIndexA = aColA * aRowDim;
         int tmpIndexB = aColB * aRowDim;
 
-        for (int i = 0; i < aRowDim; i++) {
+        for (int i = 0; i < aRowDim; i++)
+        {
 
             tmpOldA = aData[tmpIndexA];
             tmpOldB = aData[tmpIndexB];
@@ -54,7 +57,8 @@ public final class RotateRight extends MatrixOperation {
     }
 
     public static void invoke(final ComplexNumber[] aData, final int aRowDim, final int aColA, final int aColB, final ComplexNumber aCos,
-            final ComplexNumber aSin) {
+                              final ComplexNumber aSin)
+    {
 
         ComplexNumber tmpOldA;
         ComplexNumber tmpOldB;
@@ -62,7 +66,8 @@ public final class RotateRight extends MatrixOperation {
         int tmpIndexA = aColA * aRowDim;
         int tmpIndexB = aColB * aRowDim;
 
-        for (int i = 0; i < aRowDim; i++) {
+        for (int i = 0; i < aRowDim; i++)
+        {
 
             tmpOldA = aData[tmpIndexA];
             tmpOldB = aData[tmpIndexB];
@@ -75,7 +80,8 @@ public final class RotateRight extends MatrixOperation {
         }
     }
 
-    public static void invoke(final double[] aData, final int aRowDim, final int aColA, final int aColB, final double aCos, final double aSin) {
+    public static void invoke(final double[] aData, final int aRowDim, final int aColA, final int aColB, final double aCos, final double aSin)
+    {
 
         double tmpOldA;
         double tmpOldB;
@@ -83,7 +89,8 @@ public final class RotateRight extends MatrixOperation {
         int tmpIndexA = aColA * aRowDim;
         int tmpIndexB = aColB * aRowDim;
 
-        for (int i = 0; i < aRowDim; i++) {
+        for (int i = 0; i < aRowDim; i++)
+        {
 
             tmpOldA = aData[tmpIndexA];
             tmpOldB = aData[tmpIndexB];
@@ -96,12 +103,14 @@ public final class RotateRight extends MatrixOperation {
         }
     }
 
-    private RotateRight() {
+    private RotateRight()
+    {
         super();
     }
 
     @Override
-    public int threshold() {
+    public int threshold()
+    {
         return THRESHOLD;
     }
 

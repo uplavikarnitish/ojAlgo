@@ -50,9 +50,11 @@ import org.ojalgo.type.context.NumberContext;
  *
  * @author apete
  */
-public interface LDL<N extends Number> extends LDU<N>, MatrixDecomposition.Hermitian<N> {
+public interface LDL<N extends Number> extends LDU<N>, MatrixDecomposition.Hermitian<N>
+{
 
-    interface Factory<N extends Number> extends MatrixDecomposition.Factory<LDL<N>> {
+    interface Factory<N extends Number> extends MatrixDecomposition.Factory<LDL<N>>
+    {
 
     }
 
@@ -60,31 +62,40 @@ public interface LDL<N extends Number> extends LDU<N>, MatrixDecomposition.Hermi
 
     public static final Factory<ComplexNumber> COMPLEX = typical -> new LDLDecomposition.Complex();
 
-    public static final Factory<Double> PRIMITIVE = typical -> {
-        if ((256L < typical.countColumns()) && (typical.count() <= BasicArray.MAX_ARRAY_SIZE)) {
+    public static final Factory<Double> PRIMITIVE = typical ->
+    {
+        if ((256L < typical.countColumns()) && (typical.count() <= BasicArray.MAX_ARRAY_SIZE))
+        {
             return new LDLDecomposition.Primitive();
-        } else {
+        } else
+        {
             return new RawLDL();
         }
     };
 
     @SuppressWarnings("unchecked")
-    public static <N extends Number> LDL<N> make(final Access2D<N> typical) {
+    public static <N extends Number> LDL<N> make(final Access2D<N> typical)
+    {
 
         final N tmpNumber = typical.get(0, 0);
 
-        if (tmpNumber instanceof BigDecimal) {
+        if (tmpNumber instanceof BigDecimal)
+        {
             return (LDL<N>) BIG.make(typical);
-        } else if (tmpNumber instanceof ComplexNumber) {
+        } else if (tmpNumber instanceof ComplexNumber)
+        {
             return (LDL<N>) COMPLEX.make(typical);
-        } else if (tmpNumber instanceof Double) {
+        } else if (tmpNumber instanceof Double)
+        {
             return (LDL<N>) PRIMITIVE.make(typical);
-        } else {
+        } else
+        {
             throw new IllegalArgumentException();
         }
     }
 
-    default boolean equals(final MatrixStore<N> other, final NumberContext context) {
+    default boolean equals(final MatrixStore<N> other, final NumberContext context)
+    {
         return MatrixUtils.equals(other, this, context);
     }
 
@@ -93,26 +104,30 @@ public interface LDL<N extends Number> extends LDU<N>, MatrixDecomposition.Hermi
     /**
      * Must implement either {@link #getL()} or {@link #getR()}.
      */
-    default MatrixStore<N> getL() {
+    default MatrixStore<N> getL()
+    {
         return this.getR().conjugate();
     }
 
     /**
      * Must implement either {@link #getL()} or {@link #getR()}.
      */
-    default MatrixStore<N> getR() {
+    default MatrixStore<N> getR()
+    {
         return this.getL().conjugate();
     }
 
     int getRank();
 
-    default boolean isFullSize() {
+    default boolean isFullSize()
+    {
         return true;
     }
 
     boolean isSquareAndNotSingular();
 
-    default MatrixStore<N> reconstruct() {
+    default MatrixStore<N> reconstruct()
+    {
         return MatrixUtils.reconstruct(this);
     }
 }

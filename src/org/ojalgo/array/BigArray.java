@@ -38,48 +38,58 @@ import org.ojalgo.type.TypeUtils;
  *
  * @author apete
  */
-public class BigArray extends ReferenceTypeArray<BigDecimal> {
+public class BigArray extends ReferenceTypeArray<BigDecimal>
+{
 
     static final long ELEMENT_SIZE = MemoryEstimator.estimateObject(BigDecimal.class);
 
-    static final DenseFactory<BigDecimal> FACTORY = new DenseFactory<BigDecimal>() {
+    static final DenseFactory<BigDecimal> FACTORY = new DenseFactory<BigDecimal>()
+    {
 
         @Override
-        long getElementSize() {
+        long getElementSize()
+        {
             return ELEMENT_SIZE;
         }
 
         @Override
-        DenseArray<BigDecimal> make(final int size) {
+        DenseArray<BigDecimal> make(final int size)
+        {
             return BigArray.make(size);
         }
 
         @Override
-        Scalar<BigDecimal> zero() {
+        Scalar<BigDecimal> zero()
+        {
             return BigScalar.ZERO;
         }
 
     };
 
-    public static final BigArray make(final int size) {
+    public static final BigArray make(final int size)
+    {
         return new BigArray(size);
     }
 
-    public static final SegmentedArray<BigDecimal> makeSegmented(final long count) {
+    public static final SegmentedArray<BigDecimal> makeSegmented(final long count)
+    {
         return SegmentedArray.make(FACTORY, count);
     }
 
-    public static final BigArray wrap(final BigDecimal[] data) {
+    public static final BigArray wrap(final BigDecimal[] data)
+    {
         return new BigArray(data);
     }
 
-    protected BigArray(final BigDecimal[] data) {
+    protected BigArray(final BigDecimal[] data)
+    {
 
         super(data);
 
     }
 
-    protected BigArray(final int size) {
+    protected BigArray(final int size)
+    {
 
         super(new BigDecimal[size]);
 
@@ -87,46 +97,57 @@ public class BigArray extends ReferenceTypeArray<BigDecimal> {
     }
 
     @Override
-    public boolean equals(final Object other) {
-        if (other instanceof BigArray) {
+    public boolean equals(final Object other)
+    {
+        if (other instanceof BigArray)
+        {
             return Arrays.equals(data, ((BigArray) other).data);
-        } else {
+        } else
+        {
             return super.equals(other);
         }
     }
 
-    public final void fillMatching(final Access1D<?> values) {
+    public final void fillMatching(final Access1D<?> values)
+    {
         final int tmpLimit = (int) FunctionUtils.min(this.count(), values.count());
-        for (int i = 0; i < tmpLimit; i++) {
+        for (int i = 0; i < tmpLimit; i++)
+        {
             data[i] = TypeUtils.toBigDecimal(values.get(i));
         }
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return Arrays.hashCode(data);
     }
 
     @Override
-    protected final void add(final int index, final double addend) {
+    protected final void add(final int index, final double addend)
+    {
         this.fillOne(index, this.get(index).add(this.valueOf(addend)));
     }
 
     @Override
-    protected final void add(final int index, final Number addend) {
+    protected final void add(final int index, final Number addend)
+    {
         this.fillOne(index, this.get(index).add(this.valueOf(addend)));
     }
 
     @Override
-    protected int indexOfLargest(final int first, final int limit, final int step) {
+    protected int indexOfLargest(final int first, final int limit, final int step)
+    {
 
         int retVal = first;
         BigDecimal tmpLargest = ZERO;
         BigDecimal tmpValue;
 
-        for (int i = first; i < limit; i += step) {
+        for (int i = first; i < limit; i += step)
+        {
             tmpValue = data[i].abs();
-            if (tmpValue.compareTo(tmpLargest) == 1) {
+            if (tmpValue.compareTo(tmpLargest) == 1)
+            {
                 tmpLargest = tmpValue;
                 retVal = i;
             }
@@ -136,27 +157,32 @@ public class BigArray extends ReferenceTypeArray<BigDecimal> {
     }
 
     @Override
-    protected boolean isAbsolute(final int index) {
+    protected boolean isAbsolute(final int index)
+    {
         return BigScalar.isAbsolute(data[index]);
     }
 
     @Override
-    protected boolean isSmall(final int index, final double comparedTo) {
+    protected boolean isSmall(final int index, final double comparedTo)
+    {
         return BigScalar.isSmall(comparedTo, data[index]);
     }
 
     @Override
-    DenseArray<BigDecimal> newInstance(final int capacity) {
+    DenseArray<BigDecimal> newInstance(final int capacity)
+    {
         return new BigArray(capacity);
     }
 
     @Override
-    BigDecimal valueOf(final double value) {
+    BigDecimal valueOf(final double value)
+    {
         return BigDecimal.valueOf(value);
     }
 
     @Override
-    BigDecimal valueOf(final Number number) {
+    BigDecimal valueOf(final Number number)
+    {
         return TypeUtils.toBigDecimal(number);
     }
 

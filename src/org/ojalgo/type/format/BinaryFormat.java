@@ -25,19 +25,23 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 
-public class BinaryFormat extends Format {
+public class BinaryFormat extends Format
+{
 
-    public BinaryFormat() {
+    public BinaryFormat()
+    {
         super();
     }
 
     @Override
-    public StringBuffer format(final Object someObj, final StringBuffer aBufferToAppendTo, final FieldPosition aPosition) {
+    public StringBuffer format(final Object someObj, final StringBuffer aBufferToAppendTo, final FieldPosition aPosition)
+    {
         return aBufferToAppendTo.append(new String((byte[]) someObj));
     }
 
     @Override
-    public byte[] parseObject(final String someSource, final ParsePosition somePos) {
+    public byte[] parseObject(final String someSource, final ParsePosition somePos)
+    {
         return someSource.getBytes();
     }
 

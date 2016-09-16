@@ -26,7 +26,8 @@ import java.math.MathContext;
 
 import org.ojalgo.function.BigFunction;
 
-public abstract class BigMath {
+public abstract class BigMath
+{
 
     public static final BigDecimal ZERO = new BigDecimal("0", MathContext.DECIMAL128);
     public static final BigDecimal ONE = new BigDecimal("1", MathContext.DECIMAL128);
@@ -73,7 +74,8 @@ public abstract class BigMath {
     public static final BigDecimal VERY_NEGATIVE = new BigDecimal(Long.MIN_VALUE, MathContext.DECIMAL128);
     public static final BigDecimal VERY_POSITIVE = new BigDecimal(Long.MAX_VALUE, MathContext.DECIMAL128);
 
-    private BigMath() {
+    private BigMath()
+    {
         super();
     }
 

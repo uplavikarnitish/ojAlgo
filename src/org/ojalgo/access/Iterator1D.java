@@ -23,18 +23,21 @@ package org.ojalgo.access;
 
 import java.util.Iterator;
 
-public final class Iterator1D<N extends Number> implements Iterator<N> {
+public final class Iterator1D<N extends Number> implements Iterator<N>
+{
 
     private long cursor = 0L;
     private final Access1D<? extends N> myAccess;
     private final long myCount;
 
     @SuppressWarnings("unused")
-    private Iterator1D() {
+    private Iterator1D()
+    {
         this(null);
     }
 
-    Iterator1D(final Access1D<? extends N> access) {
+    Iterator1D(final Access1D<? extends N> access)
+    {
 
         super();
 
@@ -42,15 +45,18 @@ public final class Iterator1D<N extends Number> implements Iterator<N> {
         myCount = access.count();
     }
 
-    public boolean hasNext() {
+    public boolean hasNext()
+    {
         return cursor < myCount;
     }
 
-    public N next() {
+    public N next()
+    {
         return myAccess.get(cursor++);
     }
 
-    public void remove() {
+    public void remove()
+    {
         throw new UnsupportedOperationException();
     }
 

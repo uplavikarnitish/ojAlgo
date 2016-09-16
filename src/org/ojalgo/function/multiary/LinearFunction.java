@@ -38,67 +38,81 @@ import org.ojalgo.scalar.Scalar;
  *
  * @author apete
  */
-public final class LinearFunction<N extends Number> extends AbstractMultiary<N, LinearFunction<N>> implements MultiaryFunction.Linear<N> {
+public final class LinearFunction<N extends Number> extends AbstractMultiary<N, LinearFunction<N>> implements MultiaryFunction.Linear<N>
+{
 
-    public static LinearFunction<BigDecimal> makeBig(final Access1D<? extends Number> factors) {
+    public static LinearFunction<BigDecimal> makeBig(final Access1D<? extends Number> factors)
+    {
         return new LinearFunction<>(BigDenseStore.FACTORY.rows(factors));
     }
 
-    public static LinearFunction<BigDecimal> makeBig(final int arity) {
+    public static LinearFunction<BigDecimal> makeBig(final int arity)
+    {
         return new LinearFunction<>(BigDenseStore.FACTORY.makeZero(1, arity));
     }
 
-    public static LinearFunction<ComplexNumber> makeComplex(final Access1D<? extends Number> factors) {
+    public static LinearFunction<ComplexNumber> makeComplex(final Access1D<? extends Number> factors)
+    {
         return new LinearFunction<>(ComplexDenseStore.FACTORY.rows(factors));
     }
 
-    public static LinearFunction<ComplexNumber> makeComplex(final int arity) {
+    public static LinearFunction<ComplexNumber> makeComplex(final int arity)
+    {
         return new LinearFunction<>(ComplexDenseStore.FACTORY.makeZero(1, arity));
     }
 
-    public static LinearFunction<Double> makePrimitive(final Access1D<? extends Number> factors) {
+    public static LinearFunction<Double> makePrimitive(final Access1D<? extends Number> factors)
+    {
         return new LinearFunction<>(PrimitiveDenseStore.FACTORY.rows(factors));
     }
 
-    public static LinearFunction<Double> makePrimitive(final int arity) {
+    public static LinearFunction<Double> makePrimitive(final int arity)
+    {
         return new LinearFunction<>(PrimitiveDenseStore.FACTORY.makeZero(1, arity));
     }
 
     private final MatrixStore<N> myFactors;
 
     @SuppressWarnings("unused")
-    private LinearFunction() {
+    private LinearFunction()
+    {
         this(null);
     }
 
-    LinearFunction(final MatrixStore<N> factors) {
+    LinearFunction(final MatrixStore<N> factors)
+    {
 
         super();
 
         myFactors = factors;
 
-        if (myFactors.countRows() != 1L) {
+        if (myFactors.countRows() != 1L)
+        {
             throw new IllegalArgumentException("Must be a row vector!");
         }
     }
 
-    public int arity() {
+    public int arity()
+    {
         return (int) myFactors.countColumns();
     }
 
     @Override
-    public MatrixStore<N> getGradient(final Access1D<N> point) {
+    public MatrixStore<N> getGradient(final Access1D<N> point)
+    {
         return myFactors.transpose();
     }
 
     @Override
-    public MatrixStore<N> getHessian(final Access1D<N> point) {
+    public MatrixStore<N> getHessian(final Access1D<N> point)
+    {
         //return new ZeroStore<N>(myFactors.factory(), this.arity(), this.arity());
         return this.factory().builder().makeZero(this.arity(), this.arity()).get();
     }
 
     @Override
-    public N invoke(final Access1D<N> arg) {
+    public N invoke(final Access1D<N> arg)
+    {
 
         final PhysicalStore<N> tmpPreallocated = myFactors.physical().makeZero(1L, 1L);
 
@@ -111,12 +125,14 @@ public final class LinearFunction<N extends Number> extends AbstractMultiary<N, 
         return retVal.getNumber();
     }
 
-    public PhysicalStore<N> linear() {
+    public PhysicalStore<N> linear()
+    {
         return (PhysicalStore<N>) myFactors;
     }
 
     @Override
-    protected Factory<N, ?> factory() {
+    protected Factory<N, ?> factory()
+    {
         return myFactors.physical();
     }
 

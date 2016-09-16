@@ -23,11 +23,13 @@ package org.ojalgo.series.primitive;
 
 import org.ojalgo.type.CalendarDate;
 
-public abstract class PrimitiveTimeSeries extends PrimitiveSeries {
+public abstract class PrimitiveTimeSeries extends PrimitiveSeries
+{
 
     private final PrimitiveSeries myValueSeries;
 
-    protected PrimitiveTimeSeries(final PrimitiveSeries aValueSeries) {
+    protected PrimitiveTimeSeries(final PrimitiveSeries aValueSeries)
+    {
 
         super();
 
@@ -38,7 +40,8 @@ public abstract class PrimitiveTimeSeries extends PrimitiveSeries {
 
     public abstract long getAverageStepSize();
 
-    public final PrimitiveSeries getValueSeries() {
+    public final PrimitiveSeries getValueSeries()
+    {
         return myValueSeries;
     }
 
@@ -47,12 +50,14 @@ public abstract class PrimitiveTimeSeries extends PrimitiveSeries {
     public abstract CalendarDate last();
 
     @Override
-    public final int size() {
+    public final int size()
+    {
         return myValueSeries.size();
     }
 
     @Override
-    public final double value(final int index) {
+    public final double value(final int index)
+    {
         return myValueSeries.value(index);
     }
 

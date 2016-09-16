@@ -39,15 +39,17 @@ import org.ojalgo.type.context.NumberContext;
  *
  * @author apete
  */
-public final class MathProgSysModel extends AbstractModel<GenericSolver> {
+public final class MathProgSysModel extends AbstractModel<GenericSolver>
+{
 
-    public static abstract class Integration<S extends Optimisation.Solver> implements Optimisation.Integration<MathProgSysModel, S> {
+    public static abstract class Integration<S extends Optimisation.Solver> implements Optimisation.Integration<MathProgSysModel, S>
+    {
 
     }
 
     /**
      * BoundType used with the BOUNDS section.
-     *
+     * <p>
      * <pre>
      *  type            meaning
      * ---------------------------------------------------
@@ -67,18 +69,21 @@ public final class MathProgSysModel extends AbstractModel<GenericSolver> {
      *
      * @author apete
      */
-    static enum BoundType {
+    static enum BoundType
+    {
 
         BV(), FR(), FX(), LI(), LO(), MI(), PL(), SC(), UI(), UP();
 
     }
 
-    final class Column extends Object {
+    final class Column extends Object
+    {
 
         private boolean mySemicontinuous = false;
         private final Variable myVariable;
 
-        Column(final String name) {
+        Column(final String name)
+        {
 
             super();
 
@@ -88,117 +93,128 @@ public final class MathProgSysModel extends AbstractModel<GenericSolver> {
             this.bound(BoundType.PL, null);
         }
 
-        public Column bound(final BoundType type, final BigDecimal value) {
+        public Column bound(final BoundType type, final BigDecimal value)
+        {
 
-            switch (type) {
+            switch (type)
+            {
 
-            case LO:
+                case LO:
 
-                myVariable.lower(value);
+                    myVariable.lower(value);
 
-                break;
+                    break;
 
-            case UP:
+                case UP:
 
-                myVariable.upper(value);
+                    myVariable.upper(value);
 
-                if (!myVariable.isLowerLimitSet()) {
-                    myVariable.lower(ZERO);
-                }
+                    if (!myVariable.isLowerLimitSet())
+                    {
+                        myVariable.lower(ZERO);
+                    }
 
-                break;
+                    break;
 
-            case FX:
+                case FX:
 
-                myVariable.level(value);
+                    myVariable.level(value);
 
-                break;
+                    break;
 
-            case FR:
+                case FR:
 
-                myVariable.level(null);
+                    myVariable.level(null);
 
-                break;
+                    break;
 
-            case MI:
+                case MI:
 
-                myVariable.lower(null);
+                    myVariable.lower(null);
 
-                if (!myVariable.isUpperLimitSet()) {
-                    myVariable.upper(ZERO);
-                }
+                    if (!myVariable.isUpperLimitSet())
+                    {
+                        myVariable.upper(ZERO);
+                    }
 
-                break;
+                    break;
 
-            case PL:
+                case PL:
 
-                myVariable.upper(null);
+                    myVariable.upper(null);
 
-                if (!myVariable.isLowerLimitSet()) {
-                    myVariable.lower(ZERO);
-                }
+                    if (!myVariable.isLowerLimitSet())
+                    {
+                        myVariable.lower(ZERO);
+                    }
 
-                break;
+                    break;
 
-            case BV:
+                case BV:
 
-                myVariable.lower(ZERO).upper(ONE).integer(true);
+                    myVariable.lower(ZERO).upper(ONE).integer(true);
 
-                break;
+                    break;
 
-            case LI:
+                case LI:
 
-                myVariable.lower(value).upper(null).integer(true);
+                    myVariable.lower(value).upper(null).integer(true);
 
-                break;
+                    break;
 
-            case UI:
+                case UI:
 
-                myVariable.upper(value).integer(true);
+                    myVariable.upper(value).integer(true);
 
-                if (!myVariable.isLowerLimitSet()) {
-                    myVariable.lower(ZERO);
-                }
+                    if (!myVariable.isLowerLimitSet())
+                    {
+                        myVariable.lower(ZERO);
+                    }
 
-                break;
+                    break;
 
-            case SC:
+                case SC:
 
-                mySemicontinuous = true;
+                    mySemicontinuous = true;
 
-                myVariable.upper(value);
+                    myVariable.upper(value);
 
-                if (!myVariable.isLowerLimitSet()) {
-                    myVariable.lower(ONE);
-                }
+                    if (!myVariable.isLowerLimitSet())
+                    {
+                        myVariable.lower(ONE);
+                    }
 
-                break;
+                    break;
 
-            default:
+                default:
 
-                break;
+                    break;
             }
 
             return this;
         }
 
-        public Column integer(final boolean flag) {
+        public Column integer(final boolean flag)
+        {
             myVariable.setInteger(flag);
             return this;
         }
 
-        public void setRowValue(final String rowName, final BigDecimal value) {
+        public void setRowValue(final String rowName, final BigDecimal value)
+        {
             myRows.get(rowName).getExpression().set(myVariable, value);
         }
 
         /**
          * @return the variable
          */
-        Variable getVariable() {
+        Variable getVariable()
+        {
             return myVariable;
         }
 
-        boolean isSemicontinuous() {
+        boolean isSemicontinuous()
+        {
             return mySemicontinuous;
         }
 
@@ -207,25 +223,29 @@ public final class MathProgSysModel extends AbstractModel<GenericSolver> {
     /**
      * @author apete
      */
-    static enum ColumnMarker {
+    static enum ColumnMarker
+    {
 
         INTEND(), INTORG();
 
     }
 
-    static enum FileSection {
+    static enum FileSection
+    {
 
         BOUNDS(), COLUMNS(), ENDATA(), NAME(), OBJNAME(), OBJSENSE(), RANGES(), RHS(), ROWS(), SOS();
 
     }
 
-    final class Row extends Object {
+    final class Row extends Object
+    {
 
         private final Expression myExpression;
 
         private final RowType myType;
 
-        Row(final String name, final RowType rowType) {
+        Row(final String name, final RowType rowType)
+        {
 
             super();
 
@@ -233,9 +253,11 @@ public final class MathProgSysModel extends AbstractModel<GenericSolver> {
 
             myType = rowType;
 
-            if (myType == RowType.N) {
+            if (myType == RowType.N)
+            {
                 myExpression.weight(ONE);
-            } else {
+            } else
+            {
                 myExpression.weight(null);
             }
 
@@ -243,100 +265,109 @@ public final class MathProgSysModel extends AbstractModel<GenericSolver> {
             this.rhs(ZERO);
         }
 
-        public Row range(final BigDecimal value) {
+        public Row range(final BigDecimal value)
+        {
 
-            switch (myType) {
+            switch (myType)
+            {
 
-            case E:
+                case E:
 
-                final int tmpSignum = value.signum();
-                if (tmpSignum == 1) {
-                    myExpression.upper(myExpression.getLowerLimit().add(value));
-                } else if (tmpSignum == -1) {
-                    myExpression.lower(myExpression.getUpperLimit().add(value));
-                }
+                    final int tmpSignum = value.signum();
+                    if (tmpSignum == 1)
+                    {
+                        myExpression.upper(myExpression.getLowerLimit().add(value));
+                    } else if (tmpSignum == -1)
+                    {
+                        myExpression.lower(myExpression.getUpperLimit().add(value));
+                    }
 
-                break;
+                    break;
 
-            case L:
+                case L:
 
-                myExpression.lower(myExpression.getUpperLimit().subtract(value.abs()));
+                    myExpression.lower(myExpression.getUpperLimit().subtract(value.abs()));
 
-                break;
+                    break;
 
-            case G:
+                case G:
 
-                myExpression.upper(myExpression.getLowerLimit().add(value.abs()));
+                    myExpression.upper(myExpression.getLowerLimit().add(value.abs()));
 
-                break;
+                    break;
 
-            case N:
+                case N:
 
-                myExpression.level(null);
-                myExpression.weight(ONE);
+                    myExpression.level(null);
+                    myExpression.weight(ONE);
 
-                break;
+                    break;
 
-            default:
+                default:
 
-                break;
+                    break;
             }
 
             return this;
         }
 
-        public Row rhs(final BigDecimal value) {
+        public Row rhs(final BigDecimal value)
+        {
 
-            switch (myType) {
+            switch (myType)
+            {
 
-            case E:
+                case E:
 
-                myExpression.level(value);
+                    myExpression.level(value);
 
-                break;
+                    break;
 
-            case L:
+                case L:
 
-                myExpression.upper(value);
+                    myExpression.upper(value);
 
-                break;
+                    break;
 
-            case G:
+                case G:
 
-                myExpression.lower(value);
+                    myExpression.lower(value);
 
-                break;
+                    break;
 
-            case N:
+                case N:
 
-                myExpression.level(null);
-                myExpression.weight(ONE);
+                    myExpression.level(null);
+                    myExpression.weight(ONE);
 
-                break;
+                    break;
 
-            default:
+                default:
 
-                break;
+                    break;
             }
 
             return this;
         }
 
-        public void setColumnValue(final String columnName, final BigDecimal value) {
+        public void setColumnValue(final String columnName, final BigDecimal value)
+        {
             myExpression.set(myColumns.get(columnName).getVariable(), value);
         }
 
         /**
          * @return the expression
          */
-        Expression getExpression() {
+        Expression getExpression()
+        {
             return myExpression;
         }
 
         /**
          * @return the type
          */
-        RowType getType() {
+        RowType getType()
+        {
             return myType;
         }
 
@@ -344,7 +375,7 @@ public final class MathProgSysModel extends AbstractModel<GenericSolver> {
 
     /**
      * RowType used with the ROWS and RANGES sections.
-     *
+     * <p>
      * <pre>
      * type      meaning
      * ---------------------------
@@ -364,7 +395,8 @@ public final class MathProgSysModel extends AbstractModel<GenericSolver> {
      *
      * @author apete
      */
-    static enum RowType {
+    static enum RowType
+    {
 
         E(), G(), L(), N();
 
@@ -372,17 +404,19 @@ public final class MathProgSysModel extends AbstractModel<GenericSolver> {
 
     private static final String COMMENT = "*";
     private static final String EMPTY = "";
-    private static final int[] FIELD_LIMITS = new int[] { 3, 12, 22, 36, 47, 61 };
+    private static final int[] FIELD_LIMITS = new int[]{3, 12, 22, 36, 47, 61};
     private static final String SPACE = " ";
 
-    public static MathProgSysModel make(final File file) {
+    public static MathProgSysModel make(final File file)
+    {
 
         final MathProgSysModel retVal = new MathProgSysModel();
 
         String tmpLine;
         FileSection tmpSection = null;
 
-        try {
+        try
+        {
 
             final BufferedReader tmpBufferedFileReader = new BufferedReader(new FileReader(file));
 
@@ -390,24 +424,30 @@ public final class MathProgSysModel extends AbstractModel<GenericSolver> {
             //it returns the content of a line MINUS the newline.
             //it returns null only for the END of the stream.
             //it returns an empty String if two newlines appear in a row.
-            while ((tmpLine = tmpBufferedFileReader.readLine()) != null) {
+            while ((tmpLine = tmpBufferedFileReader.readLine()) != null)
+            {
 
                 //        BasicLogger.logDebug("Line: {}.", tmpLine);
 
-                if ((tmpLine.length() == 0) || tmpLine.startsWith(COMMENT)) {
+                if ((tmpLine.length() == 0) || tmpLine.startsWith(COMMENT))
+                {
                     // Skip this line
-                } else if (tmpLine.startsWith(SPACE)) {
+                } else if (tmpLine.startsWith(SPACE))
+                {
                     retVal.parseSectionLine(tmpSection, tmpLine);
-                } else {
+                } else
+                {
                     tmpSection = retVal.identifySection(tmpLine);
                 }
             }
 
             tmpBufferedFileReader.close();
 
-        } catch (final FileNotFoundException anException) {
+        } catch (final FileNotFoundException anException)
+        {
             anException.printStackTrace();
-        } catch (final IOException anException) {
+        } catch (final IOException anException)
+        {
             anException.printStackTrace();
         }
 
@@ -422,7 +462,8 @@ public final class MathProgSysModel extends AbstractModel<GenericSolver> {
 
     private final HashMap<String, Row> myRows = new HashMap<>();
 
-    MathProgSysModel() {
+    MathProgSysModel()
+    {
 
         super();
 
@@ -432,29 +473,37 @@ public final class MathProgSysModel extends AbstractModel<GenericSolver> {
     }
 
     @Override
-    public void dispose() {
+    public void dispose()
+    {
         myDelegate.dispose();
         myRows.clear();
         myColumns.clear();
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return false;
         }
-        if (!(obj instanceof MathProgSysModel)) {
+        if (!(obj instanceof MathProgSysModel))
+        {
             return false;
         }
         final MathProgSysModel other = (MathProgSysModel) obj;
-        if (myDelegate == null) {
-            if (other.myDelegate != null) {
+        if (myDelegate == null)
+        {
+            if (other.myDelegate != null)
+            {
                 return false;
             }
-        } else if (!myDelegate.equals(other.myDelegate)) {
+        } else if (!myDelegate.equals(other.myDelegate))
+        {
             return false;
         }
         return true;
@@ -463,16 +512,19 @@ public final class MathProgSysModel extends AbstractModel<GenericSolver> {
     /**
      * @return The delegate {@linkplain ExpressionsBasedModel}
      */
-    public ExpressionsBasedModel getExpressionsBasedModel() {
+    public ExpressionsBasedModel getExpressionsBasedModel()
+    {
         return myDelegate;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return myName;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = 1;
         result = (prime * result) + ((myDelegate == null) ? 0 : myDelegate.hashCode());
@@ -484,7 +536,8 @@ public final class MathProgSysModel extends AbstractModel<GenericSolver> {
      *
      * @see org.ojalgo.optimisation.Optimisation.Model#maximise()
      */
-    public Optimisation.Result maximise() {
+    public Optimisation.Result maximise()
+    {
         return myDelegate.maximise();
     }
 
@@ -493,7 +546,8 @@ public final class MathProgSysModel extends AbstractModel<GenericSolver> {
      *
      * @see org.ojalgo.optimisation.Optimisation.Model#minimise()
      */
-    public Optimisation.Result minimise() {
+    public Optimisation.Result minimise()
+    {
         return myDelegate.minimise();
     }
 
@@ -505,53 +559,64 @@ public final class MathProgSysModel extends AbstractModel<GenericSolver> {
      * The solution (variable values) are in the order the columns were defined in the MPS-file.
      * </p>
      */
-    public Optimisation.Result solve() {
-        if (this.isMaximisation()) {
+    public Optimisation.Result solve()
+    {
+        if (this.isMaximisation())
+        {
             return myDelegate.maximise();
-        } else {
+        } else
+        {
             return myDelegate.minimise();
         }
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return myDelegate.toString();
     }
 
-    public boolean validate() {
+    public boolean validate()
+    {
         return myDelegate.validate();
     }
 
     /**
      * @see org.ojalgo.optimisation.ExpressionsBasedModel#validate(org.ojalgo.access.Access1D,
-     *      org.ojalgo.type.context.NumberContext)
+     * org.ojalgo.type.context.NumberContext)
      */
-    public boolean validate(final Access1D<BigDecimal> solution, final NumberContext context) {
+    public boolean validate(final Access1D<BigDecimal> solution, final NumberContext context)
+    {
         return myDelegate.validate(solution, context);
     }
 
-    private void extractFields(final String line) {
+    private void extractFields(final String line)
+    {
 
         final int tmpLength = line.length();
 
         int tmpFirst = 0;
         int tmpLimit = tmpFirst;
-        for (int i = 0; i < myFields.length; i++) {
+        for (int i = 0; i < myFields.length; i++)
+        {
             tmpLimit = Math.min(FIELD_LIMITS[i], tmpLength);
             myFields[i] = line.substring(tmpFirst, tmpLimit).trim();
             tmpFirst = tmpLimit;
         }
     }
 
-    FileSection identifySection(final String line) {
+    FileSection identifySection(final String line)
+    {
 
         final int tmpSplit = line.indexOf(SPACE);
         String tmpSection;
         String tmpArgument;
-        if (tmpSplit != -1) {
+        if (tmpSplit != -1)
+        {
             tmpSection = line.substring(0, tmpSplit).trim();
             tmpArgument = line.substring(tmpSplit).trim();
-        } else {
+        } else
+        {
             tmpSection = line.trim();
             tmpArgument = EMPTY;
         }
@@ -560,120 +625,134 @@ public final class MathProgSysModel extends AbstractModel<GenericSolver> {
 
         final FileSection retVal = FileSection.valueOf(tmpSection);
 
-        switch (retVal) {
+        switch (retVal)
+        {
 
-        case NAME:
+            case NAME:
 
-            myName = tmpArgument;
+                myName = tmpArgument;
 
-            break;
+                break;
 
-        default:
+            default:
 
-            break;
+                break;
         }
 
         return retVal;
     }
 
-    void parseSectionLine(final FileSection section, final String line) {
+    void parseSectionLine(final FileSection section, final String line)
+    {
 
         this.extractFields(line);
 
         //      BasicLogger.logDebug("{}: {}.", aSection, Arrays.toString(myFields));
 
-        switch (section) {
+        switch (section)
+        {
 
-        case NAME:
+            case NAME:
 
-            break;
+                break;
 
-        case OBJSENSE:
+            case OBJSENSE:
 
-            if (myFields[0].equals("MAX")) {
-                this.setMaximisation();
-            } else {
-                this.setMinimisation();
-            }
-
-            break;
-
-        case OBJNAME:
-
-            break;
-
-        case ROWS:
-
-            final Row tmpRow = new Row(myFields[1], RowType.valueOf(myFields[0]));
-
-            myRows.put(myFields[1], tmpRow);
-
-            break;
-
-        case COLUMNS:
-
-            if (myFields[2].indexOf("MARKER") != -1) {
-
-                if (myFields[4].indexOf("INTORG") != -1) {
-                    myIntegerMarker = true;
-                } else if (myFields[4].indexOf("INTEND") != -1) {
-                    myIntegerMarker = false;
+                if (myFields[0].equals("MAX"))
+                {
+                    this.setMaximisation();
+                } else
+                {
+                    this.setMinimisation();
                 }
 
-            } else {
+                break;
 
-                if (!myColumns.containsKey(myFields[1])) {
-                    myColumns.put(myFields[1], new Column(myFields[1]));
+            case OBJNAME:
+
+                break;
+
+            case ROWS:
+
+                final Row tmpRow = new Row(myFields[1], RowType.valueOf(myFields[0]));
+
+                myRows.put(myFields[1], tmpRow);
+
+                break;
+
+            case COLUMNS:
+
+                if (myFields[2].indexOf("MARKER") != -1)
+                {
+
+                    if (myFields[4].indexOf("INTORG") != -1)
+                    {
+                        myIntegerMarker = true;
+                    } else if (myFields[4].indexOf("INTEND") != -1)
+                    {
+                        myIntegerMarker = false;
+                    }
+
+                } else
+                {
+
+                    if (!myColumns.containsKey(myFields[1]))
+                    {
+                        myColumns.put(myFields[1], new Column(myFields[1]));
+                    }
+
+                    final Column tmpColumn = myColumns.get(myFields[1]);
+
+                    tmpColumn.setRowValue(myFields[2], new BigDecimal(myFields[3]));
+                    if (myFields[4].length() != 0)
+                    {
+                        tmpColumn.setRowValue(myFields[4], new BigDecimal(myFields[5]));
+                    }
+
+                    if (myIntegerMarker)
+                    {
+                        tmpColumn.integer(myIntegerMarker);
+                    }
+
                 }
 
-                final Column tmpColumn = myColumns.get(myFields[1]);
+                break;
 
-                tmpColumn.setRowValue(myFields[2], new BigDecimal(myFields[3]));
-                if (myFields[4].length() != 0) {
-                    tmpColumn.setRowValue(myFields[4], new BigDecimal(myFields[5]));
+            case RHS:
+
+                myRows.get(myFields[2]).rhs(new BigDecimal(myFields[3]));
+
+                if (myFields[4].length() != 0)
+                {
+                    myRows.get(myFields[4]).rhs(new BigDecimal(myFields[5]));
                 }
 
-                if (myIntegerMarker) {
-                    tmpColumn.integer(myIntegerMarker);
+                break;
+
+            case RANGES:
+
+                myRows.get(myFields[2]).range(new BigDecimal(myFields[3]));
+
+                if (myFields[4].length() != 0)
+                {
+                    myRows.get(myFields[4]).range(new BigDecimal(myFields[5]));
                 }
 
-            }
+                break;
 
-            break;
+            case BOUNDS:
 
-        case RHS:
+                myColumns.get(myFields[2]).bound(BoundType.valueOf(myFields[0]), myFields[3].length() == 0 ? null : new BigDecimal(myFields[3]));
 
-            myRows.get(myFields[2]).rhs(new BigDecimal(myFields[3]));
+                break;
 
-            if (myFields[4].length() != 0) {
-                myRows.get(myFields[4]).rhs(new BigDecimal(myFields[5]));
-            }
+            case ENDATA:
 
-            break;
+                break;
 
-        case RANGES:
+            default:
 
-            myRows.get(myFields[2]).range(new BigDecimal(myFields[3]));
-
-            if (myFields[4].length() != 0) {
-                myRows.get(myFields[4]).range(new BigDecimal(myFields[5]));
-            }
-
-            break;
-
-        case BOUNDS:
-
-            myColumns.get(myFields[2]).bound(BoundType.valueOf(myFields[0]), myFields[3].length() == 0 ? null : new BigDecimal(myFields[3]));
-
-            break;
-
-        case ENDATA:
-
-            break;
-
-        default:
-
-            break;
+                break;
         }
     }
 

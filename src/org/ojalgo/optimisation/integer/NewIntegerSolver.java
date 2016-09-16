@@ -48,15 +48,19 @@ import org.ojalgo.type.TypeUtils;
  *
  * @author apete
  */
-public final class NewIntegerSolver extends IntegerSolver {
+public final class NewIntegerSolver extends IntegerSolver
+{
 
-    class NodeWorker implements Callable<Boolean> {
+    class NodeWorker implements Callable<Boolean>
+    {
 
-        public Boolean call() throws Exception {
+        public Boolean call() throws Exception
+        {
 
             NodeKey tmpNodeKey = null;
 
-            while (normal && NewIntegerSolver.this.isStillNodesToTry() && ((tmpNodeKey = NewIntegerSolver.this.getNextNode()) != null)) {
+            while (normal && NewIntegerSolver.this.isStillNodesToTry() && ((tmpNodeKey = NewIntegerSolver.this.getNextNode()) != null))
+            {
                 NewIntegerSolver.this.compute(tmpNodeKey);
             }
 
@@ -71,7 +75,8 @@ public final class NewIntegerSolver extends IntegerSolver {
 
     boolean normal = true;
 
-    NewIntegerSolver(final ExpressionsBasedModel model, final Options solverOptions) {
+    NewIntegerSolver(final ExpressionsBasedModel model, final Options solverOptions)
+    {
 
         super(model, solverOptions);
 
@@ -80,7 +85,8 @@ public final class NewIntegerSolver extends IntegerSolver {
         myIntegerIndeces = new int[tmpIntegerVariables.size()];
         myIntegerSignificances = new double[tmpIntegerVariables.size()];
 
-        for (int i = 0; i < myIntegerIndeces.length; i++) {
+        for (int i = 0; i < myIntegerIndeces.length; i++)
+        {
             final Variable tmpVariable = tmpIntegerVariables.get(i);
             myIntegerIndeces[i] = model.indexOf(tmpVariable);
         }
@@ -88,11 +94,13 @@ public final class NewIntegerSolver extends IntegerSolver {
         //options.debug = System.out;
     }
 
-    public Result solve(final Result kickStarter) {
+    public Result solve(final Result kickStarter)
+    {
 
         // Must verify that it actually is an integer solution
         // The kickStarter may be user-supplied
-        if ((kickStarter != null) && kickStarter.getState().isFeasible() && this.getModel().validate(kickStarter)) {
+        if ((kickStarter != null) && kickStarter.getState().isFeasible() && this.getModel().validate(kickStarter))
+        {
             this.markInteger(null, kickStarter);
         }
 
@@ -106,19 +114,25 @@ public final class NewIntegerSolver extends IntegerSolver {
 
         Optimisation.Result retVal = this.getBestResultSoFar();
 
-        if (retVal.getState().isFeasible()) {
+        if (retVal.getState().isFeasible())
+        {
 
-            if (normal) {
+            if (normal)
+            {
                 retVal = new Optimisation.Result(State.OPTIMAL, retVal);
-            } else {
+            } else
+            {
                 retVal = new Optimisation.Result(State.FEASIBLE, retVal);
             }
 
-        } else {
+        } else
+        {
 
-            if (normal) {
+            if (normal)
+            {
                 retVal = new Optimisation.Result(State.INFEASIBLE, retVal);
-            } else {
+            } else
+            {
                 retVal = new Optimisation.Result(State.FAILED, retVal);
             }
         }
@@ -127,39 +141,47 @@ public final class NewIntegerSolver extends IntegerSolver {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return TypeUtils.format("Solutions={} Nodes/Iterations={} {}", this.countIntegerSolutions(), this.countExploredNodes(), this.getBestResultSoFar());
     }
 
     @Override
-    protected MatrixStore<Double> extractSolution() {
+    protected MatrixStore<Double> extractSolution()
+    {
         return PrimitiveDenseStore.FACTORY.columns(this.getBestResultSoFar());
     }
 
     @Override
-    protected boolean initialise(final Result kickStarter) {
+    protected boolean initialise(final Result kickStarter)
+    {
         return true;
     }
 
     @Override
-    protected boolean needsAnotherIteration() {
+    protected boolean needsAnotherIteration()
+    {
         return !this.getState().isOptimal();
     }
 
     @Override
-    protected boolean validate() {
+    protected boolean validate()
+    {
 
         boolean retVal = true;
         this.setState(State.VALID);
 
-        try {
+        try
+        {
 
-            if (!(retVal = this.getModel().validate())) {
+            if (!(retVal = this.getModel().validate()))
+            {
                 retVal = false;
                 this.setState(State.INVALID);
             }
 
-        } catch (final Exception ex) {
+        } catch (final Exception ex)
+        {
 
             retVal = false;
             this.setState(State.FAILED);
@@ -168,27 +190,34 @@ public final class NewIntegerSolver extends IntegerSolver {
         return retVal;
     }
 
-    boolean add(final NodeKey e) {
+    boolean add(final NodeKey e)
+    {
         return myNodesToTry.add(e);
     }
 
-    void compute(final NodeKey nodeKey) {
+    void compute(final NodeKey nodeKey)
+    {
 
-        if (NewIntegerSolver.this.isDebug()) {
+        if (NewIntegerSolver.this.isDebug())
+        {
             NewIntegerSolver.this.debug("\nBranch&Bound Node");
             NewIntegerSolver.this.debug(nodeKey.toString());
             NewIntegerSolver.this.debug(NewIntegerSolver.this.toString());
         }
 
-        if (!NewIntegerSolver.this.isIterationAllowed() || !NewIntegerSolver.this.isIterationNecessary()) {
-            if (NewIntegerSolver.this.isDebug()) {
+        if (!NewIntegerSolver.this.isIterationAllowed() || !NewIntegerSolver.this.isIterationNecessary())
+        {
+            if (NewIntegerSolver.this.isDebug())
+            {
                 NewIntegerSolver.this.debug("Reached iterations or time limit - stop!");
             }
             normal &= false;
         }
 
-        if (!NewIntegerSolver.this.isGoodEnoughToContinueBranching(nodeKey.objective)) {
-            if (NewIntegerSolver.this.isDebug()) {
+        if (!NewIntegerSolver.this.isGoodEnoughToContinueBranching(nodeKey.objective))
+        {
+            if (NewIntegerSolver.this.isDebug())
+            {
                 NewIntegerSolver.this.debug("No longer a relevant node!");
             }
             normal &= true;
@@ -199,17 +228,22 @@ public final class NewIntegerSolver extends IntegerSolver {
 
         NewIntegerSolver.this.incrementIterationsCount();
 
-        if ((tmpModel.options.debug_appender != null) && (tmpModel.options.debug_appender instanceof PrinterBuffer)) {
-            if (NewIntegerSolver.this.getModel().options.debug_appender != null) {
+        if ((tmpModel.options.debug_appender != null) && (tmpModel.options.debug_appender instanceof PrinterBuffer))
+        {
+            if (NewIntegerSolver.this.getModel().options.debug_appender != null)
+            {
                 ((PrinterBuffer) tmpModel.options.debug_appender).flush(NewIntegerSolver.this.getModel().options.debug_appender);
             }
         }
-        if (tmpResult.getState().isOptimal()) {
-            if (NewIntegerSolver.this.isDebug()) {
+        if (tmpResult.getState().isOptimal())
+        {
+            if (NewIntegerSolver.this.isDebug())
+            {
                 NewIntegerSolver.this.debug("Node solved to optimality!");
             }
 
-            if (NewIntegerSolver.this.options.validate && !tmpModel.validate(tmpResult)) {
+            if (NewIntegerSolver.this.options.validate && !tmpModel.validate(tmpResult))
+            {
                 // This should not be possible. There is a bug somewhere.
                 NewIntegerSolver.this.debug("Node solution marked as OPTIMAL, but is actually INVALID/INFEASIBLE/FAILED. Stop this branch!");
                 //                    IntegerSolver.this.logDebug(myKey.toString());
@@ -223,8 +257,10 @@ public final class NewIntegerSolver extends IntegerSolver {
             final int tmpBranchIndex = NewIntegerSolver.this.identifyNonIntegerVariable(tmpResult, nodeKey);
             final double tmpSolutionValue = NewIntegerSolver.this.evaluateFunction(tmpResult);
 
-            if (tmpBranchIndex == -1) {
-                if (NewIntegerSolver.this.isDebug()) {
+            if (tmpBranchIndex == -1)
+            {
+                if (NewIntegerSolver.this.isDebug())
+                {
                     NewIntegerSolver.this.debug("Integer solution! Store it among the others, and stop this branch!");
                 }
 
@@ -232,7 +268,8 @@ public final class NewIntegerSolver extends IntegerSolver {
 
                 NewIntegerSolver.this.markInteger(nodeKey, tmpIntegerSolutionResult);
 
-                if (NewIntegerSolver.this.isDebug()) {
+                if (NewIntegerSolver.this.isDebug())
+                {
                     NewIntegerSolver.this.debug(NewIntegerSolver.this.getBestResultSoFar().toString());
                 }
 
@@ -240,15 +277,19 @@ public final class NewIntegerSolver extends IntegerSolver {
                 BasicLogger.debug(NewIntegerSolver.this.toString());
                 // BasicLogger.debug(DaemonPoolExecutor.INSTANCE.toString());
 
-            } else {
-                if (NewIntegerSolver.this.isDebug()) {
+            } else
+            {
+                if (NewIntegerSolver.this.isDebug())
+                {
                     NewIntegerSolver.this.debug("Not an Integer Solution: " + tmpSolutionValue);
                 }
 
                 final double tmpVariableValue = tmpResult.doubleValue(NewIntegerSolver.this.getGlobalIndex(tmpBranchIndex));
 
-                if (NewIntegerSolver.this.isGoodEnoughToContinueBranching(tmpSolutionValue)) {
-                    if (NewIntegerSolver.this.isDebug()) {
+                if (NewIntegerSolver.this.isGoodEnoughToContinueBranching(tmpSolutionValue))
+                {
+                    if (NewIntegerSolver.this.isDebug())
+                    {
                         NewIntegerSolver.this.debug("Still hope, branching on {} @ {} >>> {}", tmpBranchIndex, tmpVariableValue,
                                 tmpModel.getVariable(NewIntegerSolver.this.getGlobalIndex(tmpBranchIndex)));
                     }
@@ -262,21 +303,26 @@ public final class NewIntegerSolver extends IntegerSolver {
                     this.add(tmpLowerBranchTask);
                     this.add(tmpUpperBranchTask);
 
-                    if (DaemonPoolExecutor.isDaemonAvailable()) {
+                    if (DaemonPoolExecutor.isDaemonAvailable())
+                    {
                         DaemonPoolExecutor.invoke(new NodeWorker());
                     }
 
                     normal &= true;
 
-                } else {
-                    if (NewIntegerSolver.this.isDebug()) {
+                } else
+                {
+                    if (NewIntegerSolver.this.isDebug())
+                    {
                         NewIntegerSolver.this.debug("Can't find better integer solutions - stop this branch!");
                     }
                 }
             }
 
-        } else {
-            if (NewIntegerSolver.this.isDebug()) {
+        } else
+        {
+            if (NewIntegerSolver.this.isDebug())
+            {
                 NewIntegerSolver.this.debug("Failed to solve problem - stop this branch!");
             }
         }
@@ -284,23 +330,28 @@ public final class NewIntegerSolver extends IntegerSolver {
         normal &= true;
     }
 
-    int countExploredNodes() {
+    int countExploredNodes()
+    {
         return this.countIterations();
     }
 
-    int getGlobalIndex(final int integerIndex) {
+    int getGlobalIndex(final int integerIndex)
+    {
         return myIntegerIndeces[integerIndex];
     }
 
-    int[] getIntegerIndeces() {
+    int[] getIntegerIndeces()
+    {
         return myIntegerIndeces;
     }
 
-    double getIntegerSignificance(final int index) {
+    double getIntegerSignificance(final int index)
+    {
         return myIntegerSignificances[index];
     }
 
-    NodeKey getNextNode() {
+    NodeKey getNextNode()
+    {
         return myNodesToTry.poll();
         //        if (myMinimisation) {
         //            final NodeKey retVal = myNodesToTry.first();
@@ -313,21 +364,24 @@ public final class NewIntegerSolver extends IntegerSolver {
         //        }
     }
 
-    int identifyNonIntegerVariable(final Optimisation.Result nodeResult, final NodeKey nodeKey) {
+    int identifyNonIntegerVariable(final Optimisation.Result nodeResult, final NodeKey nodeKey)
+    {
 
         int retVal = -1;
 
         double tmpFraction, tmpImpact;
         double tmpMaxImpact = ZERO;
 
-        for (int i = 0; i < myIntegerIndeces.length; i++) {
+        for (int i = 0; i < myIntegerIndeces.length; i++)
+        {
 
             tmpFraction = nodeKey.getFraction(i, nodeResult.doubleValue(myIntegerIndeces[i]));
 
             //tmpImpact = (ONE - tmpFraction) * this.getIntegerSignificance(i);
             tmpImpact = tmpFraction * this.getIntegerSignificance(i);
 
-            if ((tmpImpact > tmpMaxImpact) && !options.integer.isZero(tmpFraction)) {
+            if ((tmpImpact > tmpMaxImpact) && !options.integer.isZero(tmpFraction))
+            {
                 retVal = i;
                 tmpMaxImpact = tmpImpact;
             }
@@ -337,16 +391,19 @@ public final class NewIntegerSolver extends IntegerSolver {
         return retVal;
     }
 
-    boolean isStillNodesToTry() {
+    boolean isStillNodesToTry()
+    {
         return !myNodesToTry.isEmpty();
     }
 
-    ExpressionsBasedModel makeNodeModel(final NodeKey nodeKey) {
+    ExpressionsBasedModel makeNodeModel(final NodeKey nodeKey)
+    {
 
         final ExpressionsBasedModel retVal = this.getModel().relax(false);
 
         final int[] tmpIntegerIndeces = this.getIntegerIndeces();
-        for (int i = 0; i < tmpIntegerIndeces.length; i++) {
+        for (int i = 0; i < tmpIntegerIndeces.length; i++)
+        {
 
             final BigDecimal tmpLowerBound = nodeKey.getLowerBound(i);
             final BigDecimal tmpUpperBound = nodeKey.getUpperBound(i);
@@ -356,23 +413,29 @@ public final class NewIntegerSolver extends IntegerSolver {
             tmpVariable.upper(tmpUpperBound);
 
             BigDecimal tmpValue = tmpVariable.getValue();
-            if (tmpValue != null) {
-                if (tmpLowerBound != null) {
+            if (tmpValue != null)
+            {
+                if (tmpLowerBound != null)
+                {
                     tmpValue = tmpValue.max(tmpLowerBound);
                 }
-                if (tmpUpperBound != null) {
+                if (tmpUpperBound != null)
+                {
                     tmpValue = tmpValue.min(tmpUpperBound);
                 }
                 tmpVariable.setValue(tmpValue);
             }
         }
 
-        if (this.isIntegerSolutionFound()) {
+        if (this.isIntegerSolutionFound())
+        {
             final double tmpBestValue = this.getBestResultSoFar().getValue();
             final double tmpGap = PrimitiveFunction.ABS.invoke(tmpBestValue * options.mip_gap);
-            if (retVal.isMinimisation()) {
+            if (retVal.isMinimisation())
+            {
                 retVal.limitObjective(null, TypeUtils.toBigDecimal(tmpBestValue - tmpGap, options.problem));
-            } else {
+            } else
+            {
                 retVal.limitObjective(TypeUtils.toBigDecimal(tmpBestValue + tmpGap, options.problem), null);
             }
         }
@@ -380,7 +443,8 @@ public final class NewIntegerSolver extends IntegerSolver {
         return retVal;
     }
 
-    void pruneNodes(final NodeKey integerNode) {
+    void pruneNodes(final NodeKey integerNode)
+    {
         //        if (myMinimisation) {
         //            final SortedSet<NodeKey> tmpTail = myNodesToTry.tailSet(integerNode);
         //            myNodesToTry.removeAll(tmpTail);
@@ -390,11 +454,13 @@ public final class NewIntegerSolver extends IntegerSolver {
         //        }
     }
 
-    void setIntegerSignificance(final int index, final double significance) {
+    void setIntegerSignificance(final int index, final double significance)
+    {
         myIntegerSignificances[index] = significance;
     }
 
-    void setup() {
+    void setup()
+    {
 
         normal = true;
 
@@ -416,7 +482,8 @@ public final class NewIntegerSolver extends IntegerSolver {
 
         final double[] tmpSignificance = new double[tmpIntegerVariables.size()];
 
-        for (int i = 0; i < tmpIntegerVariables.size(); i++) {
+        for (int i = 0; i < tmpIntegerVariables.size(); i++)
+        {
 
             final int tmpGlobalIndex = NewIntegerSolver.this.getGlobalIndex(i);
             final double tmpVariableValue = tmpRootResult.doubleValue(tmpGlobalIndex);
@@ -426,10 +493,12 @@ public final class NewIntegerSolver extends IntegerSolver {
             final Result tmpLowerResult = tmpLowerModel.solve(tmpRootResult);
             final double tmpLowerValue = tmpLowerResult.getValue();
 
-            if (tmpLowerValue < tmpMinValue) {
+            if (tmpLowerValue < tmpMinValue)
+            {
                 tmpMinValue = tmpLowerValue;
             }
-            if (tmpLowerValue > tmpMaxValue) {
+            if (tmpLowerValue > tmpMaxValue)
+            {
                 tmpMaxValue = tmpLowerValue;
             }
 
@@ -438,49 +507,61 @@ public final class NewIntegerSolver extends IntegerSolver {
             final Result tmpUpperResult = tmpUpperModel.solve(tmpRootResult);
             final double tmpUpperValue = tmpUpperResult.getValue();
 
-            if (tmpUpperValue < tmpMinValue) {
+            if (tmpUpperValue < tmpMinValue)
+            {
                 tmpMinValue = tmpUpperValue;
             }
-            if (tmpUpperValue > tmpMaxValue) {
+            if (tmpUpperValue > tmpMaxValue)
+            {
                 tmpMaxValue = tmpUpperValue;
             }
 
-            if (tmpLowerResult.getState().isFeasible() && tmpUpperResult.getState().isFeasible()) {
-                if (tmpRootModel.isMinimisation() && ((tmpLowerValue < tmpBestValue) || (tmpUpperValue < tmpBestValue))) {
+            if (tmpLowerResult.getState().isFeasible() && tmpUpperResult.getState().isFeasible())
+            {
+                if (tmpRootModel.isMinimisation() && ((tmpLowerValue < tmpBestValue) || (tmpUpperValue < tmpBestValue)))
+                {
                     retVal[0] = tmpLowerNodeKey;
                     retVal[1] = tmpUpperNodeKey;
-                } else if (tmpRootModel.isMaximisation() && ((tmpLowerValue > tmpBestValue) || (tmpUpperValue > tmpBestValue))) {
+                } else if (tmpRootModel.isMaximisation() && ((tmpLowerValue > tmpBestValue) || (tmpUpperValue > tmpBestValue)))
+                {
                     retVal[0] = tmpLowerNodeKey;
                     retVal[1] = tmpUpperNodeKey;
                 }
             }
 
-            if (!Double.isNaN(tmpUpperValue) && !Double.isNaN(tmpLowerValue)) {
+            if (!Double.isNaN(tmpUpperValue) && !Double.isNaN(tmpLowerValue))
+            {
                 tmpSignificance[i] = PrimitiveFunction.ABS.invoke(tmpUpperValue - tmpLowerValue);
             }
         }
 
         double tmpScale = tmpMaxValue - tmpMinValue;
         final double value = tmpScale;
-        if (PrimitiveScalar.isSmall(PrimitiveMath.ONE, value)) {
+        if (PrimitiveScalar.isSmall(PrimitiveMath.ONE, value))
+        {
             tmpScale = PrimitiveMath.ONE;
         }
-        for (int i = 0; i < tmpSignificance.length; i++) {
+        for (int i = 0; i < tmpSignificance.length; i++)
+        {
             NewIntegerSolver.this.setIntegerSignificance(i, 0.5 + (tmpSignificance[i] / tmpScale));
         }
 
-        if ((retVal[0] != null) && (retVal[1] != null)) {
+        if ((retVal[0] != null) && (retVal[1] != null))
+        {
             NewIntegerSolver.this.add(retVal[0]);
             NewIntegerSolver.this.add(retVal[1]);
-        } else {
+        } else
+        {
             NewIntegerSolver.this.add(new NodeKey(tmpIntegerModel));
         }
 
         final Future<Boolean> tmpFuture = DaemonPoolExecutor.invoke(new NodeWorker());
 
-        try {
+        try
+        {
             normal = normal && tmpFuture.get();
-        } catch (InterruptedException | ExecutionException anException) {
+        } catch (InterruptedException | ExecutionException anException)
+        {
             normal &= false;
         }
     }

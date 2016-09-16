@@ -36,95 +36,116 @@ import org.ojalgo.scalar.Scalar;
  *
  * @author apete
  */
-public class QuaternionArray extends ReferenceTypeArray<Quaternion> {
+public class QuaternionArray extends ReferenceTypeArray<Quaternion>
+{
 
     static final long ELEMENT_SIZE = MemoryEstimator.estimateObject(Quaternion.class);
 
-    static final DenseFactory<Quaternion> FACTORY = new DenseFactory<Quaternion>() {
+    static final DenseFactory<Quaternion> FACTORY = new DenseFactory<Quaternion>()
+    {
 
         @Override
-        long getElementSize() {
+        long getElementSize()
+        {
             return ELEMENT_SIZE;
         }
 
         @Override
-        DenseArray<Quaternion> make(final int size) {
+        DenseArray<Quaternion> make(final int size)
+        {
             return QuaternionArray.make(size);
         }
 
         @Override
-        Scalar<Quaternion> zero() {
+        Scalar<Quaternion> zero()
+        {
             return Quaternion.ZERO;
         }
 
     };
 
-    public static final QuaternionArray make(final int size) {
+    public static final QuaternionArray make(final int size)
+    {
         return new QuaternionArray(size);
     }
 
-    public static final SegmentedArray<Quaternion> makeSegmented(final long count) {
+    public static final SegmentedArray<Quaternion> makeSegmented(final long count)
+    {
         return SegmentedArray.make(FACTORY, count);
     }
 
-    public static final QuaternionArray wrap(final Quaternion[] data) {
+    public static final QuaternionArray wrap(final Quaternion[] data)
+    {
         return new QuaternionArray(data);
     }
 
-    protected QuaternionArray(final int size) {
+    protected QuaternionArray(final int size)
+    {
 
         super(new Quaternion[size]);
 
         this.fill(0, size, 1, Quaternion.ZERO);
     }
 
-    protected QuaternionArray(final Quaternion[] data) {
+    protected QuaternionArray(final Quaternion[] data)
+    {
 
         super(data);
 
     }
 
     @Override
-    public boolean equals(final Object anObj) {
-        if (anObj instanceof QuaternionArray) {
+    public boolean equals(final Object anObj)
+    {
+        if (anObj instanceof QuaternionArray)
+        {
             return Arrays.equals(data, ((QuaternionArray) anObj).data);
-        } else {
+        } else
+        {
             return super.equals(anObj);
         }
     }
 
-    public final void fillMatching(final Access1D<?> values) {
+    public final void fillMatching(final Access1D<?> values)
+    {
         final int tmpLimit = (int) FunctionUtils.min(this.count(), values.count());
-        for (int i = 0; i < tmpLimit; i++) {
+        for (int i = 0; i < tmpLimit; i++)
+        {
             data[i] = Quaternion.valueOf(values.get(i));
         }
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return Arrays.hashCode(data);
     }
 
     @Override
-    protected final void add(final int index, final double addend) {
+    protected final void add(final int index, final double addend)
+    {
         this.fillOne(index, this.get(index).add(this.valueOf(addend)));
     }
 
     @Override
-    protected final void add(final int index, final Number addend) {
+    protected final void add(final int index, final Number addend)
+    {
         this.fillOne(index, this.get(index).add(this.valueOf(addend)));
     }
 
     @Override
-    protected int indexOfLargest(final int first, final int limit, final int step) {
+    protected int indexOfLargest(final int first, final int limit, final int step)
+    {
 
         int retVal = first;
         double tmpLargest = ZERO;
         double tmpValue;
 
-        for (int i = first; i < limit; i += step) {
+        for (int i = first; i < limit; i += step)
+        {
             tmpValue = data[i].norm();
-            if (tmpValue > tmpLargest) {
+            if (tmpValue > tmpLargest)
+            {
                 tmpLargest = tmpValue;
                 retVal = i;
             }
@@ -134,27 +155,32 @@ public class QuaternionArray extends ReferenceTypeArray<Quaternion> {
     }
 
     @Override
-    protected boolean isAbsolute(final int index) {
+    protected boolean isAbsolute(final int index)
+    {
         return Quaternion.isAbsolute(data[index]);
     }
 
     @Override
-    protected boolean isSmall(final int index, final double comparedTo) {
+    protected boolean isSmall(final int index, final double comparedTo)
+    {
         return Quaternion.isSmall(comparedTo, data[index]);
     }
 
     @Override
-    DenseArray<Quaternion> newInstance(final int capacity) {
+    DenseArray<Quaternion> newInstance(final int capacity)
+    {
         return new QuaternionArray(capacity);
     }
 
     @Override
-    final Quaternion valueOf(final double value) {
+    final Quaternion valueOf(final double value)
+    {
         return Quaternion.valueOf(value);
     }
 
     @Override
-    final Quaternion valueOf(final Number number) {
+    final Quaternion valueOf(final Number number)
+    {
         return Quaternion.valueOf(number);
     }
 }

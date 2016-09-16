@@ -26,14 +26,16 @@ import org.ojalgo.function.PrimitiveFunction;
 /**
  * @author apete
  */
-public class ColourData extends Object {
+public class ColourData extends Object
+{
 
     public static final ColourData BLACK = new ColourData(0, 0, 0);
     public static final ColourData WHITE = new ColourData(255, 255, 255);
 
     private static final int LIMIT = 256;
 
-    public static ColourData random() {
+    public static ColourData random()
+    {
 
         final int tmpR = (int) PrimitiveFunction.FLOOR.invoke(LIMIT * Math.random());
         final int tmpG = (int) PrimitiveFunction.FLOOR.invoke(LIMIT * Math.random());
@@ -42,62 +44,77 @@ public class ColourData extends Object {
         return new ColourData(tmpR, tmpG, tmpB);
     }
 
-    public static ColourData valueOf(final String colourAsHexString) {
+    public static ColourData valueOf(final String colourAsHexString)
+    {
         final int i = Integer.decode(colourAsHexString).intValue();
         return new ColourData((i >> 16) & 0xFF, (i >> 8) & 0xFF, i & 0xFF);
     }
 
     private final int myValue;
 
-    public ColourData(final float r, final float g, final float b) {
+    public ColourData(final float r, final float g, final float b)
+    {
         this((int) ((r * 255F) + 0.5F), (int) ((g * 255F) + 0.5F), (int) ((b * 255F) + 0.5F));
     }
 
-    public ColourData(final float r, final float g, final float b, final float a) {
+    public ColourData(final float r, final float g, final float b, final float a)
+    {
         this((int) ((r * 255F) + 0.5F), (int) ((g * 255F) + 0.5F), (int) ((b * 255F) + 0.5F), (int) ((a * 255F) + 0.5F));
     }
 
-    public ColourData(final int rgb) {
+    public ColourData(final int rgb)
+    {
         myValue = 0xff000000 | rgb;
     }
 
-    public ColourData(final int rgba, final boolean alpha) {
-        if (alpha) {
+    public ColourData(final int rgba, final boolean alpha)
+    {
+        if (alpha)
+        {
             myValue = rgba;
-        } else {
+        } else
+        {
             myValue = 0xff000000 | rgba;
         }
     }
 
-    public ColourData(final int r, final int g, final int b) {
+    public ColourData(final int r, final int g, final int b)
+    {
         this(r, g, b, 255);
     }
 
-    public ColourData(final int r, final int g, final int b, final int a) {
+    public ColourData(final int r, final int g, final int b, final int a)
+    {
         myValue = ((a & 0xFF) << 24) | ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | ((b & 0xFF) << 0);
     }
 
-    public int getAlpha() {
+    public int getAlpha()
+    {
         return (myValue >> 24) & 0xff;
     }
 
-    public int getBlue() {
+    public int getBlue()
+    {
         return (myValue >> 0) & 0xFF;
     }
 
-    public int getGreen() {
+    public int getGreen()
+    {
         return (myValue >> 8) & 0xFF;
     }
 
-    public int getRed() {
+    public int getRed()
+    {
         return (myValue >> 16) & 0xFF;
     }
 
-    public int getRGB() {
+    public int getRGB()
+    {
         return myValue;
     }
 
-    public String toHexString() {
+    public String toHexString()
+    {
         return TypeUtils.toHexString(myValue);
     }
 

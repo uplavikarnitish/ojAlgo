@@ -30,14 +30,17 @@ import org.ojalgo.matrix.store.PrimitiveDenseStore;
 import org.ojalgo.scalar.ComplexNumber;
 import org.ojalgo.type.context.NumberContext;
 
-abstract class SchurDecomposition<N extends Number> extends InPlaceDecomposition<N> implements Schur<N> {
+abstract class SchurDecomposition<N extends Number> extends InPlaceDecomposition<N> implements Schur<N>
+{
 
-    public static final class SchurResult<N extends Number> extends Object {
+    public static final class SchurResult<N extends Number> extends Object
+    {
 
         private final Array1D<ComplexNumber> myDiagonal;
         private final MatrixStore<N> myQ;
 
-        public SchurResult(final Array1D<ComplexNumber> aDiagonal, final MatrixStore<N> aQ) {
+        public SchurResult(final Array1D<ComplexNumber> aDiagonal, final MatrixStore<N> aQ)
+        {
 
             super();
 
@@ -46,23 +49,28 @@ abstract class SchurDecomposition<N extends Number> extends InPlaceDecomposition
         }
 
         @SuppressWarnings("unused")
-        private SchurResult() {
+        private SchurResult()
+        {
             this(null, null);
         }
 
-        public final Array1D<ComplexNumber> getDiagonal() {
+        public final Array1D<ComplexNumber> getDiagonal()
+        {
             return myDiagonal;
         }
 
-        public final MatrixStore<N> getQ() {
+        public final MatrixStore<N> getQ()
+        {
             return myQ;
         }
 
     }
 
-    static final class Primitive extends SchurDecomposition<Double> {
+    static final class Primitive extends SchurDecomposition<Double>
+    {
 
-        Primitive() {
+        Primitive()
+        {
             super(PrimitiveDenseStore.FACTORY);
         }
 
@@ -71,11 +79,13 @@ abstract class SchurDecomposition<N extends Number> extends InPlaceDecomposition
     private Array1D<ComplexNumber> myDiagonal;
     private MatrixStore<N> myQ;
 
-    protected SchurDecomposition(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> aFactory) {
+    protected SchurDecomposition(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> aFactory)
+    {
         super(aFactory);
     }
 
-    public boolean decompose(final ElementsSupplier<N> matrix) {
+    public boolean decompose(final ElementsSupplier<N> matrix)
+    {
 
         this.reset();
 
@@ -93,36 +103,44 @@ abstract class SchurDecomposition<N extends Number> extends InPlaceDecomposition
         return this.computed(true);
     }
 
-    public boolean equals(final MatrixStore<N> other, final NumberContext context) {
+    public boolean equals(final MatrixStore<N> other, final NumberContext context)
+    {
         return MatrixUtils.equals(other, this, context);
     }
 
-    public Array1D<ComplexNumber> getDiagonal() {
+    public Array1D<ComplexNumber> getDiagonal()
+    {
         return myDiagonal;
     }
 
-    public MatrixStore<N> getQ() {
+    public MatrixStore<N> getQ()
+    {
         return myQ;
     }
 
-    public MatrixStore<N> getU() {
+    public MatrixStore<N> getU()
+    {
         return this.getInPlace().logical().hessenberg(true).get();
     }
 
-    public boolean isFullSize() {
+    public boolean isFullSize()
+    {
         return true;
     }
 
-    public boolean isOrdered() {
+    public boolean isOrdered()
+    {
         return false;
     }
 
-    public boolean isSolvable() {
+    public boolean isSolvable()
+    {
         return false;
     }
 
     @Override
-    public void reset() {
+    public void reset()
+    {
 
         super.reset();
 
@@ -130,15 +148,18 @@ abstract class SchurDecomposition<N extends Number> extends InPlaceDecomposition
         myQ = null;
     }
 
-    public MatrixStore<N> solve(final Access2D<N> rhs, final DecompositionStore<N> preallocated) {
+    public MatrixStore<N> solve(final Access2D<N> rhs, final DecompositionStore<N> preallocated)
+    {
         throw new UnsupportedOperationException();
     }
 
-    final void setDiagonal(final Array1D<ComplexNumber> newDiagonal) {
+    final void setDiagonal(final Array1D<ComplexNumber> newDiagonal)
+    {
         myDiagonal = newDiagonal;
     }
 
-    final void setQ(final MatrixStore<N> newQ) {
+    final void setQ(final MatrixStore<N> newQ)
+    {
         myQ = newQ;
     }
 

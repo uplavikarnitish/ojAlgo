@@ -49,9 +49,11 @@ import org.ojalgo.scalar.ComplexNumber;
  * @author apete
  */
 public interface SingularValue<N extends Number>
-        extends MatrixDecomposition<N>, MatrixDecomposition.Solver<N>, MatrixDecomposition.EconomySize<N>, MatrixDecomposition.Values<N> {
+        extends MatrixDecomposition<N>, MatrixDecomposition.Solver<N>, MatrixDecomposition.EconomySize<N>, MatrixDecomposition.Values<N>
+{
 
-    interface Factory<N extends Number> extends MatrixDecomposition.Factory<SingularValue<N>> {
+    interface Factory<N extends Number> extends MatrixDecomposition.Factory<SingularValue<N>>
+    {
 
     }
 
@@ -59,26 +61,34 @@ public interface SingularValue<N extends Number>
 
     public static final Factory<ComplexNumber> COMPLEX = typical -> new SVDnew32.Complex();
 
-    public static final Factory<Double> PRIMITIVE = typical -> {
-        if ((2048L < typical.countColumns()) && (typical.count() <= BasicArray.MAX_ARRAY_SIZE)) {
+    public static final Factory<Double> PRIMITIVE = typical ->
+    {
+        if ((2048L < typical.countColumns()) && (typical.count() <= BasicArray.MAX_ARRAY_SIZE))
+        {
             return new SVDnew32.Primitive();
-        } else {
+        } else
+        {
             return new RawSingularValue();
         }
     };
 
     @SuppressWarnings("unchecked")
-    public static <N extends Number> SingularValue<N> make(final Access2D<N> typical) {
+    public static <N extends Number> SingularValue<N> make(final Access2D<N> typical)
+    {
 
         final N tmpNumber = typical.get(0, 0);
 
-        if (tmpNumber instanceof BigDecimal) {
+        if (tmpNumber instanceof BigDecimal)
+        {
             return (SingularValue<N>) BIG.make(typical);
-        } else if (tmpNumber instanceof ComplexNumber) {
+        } else if (tmpNumber instanceof ComplexNumber)
+        {
             return (SingularValue<N>) COMPLEX.make(typical);
-        } else if (tmpNumber instanceof Double) {
+        } else if (tmpNumber instanceof Double)
+        {
             return (SingularValue<N>) PRIMITIVE.make(typical);
-        } else {
+        } else
+        {
             throw new IllegalArgumentException();
         }
     }
@@ -155,7 +165,8 @@ public interface SingularValue<N extends Number>
 
     double getTraceNorm();
 
-    default MatrixStore<N> reconstruct() {
+    default MatrixStore<N> reconstruct()
+    {
         return MatrixUtils.reconstruct(this);
     }
 

@@ -35,7 +35,8 @@ import java.text.Format;
  *
  * @author apete
  */
-public interface TypeContext<T> {
+public interface TypeContext<T>
+{
 
     /**
      * Will force the object to conform to the context's specification.

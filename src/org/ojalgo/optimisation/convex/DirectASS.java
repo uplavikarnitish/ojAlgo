@@ -43,9 +43,11 @@ import org.ojalgo.optimisation.Optimisation;
  *
  * @author apete
  */
-abstract class DirectASS extends ActiveSetSolver {
+abstract class DirectASS extends ActiveSetSolver
+{
 
-    DirectASS(final ConvexSolver.Builder matrices, final Optimisation.Options solverOptions) {
+    DirectASS(final ConvexSolver.Builder matrices, final Optimisation.Options solverOptions)
+    {
 
         super(matrices, solverOptions);
 
@@ -53,9 +55,11 @@ abstract class DirectASS extends ActiveSetSolver {
 
     @SuppressWarnings("deprecation")
     @Override
-    protected void performIteration() {
+    protected void performIteration()
+    {
 
-        if (this.isDebug()) {
+        if (this.isDebug())
+        {
             this.debug("\nPerformIteration {}", 1 + this.countIterations());
             this.debug(myActivator.toString());
         }
@@ -73,15 +77,18 @@ abstract class DirectASS extends ActiveSetSolver {
         final PrimitiveDenseStore tmpIterX = myIterationX;
         final PrimitiveDenseStore tmpIterL = PrimitiveDenseStore.FACTORY.makeZero(tmpIterA.countRows(), 1L);
 
-        if ((tmpIterA.countRows() < tmpIterA.countColumns()) && (tmpSolvable = myCholesky.isSolvable())) {
+        if ((tmpIterA.countRows() < tmpIterA.countColumns()) && (tmpSolvable = myCholesky.isSolvable()))
+        {
             // Q is SPD
 
-            if (tmpIterA.countRows() == 0L) {
+            if (tmpIterA.countRows() == 0L)
+            {
                 // Unconstrained - can happen when PureASS and all inequalities are inactive
 
                 myCholesky.solve(tmpIterC, tmpIterX);
 
-            } else {
+            } else
+            {
                 // Actual/normal optimisation problem
 
                 final MatrixStore<Double> tmpInvQAT = myCholesky.solve(tmpIterA.transpose());
@@ -94,11 +101,13 @@ abstract class DirectASS extends ActiveSetSolver {
                 // TODO Symmetric, only need to calculate halv the Schur complement, and only 1 row/column changes per iteration
                 //BasicLogger.debug("Negated Schur complement", tmpS.get());
 
-                if (this.isDebug()) {
+                if (this.isDebug())
+                {
                     BasicLogger.debug(Arrays.toString(tmpIncluded), tmpS.get());
                 }
 
-                if (tmpSolvable = myLU.compute(tmpS)) {
+                if (tmpSolvable = myLU.compute(tmpS))
+                {
 
                     // tmpIterX temporarely used to store tmpInvQC
                     // final MatrixStore<Double> tmpInvQC = myCholesky.solve(tmpIterC, tmpIterX);
@@ -110,7 +119,8 @@ abstract class DirectASS extends ActiveSetSolver {
 
                     //BasicLogger.debug("L", tmpIterL);
 
-                    if (this.isDebug()) {
+                    if (this.isDebug())
+                    {
                         this.debug("Iteration L", tmpIterL);
                     }
 
@@ -120,7 +130,8 @@ abstract class DirectASS extends ActiveSetSolver {
             }
         }
 
-        if (!tmpSolvable && (tmpSolvable = myLU.compute(this.getIterationKKT(tmpIncluded)))) {
+        if (!tmpSolvable && (tmpSolvable = myLU.compute(this.getIterationKKT(tmpIncluded))))
+        {
             // The above failed, but the KKT system is solvable
             // Try solving the full KKT system instaed
 
@@ -129,7 +140,8 @@ abstract class DirectASS extends ActiveSetSolver {
             tmpIterL.fillMatching(tmpXL.logical().offsets(this.countVariables(), 0).get());
         }
 
-        if (!tmpSolvable && this.isDebug()) {
+        if (!tmpSolvable && this.isDebug())
+        {
             options.debug_appender.println("KKT system unsolvable!");
             options.debug_appender.printmtrx("KKT", this.getIterationKKT());
             options.debug_appender.printmtrx("RHS", this.getIterationRHS());
@@ -137,10 +149,12 @@ abstract class DirectASS extends ActiveSetSolver {
 
         myIterationL.fillAll(0.0);
         final int tmpCountE = this.countEqualityConstraints();
-        for (int i = 0; i < tmpCountE; i++) {
+        for (int i = 0; i < tmpCountE; i++)
+        {
             myIterationL.set(i, tmpIterL.doubleValue(i));
         }
-        for (int i = 0; i < tmpIncluded.length; i++) {
+        for (int i = 0; i < tmpIncluded.length; i++)
+        {
             myIterationL.set(tmpCountE + tmpIncluded[i], tmpIterL.doubleValue(tmpCountE + i));
         }
 
@@ -148,32 +162,39 @@ abstract class DirectASS extends ActiveSetSolver {
     }
 
     @Override
-    void excludeAndRemove(final int toExclude) {
+    void excludeAndRemove(final int toExclude)
+    {
         myActivator.exclude(toExclude);
     }
 
     @Override
-    void initSolution(final MatrixStore<Double> tmpBI, final int tmpNumVars, final int tmpNumEqus) {
+    void initSolution(final MatrixStore<Double> tmpBI, final int tmpNumVars, final int tmpNumEqus)
+    {
 
-        if (this.hasInequalityConstraints()) {
+        if (this.hasInequalityConstraints())
+        {
 
             final int[] tmpExcluded = myActivator.getExcluded();
 
             final MatrixStore<Double> tmpAIX = this.getAIX(tmpExcluded);
-            for (int i = 0; i < tmpExcluded.length; i++) {
+            for (int i = 0; i < tmpExcluded.length; i++)
+            {
                 final double tmpBody = tmpAIX.doubleValue(i);
                 final double tmpRHS = tmpBI.doubleValue(tmpExcluded[i]);
-                if (!options.slack.isDifferent(tmpRHS, tmpBody) && (myIterationL.doubleValue(tmpNumEqus + tmpExcluded[i]) != ZERO)) {
+                if (!options.slack.isDifferent(tmpRHS, tmpBody) && (myIterationL.doubleValue(tmpNumEqus + tmpExcluded[i]) != ZERO))
+                {
                     myActivator.include(tmpExcluded[i]);
                 }
             }
         }
 
-        while (((tmpNumEqus + myActivator.countIncluded()) >= tmpNumVars) && (myActivator.countIncluded() > 0)) {
+        while (((tmpNumEqus + myActivator.countIncluded()) >= tmpNumVars) && (myActivator.countIncluded() > 0))
+        {
             this.shrink();
         }
 
-        if (this.isDebug() && ((tmpNumEqus + myActivator.countIncluded()) > tmpNumVars)) {
+        if (this.isDebug() && ((tmpNumEqus + myActivator.countIncluded()) > tmpNumVars))
+        {
             this.debug("Redundant contraints!");
         }
 

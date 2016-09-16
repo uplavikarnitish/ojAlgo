@@ -36,20 +36,23 @@ import org.ojalgo.type.context.NumberContext;
 /**
  * @author apete
  */
-public abstract class MutableSolver<D extends IterativeSolverTask & IterativeSolverTask.SparseDelegate> extends IterativeSolverTask {
+public abstract class MutableSolver<D extends IterativeSolverTask & IterativeSolverTask.SparseDelegate> extends IterativeSolverTask
+{
 
     private final D myDelegate;
     private final List<Equation> myRows = new ArrayList<>();
     private final long mySize;
 
     @SuppressWarnings("unused")
-    private MutableSolver() {
+    private MutableSolver()
+    {
         super();
         myDelegate = null;
         mySize = 0L;
     }
 
-    protected MutableSolver(final D delegate, final long size) {
+    protected MutableSolver(final D delegate, final long size)
+    {
 
         super();
 
@@ -57,8 +60,10 @@ public abstract class MutableSolver<D extends IterativeSolverTask & IterativeSol
         mySize = size;
     }
 
-    public boolean add(final Equation row) {
-        if (row.count() != mySize) {
+    public boolean add(final Equation row)
+    {
+        if (row.count() != mySize)
+        {
             throw new IllegalArgumentException();
         }
         final boolean retVal = myRows.add(row);
@@ -66,11 +71,13 @@ public abstract class MutableSolver<D extends IterativeSolverTask & IterativeSol
         return retVal;
     }
 
-    public void clear() {
+    public void clear()
+    {
         myRows.clear();
     }
 
-    public boolean remove(final Equation row) {
+    public boolean remove(final Equation row)
+    {
         return myRows.remove(row);
     }
 
@@ -78,42 +85,50 @@ public abstract class MutableSolver<D extends IterativeSolverTask & IterativeSol
      * A variation of {@linkplain #solve(Access2D, Access2D, DecompositionStore)} where you do not supply the
      * equation system <code>body</code>. It is assumed to have been set up beforehand.
      */
-    public final double resolve(final PhysicalStore<Double> solution) {
+    public final double resolve(final PhysicalStore<Double> solution)
+    {
         return myDelegate.resolve(myRows, solution);
     }
 
-    public MatrixStore<Double> solve(final Access2D<?> body, final Access2D<?> rhs, final DecompositionStore<Double> current) throws TaskException {
+    public MatrixStore<Double> solve(final Access2D<?> body, final Access2D<?> rhs, final DecompositionStore<Double> current) throws TaskException
+    {
         return myDelegate.solve(body, rhs, current);
     }
 
-    protected double doubleValue(final int row, final int column) {
+    protected double doubleValue(final int row, final int column)
+    {
         final Equation tmpRow = myRows.get(row);
         return tmpRow.doubleValue(column);
     }
 
-    protected final D getDelegate() {
+    protected final D getDelegate()
+    {
         return myDelegate;
     }
 
     @Override
-    protected void setAccuracyContext(final NumberContext accuracyContext) {
+    protected void setAccuracyContext(final NumberContext accuracyContext)
+    {
         super.setAccuracyContext(accuracyContext);
         myDelegate.setAccuracyContext(accuracyContext);
     }
 
     @Override
-    protected void setDebugPrinter(final BasicLogger.Printer debugPrinter) {
+    protected void setDebugPrinter(final BasicLogger.Printer debugPrinter)
+    {
         super.setDebugPrinter(debugPrinter);
         myDelegate.setDebugPrinter(debugPrinter);
     }
 
     @Override
-    protected void setIterationsLimit(final int iterationsLimit) {
+    protected void setIterationsLimit(final int iterationsLimit)
+    {
         super.setIterationsLimit(iterationsLimit);
         myDelegate.setIterationsLimit(iterationsLimit);
     }
 
-    protected long size() {
+    protected long size()
+    {
         return mySize;
     }
 

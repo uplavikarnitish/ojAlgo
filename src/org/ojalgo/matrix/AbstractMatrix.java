@@ -58,28 +58,32 @@ import org.ojalgo.type.context.NumberContext;
  *
  * @author apete
  */
-abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends Object implements BasicMatrix, Serializable {
+abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends Object implements BasicMatrix, Serializable
+{
 
     private transient MatrixDecomposition<N> myDecomposition;
     private transient int myHashCode = 0;
     private final MatrixStore<N> myStore;
 
     @SuppressWarnings("unused")
-    private AbstractMatrix() {
+    private AbstractMatrix()
+    {
 
         this(null);
 
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    AbstractMatrix(final MatrixStore<N> store) {
+    AbstractMatrix(final MatrixStore<N> store)
+    {
 
         super();
 
         myStore = store;
     }
 
-    public I add(final BasicMatrix addend) {
+    public I add(final BasicMatrix addend)
+    {
 
         MatrixError.throwIfNotEqualDimensions(myStore, addend);
 
@@ -90,7 +94,8 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return this.getFactory().instantiate(retVal);
     }
 
-    public I add(final double scalarAddend) {
+    public I add(final double scalarAddend)
+    {
 
         final PhysicalStore<N> retVal = myStore.physical().copy(myStore);
 
@@ -101,7 +106,8 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return this.getFactory().instantiate(retVal);
     }
 
-    public I add(final int row, final int col, final Access2D<?> addend) {
+    public I add(final int row, final int col, final Access2D<?> addend)
+    {
 
         final MatrixStore<N> tmpDiff = this.cast(addend);
 
@@ -109,7 +115,8 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return this.getFactory().instantiate(myStore.logical().superimpose(row, col, tmpDiff).get());
     }
 
-    public I add(final Number scalarAddend) {
+    public I add(final Number scalarAddend)
+    {
 
         final PhysicalStore<N> retVal = myStore.physical().copy(myStore);
 
@@ -120,31 +127,38 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return this.getFactory().instantiate(retVal);
     }
 
-    public N aggregateAll(final Aggregator aggregator) {
+    public N aggregateAll(final Aggregator aggregator)
+    {
         return myStore.aggregateAll(aggregator);
     }
 
-    public I conjugate() {
+    public I conjugate()
+    {
         return this.getFactory().instantiate(myStore.conjugate());
     }
 
-    public Builder<I> copyToBuilder() {
+    public Builder<I> copyToBuilder()
+    {
         return this.getFactory().wrap(myStore.copy());
     }
 
-    public long count() {
+    public long count()
+    {
         return myStore.count();
     }
 
-    public long countColumns() {
+    public long countColumns()
+    {
         return myStore.countColumns();
     }
 
-    public long countRows() {
+    public long countRows()
+    {
         return myStore.countRows();
     }
 
-    public I divide(final double scalarDivisor) {
+    public I divide(final double scalarDivisor)
+    {
 
         final PhysicalStore<N> retVal = myStore.physical().copy(myStore);
 
@@ -155,7 +169,8 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return this.getFactory().instantiate(retVal);
     }
 
-    public I divide(final Number scalarDivisor) {
+    public I divide(final Number scalarDivisor)
+    {
 
         final PhysicalStore<N> retVal = myStore.physical().copy(myStore);
 
@@ -166,7 +181,8 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return this.getFactory().instantiate(retVal);
     }
 
-    public I divideElements(final Access2D<?> divisor) {
+    public I divideElements(final Access2D<?> divisor)
+    {
 
         MatrixError.throwIfNotEqualDimensions(myStore, divisor);
 
@@ -177,72 +193,88 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return this.getFactory().instantiate(retVal);
     }
 
-    public double doubleValue(final long index) {
+    public double doubleValue(final long index)
+    {
         return myStore.doubleValue(index);
     }
 
-    public double doubleValue(final long i, final long j) {
+    public double doubleValue(final long i, final long j)
+    {
         return myStore.doubleValue(i, j);
     }
 
-    public boolean equals(final Access2D<?> aMtrx, final NumberContext aCntxt) {
+    public boolean equals(final Access2D<?> aMtrx, final NumberContext aCntxt)
+    {
         return AccessUtils.equals(myStore, aMtrx, aCntxt);
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (obj instanceof Access2D<?>) {
+    public boolean equals(final Object obj)
+    {
+        if (obj instanceof Access2D<?>)
+        {
             return this.equals((Access2D<?>) obj, NumberContext.getGeneral(6));
-        } else {
+        } else
+        {
             return super.equals(obj);
         }
     }
 
-    public void flushCache() {
+    public void flushCache()
+    {
 
         myHashCode = 0;
 
         myDecomposition = null;
     }
 
-    public N get(final long index) {
+    public N get(final long index)
+    {
         return myStore.get(index);
     }
 
-    public N get(final long aRow, final long aColumn) {
+    public N get(final long aRow, final long aColumn)
+    {
         return this.getStore().get(aRow, aColumn);
     }
 
-    public I getColumnsRange(final int first, final int limit) {
+    public I getColumnsRange(final int first, final int limit)
+    {
         return this.getFactory().instantiate(myStore.logical().limits((int) myStore.countRows(), limit).offsets(0, first).get());
     }
 
-    public Scalar<N> getCondition() {
+    public Scalar<N> getCondition()
+    {
         return myStore.physical().scalar().convert(this.getComputedSingularValue().getCondition());
     }
 
-    public Scalar<N> getDeterminant() {
+    public Scalar<N> getDeterminant()
+    {
         return myStore.physical().scalar().convert(this.getComputedLU().getDeterminant());
     }
 
-    public List<ComplexNumber> getEigenvalues() {
+    public List<ComplexNumber> getEigenvalues()
+    {
         return this.getComputedEigenvalue().getEigenvalues();
     }
 
     /**
      * @see org.ojalgo.matrix.BasicMatrix#getFrobeniusNorm()
      */
-    public Scalar<N> getFrobeniusNorm() {
+    public Scalar<N> getFrobeniusNorm()
+    {
         return myStore.physical().scalar().convert(myStore.aggregateAll(Aggregator.NORM2));
     }
 
-    public Scalar<N> getInfinityNorm() {
+    public Scalar<N> getInfinityNorm()
+    {
 
         double retVal = PrimitiveMath.ZERO;
         final AggregatorFunction<N> tmpRowSumAggr = myStore.physical().aggregator().norm1();
 
         final int tmpRowDim = (int) myStore.countRows();
-        for (int i = 0; i < tmpRowDim; i++) {
+        for (int i = 0; i < tmpRowDim; i++)
+        {
             myStore.visitRow(i, 0, tmpRowSumAggr);
             retVal = PrimitiveFunction.MAX.invoke(retVal, tmpRowSumAggr.doubleValue());
             tmpRowSumAggr.reset();
@@ -251,17 +283,20 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return myStore.physical().scalar().convert(retVal);
     }
 
-    public Scalar<N> getKyFanNorm(final int k) {
+    public Scalar<N> getKyFanNorm(final int k)
+    {
         return myStore.physical().scalar().convert(this.getComputedSingularValue().getKyFanNorm(k));
     }
 
-    public Scalar<N> getOneNorm() {
+    public Scalar<N> getOneNorm()
+    {
 
         double retVal = PrimitiveMath.ZERO;
         final AggregatorFunction<N> tmpColSumAggr = myStore.physical().aggregator().norm1();
 
         final int tmpColDim = (int) this.countColumns();
-        for (int j = 0; j < tmpColDim; j++) {
+        for (int j = 0; j < tmpColDim; j++)
+        {
             myStore.visitColumn(0, j, tmpColSumAggr);
             retVal = PrimitiveFunction.MAX.invoke(retVal, tmpColSumAggr.doubleValue());
             tmpColSumAggr.reset();
@@ -270,23 +305,28 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return myStore.physical().scalar().convert(retVal);
     }
 
-    public Scalar<N> getOperatorNorm() {
+    public Scalar<N> getOperatorNorm()
+    {
         return myStore.physical().scalar().convert(this.getComputedSingularValue().getOperatorNorm());
     }
 
-    public int getRank() {
+    public int getRank()
+    {
         return this.getComputedSingularValue().getRank();
     }
 
-    public I getRowsRange(final int first, final int limit) {
+    public I getRowsRange(final int first, final int limit)
+    {
         return this.getFactory().instantiate(myStore.logical().limits(limit, (int) myStore.countColumns()).offsets(first, 0).get());
     }
 
-    public List<Double> getSingularValues() {
+    public List<Double> getSingularValues()
+    {
         return this.getComputedSingularValue().getSingularValues();
     }
 
-    public Scalar<N> getTrace() {
+    public Scalar<N> getTrace()
+    {
 
         final AggregatorFunction<N> tmpAggr = myStore.physical().aggregator().sum();
 
@@ -295,41 +335,47 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return myStore.physical().scalar().convert(tmpAggr.getNumber());
     }
 
-    public Scalar<N> getTraceNorm() {
+    public Scalar<N> getTraceNorm()
+    {
         return myStore.physical().scalar().convert(this.getComputedSingularValue().getTraceNorm());
     }
 
-    public Scalar<N> getVectorNorm(final int aDegree) {
+    public Scalar<N> getVectorNorm(final int aDegree)
+    {
 
-        switch (aDegree) {
+        switch (aDegree)
+        {
 
-        case 0:
+            case 0:
 
-            return myStore.physical().scalar().convert(myStore.aggregateAll(Aggregator.CARDINALITY));
+                return myStore.physical().scalar().convert(myStore.aggregateAll(Aggregator.CARDINALITY));
 
-        case 1:
+            case 1:
 
-            return myStore.physical().scalar().convert(myStore.aggregateAll(Aggregator.NORM1));
+                return myStore.physical().scalar().convert(myStore.aggregateAll(Aggregator.NORM1));
 
-        case 2:
+            case 2:
 
-            return myStore.physical().scalar().convert(myStore.aggregateAll(Aggregator.NORM2));
+                return myStore.physical().scalar().convert(myStore.aggregateAll(Aggregator.NORM2));
 
-        default:
+            default:
 
-            return myStore.physical().scalar().convert(myStore.aggregateAll(Aggregator.LARGEST));
+                return myStore.physical().scalar().convert(myStore.aggregateAll(Aggregator.LARGEST));
         }
     }
 
     @Override
-    public int hashCode() {
-        if (myHashCode == 0) {
+    public int hashCode()
+    {
+        if (myHashCode == 0)
+        {
             myHashCode = MatrixUtils.hashCode(myStore);
         }
         return myHashCode;
     }
 
-    public I invert() {
+    public I invert()
+    {
 
         MatrixStore<N> retVal = null;
 
@@ -346,31 +392,38 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return this.getFactory().instantiate(retVal);
     }
 
-    public boolean isAbsolute(final long row, final long col) {
+    public boolean isAbsolute(final long row, final long col)
+    {
         return myStore.isAbsolute(row, col);
     }
 
-    public boolean isFullRank() {
+    public boolean isFullRank()
+    {
         return this.getRank() == Math.min(myStore.countRows(), myStore.countColumns());
     }
 
-    public boolean isHermitian() {
+    public boolean isHermitian()
+    {
         return this.isSquare() && myStore.equals(myStore.conjugate(), NumberContext.getGeneral(6));
     }
 
-    public boolean isSmall(final double comparedTo) {
+    public boolean isSmall(final double comparedTo)
+    {
         return myStore.isSmall(comparedTo);
     }
 
-    public boolean isSmall(final long row, final long col, final double comparedTo) {
+    public boolean isSmall(final long row, final long col, final double comparedTo)
+    {
         return myStore.isSmall(row, col, comparedTo);
     }
 
-    public boolean isSymmetric() {
+    public boolean isSymmetric()
+    {
         return this.isSquare() && myStore.equals(myStore.transpose(), NumberContext.getGeneral(6));
     }
 
-    public I mergeColumns(final Access2D<?> aMtrx) {
+    public I mergeColumns(final Access2D<?> aMtrx)
+    {
 
         MatrixError.throwIfNotEqualColumnDimensions(myStore, aMtrx);
 
@@ -378,7 +431,8 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return this.getFactory().instantiate(myStore.logical().below(this.cast(aMtrx)).get());
     }
 
-    public I mergeRows(final Access2D<?> aMtrx) {
+    public I mergeRows(final Access2D<?> aMtrx)
+    {
 
         MatrixError.throwIfNotEqualRowDimensions(myStore, aMtrx);
 
@@ -386,7 +440,8 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return this.getFactory().instantiate(myStore.logical().right(this.cast(aMtrx)).get());
     }
 
-    public I modify(final UnaryFunction<? extends Number> aFunc) {
+    public I modify(final UnaryFunction<? extends Number> aFunc)
+    {
 
         final PhysicalStore<N> retVal = myStore.copy();
 
@@ -395,14 +450,16 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return this.getFactory().instantiate(retVal);
     }
 
-    public I multiply(final BasicMatrix multiplicand) {
+    public I multiply(final BasicMatrix multiplicand)
+    {
 
         MatrixError.throwIfMultiplicationNotPossible(myStore, multiplicand);
 
         return this.getFactory().instantiate(myStore.multiply(this.cast(multiplicand)));
     }
 
-    public I multiply(final double scalarMultiplicand) {
+    public I multiply(final double scalarMultiplicand)
+    {
 
         final PhysicalStore<N> retVal = myStore.physical().copy(myStore);
 
@@ -413,7 +470,8 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return this.getFactory().instantiate(retVal);
     }
 
-    public I multiply(final Number scalarMultiplicand) {
+    public I multiply(final Number scalarMultiplicand)
+    {
 
         final PhysicalStore<N> retVal = myStore.physical().copy(myStore);
 
@@ -424,7 +482,8 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return this.getFactory().instantiate(retVal);
     }
 
-    public I multiplyElements(final Access2D<?> multiplicand) {
+    public I multiplyElements(final Access2D<?> multiplicand)
+    {
 
         MatrixError.throwIfNotEqualDimensions(myStore, multiplicand);
 
@@ -435,7 +494,8 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return this.getFactory().instantiate(retVal);
     }
 
-    public I negate() {
+    public I negate()
+    {
 
         final PhysicalStore<N> retVal = myStore.copy();
 
@@ -444,23 +504,28 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return this.getFactory().instantiate(retVal);
     }
 
-    public double norm() {
+    public double norm()
+    {
         return myStore.norm();
     }
 
-    public I selectColumns(final int... someCols) {
+    public I selectColumns(final int... someCols)
+    {
         return this.getFactory().instantiate(myStore.logical().column(someCols).get());
     }
 
-    public I selectRows(final int... someRows) {
+    public I selectRows(final int... someRows)
+    {
         return this.getFactory().instantiate(myStore.logical().row(someRows).get());
     }
 
-    public I signum() {
+    public I signum()
+    {
         return this.getFactory().instantiate(myStore.signum());
     }
 
-    public I solve(final Access2D<?> rhs) {
+    public I solve(final Access2D<?> rhs)
+    {
 
         MatrixStore<N> retVal = null;
 
@@ -479,7 +544,8 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return this.getFactory().instantiate(retVal);
     }
 
-    public I subtract(final BasicMatrix subtrahend) {
+    public I subtract(final BasicMatrix subtrahend)
+    {
 
         MatrixError.throwIfNotEqualDimensions(myStore, subtrahend);
 
@@ -490,7 +556,8 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return this.getFactory().instantiate(retVal);
     }
 
-    public BasicMatrix subtract(final double scalarSubtrahend) {
+    public BasicMatrix subtract(final double scalarSubtrahend)
+    {
 
         final PhysicalStore<N> retVal = myStore.physical().copy(myStore);
 
@@ -501,7 +568,8 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return this.getFactory().instantiate(retVal);
     }
 
-    public I subtract(final Number scalarSubtrahend) {
+    public I subtract(final Number scalarSubtrahend)
+    {
 
         final PhysicalStore<N> retVal = myStore.physical().copy(myStore);
 
@@ -512,64 +580,77 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return this.getFactory().instantiate(retVal);
     }
 
-    public PhysicalStore<BigDecimal> toBigStore() {
+    public PhysicalStore<BigDecimal> toBigStore()
+    {
         return BigDenseStore.FACTORY.copy(this);
     }
 
-    public PhysicalStore<ComplexNumber> toComplexStore() {
+    public PhysicalStore<ComplexNumber> toComplexStore()
+    {
         return ComplexDenseStore.FACTORY.copy(this);
     }
 
-    public List<BasicMatrix> toListOfColumns() {
+    public List<BasicMatrix> toListOfColumns()
+    {
 
         final int tmpColDim = (int) this.countColumns();
 
         final List<BasicMatrix> retVal = new ArrayList<>(tmpColDim);
 
-        for (int j = 0; j < tmpColDim; j++) {
+        for (int j = 0; j < tmpColDim; j++)
+        {
             retVal.add(j, this.selectColumns(j));
         }
 
         return retVal;
     }
 
-    public List<N> toListOfElements() {
+    public List<N> toListOfElements()
+    {
         return myStore.copy().asList();
     }
 
-    public List<BasicMatrix> toListOfRows() {
+    public List<BasicMatrix> toListOfRows()
+    {
 
         final int tmpRowDim = (int) this.countRows();
 
         final List<BasicMatrix> retVal = new ArrayList<>(tmpRowDim);
 
-        for (int i = 0; i < tmpRowDim; i++) {
+        for (int i = 0; i < tmpRowDim; i++)
+        {
             retVal.add(i, this.selectRows(i));
         }
 
         return retVal;
     }
 
-    public PhysicalStore<Double> toPrimitiveStore() {
+    public PhysicalStore<Double> toPrimitiveStore()
+    {
         return PrimitiveDenseStore.FACTORY.copy(this);
     }
 
-    public Scalar<N> toScalar(final long row, final long col) {
+    public Scalar<N> toScalar(final long row, final long col)
+    {
         return myStore.toScalar(row, col);
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return MatrixUtils.toString(this);
     }
 
-    public I transpose() {
+    public I transpose()
+    {
         return this.getFactory().instantiate(myStore.transpose());
     }
 
-    private final Eigenvalue<N> getComputedEigenvalue() {
+    private final Eigenvalue<N> getComputedEigenvalue()
+    {
 
-        if (!this.isComputedEigenvalue()) {
+        if (!this.isComputedEigenvalue())
+        {
             myDecomposition = Eigenvalue.make(myStore);
             myDecomposition.decompose(myStore);
         }
@@ -577,9 +658,11 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return (Eigenvalue<N>) myDecomposition;
     }
 
-    private final LU<N> getComputedLU() {
+    private final LU<N> getComputedLU()
+    {
 
-        if (!this.isComputedLU()) {
+        if (!this.isComputedLU())
+        {
             myDecomposition = LU.make(myStore);
             myDecomposition.decompose(myStore);
         }
@@ -587,9 +670,11 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return (LU<N>) myDecomposition;
     }
 
-    private final QR<N> getComputedQR() {
+    private final QR<N> getComputedQR()
+    {
 
-        if (!this.isComputedQR()) {
+        if (!this.isComputedQR())
+        {
             myDecomposition = QR.make(myStore);
             myDecomposition.decompose(myStore);
         }
@@ -597,9 +682,11 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return (QR<N>) myDecomposition;
     }
 
-    private final SingularValue<N> getComputedSingularValue() {
+    private final SingularValue<N> getComputedSingularValue()
+    {
 
-        if (!this.isComputedSingularValue()) {
+        if (!this.isComputedSingularValue())
+        {
             myDecomposition = SingularValue.make(myStore);
             myDecomposition.decompose(myStore);
         }
@@ -607,49 +694,62 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         return (SingularValue<N>) myDecomposition;
     }
 
-    private boolean isComputedEigenvalue() {
+    private boolean isComputedEigenvalue()
+    {
         return (myDecomposition != null) && (myDecomposition instanceof Eigenvalue) && myDecomposition.isComputed();
     }
 
-    private boolean isComputedLU() {
+    private boolean isComputedLU()
+    {
         return (myDecomposition != null) && (myDecomposition instanceof LU) && myDecomposition.isComputed();
     }
 
-    private boolean isComputedQR() {
+    private boolean isComputedQR()
+    {
         return (myDecomposition != null) && (myDecomposition instanceof QR) && myDecomposition.isComputed();
     }
 
-    private boolean isComputedSingularValue() {
+    private boolean isComputedSingularValue()
+    {
         return (myDecomposition != null) && (myDecomposition instanceof SingularValue) && myDecomposition.isComputed();
     }
 
-    protected final MatrixStore<N> doInvert() {
+    protected final MatrixStore<N> doInvert()
+    {
 
         if ((myDecomposition != null) && (myDecomposition instanceof MatrixDecomposition.Solver)
-                && ((MatrixDecomposition.Solver<?>) myDecomposition).isSolvable()) {
+                && ((MatrixDecomposition.Solver<?>) myDecomposition).isSolvable())
+        {
 
             return ((MatrixDecomposition.Solver<N>) myDecomposition).getInverse();
 
-        } else {
+        } else
+        {
 
             final InverterTask<N> tmpTask = this.getInverterTask(myStore);
 
-            if (tmpTask instanceof MatrixDecomposition.Solver) {
+            if (tmpTask instanceof MatrixDecomposition.Solver)
+            {
 
                 final MatrixDecomposition.Solver<N> tmpSolver = (MatrixDecomposition.Solver<N>) tmpTask;
                 myDecomposition = tmpSolver;
 
-                if (tmpSolver.compute(myStore)) {
+                if (tmpSolver.compute(myStore))
+                {
                     return tmpSolver.getInverse();
-                } else {
+                } else
+                {
                     return null;
                 }
 
-            } else {
+            } else
+            {
 
-                try {
+                try
+                {
                     return tmpTask.invert(myStore);
-                } catch (final TaskException xcptn) {
+                } catch (final TaskException xcptn)
+                {
                     xcptn.printStackTrace();
                     return null;
                 }
@@ -657,33 +757,42 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
         }
     }
 
-    protected final MatrixStore<N> doSolve(final MatrixStore<N> rhs) {
+    protected final MatrixStore<N> doSolve(final MatrixStore<N> rhs)
+    {
 
         if ((myDecomposition != null) && (myDecomposition instanceof MatrixDecomposition.Solver)
-                && ((MatrixDecomposition.Solver<?>) myDecomposition).isSolvable()) {
+                && ((MatrixDecomposition.Solver<?>) myDecomposition).isSolvable())
+        {
 
             return ((MatrixDecomposition.Solver<N>) myDecomposition).solve(rhs);
 
-        } else {
+        } else
+        {
 
             final SolverTask<N> tmpTask = this.getSolverTask(myStore, rhs);
 
-            if (tmpTask instanceof MatrixDecomposition.Solver) {
+            if (tmpTask instanceof MatrixDecomposition.Solver)
+            {
 
                 final MatrixDecomposition.Solver<N> tmpSolver = (MatrixDecomposition.Solver<N>) tmpTask;
                 myDecomposition = tmpSolver;
 
-                if (tmpSolver.compute(myStore)) {
+                if (tmpSolver.compute(myStore))
+                {
                     return tmpSolver.solve(rhs);
-                } else {
+                } else
+                {
                     return null;
                 }
 
-            } else {
+            } else
+            {
 
-                try {
+                try
+                {
                     return tmpTask.solve(myStore, rhs);
-                } catch (final TaskException xcptn) {
+                } catch (final TaskException xcptn)
+                {
                     xcptn.printStackTrace();
                     return null;
                 }
@@ -701,7 +810,8 @@ abstract class AbstractMatrix<N extends Number, I extends BasicMatrix> extends O
 
     abstract SolverTask<N> getSolverTask(MatrixStore<N> templateBody, MatrixStore<N> templateRHS);
 
-    final MatrixStore<N> getStore() {
+    final MatrixStore<N> getStore()
+    {
         return myStore;
     }
 

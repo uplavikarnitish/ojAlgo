@@ -26,9 +26,11 @@ package org.ojalgo.function;
  *
  * @author apete
  */
-public abstract class FunctionSet<N extends Number> {
+public abstract class FunctionSet<N extends Number>
+{
 
-    protected FunctionSet() {
+    protected FunctionSet()
+    {
         super();
     }
 
@@ -62,7 +64,7 @@ public abstract class FunctionSet<N extends Number> {
     public abstract UnaryFunction<N> atan();
 
     /**
-     * @see Math#atan2(double,double)
+     * @see Math#atan2(double, double)
      */
     public abstract BinaryFunction<N> atan2();
 

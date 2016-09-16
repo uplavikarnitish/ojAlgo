@@ -38,7 +38,8 @@ import org.ojalgo.optimisation.ExpressionsBasedModel;
 import org.ojalgo.optimisation.Variable;
 import org.ojalgo.type.TypeUtils;
 
-public final class PortfolioMixer {
+public final class PortfolioMixer
+{
 
     private static final String ACTIVE = "_Active";
     private static final String B = "B";
@@ -52,11 +53,13 @@ public final class PortfolioMixer {
     private final HashMap<int[], LowerUpper> myAssetConstraints = new HashMap<>();
     private final HashMap<int[], LowerUpper> myComponentConstraints = new HashMap<>();
 
-    public PortfolioMixer(final FinancePortfolio target, final Collection<? extends FinancePortfolio> components) {
+    public PortfolioMixer(final FinancePortfolio target, final Collection<? extends FinancePortfolio> components)
+    {
         this(target, components.toArray(new FinancePortfolio[components.size()]));
     }
 
-    public PortfolioMixer(final FinancePortfolio target, final FinancePortfolio... components) {
+    public PortfolioMixer(final FinancePortfolio target, final FinancePortfolio... components)
+    {
 
         super();
 
@@ -65,44 +68,53 @@ public final class PortfolioMixer {
         final int tmpSize = myTarget.getWeights().size();
 
         myComponents = new ArrayList<>();
-        for (final FinancePortfolio tmpCompPortf : components) {
-            if (tmpCompPortf.getWeights().size() != tmpSize) {
+        for (final FinancePortfolio tmpCompPortf : components)
+        {
+            if (tmpCompPortf.getWeights().size() != tmpSize)
+            {
                 throw new IllegalArgumentException(DIMENSION_MISMATCH);
-            } else {
+            } else
+            {
                 myComponents.add(tmpCompPortf);
             }
         }
     }
 
     @SuppressWarnings("unused")
-    private PortfolioMixer() {
+    private PortfolioMixer()
+    {
 
         this(null, new ArrayList<FinancePortfolio>());
 
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    public LowerUpper addAssetConstraint(final Number lowerLimit, final Number upperLimit, final int... assetIndeces) {
+    public LowerUpper addAssetConstraint(final Number lowerLimit, final Number upperLimit, final int... assetIndeces)
+    {
         return myAssetConstraints.put(assetIndeces, new LowerUpper(lowerLimit, upperLimit));
     }
 
-    public LowerUpper addComponentConstraint(final Number lowerLimit, final Number upperLimit, final int... assetIndeces) {
+    public LowerUpper addComponentConstraint(final Number lowerLimit, final Number upperLimit, final int... assetIndeces)
+    {
         return myComponentConstraints.put(assetIndeces, new LowerUpper(lowerLimit, upperLimit));
     }
 
-    public List<BigDecimal> mix(final int aNumber) {
+    public List<BigDecimal> mix(final int aNumber)
+    {
 
         final int tmpNumberOfAssets = myTarget.getWeights().size();
         final int tmpNumberOfComponents = myComponents.size();
 
         final Variable[] tmpVariables = new Variable[2 * tmpNumberOfComponents];
 
-        for (int c = 0; c < tmpNumberOfComponents; c++) {
+        for (int c = 0; c < tmpNumberOfComponents; c++)
+        {
 
             final Variable tmpVariable = new Variable(C + c);
 
             BigDecimal tmpVal = ZERO;
-            for (int i = 0; i < tmpNumberOfAssets; i++) {
+            for (int i = 0; i < tmpNumberOfAssets; i++)
+            {
                 tmpVal = tmpVal.add(myTarget.getWeights().get(i).multiply(myComponents.get(c).getWeights().get(i)));
             }
             tmpVal = tmpVal.multiply(TWO).negate();
@@ -120,11 +132,14 @@ public final class PortfolioMixer {
 
         final Expression tmpQuadObj = tmpModel.addExpression(QUADRATIC_OBJECTIVE_PART);
         tmpQuadObj.weight(ONE);
-        for (int row = 0; row < tmpNumberOfComponents; row++) {
-            for (int col = 0; col < tmpNumberOfComponents; col++) {
+        for (int row = 0; row < tmpNumberOfComponents; row++)
+        {
+            for (int col = 0; col < tmpNumberOfComponents; col++)
+            {
 
                 BigDecimal tmpVal = ZERO;
-                for (int i = 0; i < tmpNumberOfAssets; i++) {
+                for (int i = 0; i < tmpNumberOfAssets; i++)
+                {
                     tmpVal = tmpVal.add(myComponents.get(row).getWeights().get(i).multiply(myComponents.get(col).getWeights().get(i)));
                 }
                 tmpQuadObj.set(row, col, tmpVal);
@@ -142,7 +157,8 @@ public final class PortfolioMixer {
 
         final Expression tmpHundredPercent = tmpModel.addExpression("100%");
         tmpHundredPercent.level(ONE);
-        for (int c = 0; c < tmpNumberOfComponents; c++) {
+        for (int c = 0; c < tmpNumberOfComponents; c++)
+        {
             tmpHundredPercent.set(c, ONE);
         }
         //        BasicLogger.logDebug(tmpHundredPercent.toString());
@@ -150,13 +166,15 @@ public final class PortfolioMixer {
 
         final Expression tmpStrategyCount = tmpModel.addExpression(STRATEGY_COUNT);
         tmpStrategyCount.upper(TypeUtils.toBigDecimal(aNumber));
-        for (int c = 0; c < tmpNumberOfComponents; c++) {
+        for (int c = 0; c < tmpNumberOfComponents; c++)
+        {
             tmpStrategyCount.set(tmpNumberOfComponents + c, ONE);
         }
         //        BasicLogger.logDebug(tmpStrategyCount.toString());
         //        BasicLogger.logDebug(tmpStrategyCount.getName(), tmpStrategyCount.getLinear().getFactors());
 
-        for (final Entry<int[], LowerUpper> tmpEntry : myAssetConstraints.entrySet()) {
+        for (final Entry<int[], LowerUpper> tmpEntry : myAssetConstraints.entrySet())
+        {
 
             final int tmpIndex = tmpEntry.getKey()[0]; // For now I assume there is only 1 index
             final BigDecimal tmpLower = tmpEntry.getValue().lower;
@@ -164,18 +182,22 @@ public final class PortfolioMixer {
 
             final Expression tmpExpr = tmpModel.addExpression("AC" + Arrays.toString(tmpEntry.getKey()));
 
-            for (int c = 0; c < tmpNumberOfComponents; c++) {
+            for (int c = 0; c < tmpNumberOfComponents; c++)
+            {
                 tmpExpr.set(c, myComponents.get(c).getWeights().get(tmpIndex));
             }
-            if (tmpLower != null) {
+            if (tmpLower != null)
+            {
                 tmpExpr.lower(tmpLower);
             }
-            if (tmpUpper != null) {
+            if (tmpUpper != null)
+            {
                 tmpExpr.upper(tmpUpper);
             }
         }
 
-        for (final Entry<int[], LowerUpper> tmpEntry : myComponentConstraints.entrySet()) {
+        for (final Entry<int[], LowerUpper> tmpEntry : myComponentConstraints.entrySet())
+        {
 
             final int tmpIndex = tmpEntry.getKey()[0]; // For now I assume there is only 1 index
             final BigDecimal tmpLower = tmpEntry.getValue().lower;
@@ -185,12 +207,15 @@ public final class PortfolioMixer {
 
             tmpExpr.set(tmpIndex, BigMath.ONE);
 
-            for (int c = 0; c < tmpNumberOfComponents; c++) {
+            for (int c = 0; c < tmpNumberOfComponents; c++)
+            {
             }
-            if (tmpLower != null) {
+            if (tmpLower != null)
+            {
                 tmpExpr.lower(tmpLower);
             }
-            if (tmpUpper != null) {
+            if (tmpUpper != null)
+            {
                 tmpExpr.upper(tmpUpper);
             }
         }
@@ -198,7 +223,8 @@ public final class PortfolioMixer {
         tmpModel.minimise();
 
         final ArrayList<BigDecimal> retVal = new ArrayList<>(tmpNumberOfComponents);
-        for (int v = 0; v < tmpNumberOfComponents; v++) {
+        for (int v = 0; v < tmpNumberOfComponents; v++)
+        {
             retVal.add(tmpVariables[v].getValue());
         }
         return retVal;

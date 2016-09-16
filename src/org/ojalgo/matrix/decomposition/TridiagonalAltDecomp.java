@@ -32,16 +32,19 @@ import org.ojalgo.matrix.store.MatrixStore;
 import org.ojalgo.matrix.store.PrimitiveDenseStore;
 import org.ojalgo.type.context.NumberContext;
 
-class TridiagonalAltDecomp extends InPlaceDecomposition<Double> implements Tridiagonal<Double> {
+class TridiagonalAltDecomp extends InPlaceDecomposition<Double> implements Tridiagonal<Double>
+{
 
     BasicArray<Double> myMain;
     BasicArray<Double> myOff;
 
-    TridiagonalAltDecomp() {
+    TridiagonalAltDecomp()
+    {
         super(PrimitiveDenseStore.FACTORY);
     }
 
-    public boolean decompose(final ElementsSupplier<Double> matrix) {
+    public boolean decompose(final ElementsSupplier<Double> matrix)
+    {
 
         this.setInPlace(matrix);
 
@@ -53,11 +56,13 @@ class TridiagonalAltDecomp extends InPlaceDecomposition<Double> implements Tridi
         return true;
     }
 
-    public boolean equals(final MatrixStore<Double> other, final NumberContext context) {
+    public boolean equals(final MatrixStore<Double> other, final NumberContext context)
+    {
         return MatrixUtils.equals(other, this, context);
     }
 
-    public MatrixStore<Double> getD() {
+    public MatrixStore<Double> getD()
+    {
 
         final Array1D<Double> tmpMain = Array1D.PRIMITIVE.wrap(myMain);
         final Array1D<Double> tmpOff = Array1D.PRIMITIVE.wrap(myOff).subList(1, (int) myOff.count());
@@ -67,19 +72,23 @@ class TridiagonalAltDecomp extends InPlaceDecomposition<Double> implements Tridi
         return this.wrap(tmpAccess).get();
     }
 
-    public MatrixStore<Double> getQ() {
+    public MatrixStore<Double> getQ()
+    {
         return this.getInPlace();
     }
 
-    public boolean isFullSize() {
+    public boolean isFullSize()
+    {
         return true;
     }
 
-    public boolean isSolvable() {
+    public boolean isSolvable()
+    {
         return false;
     }
 
-    public MatrixStore<Double> solve(final Access2D<Double> rhs, final DecompositionStore<Double> preallocated) {
+    public MatrixStore<Double> solve(final Access2D<Double> rhs, final DecompositionStore<Double> preallocated)
+    {
         throw new UnsupportedOperationException();
     }
 

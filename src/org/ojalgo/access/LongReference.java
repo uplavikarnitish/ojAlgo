@@ -23,11 +23,13 @@ package org.ojalgo.access;
 
 import java.util.Arrays;
 
-public final class LongReference implements Comparable<LongReference> {
+public final class LongReference implements Comparable<LongReference>
+{
 
     public final long[] reference;
 
-    public LongReference(final long... aReference) {
+    public LongReference(final long... aReference)
+    {
 
         super();
 
@@ -35,16 +37,19 @@ public final class LongReference implements Comparable<LongReference> {
     }
 
     @SuppressWarnings("unused")
-    private LongReference() {
+    private LongReference()
+    {
         this(-1L);
     }
 
-    public int compareTo(final LongReference ref) {
+    public int compareTo(final LongReference ref)
+    {
 
         int retVal = Integer.compare(reference.length, ref.reference.length);
 
         int i = reference.length - 1;
-        while ((retVal == 0) && (i >= 0)) {
+        while ((retVal == 0) && (i >= 0))
+        {
             retVal = Long.compare(reference[i], ref.reference[i]);
             i--;
         }
@@ -53,25 +58,31 @@ public final class LongReference implements Comparable<LongReference> {
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return false;
         }
-        if (!(obj instanceof LongReference)) {
+        if (!(obj instanceof LongReference))
+        {
             return false;
         }
         final LongReference other = (LongReference) obj;
-        if (!Arrays.equals(reference, other.reference)) {
+        if (!Arrays.equals(reference, other.reference))
+        {
             return false;
         }
         return true;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = 1;
         result = (prime * result) + Arrays.hashCode(reference);
@@ -79,7 +90,8 @@ public final class LongReference implements Comparable<LongReference> {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return Arrays.toString(reference);
     }
 

@@ -23,27 +23,33 @@ package org.ojalgo.matrix.store;
 
 import org.ojalgo.scalar.Scalar;
 
-final class TransposedStore<N extends Number> extends TransjugatedStore<N> {
+final class TransposedStore<N extends Number> extends TransjugatedStore<N>
+{
 
-    TransposedStore(final MatrixStore<N> base) {
+    TransposedStore(final MatrixStore<N> base)
+    {
         super(base);
     }
 
-    public N get(final long aRow, final long aCol) {
+    public N get(final long aRow, final long aCol)
+    {
         return this.getBase().get(aCol, aRow);
     }
 
-    public MatrixStore<N> multiply(final MatrixStore<N> right) {
+    public MatrixStore<N> multiply(final MatrixStore<N> right)
+    {
 
         MatrixStore<N> retVal;
 
-        if (right instanceof TransposedStore<?>) {
+        if (right instanceof TransposedStore<?>)
+        {
 
             retVal = ((TransposedStore<N>) right).getOriginal().multiply(this.getBase());
 
             retVal = new TransposedStore<>(retVal);
 
-        } else {
+        } else
+        {
 
             retVal = super.multiply(right);
         }
@@ -51,12 +57,14 @@ final class TransposedStore<N extends Number> extends TransjugatedStore<N> {
         return retVal;
     }
 
-    public Scalar<N> toScalar(final long row, final long column) {
+    public Scalar<N> toScalar(final long row, final long column)
+    {
         return this.getBase().toScalar(column, row);
     }
 
     @Override
-    public MatrixStore<N> transpose() {
+    public MatrixStore<N> transpose()
+    {
         return this.getBase();
     }
 

@@ -28,31 +28,39 @@ import org.ojalgo.function.PrimitiveFunction;
 import org.ojalgo.type.context.NumberContext;
 import org.ojalgo.type.context.NumberContext.Enforceable;
 
-public final class Money extends Number implements Scalar<Money>, Enforceable<Money> {
+public final class Money extends Number implements Scalar<Money>, Enforceable<Money>
+{
 
-    public static final Scalar.Factory<Money> FACTORY = new Scalar.Factory<Money>() {
+    public static final Scalar.Factory<Money> FACTORY = new Scalar.Factory<Money>()
+    {
 
-        public Money cast(final double value) {
+        public Money cast(final double value)
+        {
             return Money.valueOf(value);
         }
 
-        public Money cast(final Number number) {
+        public Money cast(final Number number)
+        {
             return Money.valueOf(number);
         }
 
-        public Money convert(final double value) {
+        public Money convert(final double value)
+        {
             return Money.valueOf(value);
         }
 
-        public Money convert(final Number number) {
+        public Money convert(final Number number)
+        {
             return Money.valueOf(number);
         }
 
-        public Money one() {
+        public Money one()
+        {
             return ONE;
         }
 
-        public Money zero() {
+        public Money zero()
+        {
             return ZERO;
         }
 
@@ -68,46 +76,57 @@ public final class Money extends Number implements Scalar<Money>, Enforceable<Mo
 
     static final NumberContext CONTEXT = BigScalar.CONTEXT.newPrecision(19).newScale(4);
 
-    public static boolean isAbsolute(final Money value) {
+    public static boolean isAbsolute(final Money value)
+    {
         return value.isAbsolute();
     }
 
-    public static boolean isInfinite(final Money value) {
+    public static boolean isInfinite(final Money value)
+    {
         return false;
     }
 
-    public static boolean isNaN(final Money value) {
+    public static boolean isNaN(final Money value)
+    {
         return false;
     }
 
-    public static boolean isSmall(final double comparedTo, final Money value) {
+    public static boolean isSmall(final double comparedTo, final Money value)
+    {
         return value.isSmall(comparedTo);
     }
 
-    public static Money valueOf(final double value) {
+    public static Money valueOf(final double value)
+    {
         return new Money(value * DOUBLE_DENOMINATOR);
     }
 
-    public static Money valueOf(final Number number) {
+    public static Money valueOf(final Number number)
+    {
 
-        if (number != null) {
+        if (number != null)
+        {
 
-            if (number instanceof Money) {
+            if (number instanceof Money)
+            {
 
                 return (Money) number;
 
-            } else {
+            } else
+            {
 
                 return new Money(number.doubleValue() * Money.DOUBLE_DENOMINATOR);
             }
 
-        } else {
+        } else
+        {
 
             return ZERO;
         }
     }
 
-    private static String toString(final Money scalar) {
+    private static String toString(final Money scalar)
+    {
         return Double.toString(scalar.doubleValue());
     }
 
@@ -115,150 +134,186 @@ public final class Money extends Number implements Scalar<Money>, Enforceable<Mo
 
     private final long myNumerator;
 
-    private Money() {
+    private Money()
+    {
 
         super();
 
         myNumerator = 0L;
     }
 
-    private Money(final double numerator) {
+    private Money(final double numerator)
+    {
 
         super();
 
         myNumerator = Math.round(numerator);
     }
 
-    private Money(final long numerator) {
+    private Money(final long numerator)
+    {
 
         super();
 
         myNumerator = numerator;
     }
 
-    public Money add(final double arg) {
+    public Money add(final double arg)
+    {
         return new Money(myNumerator + (arg * DOUBLE_DENOMINATOR));
     }
 
-    public Money add(final Money arg) {
+    public Money add(final Money arg)
+    {
         return new Money(myNumerator + arg.getNumerator());
     }
 
-    public int compareTo(final Money reference) {
+    public int compareTo(final Money reference)
+    {
         return Long.compare(myNumerator, reference.getNumerator());
     }
 
-    public Money conjugate() {
+    public Money conjugate()
+    {
         return this;
     }
 
-    public Money divide(final double arg) {
+    public Money divide(final double arg)
+    {
         return new Money(myNumerator / arg);
     }
 
-    public Money divide(final Money arg) {
+    public Money divide(final Money arg)
+    {
         return new Money((myNumerator * LONG_DENOMINATOR) / arg.getNumerator());
     }
 
     @Override
-    public double doubleValue() {
+    public double doubleValue()
+    {
         return myNumerator / DOUBLE_DENOMINATOR;
     }
 
-    public Money enforce(final NumberContext context) {
-        if (context.getScale() < 4) {
+    public Money enforce(final NumberContext context)
+    {
+        if (context.getScale() < 4)
+        {
             return Money.valueOf(context.enforce(this.doubleValue()));
-        } else {
+        } else
+        {
             return this;
         }
     }
 
     @Override
-    public float floatValue() {
+    public float floatValue()
+    {
         return (float) this.doubleValue();
     }
 
-    public Money getNumber() {
+    public Money getNumber()
+    {
         return this;
     }
 
     @Override
-    public int intValue() {
+    public int intValue()
+    {
         return (int) this.doubleValue();
     }
 
-    public Money invert() {
+    public Money invert()
+    {
         return new Money((LONG_DENOMINATOR * LONG_DENOMINATOR) / myNumerator);
     }
 
-    public boolean isAbsolute() {
+    public boolean isAbsolute()
+    {
         return myNumerator >= 0L;
     }
 
-    public boolean isSmall(final double comparedTo) {
+    public boolean isSmall(final double comparedTo)
+    {
         return CONTEXT.isSmall(comparedTo, this.doubleValue());
     }
 
     @Override
-    public long longValue() {
+    public long longValue()
+    {
         return this.toBigDecimal().longValue();
     }
 
-    public Money multiply(final double arg) {
+    public Money multiply(final double arg)
+    {
         return new Money(myNumerator * arg);
     }
 
-    public Money multiply(final Money arg) {
+    public Money multiply(final Money arg)
+    {
         return new Money((myNumerator * arg.getNumerator()) / LONG_DENOMINATOR);
     }
 
-    public Money negate() {
+    public Money negate()
+    {
         return new Money(-myNumerator);
     }
 
-    public double norm() {
+    public double norm()
+    {
         return PrimitiveFunction.ABS.invoke(this.doubleValue());
     }
 
-    public Money signum() {
-        if (myNumerator == 0L) {
+    public Money signum()
+    {
+        if (myNumerator == 0L)
+        {
             return ZERO;
-        } else if (myNumerator < 0L) {
+        } else if (myNumerator < 0L)
+        {
             return NEG;
-        } else {
+        } else
+        {
             return ONE;
         }
     }
 
-    public Money subtract(final double arg) {
+    public Money subtract(final double arg)
+    {
         return new Money(myNumerator - (arg * DOUBLE_DENOMINATOR));
     }
 
-    public Money subtract(final Money arg) {
+    public Money subtract(final Money arg)
+    {
         return new Money(myNumerator - arg.getNumerator());
     }
 
-    public BigDecimal toBigDecimal() {
-        if (myDecimal == null) {
+    public BigDecimal toBigDecimal()
+    {
+        if (myDecimal == null)
+        {
             myDecimal = this.toBigDecimal(CONTEXT.getMathContext());
         }
         return myDecimal;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return Money.toString(this);
     }
 
-    public String toString(final NumberContext context) {
+    public String toString(final NumberContext context)
+    {
         return Money.toString(this.enforce(context));
     }
 
-    private BigDecimal toBigDecimal(final MathContext context) {
+    private BigDecimal toBigDecimal(final MathContext context)
+    {
         return new BigDecimal(myNumerator).divide(new BigDecimal(LONG_DENOMINATOR), context);
     }
 
-    long getNumerator() {
+    long getNumerator()
+    {
         return myNumerator;
     }
 

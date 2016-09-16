@@ -24,38 +24,47 @@ package org.ojalgo.netio;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Batch extends ArrayList<Message> {
+public class Batch extends ArrayList<Message>
+{
 
-    public Batch() {
+    public Batch()
+    {
         super();
     }
 
-    public Batch(final Collection<? extends Message> collection) {
+    public Batch(final Collection<? extends Message> collection)
+    {
         super(collection);
     }
 
-    public Batch(final int anInitialCapacity) {
+    public Batch(final int anInitialCapacity)
+    {
         super(anInitialCapacity);
     }
 
-    public boolean add(final String aCommand) {
+    public boolean add(final String aCommand)
+    {
         return super.add(new Message(aCommand));
     }
 
-    public boolean add(final String aCommand, final String anArgument) {
+    public boolean add(final String aCommand, final String anArgument)
+    {
         return super.add(new Message(aCommand, anArgument));
     }
 
-    public boolean add(final String aCommand, final String anArgument, final String aParameter) {
+    public boolean add(final String aCommand, final String anArgument, final String aParameter)
+    {
         return super.add(new Message(aCommand, anArgument, aParameter));
     }
 
-    public boolean add(final String[] aCommand) {
+    public boolean add(final String[] aCommand)
+    {
         return super.add(new Message(aCommand));
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return Message.toString(this);
     }
 

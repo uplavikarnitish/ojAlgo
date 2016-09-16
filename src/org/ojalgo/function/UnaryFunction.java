@@ -24,13 +24,16 @@ package org.ojalgo.function;
 import java.util.function.DoubleUnaryOperator;
 import java.util.function.UnaryOperator;
 
-public interface UnaryFunction<N extends Number> extends BasicFunction<N>, UnaryOperator<N>, DoubleUnaryOperator {
+public interface UnaryFunction<N extends Number> extends BasicFunction<N>, UnaryOperator<N>, DoubleUnaryOperator
+{
 
-    default N apply(final N arg) {
+    default N apply(final N arg)
+    {
         return this.invoke(arg);
     }
 
-    default double applyAsDouble(final double arg) {
+    default double applyAsDouble(final double arg)
+    {
         return this.invoke(arg);
     }
 

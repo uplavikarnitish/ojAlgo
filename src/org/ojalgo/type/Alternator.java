@@ -26,13 +26,15 @@ package org.ojalgo.type;
  *
  * @author apete
  */
-public class Alternator<T> {
+public class Alternator<T>
+{
 
     private final T myAlternativeA;
     private final T myAlternativeB;
     private boolean mySwitch;
 
-    public Alternator(final T anAlternativeA, final T anAlternativeB) {
+    public Alternator(final T anAlternativeA, final T anAlternativeB)
+    {
 
         super();
 
@@ -43,11 +45,13 @@ public class Alternator<T> {
     }
 
     @SuppressWarnings("unused")
-    private Alternator() {
+    private Alternator()
+    {
         this(null, null);
     }
 
-    public T get() {
+    public T get()
+    {
         return (mySwitch = !mySwitch) ? myAlternativeA : myAlternativeB;
     }
 

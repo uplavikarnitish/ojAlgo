@@ -25,18 +25,22 @@ import static org.ojalgo.constant.PrimitiveMath.*;
 
 import org.ojalgo.function.PrimitiveFunction;
 
-public abstract class RandomUtils {
+public abstract class RandomUtils
+{
 
     private static final double[] C;
 
-    static {
+    static
+    {
 
         C = new double[1000];
 
         C[0] = ONE;
-        for (int k = 1; k < C.length; k++) {
+        for (int k = 1; k < C.length; k++)
+        {
             C[k] = ZERO;
-            for (int m = 0; m <= (k - 1); m++) {
+            for (int m = 0; m <= (k - 1); m++)
+            {
                 C[k] += (C[m] * C[k - 1 - m]) / ((m + 1) * ((2 * m) + 1));
             }
         }
@@ -45,17 +49,18 @@ public abstract class RandomUtils {
     /**
      * For the Lanczos approximation of the gamma function
      */
-    private static final double[] L9 = { 0.99999999999980993227684700473478, 676.520368121885098567009190444019, -1259.13921672240287047156078755283,
+    private static final double[] L9 = {0.99999999999980993227684700473478, 676.520368121885098567009190444019, -1259.13921672240287047156078755283,
             771.3234287776530788486528258894, -176.61502916214059906584551354, 12.507343278686904814458936853, -0.13857109526572011689554707,
-            9.984369578019570859563e-6, 1.50563273514931155834e-7 };
+            9.984369578019570859563e-6, 1.50563273514931155834e-7};
 
     /**
-     * @param aSumOfValues The sum of all values in a sample set
+     * @param aSumOfValues        The sum of all values in a sample set
      * @param aSumOfSquaredValues The sum of all squared values, in a sample set
-     * @param aValuesCount The number of values in the sample set
+     * @param aValuesCount        The number of values in the sample set
      * @return The sample set's variance
      */
-    public static double calculateVariance(final double aSumOfValues, final double aSumOfSquaredValues, final int aValuesCount) {
+    public static double calculateVariance(final double aSumOfValues, final double aSumOfSquaredValues, final int aValuesCount)
+    {
         return ((aValuesCount * aSumOfSquaredValues) - (aSumOfValues * aSumOfValues)) / (aValuesCount * (aValuesCount - 1));
     }
 
@@ -64,15 +69,18 @@ public abstract class RandomUtils {
      * <a href="http://en.wikipedia.org/wiki/Error_function">erf()&nbsp;@&nbsp;Wikipedia</a> <br>
      * <a href="http://mathworld.wolfram.com/Erf.html">erf()&nbsp;@&nbsp;Wolfram MathWorld</a>
      */
-    public static double erf(final double anArg) {
+    public static double erf(final double anArg)
+    {
 
         double retVal = ZERO;
         final double tmpSqr = anArg * anArg;
         double tmpVal;
 
-        for (int n = 0; n <= 60; n++) {
+        for (int n = 0; n <= 60; n++)
+        {
             tmpVal = anArg / ((2 * n) + 1);
-            for (int i = 1; i <= n; i++) {
+            for (int i = 1; i <= n; i++)
+            {
                 tmpVal *= -tmpSqr / i;
             }
             retVal += tmpVal;
@@ -86,7 +94,8 @@ public abstract class RandomUtils {
      * <a href="http://en.wikipedia.org/wiki/Error_function">erf()&nbsp;@&nbsp;Wikipedia</a> <br>
      * <a href="http://mathworld.wolfram.com/Erf.html">erf()&nbsp;@&nbsp;Wolfram MathWorld</a>
      */
-    public static double erfc(final double anArg) {
+    public static double erfc(final double anArg)
+    {
         return ONE - RandomUtils.erf(anArg);
     }
 
@@ -95,22 +104,26 @@ public abstract class RandomUtils {
      * <a href="http://en.wikipedia.org/wiki/Error_function">erf()&nbsp;@&nbsp;Wikipedia</a> <br>
      * <a href="http://mathworld.wolfram.com/Erf.html">erf()&nbsp;@&nbsp;Wolfram MathWorld</a>
      */
-    public static double erfi(final double anArg) {
+    public static double erfi(final double anArg)
+    {
 
         double retVal = ZERO;
 
-        for (int k = 500; k >= 0; k--) {
+        for (int k = 500; k >= 0; k--)
+        {
             retVal += (C[k] * (PrimitiveFunction.POW.invoke((SQRT_PI * anArg) / TWO, (2 * k) + 1))) / ((2 * k) + 1);
         }
 
         return retVal;
     }
 
-    public static double factorial(final int aVal) {
+    public static double factorial(final int aVal)
+    {
 
         double retVal = ONE;
 
-        for (int i = 2; i <= aVal; i++) {
+        for (int i = 2; i <= aVal; i++)
+        {
             retVal *= i;
         }
 
@@ -122,24 +135,30 @@ public abstract class RandomUtils {
      * algorithm is taken from <a href="http://en.wikipedia.org/wiki/Lanczos_approximation">WikipediA</a> ,
      * but it's modified a bit and I found more exact coefficients somewhere else.
      */
-    public static double gamma(final double arg) {
+    public static double gamma(final double arg)
+    {
 
-        if ((arg <= ZERO) && (PrimitiveFunction.ABS.invoke(arg % ONE) < MACHINE_EPSILON)) {
+        if ((arg <= ZERO) && (PrimitiveFunction.ABS.invoke(arg % ONE) < MACHINE_EPSILON))
+        {
 
             return NaN;
 
-        } else {
+        } else
+        {
 
-            if (arg < HALF) {
+            if (arg < HALF)
+            {
 
                 return PI / (PrimitiveFunction.SIN.invoke(PI * arg) * RandomUtils.gamma(ONE - arg));
 
-            } else {
+            } else
+            {
 
                 final double z = arg - ONE;
 
                 double x = L9[0];
-                for (int i = 1; i < L9.length; i++) {
+                for (int i = 1; i < L9.length; i++)
+                {
                     x += L9[i] / (z + i);
                 }
 
@@ -155,9 +174,11 @@ public abstract class RandomUtils {
      * @param k A vector of subset sizes the sum of which must equal the size of the full set
      * @return The number of ways the set can be partioned in to subsets of the given sizes
      */
-    public static int partitions(final int n, final int[] k) {
+    public static int partitions(final int n, final int[] k)
+    {
         int retVal = (int) RandomUtils.factorial(n);
-        for (int i = 0; i < k.length; i++) {
+        for (int i = 0; i < k.length; i++)
+        {
             retVal /= RandomUtils.factorial(k[i]);
         }
         return retVal;
@@ -167,7 +188,8 @@ public abstract class RandomUtils {
      * @param n The number of elements in the set
      * @return The number of permutations of the set
      */
-    public static int permutations(final int n) {
+    public static int permutations(final int n)
+    {
         return (int) RandomUtils.factorial(n);
     }
 
@@ -176,7 +198,8 @@ public abstract class RandomUtils {
      * @param k The number of elements in the subset
      * @return The number of subsets to the set
      */
-    public static int subsets(final int n, final int k) {
+    public static int subsets(final int n, final int k)
+    {
         return (int) (RandomUtils.factorial(n) / (RandomUtils.factorial(k) * RandomUtils.factorial(n - k)));
     }
 
@@ -185,11 +208,13 @@ public abstract class RandomUtils {
      * @param k The size of the tuple
      * @return The number of ordered k-tuples (variations) of the set
      */
-    public static int variations(final int n, final int k) {
+    public static int variations(final int n, final int k)
+    {
         return (int) (RandomUtils.factorial(n) / RandomUtils.factorial(n - k));
     }
 
-    private RandomUtils() {
+    private RandomUtils()
+    {
         super();
     }
 }

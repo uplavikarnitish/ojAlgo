@@ -39,7 +39,8 @@ import org.ojalgo.type.keyvalue.KeyValue;
  *
  * @author apete
  */
-public interface BasicSeries<K extends Comparable<K>, V extends Number> extends SortedMap<K, V> {
+public interface BasicSeries<K extends Comparable<K>, V extends Number> extends SortedMap<K, V>
+{
 
     BasicSeries<K, V> colour(ColourData colour);
 

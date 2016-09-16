@@ -41,12 +41,14 @@ package org.ojalgo.algebra;
  * @author apete
  * @see <a href="https://en.wikipedia.org/wiki/Group_(mathematics)">Group</a>
  */
-public interface Group {
+public interface Group
+{
 
     /**
      * @see <a href="https://en.wikipedia.org/wiki/Additive_group">Additive group</a>
      */
-    public interface Additive<S> extends Group, Operation.Addition<S> {
+    public interface Additive<S> extends Group, Operation.Addition<S>
+    {
 
         /**
          * The additive inverse of this.
@@ -60,7 +62,8 @@ public interface Group {
     /**
      * @see <a href="https://en.wikipedia.org/wiki/Multiplicative_group">Multiplicative group</a>
      */
-    public interface Multiplicative<S> extends Group, Operation.Multiplication<S> {
+    public interface Multiplicative<S> extends Group, Operation.Multiplication<S>
+    {
 
         /**
          * The multiplicative inverse.

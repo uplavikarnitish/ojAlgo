@@ -31,20 +31,23 @@ import org.ojalgo.scalar.Scalar;
  *
  * @author apete
  */
-final class RowsStore<N extends Number> extends SelectingStore<N> {
+final class RowsStore<N extends Number> extends SelectingStore<N>
+{
 
     private final int[] myRows;
 
     /**
      * @deprecated v40 Use {@link LogicalBuilder#offsets(int, int)} and/or
-     *             {@link LogicalBuilder#limits(int, int)} instead
+     * {@link LogicalBuilder#limits(int, int)} instead
      */
     @Deprecated
-    RowsStore(final int first, final int limit, final MatrixStore<N> base) {
+    RowsStore(final int first, final int limit, final MatrixStore<N> base)
+    {
         this(base, AccessUtils.makeIncreasingRange(first, limit - first));
     }
 
-    RowsStore(final MatrixStore<N> base, final int... rows) {
+    RowsStore(final MatrixStore<N> base, final int... rows)
+    {
 
         super(base, rows.length, (int) base.countColumns());
 
@@ -54,26 +57,32 @@ final class RowsStore<N extends Number> extends SelectingStore<N> {
     /**
      * @see org.ojalgo.matrix.store.MatrixStore#doubleValue(long, long)
      */
-    public double doubleValue(final long row, final long col) {
+    public double doubleValue(final long row, final long col)
+    {
         return this.getBase().doubleValue(myRows[(int) row], col);
     }
 
-    public int firstInRow(final int row) {
+    public int firstInRow(final int row)
+    {
         return this.getBase().firstInRow(myRows[row]);
     }
 
-    public N get(final long row, final long col) {
+    public N get(final long row, final long col)
+    {
         return this.getBase().get(myRows[(int) row], col);
     }
 
     @Override
-    public int limitOfRow(final int row) {
+    public int limitOfRow(final int row)
+    {
         return this.getBase().limitOfRow(myRows[row]);
     }
 
-    public void multiply(final Access1D<N> right, final ElementsConsumer<N> target) {
+    public void multiply(final Access1D<N> right, final ElementsConsumer<N> target)
+    {
 
-        if (this.isPrimitive()) {
+        if (this.isPrimitive())
+        {
 
             target.countRows();
             final long tmpComplexity = this.countColumns();
@@ -81,17 +90,20 @@ final class RowsStore<N extends Number> extends SelectingStore<N> {
 
             final MatrixStore<N> tmpBase = this.getBase();
 
-            for (int i = 0; i < myRows.length; i++) {
+            for (int i = 0; i < myRows.length; i++)
+            {
                 final int tmpRow = myRows[i];
 
                 final int tmpFirst = tmpBase.firstInRow(tmpRow);
                 final int tmpLimit = tmpBase.limitOfRow(tmpRow);
 
-                for (long j = 0L; j < tmpTargetColumns; j++) {
+                for (long j = 0L; j < tmpTargetColumns; j++)
+                {
 
                     double tmpVal = PrimitiveMath.ZERO;
 
-                    for (int c = tmpFirst; c < tmpLimit; c++) {
+                    for (int c = tmpFirst; c < tmpLimit; c++)
+                    {
                         tmpVal += tmpBase.doubleValue(tmpRow, c) * right.doubleValue(c + (j * tmpComplexity));
                     }
 
@@ -99,21 +111,25 @@ final class RowsStore<N extends Number> extends SelectingStore<N> {
                 }
             }
 
-        } else {
+        } else
+        {
 
             super.multiply(right, target);
         }
 
     }
 
-    public Scalar<N> toScalar(final long row, final long column) {
+    public Scalar<N> toScalar(final long row, final long column)
+    {
         return this.getBase().toScalar(myRows[(int) row], column);
     }
 
     @Override
-    protected void addNonZerosTo(final ElementsConsumer<N> consumer) {
+    protected void addNonZerosTo(final ElementsConsumer<N> consumer)
+    {
         final MatrixStore<N> tmpBase = this.getBase();
-        for (int r = 0; r < myRows.length; r++) {
+        for (int r = 0; r < myRows.length; r++)
+        {
             consumer.fillRow(r, 0, tmpBase.sliceRow(myRows[r], 0));
         }
     }

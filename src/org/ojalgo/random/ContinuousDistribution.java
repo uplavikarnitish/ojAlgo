@@ -21,7 +21,8 @@
  */
 package org.ojalgo.random;
 
-public interface ContinuousDistribution extends Distribution {
+public interface ContinuousDistribution extends Distribution
+{
 
     /**
      * In probability theory and statistics, the cumulative distribution function (CDF), or just distribution

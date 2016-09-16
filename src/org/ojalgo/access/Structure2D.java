@@ -21,12 +21,14 @@
  */
 package org.ojalgo.access;
 
-public interface Structure2D extends Structure1D {
+public interface Structure2D extends Structure1D
+{
 
     /**
      * count() == countRows() * countColumns()
      */
-    default long count() {
+    default long count()
+    {
         return this.countRows() * this.countColumns();
     }
 
@@ -50,7 +52,8 @@ public interface Structure2D extends Structure1D {
      *
      * @return true if matrix is empty
      */
-    default boolean isEmpty() {
+    default boolean isEmpty()
+    {
         return ((this.countRows() <= 0L) || (this.countColumns() <= 0L));
     }
 
@@ -62,7 +65,8 @@ public interface Structure2D extends Structure1D {
      *
      * @return true if matrix is fat
      */
-    default boolean isFat() {
+    default boolean isFat()
+    {
         final long tmpCountRows = this.countRows();
         return ((tmpCountRows > 0L) && (tmpCountRows < this.countColumns()));
     }
@@ -70,7 +74,8 @@ public interface Structure2D extends Structure1D {
     /**
      * @return true if both the row and column dimensions are equal to 1.
      */
-    default boolean isScalar() {
+    default boolean isScalar()
+    {
         return (this.countRows() == 1L) && (this.countColumns() == 1L);
     }
 
@@ -82,7 +87,8 @@ public interface Structure2D extends Structure1D {
      *
      * @return true if matrix is square
      */
-    default boolean isSquare() {
+    default boolean isSquare()
+    {
         final long tmpCountRows = this.countRows();
         return ((tmpCountRows > 0L) && (tmpCountRows == this.countColumns()));
     }
@@ -95,7 +101,8 @@ public interface Structure2D extends Structure1D {
      *
      * @return true if matrix is tall
      */
-    default boolean isTall() {
+    default boolean isTall()
+    {
         final long tmpCountColumns = this.countColumns();
         return ((tmpCountColumns > 0L) && (this.countRows() > tmpCountColumns));
     }
@@ -103,7 +110,8 @@ public interface Structure2D extends Structure1D {
     /**
      * @return true if either the row or column dimensions are equal to 1.
      */
-    default boolean isVector() {
+    default boolean isVector()
+    {
         return ((this.countColumns() == 1L) || (this.countRows() == 1L));
     }
 

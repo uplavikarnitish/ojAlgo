@@ -42,18 +42,22 @@ import org.ojalgo.netio.BasicLogger;
 import org.ojalgo.scalar.PrimitiveScalar;
 import org.ojalgo.type.context.NumberContext;
 
-abstract class IterativeSolverTask implements SolverTask<Double> {
+abstract class IterativeSolverTask implements SolverTask<Double>
+{
 
-    public static final class Configurator {
+    public static final class Configurator
+    {
 
         private final IterativeSolverTask mySolver;
 
         @SuppressWarnings("unused")
-        private Configurator() {
+        private Configurator()
+        {
             this(null);
         }
 
-        Configurator(final IterativeSolverTask solver) {
+        Configurator(final IterativeSolverTask solver)
+        {
             super();
             mySolver = solver;
         }
@@ -61,10 +65,13 @@ abstract class IterativeSolverTask implements SolverTask<Double> {
         /**
          * Accuracy/termination context
          */
-        public Configurator accuracy(final NumberContext accuray) {
-            if (accuray != null) {
+        public Configurator accuracy(final NumberContext accuray)
+        {
+            if (accuray != null)
+            {
                 mySolver.setAccuracyContext(accuray);
-            } else {
+            } else
+            {
                 mySolver.setAccuracyContext(DEFAULT);
             }
             return this;
@@ -73,7 +80,8 @@ abstract class IterativeSolverTask implements SolverTask<Double> {
         /**
          * To get debug print per iteration
          */
-        public Configurator debug(final BasicLogger.Printer printer) {
+        public Configurator debug(final BasicLogger.Printer printer)
+        {
             mySolver.setDebugPrinter(printer);
             return this;
         }
@@ -81,14 +89,16 @@ abstract class IterativeSolverTask implements SolverTask<Double> {
         /**
          * Max number of iterations
          */
-        public Configurator iterations(final int iterations) {
+        public Configurator iterations(final int iterations)
+        {
             mySolver.setIterationsLimit(iterations);
             return this;
         }
 
     }
 
-    static interface SparseDelegate {
+    static interface SparseDelegate
+    {
 
         double resolve(List<Equation> equations, final PhysicalStore<Double> solution);
 
@@ -96,17 +106,21 @@ abstract class IterativeSolverTask implements SolverTask<Double> {
 
     static final NumberContext DEFAULT = NumberContext.getMath(MathContext.DECIMAL128);
 
-    static List<Equation> toListOfRows(final Access2D<?> body, final Access2D<?> rhs) {
+    static List<Equation> toListOfRows(final Access2D<?> body, final Access2D<?> rhs)
+    {
 
         final int tmpDim = (int) body.countRows();
 
         final List<Equation> retVal = new ArrayList<>(tmpDim);
 
-        for (int i = 0; i < tmpDim; i++) {
+        for (int i = 0; i < tmpDim; i++)
+        {
             final Equation tmpRow = new Equation(i, tmpDim, rhs.doubleValue(i));
-            for (int j = 0; j < tmpDim; j++) {
+            for (int j = 0; j < tmpDim; j++)
+            {
                 final double tmpVal = body.doubleValue(i, j);
-                if (!PrimitiveScalar.isSmall(ONE, tmpVal)) {
+                if (!PrimitiveScalar.isSmall(ONE, tmpVal))
+                {
                     tmpRow.set(j, tmpVal);
                 }
             }
@@ -121,56 +135,71 @@ abstract class IterativeSolverTask implements SolverTask<Double> {
     private int myIterationsLimit = Integer.MAX_VALUE;
     private NumberContext myAccuracyContext = DEFAULT;
 
-    IterativeSolverTask() {
+    IterativeSolverTask()
+    {
         super();
     }
 
-    public final Configurator configurator() {
+    public final Configurator configurator()
+    {
         return new Configurator(this);
     }
 
-    public final DecompositionStore<Double> preallocate(final Structure2D templateBody, final Structure2D templateRHS) {
-        if (templateRHS.countColumns() != 1L) {
+    public final DecompositionStore<Double> preallocate(final Structure2D templateBody, final Structure2D templateRHS)
+    {
+        if (templateRHS.countColumns() != 1L)
+        {
             throw new IllegalArgumentException("The RHS must have precisely 1 column!");
         }
         return PrimitiveDenseStore.FACTORY.makeZero(templateRHS.countRows(), 1L);
     }
 
-    public final Optional<MatrixStore<Double>> solve(final MatrixStore<Double> body, final MatrixStore<Double> rhs) {
-        try {
+    public final Optional<MatrixStore<Double>> solve(final MatrixStore<Double> body, final MatrixStore<Double> rhs)
+    {
+        try
+        {
             return Optional.of(this.solve(body, rhs, this.preallocate(body, rhs)));
-        } catch (final TaskException xcptn) {
+        } catch (final TaskException xcptn)
+        {
             return Optional.empty();
         }
     }
 
-    protected final void debug(final int iteration, final Access1D<?> current) {
-        if (myDebugPrinter != null) {
+    protected final void debug(final int iteration, final Access1D<?> current)
+    {
+        if (myDebugPrinter != null)
+        {
             myDebugPrinter.println("{}: {}", iteration, Array1D.PRIMITIVE.copy(current));
         }
     }
 
-    protected final NumberContext getAccuracyContext() {
+    protected final NumberContext getAccuracyContext()
+    {
         return myAccuracyContext;
     }
 
-    protected final int getIterationsLimit() {
+    protected final int getIterationsLimit()
+    {
         return myIterationsLimit;
     }
 
-    protected final boolean isDebugPrinterSet() {
+    protected final boolean isDebugPrinterSet()
+    {
         return myDebugPrinter != null;
     }
 
-    protected void setAccuracyContext(final NumberContext accuracyContext) {
+    protected void setAccuracyContext(final NumberContext accuracyContext)
+    {
         myAccuracyContext = accuracyContext;
     }
 
-    protected void setDebugPrinter(final BasicLogger.Printer debugPrinter) {
+    protected void setDebugPrinter(final BasicLogger.Printer debugPrinter)
+    {
         myDebugPrinter = debugPrinter;
     }
 
-    protected void setIterationsLimit(final int iterationsLimit) {
+    protected void setIterationsLimit(final int iterationsLimit)
+    {
         myIterationsLimit = iterationsLimit;
     }
 

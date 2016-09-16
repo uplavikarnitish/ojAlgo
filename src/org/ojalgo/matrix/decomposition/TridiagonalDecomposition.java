@@ -39,28 +39,35 @@ import org.ojalgo.netio.BasicLogger;
 import org.ojalgo.scalar.ComplexNumber;
 import org.ojalgo.type.context.NumberContext;
 
-abstract class TridiagonalDecomposition<N extends Number> extends InPlaceDecomposition<N> implements Tridiagonal<N> {
+abstract class TridiagonalDecomposition<N extends Number> extends InPlaceDecomposition<N> implements Tridiagonal<N>
+{
 
-    static final class Big extends TridiagonalDecomposition<BigDecimal> {
+    static final class Big extends TridiagonalDecomposition<BigDecimal>
+    {
 
-        Big() {
+        Big()
+        {
             super(BigDenseStore.FACTORY);
         }
 
         @Override
-        Array1D<BigDecimal> makeReal(final DiagonalAccess<BigDecimal> aDiagonalAccessD) {
+        Array1D<BigDecimal> makeReal(final DiagonalAccess<BigDecimal> aDiagonalAccessD)
+        {
             return null;
         }
     }
 
-    static final class Complex extends TridiagonalDecomposition<ComplexNumber> {
+    static final class Complex extends TridiagonalDecomposition<ComplexNumber>
+    {
 
-        Complex() {
+        Complex()
+        {
             super(ComplexDenseStore.FACTORY);
         }
 
         @Override
-        Array1D<ComplexNumber> makeReal(final DiagonalAccess<ComplexNumber> aDiagonalAccessD) {
+        Array1D<ComplexNumber> makeReal(final DiagonalAccess<ComplexNumber> aDiagonalAccessD)
+        {
 
             final Array1D<ComplexNumber> retVal = Array1D.COMPLEX.makeZero(aDiagonalAccessD.getDimension());
             retVal.fillAll(ComplexNumber.ONE);
@@ -68,15 +75,18 @@ abstract class TridiagonalDecomposition<N extends Number> extends InPlaceDecompo
             final Array1D<ComplexNumber> tmpSubdiagonal = aDiagonalAccessD.subdiagonal; // superDiagonal should be the conjugate of this but it is set to the saem value
 
             ComplexNumber tmpVal = null;
-            for (int i = 0; i < tmpSubdiagonal.length; i++) {
+            for (int i = 0; i < tmpSubdiagonal.length; i++)
+            {
 
                 tmpVal = tmpSubdiagonal.get(i).signum();
 
-                if (!tmpVal.isReal()) {
+                if (!tmpVal.isReal())
+                {
 
                     tmpSubdiagonal.set(i, tmpSubdiagonal.get(i).divide(tmpVal));
 
-                    if ((i + 1) < tmpSubdiagonal.length) {
+                    if ((i + 1) < tmpSubdiagonal.length)
+                    {
                         tmpSubdiagonal.set(i + 1, tmpSubdiagonal.get(i + 1).multiply(tmpVal));
                     }
 
@@ -89,14 +99,17 @@ abstract class TridiagonalDecomposition<N extends Number> extends InPlaceDecompo
 
     }
 
-    static final class Primitive extends TridiagonalDecomposition<Double> {
+    static final class Primitive extends TridiagonalDecomposition<Double>
+    {
 
-        Primitive() {
+        Primitive()
+        {
             super(PrimitiveDenseStore.FACTORY);
         }
 
         @Override
-        Array1D<Double> makeReal(final DiagonalAccess<Double> aDiagonalAccessD) {
+        Array1D<Double> makeReal(final DiagonalAccess<Double> aDiagonalAccessD)
+        {
             return null;
         }
     }
@@ -106,17 +119,20 @@ abstract class TridiagonalDecomposition<N extends Number> extends InPlaceDecompo
     private Array1D<N> myInitDiagQ = null;
     private transient MatrixStore<N> myQ = null;
 
-    protected TridiagonalDecomposition(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> aFactory) {
+    protected TridiagonalDecomposition(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> aFactory)
+    {
         super(aFactory);
     }
 
-    public final boolean decompose(final ElementsSupplier<N> matrix) {
+    public final boolean decompose(final ElementsSupplier<N> matrix)
+    {
 
         this.reset();
 
         boolean retVal = false;
 
-        try {
+        try
+        {
 
             final int tmpRowDim = (int) matrix.countRows(); // Which is also the col-dim.
 
@@ -127,8 +143,10 @@ abstract class TridiagonalDecomposition<N extends Number> extends InPlaceDecompo
             final Householder<N> tmpHouseholder = this.makeHouseholder(tmpRowDim);
 
             final int tmpLimit = tmpRowDim - 2;
-            for (int ij = 0; ij < tmpLimit; ij++) {
-                if (tmpInPlace.generateApplyAndCopyHouseholderColumn(ij + 1, ij, tmpHouseholder)) {
+            for (int ij = 0; ij < tmpLimit; ij++)
+            {
+                if (tmpInPlace.generateApplyAndCopyHouseholderColumn(ij + 1, ij, tmpHouseholder))
+                {
                     tmpInPlace.transformSymmetric(tmpHouseholder);
                 }
             }
@@ -142,7 +160,8 @@ abstract class TridiagonalDecomposition<N extends Number> extends InPlaceDecompo
 
             retVal = true;
 
-        } catch (final Exception anException) {
+        } catch (final Exception anException)
+        {
 
             BasicLogger.error(anException.toString());
 
@@ -154,38 +173,46 @@ abstract class TridiagonalDecomposition<N extends Number> extends InPlaceDecompo
         return this.computed(retVal);
     }
 
-    public final boolean equals(final MatrixStore<N> aStore, final NumberContext context) {
+    public final boolean equals(final MatrixStore<N> aStore, final NumberContext context)
+    {
         return AccessUtils.equals(this.reconstruct(), aStore, context);
     }
 
-    public final MatrixStore<N> getD() {
+    public final MatrixStore<N> getD()
+    {
 
-        if (myD == null) {
+        if (myD == null)
+        {
             myD = this.makeD();
         }
 
         return myD;
     }
 
-    public final MatrixStore<N> getQ() {
+    public final MatrixStore<N> getQ()
+    {
 
-        if (myQ == null) {
+        if (myQ == null)
+        {
             myQ = this.makeQ();
         }
 
         return myQ;
     }
 
-    public final boolean isFullSize() {
+    public final boolean isFullSize()
+    {
         return true;
     }
 
-    public final boolean isSolvable() {
+    public final boolean isSolvable()
+    {
         return false;
     }
 
     @Override
-    public void reset() {
+    public void reset()
+    {
 
         super.reset();
 
@@ -196,54 +223,68 @@ abstract class TridiagonalDecomposition<N extends Number> extends InPlaceDecompo
         myInitDiagQ = null;
     }
 
-    public MatrixStore<N> solve(final Access2D<N> rhs, final DecompositionStore<N> preallocated) {
+    public MatrixStore<N> solve(final Access2D<N> rhs, final DecompositionStore<N> preallocated)
+    {
         throw new UnsupportedOperationException();
     }
 
-    protected final DiagonalAccess<N> getDiagonalAccessD() {
-        if (myDiagonalAccessD != null) {
+    protected final DiagonalAccess<N> getDiagonalAccessD()
+    {
+        if (myDiagonalAccessD != null)
+        {
             return myDiagonalAccessD;
-        } else {
+        } else
+        {
             throw new IllegalStateException("Decomposition not calculated!");
         }
     }
 
-    protected final MatrixStore<N> makeD() {
+    protected final MatrixStore<N> makeD()
+    {
         return this.wrap(this.getDiagonalAccessD()).get();
     }
 
-    protected final DecompositionStore<N> makeQ() {
+    protected final DecompositionStore<N> makeQ()
+    {
 
         final DecompositionStore<N> retVal = this.getInPlace();
         final int tmpDim = (int) Math.min(retVal.countRows(), retVal.countColumns());
 
         final HouseholderReference<N> tmpReference = HouseholderReference.makeColumn(retVal);
 
-        if (myInitDiagQ != null) {
+        if (myInitDiagQ != null)
+        {
             retVal.set(tmpDim - 1, tmpDim - 1, myInitDiagQ.get(tmpDim - 1));
-            if (tmpDim >= 2) {
+            if (tmpDim >= 2)
+            {
                 retVal.set(tmpDim - 2, tmpDim - 2, myInitDiagQ.get(tmpDim - 2));
             }
-        } else {
+        } else
+        {
             retVal.set(tmpDim - 1, tmpDim - 1, PrimitiveMath.ONE);
-            if (tmpDim >= 2) {
+            if (tmpDim >= 2)
+            {
                 retVal.set(tmpDim - 2, tmpDim - 2, PrimitiveMath.ONE);
             }
         }
-        if (tmpDim >= 2) {
+        if (tmpDim >= 2)
+        {
             retVal.set(tmpDim - 1, tmpDim - 2, PrimitiveMath.ZERO);
         }
 
-        for (int ij = tmpDim - 3; ij >= 0; ij--) {
+        for (int ij = tmpDim - 3; ij >= 0; ij--)
+        {
 
             tmpReference.point(ij + 1, ij);
 
-            if (!tmpReference.isZero()) {
+            if (!tmpReference.isZero())
+            {
                 retVal.transformLeft(tmpReference, ij);
             }
 
             retVal.setToIdentity(ij);
-            if (myInitDiagQ != null) {
+            if (myInitDiagQ != null)
+            {
                 retVal.set(ij, ij, myInitDiagQ.get(ij));
             }
         }
@@ -251,7 +292,8 @@ abstract class TridiagonalDecomposition<N extends Number> extends InPlaceDecompo
         return retVal;
     }
 
-    final DecompositionStore<N> doQ() {
+    final DecompositionStore<N> doQ()
+    {
         return (DecompositionStore<N>) this.getQ();
     }
 

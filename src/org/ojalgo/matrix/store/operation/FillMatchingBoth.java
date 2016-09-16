@@ -21,7 +21,8 @@
  */
 package org.ojalgo.matrix.store.operation;
 
-public final class FillMatchingBoth extends MatrixOperation {
+public final class FillMatchingBoth extends MatrixOperation
+{
 
     public static final FillMatchingBoth SETUP = new FillMatchingBoth();
 
@@ -31,12 +32,14 @@ public final class FillMatchingBoth extends MatrixOperation {
      */
     public static int THRESHOLD = 256;
 
-    private FillMatchingBoth() {
+    private FillMatchingBoth()
+    {
         super();
     }
 
     @Override
-    public int threshold() {
+    public int threshold()
+    {
         return THRESHOLD;
     }
 

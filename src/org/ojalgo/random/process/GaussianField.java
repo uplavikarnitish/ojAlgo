@@ -54,9 +54,11 @@ import org.ojalgo.type.keyvalue.ComparableToDouble;
  *
  * @author apete
  */
-public final class GaussianField<K extends Comparable<K>> {
+public final class GaussianField<K extends Comparable<K>>
+{
 
-    public static interface Covariance<K extends Comparable<K>> {
+    public static interface Covariance<K extends Comparable<K>>
+    {
 
         void calibrate(Collection<ComparableToDouble<K>> observations, Mean<K> mean);
 
@@ -64,7 +66,8 @@ public final class GaussianField<K extends Comparable<K>> {
 
     }
 
-    public static interface Mean<K extends Comparable<K>> {
+    public static interface Mean<K extends Comparable<K>>
+    {
 
         void calibrate(Collection<ComparableToDouble<K>> observations);
 
@@ -74,16 +77,22 @@ public final class GaussianField<K extends Comparable<K>> {
 
     private static final Factory<Double, PrimitiveDenseStore> FACTORY = PrimitiveDenseStore.FACTORY;
 
-    private static <K extends Comparable<K>> Mean<K> mean() {
-        return new Mean<K>() {
+    private static <K extends Comparable<K>> Mean<K> mean()
+    {
+        return new Mean<K>()
+        {
 
-            public void calibrate(final Collection<ComparableToDouble<K>> observations) {
+            public void calibrate(final Collection<ComparableToDouble<K>> observations)
+            {
 
             }
 
-            public double invoke(final K anArg) {
+            public double invoke(final K anArg)
+            {
                 return ZERO;
-            };
+            }
+
+            ;
         };
     }
 
@@ -93,25 +102,30 @@ public final class GaussianField<K extends Comparable<K>> {
     private final TreeSet<ComparableToDouble<K>> myObservations;
 
     @SuppressWarnings("unchecked")
-    public GaussianField(final Covariance<K> covarFunc) {
+    public GaussianField(final Covariance<K> covarFunc)
+    {
         this((Mean<K>) GaussianField.mean(), covarFunc, new TreeSet<ComparableToDouble<K>>());
     }
 
-    public GaussianField(final Mean<K> meanFunc, final Covariance<K> covarFunc) {
+    public GaussianField(final Mean<K> meanFunc, final Covariance<K> covarFunc)
+    {
         this(meanFunc, covarFunc, new TreeSet<ComparableToDouble<K>>());
     }
 
     @SuppressWarnings("unused")
-    private GaussianField() {
+    private GaussianField()
+    {
         this(null, null, null);
     }
 
     @SuppressWarnings("unchecked")
-    GaussianField(final Covariance<K> covarFunc, final TreeSet<ComparableToDouble<K>> observations) {
+    GaussianField(final Covariance<K> covarFunc, final TreeSet<ComparableToDouble<K>> observations)
+    {
         this((Mean<K>) GaussianField.mean(), covarFunc, observations);
     }
 
-    GaussianField(final Mean<K> meanFunc, final Covariance<K> covarFunc, final TreeSet<ComparableToDouble<K>> observations) {
+    GaussianField(final Mean<K> meanFunc, final Covariance<K> covarFunc, final TreeSet<ComparableToDouble<K>> observations)
+    {
 
         super();
 
@@ -120,16 +134,19 @@ public final class GaussianField<K extends Comparable<K>> {
         myObservations = observations;
     }
 
-    public void addObservation(final K key, final double value) {
+    public void addObservation(final K key, final double value)
+    {
         myObservations.add(new ComparableToDouble<>(key, value));
     }
 
-    public void calibrate() {
+    public void calibrate()
+    {
         myMeanFunction.calibrate(myObservations);
         myCovarianceFunction.calibrate(myObservations, myMeanFunction);
     }
 
-    public Normal1D getDistribution(final boolean cleanCovariances, final K... evaluationPoint) {
+    public Normal1D getDistribution(final boolean cleanCovariances, final K... evaluationPoint)
+    {
 
         final MatrixStore<Double> tmpRegCoef = this.getRegressionCoefficients(evaluationPoint);
 
@@ -145,7 +162,8 @@ public final class GaussianField<K extends Comparable<K>> {
         final PrimitiveDenseStore tmpCovariances = FACTORY.makeZero(tmpC11.countRows(), tmpC11.countColumns());
         tmpCovariances.fillMatching(tmpC11, SUBTRACT, tmpRegCoef.multiply(tmpC21));
 
-        if (cleanCovariances) {
+        if (cleanCovariances)
+        {
 
             final Eigenvalue<Double> tmpEvD = Eigenvalue.PRIMITIVE.make(true);
             tmpEvD.decompose(tmpCovariances);
@@ -157,8 +175,10 @@ public final class GaussianField<K extends Comparable<K>> {
             final double tmpLimit = PrimitiveFunction.MAX.invoke(PrimitiveMath.MACHINE_EPSILON * tmpLargest, 1E-12);
 
             final int tmpLength = (int) Math.min(tmpD.countRows(), tmpD.countColumns());
-            for (int ij = 0; ij < tmpLength; ij++) {
-                if (tmpD.doubleValue(ij, ij) < tmpLimit) {
+            for (int ij = 0; ij < tmpLength; ij++)
+            {
+                if (tmpD.doubleValue(ij, ij) < tmpLimit)
+                {
                     tmpD.set(ij, ij, tmpLimit);
                 }
             }
@@ -169,18 +189,22 @@ public final class GaussianField<K extends Comparable<K>> {
         return new Normal1D(tmpLocations, tmpCovariances);
     }
 
-    public Normal1D getDistribution(final K... evaluationPoint) {
+    public Normal1D getDistribution(final K... evaluationPoint)
+    {
         return this.getDistribution(false, evaluationPoint);
     }
 
-    MatrixStore<Double> getC11(final K[] args) {
+    MatrixStore<Double> getC11(final K[] args)
+    {
 
         final int tmpLength = args.length;
 
         final PrimitiveDenseStore retVal = FACTORY.makeZero(tmpLength, tmpLength);
 
-        for (int j = 0; j < tmpLength; j++) {
-            for (int i = 0; i < tmpLength; i++) {
+        for (int j = 0; j < tmpLength; j++)
+        {
+            for (int i = 0; i < tmpLength; i++)
+            {
                 retVal.set(i, j, myCovarianceFunction.invoke(args[i], args[j]));
             }
         }
@@ -188,7 +212,8 @@ public final class GaussianField<K extends Comparable<K>> {
         return retVal;
     }
 
-    MatrixStore<Double> getC12(final K[] args) {
+    MatrixStore<Double> getC12(final K[] args)
+    {
 
         final List<ComparableToDouble<K>> tmpObservations = this.getObservations();
 
@@ -197,8 +222,10 @@ public final class GaussianField<K extends Comparable<K>> {
 
         final PrimitiveDenseStore retVal = FACTORY.makeZero(tmpRowDim, tmpColDim);
 
-        for (int j = 0; j < tmpColDim; j++) {
-            for (int i = 0; i < tmpRowDim; i++) {
+        for (int j = 0; j < tmpColDim; j++)
+        {
+            for (int i = 0; i < tmpRowDim; i++)
+            {
                 retVal.set(i, j, myCovarianceFunction.invoke(args[i], tmpObservations.get(j).key));
             }
         }
@@ -206,7 +233,8 @@ public final class GaussianField<K extends Comparable<K>> {
         return retVal;
     }
 
-    MatrixStore<Double> getC21(final K[] args) {
+    MatrixStore<Double> getC21(final K[] args)
+    {
 
         final List<ComparableToDouble<K>> tmpObservations = this.getObservations();
 
@@ -215,8 +243,10 @@ public final class GaussianField<K extends Comparable<K>> {
 
         final PrimitiveDenseStore retVal = FACTORY.makeZero(tmpRowDim, tmpColDim);
 
-        for (int j = 0; j < tmpColDim; j++) {
-            for (int i = 0; i < tmpRowDim; i++) {
+        for (int j = 0; j < tmpColDim; j++)
+        {
+            for (int i = 0; i < tmpRowDim; i++)
+            {
                 retVal.set(i, j, myCovarianceFunction.invoke(tmpObservations.get(i).key, args[j]));
             }
         }
@@ -224,7 +254,8 @@ public final class GaussianField<K extends Comparable<K>> {
         return retVal;
     }
 
-    MatrixDecomposition.Solver<Double> getC22() {
+    MatrixDecomposition.Solver<Double> getC22()
+    {
 
         final List<ComparableToDouble<K>> tmpObservations = this.getObservations();
 
@@ -232,9 +263,11 @@ public final class GaussianField<K extends Comparable<K>> {
 
         final PrimitiveDenseStore tmpMatrix = FACTORY.makeZero(tmpSize, tmpSize);
 
-        for (int j = 0; j < tmpSize; j++) {
+        for (int j = 0; j < tmpSize; j++)
+        {
             final K tmpColumnKey = tmpObservations.get(j).key;
-            for (int i = 0; i < tmpSize; i++) {
+            for (int i = 0; i < tmpSize; i++)
+            {
                 tmpMatrix.set(i, j, myCovarianceFunction.invoke(tmpObservations.get(i).key, tmpColumnKey));
             }
         }
@@ -246,20 +279,23 @@ public final class GaussianField<K extends Comparable<K>> {
         return retVal;
     }
 
-    MatrixStore<Double> getM1(final K[] args) {
+    MatrixStore<Double> getM1(final K[] args)
+    {
 
         final int tmpLength = args.length;
 
         final PrimitiveDenseStore retVal = FACTORY.makeZero(tmpLength, 1);
 
-        for (int i = 0; i < tmpLength; i++) {
+        for (int i = 0; i < tmpLength; i++)
+        {
             retVal.set(i, 0, myMeanFunction.invoke(args[i]));
         }
 
         return retVal;
     }
 
-    MatrixStore<Double> getM2() {
+    MatrixStore<Double> getM2()
+    {
 
         final List<ComparableToDouble<K>> tmpObservations = this.getObservations();
 
@@ -267,14 +303,16 @@ public final class GaussianField<K extends Comparable<K>> {
 
         final PrimitiveDenseStore retVal = FACTORY.makeZero(tmpSize, 1);
 
-        for (int i = 0; i < tmpSize; i++) {
+        for (int i = 0; i < tmpSize; i++)
+        {
             retVal.set(i, 0, myMeanFunction.invoke(tmpObservations.get(i).key));
         }
 
         return retVal;
     }
 
-    MatrixStore<Double> getM2differenses() {
+    MatrixStore<Double> getM2differenses()
+    {
 
         final List<ComparableToDouble<K>> tmpObservations = this.getObservations();
 
@@ -284,7 +322,8 @@ public final class GaussianField<K extends Comparable<K>> {
 
         ComparableToDouble<K> tmpObservation;
         double tmpDiff;
-        for (int i = 0; i < tmpSize; i++) {
+        for (int i = 0; i < tmpSize; i++)
+        {
             tmpObservation = tmpObservations.get(i);
             tmpDiff = tmpObservation.value - myMeanFunction.invoke(tmpObservation.key);
             retVal.set(i, 0, tmpDiff);
@@ -293,11 +332,13 @@ public final class GaussianField<K extends Comparable<K>> {
         return retVal;
     }
 
-    List<ComparableToDouble<K>> getObservations() {
+    List<ComparableToDouble<K>> getObservations()
+    {
         return new ArrayList<>(myObservations);
     }
 
-    MatrixStore<Double> getRegressionCoefficients(final K[] args) {
+    MatrixStore<Double> getRegressionCoefficients(final K[] args)
+    {
         return this.getC22().solve(this.getC21(args)).logical().transpose().get();
     }
 

@@ -21,17 +21,21 @@
  */
 package org.ojalgo.matrix.store;
 
-final class LimitStore<N extends Number> extends SelectingStore<N> {
+final class LimitStore<N extends Number> extends SelectingStore<N>
+{
 
-    LimitStore(final int rowsCount, final int columnsCount, final MatrixStore<N> base) {
+    LimitStore(final int rowsCount, final int columnsCount, final MatrixStore<N> base)
+    {
         super(base, rowsCount, columnsCount);
     }
 
-    public double doubleValue(final long row, final long col) {
+    public double doubleValue(final long row, final long col)
+    {
         return this.getBase().doubleValue(row, col);
     }
 
-    public N get(final long row, final long col) {
+    public N get(final long row, final long col)
+    {
         return this.getBase().get(row, col);
     }
 

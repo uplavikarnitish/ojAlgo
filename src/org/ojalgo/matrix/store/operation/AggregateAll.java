@@ -21,18 +21,21 @@
  */
 package org.ojalgo.matrix.store.operation;
 
-public final class AggregateAll extends MatrixOperation {
+public final class AggregateAll extends MatrixOperation
+{
 
     public static final AggregateAll SETUP = new AggregateAll();
 
     public static int THRESHOLD = 64;
 
-    private AggregateAll() {
+    private AggregateAll()
+    {
         super();
     }
 
     @Override
-    public int threshold() {
+    public int threshold()
+    {
         return THRESHOLD;
     }
 

@@ -32,6 +32,7 @@ package org.ojalgo.matrix.store.operation;
  *
  * @author apete
  */
-public interface BLAS1 {
+public interface BLAS1
+{
 
 }

@@ -28,9 +28,11 @@ import org.ojalgo.array.PrimitiveArray;
 import org.ojalgo.function.PrimitiveFunction;
 import org.ojalgo.optimisation.linear.LinearSolver;
 
-final class ExpressionsBasedLinearIntegration extends ExpressionsBasedModel.Integration<LinearSolver> {
+final class ExpressionsBasedLinearIntegration extends ExpressionsBasedModel.Integration<LinearSolver>
+{
 
-    public LinearSolver build(final ExpressionsBasedModel model) {
+    public LinearSolver build(final ExpressionsBasedModel model)
+    {
 
         final LinearSolver.Builder tmpBuilder = LinearSolver.getBuilder();
 
@@ -39,28 +41,33 @@ final class ExpressionsBasedLinearIntegration extends ExpressionsBasedModel.Inte
         return tmpBuilder.build(model.options);
     }
 
-    public boolean isCapable(final ExpressionsBasedModel model) {
+    public boolean isCapable(final ExpressionsBasedModel model)
+    {
         return !(model.isAnyVariableInteger() || model.isAnyExpressionQuadratic());
     }
 
     @Override
-    public Result toModelState(final Result solverState, final ExpressionsBasedModel model) {
+    public Result toModelState(final Result solverState, final ExpressionsBasedModel model)
+    {
 
         final PrimitiveArray tmpModelSolution = PrimitiveArray.make(model.countVariables());
 
-        for (final IntIndex tmpFixed : model.getFixedVariables()) {
+        for (final IntIndex tmpFixed : model.getFixedVariables())
+        {
             tmpModelSolution.set(tmpFixed.index, model.getVariable(tmpFixed.index).getValue().doubleValue());
         }
 
         final List<Variable> tmpPositives = model.getPositiveVariables();
-        for (int p = 0; p < tmpPositives.size(); p++) {
+        for (int p = 0; p < tmpPositives.size(); p++)
+        {
             final Variable tmpVariable = tmpPositives.get(p);
             final int tmpIndex = model.indexOf(tmpVariable);
             tmpModelSolution.set(tmpIndex, solverState.doubleValue(p));
         }
 
         final List<Variable> tmpNegatives = model.getNegativeVariables();
-        for (int n = 0; n < tmpNegatives.size(); n++) {
+        for (int n = 0; n < tmpNegatives.size(); n++)
+        {
             final Variable tmpVariable = tmpNegatives.get(n);
             final int tmpIndex = model.indexOf(tmpVariable);
             tmpModelSolution.set(tmpIndex, tmpModelSolution.doubleValue(tmpIndex) - solverState.doubleValue(tmpPositives.size() + n));
@@ -70,7 +77,8 @@ final class ExpressionsBasedLinearIntegration extends ExpressionsBasedModel.Inte
     }
 
     @Override
-    public Result toSolverState(final Result modelState, final ExpressionsBasedModel model) {
+    public Result toSolverState(final Result modelState, final ExpressionsBasedModel model)
+    {
 
         final List<Variable> tmpPositives = model.getPositiveVariables();
         final List<Variable> tmpNegatives = model.getNegativeVariables();
@@ -80,13 +88,15 @@ final class ExpressionsBasedLinearIntegration extends ExpressionsBasedModel.Inte
 
         final PrimitiveArray tmpSolverSolution = PrimitiveArray.make(tmpCountPositives + tmpCountNegatives);
 
-        for (int p = 0; p < tmpCountPositives; p++) {
+        for (int p = 0; p < tmpCountPositives; p++)
+        {
             final Variable tmpVariable = tmpPositives.get(p);
             final int tmpIndex = model.indexOf(tmpVariable);
             tmpSolverSolution.set(p, PrimitiveFunction.MAX.invoke(modelState.doubleValue(tmpIndex), 0.0));
         }
 
-        for (int n = 0; n < tmpCountNegatives; n++) {
+        for (int n = 0; n < tmpCountNegatives; n++)
+        {
             final Variable tmpVariable = tmpNegatives.get(n);
             final int tmpIndex = model.indexOf(tmpVariable);
             tmpSolverSolution.set(tmpCountPositives + n, PrimitiveFunction.MAX.invoke(-modelState.doubleValue(tmpIndex), 0.0));

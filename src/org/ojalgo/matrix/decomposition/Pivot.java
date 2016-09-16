@@ -23,13 +23,15 @@ package org.ojalgo.matrix.decomposition;
 
 import org.ojalgo.access.AccessUtils;
 
-final class Pivot {
+final class Pivot
+{
 
     private boolean myModified = false;
     private final int[] myOrder;
     private int mySign;
 
-    Pivot(final int numberOfRows) {
+    Pivot(final int numberOfRows)
+    {
 
         super();
 
@@ -37,9 +39,11 @@ final class Pivot {
         mySign = 1;
     }
 
-    public void change(final int row1, final int row2) {
+    public void change(final int row1, final int row2)
+    {
 
-        if (row1 != row2) {
+        if (row1 != row2)
+        {
 
             final int tmpRow = myOrder[row1];
             myOrder[row1] = myOrder[row2];
@@ -49,20 +53,24 @@ final class Pivot {
 
             myModified = true;
 
-        } else {
+        } else
+        {
             // Why?!
         }
     }
 
-    public int[] getOrder() {
+    public int[] getOrder()
+    {
         return myOrder;
     }
 
-    public boolean isModified() {
+    public boolean isModified()
+    {
         return myModified;
     }
 
-    public int signum() {
+    public int signum()
+    {
         return mySign;
     }
 

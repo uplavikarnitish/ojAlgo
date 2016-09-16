@@ -24,11 +24,14 @@ package org.ojalgo.access;
 import org.ojalgo.function.FunctionUtils;
 
 @FunctionalInterface
-public interface Callback1D<N extends Number> {
+public interface Callback1D<N extends Number>
+{
 
-    static <N extends Number> void onMatching(final Access1D<N> from, final Callback1D<N> through, final Mutate1D to) {
+    static <N extends Number> void onMatching(final Access1D<N> from, final Callback1D<N> through, final Mutate1D to)
+    {
         final long tmpLimit = FunctionUtils.min(from.count(), to.count());
-        for (long i = 0L; i < tmpLimit; i++) {
+        for (long i = 0L; i < tmpLimit; i++)
+        {
             through.call(from, i, to);
         }
     }

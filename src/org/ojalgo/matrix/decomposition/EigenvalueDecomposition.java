@@ -29,55 +29,67 @@ import org.ojalgo.matrix.store.MatrixStore;
 import org.ojalgo.netio.BasicLogger;
 import org.ojalgo.scalar.ComplexNumber;
 
-abstract class EigenvalueDecomposition<N extends Number> extends GenericDecomposition<N> implements Eigenvalue<N> {
+abstract class EigenvalueDecomposition<N extends Number> extends GenericDecomposition<N> implements Eigenvalue<N>
+{
 
     private MatrixStore<N> myD = null;
     private Array1D<ComplexNumber> myEigenvalues = null;
     private boolean myEigenvaluesOnly = false;
     private MatrixStore<N> myV = null;
 
-    protected EigenvalueDecomposition(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> aFactory) {
+    protected EigenvalueDecomposition(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> aFactory)
+    {
         super(aFactory);
     }
 
-    public N calculateDeterminant(final Access2D<?> matrix) {
+    public N calculateDeterminant(final Access2D<?> matrix)
+    {
         this.decompose(this.wrap(matrix));
         return this.getDeterminant();
     }
 
-    public final boolean checkAndCompute(final MatrixStore<N> matrix) {
+    public final boolean checkAndCompute(final MatrixStore<N> matrix)
+    {
         return this.compute(matrix, MatrixUtils.isHermitian(matrix), false);
     }
 
-    public boolean computeValuesOnly(final ElementsSupplier<N> matrix) {
+    public boolean computeValuesOnly(final ElementsSupplier<N> matrix)
+    {
         return this.compute(matrix, this.isHermitian(), true);
     }
 
-    public final boolean decompose(final ElementsSupplier<N> matrix) {
+    public final boolean decompose(final ElementsSupplier<N> matrix)
+    {
         return this.compute(matrix, this.isHermitian(), false);
     }
 
-    public final MatrixStore<N> getD() {
+    public final MatrixStore<N> getD()
+    {
 
-        if ((myD == null) && this.isComputed()) {
+        if ((myD == null) && this.isComputed())
+        {
             myD = this.makeD();
         }
 
         return myD;
     }
 
-    public final Array1D<ComplexNumber> getEigenvalues() {
+    public final Array1D<ComplexNumber> getEigenvalues()
+    {
 
-        if ((myEigenvalues == null) && this.isComputed()) {
+        if ((myEigenvalues == null) && this.isComputed())
+        {
             myEigenvalues = this.makeEigenvalues();
         }
 
         return myEigenvalues;
     }
 
-    public final MatrixStore<N> getV() {
+    public final MatrixStore<N> getV()
+    {
 
-        if ((myV == null) && !myEigenvaluesOnly && this.isComputed()) {
+        if ((myV == null) && !myEigenvaluesOnly && this.isComputed())
+        {
             myV = this.makeV();
         }
 
@@ -85,7 +97,8 @@ abstract class EigenvalueDecomposition<N extends Number> extends GenericDecompos
     }
 
     @Override
-    public void reset() {
+    public void reset()
+    {
 
         super.reset();
 
@@ -106,7 +119,8 @@ abstract class EigenvalueDecomposition<N extends Number> extends GenericDecompos
 
     protected abstract MatrixStore<N> makeV();
 
-    final boolean compute(final ElementsSupplier<N> matrix, final boolean symmetric, final boolean eigenvaluesOnly) {
+    final boolean compute(final ElementsSupplier<N> matrix, final boolean symmetric, final boolean eigenvaluesOnly)
+    {
 
         this.reset();
 
@@ -114,18 +128,22 @@ abstract class EigenvalueDecomposition<N extends Number> extends GenericDecompos
 
         boolean retVal = false;
 
-        try {
+        try
+        {
 
-            if (symmetric) {
+            if (symmetric)
+            {
 
                 retVal = this.doSymmetric(matrix, eigenvaluesOnly);
 
-            } else {
+            } else
+            {
 
                 retVal = this.doNonsymmetric(matrix, eigenvaluesOnly);
             }
 
-        } catch (final Exception exc) {
+        } catch (final Exception exc)
+        {
 
             BasicLogger.error(exc.toString());
 
@@ -137,15 +155,18 @@ abstract class EigenvalueDecomposition<N extends Number> extends GenericDecompos
         return this.computed(retVal);
     }
 
-    final void setD(final MatrixStore<N> newD) {
+    final void setD(final MatrixStore<N> newD)
+    {
         myD = newD;
     }
 
-    final void setEigenvalues(final Array1D<ComplexNumber> newEigenvalues) {
+    final void setEigenvalues(final Array1D<ComplexNumber> newEigenvalues)
+    {
         myEigenvalues = newEigenvalues;
     }
 
-    final void setV(final MatrixStore<N> newV) {
+    final void setV(final MatrixStore<N> newV)
+    {
         myV = newV;
     }
 

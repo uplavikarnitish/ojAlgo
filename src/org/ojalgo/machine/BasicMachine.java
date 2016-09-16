@@ -7,7 +7,8 @@ package org.ojalgo.machine;
  *
  * @author apete
  */
-public class BasicMachine {
+public class BasicMachine
+{
 
     private static final String BYTES = "bytes/";
     private static final String GIGA = "GB/";
@@ -19,7 +20,8 @@ public class BasicMachine {
     public final long memory;
     public final int threads;
 
-    public BasicMachine(final long memory, final int threads) {
+    public BasicMachine(final long memory, final int threads)
+    {
 
         super();
 
@@ -28,33 +30,41 @@ public class BasicMachine {
     }
 
     @SuppressWarnings("unused")
-    private BasicMachine() {
+    private BasicMachine()
+    {
         this(0L, 0);
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return false;
         }
-        if (!(obj instanceof BasicMachine)) {
+        if (!(obj instanceof BasicMachine))
+        {
             return false;
         }
         final BasicMachine other = (BasicMachine) obj;
-        if (memory != other.memory) {
+        if (memory != other.memory)
+        {
             return false;
         }
-        if (threads != other.threads) {
+        if (threads != other.threads)
+        {
             return false;
         }
         return true;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = 1;
         result = (prime * result) + (int) (memory ^ (memory >>> 32));
@@ -63,33 +73,36 @@ public class BasicMachine {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
 
         int tmpPrefix = 1;
         int tmpMeasure = (int) (memory / AbstractMachine.K);
 
-        while ((tmpMeasure / 1024) > 0) {
+        while ((tmpMeasure / 1024) > 0)
+        {
             tmpPrefix++;
             tmpMeasure /= 1024;
         }
 
-        switch (tmpPrefix) {
+        switch (tmpPrefix)
+        {
 
-        case 1:
+            case 1:
 
-            return tmpMeasure + KILO + threads + ((threads == 1) ? THREAD : THREADS);
+                return tmpMeasure + KILO + threads + ((threads == 1) ? THREAD : THREADS);
 
-        case 2:
+            case 2:
 
-            return tmpMeasure + MEGA + threads + ((threads == 1) ? THREAD : THREADS);
+                return tmpMeasure + MEGA + threads + ((threads == 1) ? THREAD : THREADS);
 
-        case 3:
+            case 3:
 
-            return tmpMeasure + GIGA + threads + ((threads == 1) ? THREAD : THREADS);
+                return tmpMeasure + GIGA + threads + ((threads == 1) ? THREAD : THREADS);
 
-        default:
+            default:
 
-            return memory + BYTES + threads + ((threads == 1) ? THREAD : THREADS);
+                return memory + BYTES + threads + ((threads == 1) ? THREAD : THREADS);
         }
 
     }

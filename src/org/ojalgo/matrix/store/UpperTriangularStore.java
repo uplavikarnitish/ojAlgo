@@ -25,60 +25,77 @@ import org.ojalgo.ProgrammingError;
 import org.ojalgo.constant.PrimitiveMath;
 import org.ojalgo.scalar.Scalar;
 
-final class UpperTriangularStore<N extends Number> extends ShadingStore<N> {
+final class UpperTriangularStore<N extends Number> extends ShadingStore<N>
+{
 
     private final boolean myUnitDiagonal;
 
     @SuppressWarnings("unused")
-    private UpperTriangularStore(final int aRowDim, final int aColDim, final MatrixStore<N> base) {
+    private UpperTriangularStore(final int aRowDim, final int aColDim, final MatrixStore<N> base)
+    {
 
         this(base, true);
 
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    UpperTriangularStore(final MatrixStore<N> base, final boolean unitDiagonal) {
+    UpperTriangularStore(final MatrixStore<N> base, final boolean unitDiagonal)
+    {
 
         super(base, (int) Math.min(base.countRows(), base.countColumns()), (int) base.countColumns());
 
         myUnitDiagonal = unitDiagonal;
     }
 
-    public double doubleValue(final long row, final long col) {
-        if (row > col) {
+    public double doubleValue(final long row, final long col)
+    {
+        if (row > col)
+        {
             return PrimitiveMath.ZERO;
-        } else if (myUnitDiagonal && (row == col)) {
+        } else if (myUnitDiagonal && (row == col))
+        {
             return PrimitiveMath.ONE;
-        } else {
+        } else
+        {
             return this.getBase().doubleValue(row, col);
         }
     }
 
-    public int firstInRow(final int row) {
+    public int firstInRow(final int row)
+    {
         return row;
     }
 
-    public N get(final long row, final long col) {
-        if (row > col) {
+    public N get(final long row, final long col)
+    {
+        if (row > col)
+        {
             return this.physical().scalar().zero().getNumber();
-        } else if (myUnitDiagonal && (row == col)) {
+        } else if (myUnitDiagonal && (row == col))
+        {
             return this.physical().scalar().one().getNumber();
-        } else {
+        } else
+        {
             return this.getBase().get(row, col);
         }
     }
 
     @Override
-    public int limitOfColumn(final int col) {
+    public int limitOfColumn(final int col)
+    {
         return col + 1;
     }
 
-    public Scalar<N> toScalar(final long row, final long col) {
-        if (row > col) {
+    public Scalar<N> toScalar(final long row, final long col)
+    {
+        if (row > col)
+        {
             return this.physical().scalar().zero();
-        } else if (myUnitDiagonal && (row == col)) {
+        } else if (myUnitDiagonal && (row == col))
+        {
             return this.physical().scalar().one();
-        } else {
+        } else
+        {
             return this.getBase().toScalar(row, col);
         }
     }

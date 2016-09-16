@@ -32,20 +32,24 @@ import org.ojalgo.series.CalendarDateSeries;
 import org.ojalgo.type.CalendarDate;
 import org.ojalgo.type.CalendarDateUnit;
 
-public final class SourceCache {
+public final class SourceCache
+{
 
-    private static final class Value {
+    private static final class Value
+    {
 
         CalendarDate used = new CalendarDate();
         final CalendarDateSeries<Double> series;
         CalendarDate updated = new CalendarDate();
 
         @SuppressWarnings("unused")
-        private Value() {
+        private Value()
+        {
             this(null, null);
         }
 
-        Value(final String name, final CalendarDateUnit resolution) {
+        Value(final String name, final CalendarDateUnit resolution)
+        {
 
             super();
 
@@ -60,16 +64,19 @@ public final class SourceCache {
     private final Map<DataSource<?>, SourceCache.Value> myCache = Collections.synchronizedMap(new HashMap<DataSource<?>, SourceCache.Value>());
     private final CalendarDateUnit myResolution;
 
-    public SourceCache(final CalendarDateUnit aResolution) {
+    public SourceCache(final CalendarDateUnit aResolution)
+    {
 
         super();
 
         myResolution = aResolution;
 
-        TIMER.schedule(new TimerTask() {
+        TIMER.schedule(new TimerTask()
+        {
 
             @Override
-            public void run() {
+            public void run()
+            {
                 SourceCache.this.cleanUp();
             }
 
@@ -77,19 +84,23 @@ public final class SourceCache {
 
     }
 
-    public synchronized CalendarDateSeries<Double> get(final DataSource<?> key) {
+    public synchronized CalendarDateSeries<Double> get(final DataSource<?> key)
+    {
 
         final CalendarDate tmpNow = new CalendarDate();
 
         Value tmpValue = myCache.get(key);
 
-        if (tmpValue != null) {
+        if (tmpValue != null)
+        {
 
-            if (myResolution.count(tmpValue.updated.millis, tmpNow.millis) > 0L) {
+            if (myResolution.count(tmpValue.updated.millis, tmpNow.millis) > 0L)
+            {
                 this.update(tmpValue, key, tmpNow);
             }
 
-        } else {
+        } else
+        {
 
             tmpValue = new SourceCache.Value(key.getSymbol(), myResolution);
 
@@ -103,20 +114,24 @@ public final class SourceCache {
         return tmpValue.series;
     }
 
-    private void cleanUp() {
+    private void cleanUp()
+    {
 
         final CalendarDate tmpNow = new CalendarDate();
 
-        for (final Entry<DataSource<?>, SourceCache.Value> tmpEntry : myCache.entrySet()) {
+        for (final Entry<DataSource<?>, SourceCache.Value> tmpEntry : myCache.entrySet())
+        {
 
-            if (myResolution.count(tmpEntry.getValue().used.millis, tmpNow.millis) > 1L) {
+            if (myResolution.count(tmpEntry.getValue().used.millis, tmpNow.millis) > 1L)
+            {
                 tmpEntry.getValue().series.clear();
                 myCache.remove(tmpEntry.getKey());
             }
         }
     }
 
-    private void update(final Value aCacheValue, final DataSource<?> key, final CalendarDate now) {
+    private void update(final Value aCacheValue, final DataSource<?> key, final CalendarDate now)
+    {
         aCacheValue.series.putAll(key.getPriceSeries());
         aCacheValue.updated = now;
     }

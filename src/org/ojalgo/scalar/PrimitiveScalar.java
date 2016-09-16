@@ -29,31 +29,39 @@ import org.ojalgo.function.PrimitiveFunction;
 import org.ojalgo.type.context.NumberContext;
 import org.ojalgo.type.context.NumberContext.Enforceable;
 
-public final class PrimitiveScalar extends Number implements Scalar<Double>, Enforceable<PrimitiveScalar> {
+public final class PrimitiveScalar extends Number implements Scalar<Double>, Enforceable<PrimitiveScalar>
+{
 
-    public static final Scalar.Factory<Double> FACTORY = new Scalar.Factory<Double>() {
+    public static final Scalar.Factory<Double> FACTORY = new Scalar.Factory<Double>()
+    {
 
-        public Double cast(final double value) {
+        public Double cast(final double value)
+        {
             return value;
         }
 
-        public Double cast(final Number number) {
+        public Double cast(final Number number)
+        {
             return number.doubleValue();
         }
 
-        public PrimitiveScalar convert(final double value) {
+        public PrimitiveScalar convert(final double value)
+        {
             return PrimitiveScalar.of(value);
         }
 
-        public PrimitiveScalar convert(final Number number) {
+        public PrimitiveScalar convert(final Number number)
+        {
             return PrimitiveScalar.valueOf(number);
         }
 
-        public PrimitiveScalar one() {
+        public PrimitiveScalar one()
+        {
             return ONE;
         }
 
-        public PrimitiveScalar zero() {
+        public PrimitiveScalar zero()
+        {
             return ZERO;
         }
 
@@ -67,44 +75,55 @@ public final class PrimitiveScalar extends Number implements Scalar<Double>, Enf
 
     static final NumberContext CONTEXT = NumberContext.getMath(MathContext.DECIMAL64);
 
-    public static boolean isAbsolute(final double value) {
+    public static boolean isAbsolute(final double value)
+    {
         return value >= PrimitiveMath.ZERO;
     }
 
-    public static boolean isInfinite(final double value) {
+    public static boolean isInfinite(final double value)
+    {
         return Double.isInfinite(value);
     }
 
-    public static boolean isNaN(final double value) {
+    public static boolean isNaN(final double value)
+    {
         return Double.isNaN(value);
     }
 
-    public static boolean isSmall(final double comparedTo, final double value) {
+    public static boolean isSmall(final double comparedTo, final double value)
+    {
         return PrimitiveScalar.CONTEXT.isSmall(comparedTo, value);
     }
 
-    public static PrimitiveScalar of(final double value) {
+    public static PrimitiveScalar of(final double value)
+    {
         return new PrimitiveScalar(value);
     }
 
-    public static PrimitiveScalar valueOf(final double value) {
+    public static PrimitiveScalar valueOf(final double value)
+    {
         return PrimitiveScalar.of(value);
     }
 
-    public static PrimitiveScalar valueOf(final Number number) {
+    public static PrimitiveScalar valueOf(final Number number)
+    {
 
-        if (number != null) {
+        if (number != null)
+        {
 
-            if (number instanceof PrimitiveScalar) {
+            if (number instanceof PrimitiveScalar)
+            {
 
                 return (PrimitiveScalar) number;
 
-            } else {
+            } else
+            {
 
                 return new PrimitiveScalar(number.doubleValue());
             }
 
-        } else {
+        } else
+        {
 
             return ZERO;
         }
@@ -112,82 +131,100 @@ public final class PrimitiveScalar extends Number implements Scalar<Double>, Enf
 
     private final double myValue;
 
-    private PrimitiveScalar() {
+    private PrimitiveScalar()
+    {
 
         super();
 
         myValue = PrimitiveMath.ZERO;
     }
 
-    private PrimitiveScalar(final double value) {
+    private PrimitiveScalar(final double value)
+    {
 
         super();
 
         myValue = value;
     }
 
-    public PrimitiveScalar add(final double arg) {
+    public PrimitiveScalar add(final double arg)
+    {
         return new PrimitiveScalar(myValue + arg);
     }
 
-    public PrimitiveScalar add(final Double arg) {
+    public PrimitiveScalar add(final Double arg)
+    {
         return new PrimitiveScalar(myValue + arg);
     }
 
-    public int compareTo(final Double reference) {
+    public int compareTo(final Double reference)
+    {
         return Double.compare(myValue, reference);
     }
 
-    public PrimitiveScalar conjugate() {
+    public PrimitiveScalar conjugate()
+    {
         return this;
     }
 
-    public PrimitiveScalar divide(final double arg) {
+    public PrimitiveScalar divide(final double arg)
+    {
         return new PrimitiveScalar(myValue / arg);
     }
 
-    public PrimitiveScalar divide(final Double arg) {
+    public PrimitiveScalar divide(final Double arg)
+    {
         return new PrimitiveScalar(myValue / arg);
     }
 
     @Override
-    public double doubleValue() {
+    public double doubleValue()
+    {
         return myValue;
     }
 
-    public PrimitiveScalar enforce(final NumberContext context) {
+    public PrimitiveScalar enforce(final NumberContext context)
+    {
         return new PrimitiveScalar(context.enforce(myValue));
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return false;
         }
-        if (!(obj instanceof Number)) {
+        if (!(obj instanceof Number))
+        {
             return false;
         }
         final double other = ((Number) obj).doubleValue();
-        if (Double.doubleToLongBits(myValue) != Double.doubleToLongBits(other)) {
+        if (Double.doubleToLongBits(myValue) != Double.doubleToLongBits(other))
+        {
             return false;
         }
         return true;
     }
 
     @Override
-    public float floatValue() {
+    public float floatValue()
+    {
         return (float) myValue;
     }
 
-    public Double getNumber() {
+    public Double getNumber()
+    {
         return myValue;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = 1;
         long temp;
@@ -197,65 +234,80 @@ public final class PrimitiveScalar extends Number implements Scalar<Double>, Enf
     }
 
     @Override
-    public int intValue() {
+    public int intValue()
+    {
         return (int) myValue;
     }
 
-    public PrimitiveScalar invert() {
+    public PrimitiveScalar invert()
+    {
         return new PrimitiveScalar(PrimitiveMath.ONE / myValue);
     }
 
-    public boolean isAbsolute() {
+    public boolean isAbsolute()
+    {
         return PrimitiveScalar.isAbsolute(myValue);
     }
 
-    public boolean isSmall(final double comparedTo) {
+    public boolean isSmall(final double comparedTo)
+    {
         return PrimitiveScalar.isSmall(comparedTo, myValue);
     }
 
     @Override
-    public long longValue() {
+    public long longValue()
+    {
         return (long) myValue;
     }
 
-    public PrimitiveScalar multiply(final double arg) {
+    public PrimitiveScalar multiply(final double arg)
+    {
         return new PrimitiveScalar(myValue * arg);
     }
 
-    public PrimitiveScalar multiply(final Double arg) {
+    public PrimitiveScalar multiply(final Double arg)
+    {
         return new PrimitiveScalar(myValue * arg);
     }
 
-    public PrimitiveScalar negate() {
+    public PrimitiveScalar negate()
+    {
         return new PrimitiveScalar(-myValue);
     }
 
-    public double norm() {
+    public double norm()
+    {
         return PrimitiveFunction.ABS.invoke(myValue);
     }
 
-    public PrimitiveScalar signum() {
+    public PrimitiveScalar signum()
+    {
         return new PrimitiveScalar(PrimitiveFunction.SIGNUM.invoke(myValue));
     }
 
-    public PrimitiveScalar subtract(final double arg) {
+    public PrimitiveScalar subtract(final double arg)
+    {
         return new PrimitiveScalar(myValue - arg);
     }
 
-    public PrimitiveScalar subtract(final Double arg) {
+    public PrimitiveScalar subtract(final Double arg)
+    {
         return new PrimitiveScalar(myValue - arg);
     }
 
-    public BigDecimal toBigDecimal() {
+    public BigDecimal toBigDecimal()
+    {
         return new BigDecimal(myValue, PrimitiveScalar.CONTEXT.getMathContext());
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return Double.toString(myValue);
     }
 
-    public String toString(final NumberContext context) {
+    public String toString(final NumberContext context)
+    {
         return context.enforce(this.toBigDecimal()).toString();
     }
 

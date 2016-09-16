@@ -25,37 +25,46 @@ import java.math.BigDecimal;
 
 import org.ojalgo.scalar.ComplexNumber;
 
-public final class ApplyCholesky extends MatrixOperation {
+public final class ApplyCholesky extends MatrixOperation
+{
 
     public static final ApplyCholesky SETUP = new ApplyCholesky();
 
     public static int THRESHOLD = 128;
 
-    public static void invoke(final BigDecimal[] data, final int structure, final int firstColumn, final int columnLimit, final BigDecimal[] multipliers) {
-        for (int j = firstColumn; j < columnLimit; j++) {
+    public static void invoke(final BigDecimal[] data, final int structure, final int firstColumn, final int columnLimit, final BigDecimal[] multipliers)
+    {
+        for (int j = firstColumn; j < columnLimit; j++)
+        {
             SubtractScaledVector.invoke(data, j * structure, multipliers, 0, multipliers[j], j, structure);
         }
     }
 
     public static void invoke(final ComplexNumber[] data, final int structure, final int firstColumn, final int columnLimit,
-            final ComplexNumber[] multipliers) {
-        for (int j = firstColumn; j < columnLimit; j++) {
+                              final ComplexNumber[] multipliers)
+    {
+        for (int j = firstColumn; j < columnLimit; j++)
+        {
             SubtractScaledVector.invoke(data, j * structure, multipliers, 0, multipliers[j].conjugate(), j, structure);
         }
     }
 
-    public static void invoke(final double[] data, final int structure, final int firstColumn, final int columnLimit, final double[] multipliers) {
-        for (int j = firstColumn; j < columnLimit; j++) {
+    public static void invoke(final double[] data, final int structure, final int firstColumn, final int columnLimit, final double[] multipliers)
+    {
+        for (int j = firstColumn; j < columnLimit; j++)
+        {
             SubtractScaledVector.invoke(data, j * structure, multipliers, 0, multipliers[j], j, structure);
         }
     }
 
-    private ApplyCholesky() {
+    private ApplyCholesky()
+    {
         super();
     }
 
     @Override
-    public int threshold() {
+    public int threshold()
+    {
         return THRESHOLD;
     }
 

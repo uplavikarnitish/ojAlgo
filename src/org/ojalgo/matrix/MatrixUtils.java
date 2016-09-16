@@ -41,12 +41,16 @@ import org.ojalgo.scalar.ComplexNumber;
 import org.ojalgo.scalar.PrimitiveScalar;
 import org.ojalgo.type.context.NumberContext;
 
-public abstract class MatrixUtils {
+public abstract class MatrixUtils
+{
 
-    public static void copy(final Access2D<?> source, final int rows, final int columns, final double[][] destination) {
-        for (int i = 0; i < rows; i++) {
+    public static void copy(final Access2D<?> source, final int rows, final int columns, final double[][] destination)
+    {
+        for (int i = 0; i < rows; i++)
+        {
             final double[] tmpRow = destination[i];
-            for (int j = 0; j < columns; j++) {
+            for (int j = 0; j < columns; j++)
+            {
                 tmpRow[j] = source.doubleValue(i, j);
             }
         }
@@ -55,9 +59,11 @@ public abstract class MatrixUtils {
     /**
      * Copies the argument of the ComplexNumber elements to the destination.
      */
-    public static void copyComplexArgument(final Access2D<ComplexNumber> source, final ElementsConsumer<?> destination) {
+    public static void copyComplexArgument(final Access2D<ComplexNumber> source, final ElementsConsumer<?> destination)
+    {
         final long tmpCount = FunctionUtils.min(source.count(), destination.count());
-        for (long i = 0L; i < tmpCount; i++) {
+        for (long i = 0L; i < tmpCount; i++)
+        {
             destination.set(i, source.get(i).getArgument());
         }
     }
@@ -65,9 +71,11 @@ public abstract class MatrixUtils {
     /**
      * Copies the imaginary part of the ComplexNumber elements to the destination.
      */
-    public static void copyComplexImaginary(final Access2D<ComplexNumber> source, final ElementsConsumer<?> destination) {
+    public static void copyComplexImaginary(final Access2D<ComplexNumber> source, final ElementsConsumer<?> destination)
+    {
         final long tmpCount = FunctionUtils.min(source.count(), destination.count());
-        for (long i = 0L; i < tmpCount; i++) {
+        for (long i = 0L; i < tmpCount; i++)
+        {
             destination.set(i, source.get(i).getImaginary());
         }
     }
@@ -75,9 +83,11 @@ public abstract class MatrixUtils {
     /**
      * Copies the modulus of the ComplexNumber elements to the destination.
      */
-    public static void copyComplexModulus(final Access2D<ComplexNumber> source, final ElementsConsumer<?> destination) {
+    public static void copyComplexModulus(final Access2D<ComplexNumber> source, final ElementsConsumer<?> destination)
+    {
         final long tmpCount = FunctionUtils.min(source.count(), destination.count());
-        for (long i = 0L; i < tmpCount; i++) {
+        for (long i = 0L; i < tmpCount; i++)
+        {
             destination.set(i, source.get(i).getModulus());
         }
     }
@@ -86,10 +96,12 @@ public abstract class MatrixUtils {
      * Simultaneously copies the modulus and argument of the ComplexNumber elements to the destinations.
      */
     public static void copyComplexModulusAndArgument(final Access2D<ComplexNumber> source, final ElementsConsumer<?> modDest,
-            final ElementsConsumer<?> argDest) {
+                                                     final ElementsConsumer<?> argDest)
+    {
         final long tmpCount = FunctionUtils.min(source.count(), modDest.count(), argDest.count());
         ComplexNumber tmpComplexNumber;
-        for (long i = 0L; i < tmpCount; i++) {
+        for (long i = 0L; i < tmpCount; i++)
+        {
             tmpComplexNumber = source.get(i);
             modDest.set(i, tmpComplexNumber.getModulus());
             argDest.set(i, tmpComplexNumber.getArgument());
@@ -99,9 +111,11 @@ public abstract class MatrixUtils {
     /**
      * Copies the real part of the ComplexNumber elements to the destination.
      */
-    public static void copyComplexReal(final Access2D<ComplexNumber> source, final ElementsConsumer<?> destination) {
+    public static void copyComplexReal(final Access2D<ComplexNumber> source, final ElementsConsumer<?> destination)
+    {
         final long tmpCount = FunctionUtils.min(source.count(), destination.count());
-        for (long i = 0L; i < tmpCount; i++) {
+        for (long i = 0L; i < tmpCount; i++)
+        {
             destination.set(i, source.get(i).getReal());
         }
     }
@@ -110,17 +124,20 @@ public abstract class MatrixUtils {
      * Simultaneously copies the real and imaginary parts of the ComplexNumber elements to the destinations.
      */
     public static void copyComplexRealAndImaginary(final Access2D<ComplexNumber> source, final ElementsConsumer<?> realDest,
-            final ElementsConsumer<?> imagDest) {
+                                                   final ElementsConsumer<?> imagDest)
+    {
         final long tmpCount = FunctionUtils.min(source.count(), realDest.count(), imagDest.count());
         ComplexNumber tmpComplexNumber;
-        for (long i = 0L; i < tmpCount; i++) {
+        for (long i = 0L; i < tmpCount; i++)
+        {
             tmpComplexNumber = source.get(i);
             realDest.set(i, tmpComplexNumber.getReal());
             imagDest.set(i, tmpComplexNumber.getImaginary());
         }
     }
 
-    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final Bidiagonal<N> decomposition, final NumberContext context) {
+    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final Bidiagonal<N> decomposition, final NumberContext context)
+    {
 
         final int tmpRowDim = (int) matrix.countRows();
         final int tmpColDim = (int) matrix.countColumns();
@@ -138,7 +155,8 @@ public abstract class MatrixUtils {
         boolean retVal = (tmpRowDim == tmpQ1.countRows()) && (tmpQ2.countRows() == tmpColDim);
 
         // Check that it's possible to reconstruct the original matrix.
-        if (retVal) {
+        if (retVal)
+        {
 
             tmpThis = matrix;
             tmpThat = decomposition.reconstruct();
@@ -147,7 +165,8 @@ public abstract class MatrixUtils {
         }
 
         // If Q1 is square, then check if it is orthogonal/unitary.
-        if (retVal && (tmpQ1.countRows() == tmpQ1.countColumns())) {
+        if (retVal && (tmpQ1.countRows() == tmpQ1.countColumns()))
+        {
 
             tmpThis = tmpQ1;
             tmpThat = tmpQ1.multiply(tmpConjugatedQ1).multiply(tmpQ1);
@@ -156,7 +175,8 @@ public abstract class MatrixUtils {
         }
 
         // If Q2 is square, then check if it is orthogonal/unitary.
-        if (retVal && (tmpQ2.countRows() == tmpQ2.countColumns())) {
+        if (retVal && (tmpQ2.countRows() == tmpQ2.countColumns()))
+        {
 
             tmpThis = tmpQ2;
             tmpThat = tmpQ2.multiply(tmpConjugatedQ2).multiply(tmpQ2);
@@ -167,7 +187,8 @@ public abstract class MatrixUtils {
         return retVal;
     }
 
-    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final Cholesky<N> decomposition, final NumberContext context) {
+    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final Cholesky<N> decomposition, final NumberContext context)
+    {
 
         boolean retVal = false;
 
@@ -178,7 +199,8 @@ public abstract class MatrixUtils {
         return retVal;
     }
 
-    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final Eigenvalue<N> decomposition, final NumberContext context) {
+    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final Eigenvalue<N> decomposition, final NumberContext context)
+    {
 
         final MatrixStore<N> tmpD = decomposition.getD();
         final MatrixStore<N> tmpV = decomposition.getV();
@@ -190,7 +212,8 @@ public abstract class MatrixUtils {
         return AccessUtils.equals(tmpStore1, tmpStore2, context);
     }
 
-    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final Hessenberg<N> decomposition, final NumberContext context) {
+    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final Hessenberg<N> decomposition, final NumberContext context)
+    {
 
         final MatrixStore<N> tmpH = decomposition.getH();
         final MatrixStore<N> tmpQ = decomposition.getQ();
@@ -201,11 +224,13 @@ public abstract class MatrixUtils {
         return AccessUtils.equals(tmpStore1, tmpStore2, context);
     }
 
-    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final LDL<N> decomposition, final NumberContext context) {
+    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final LDL<N> decomposition, final NumberContext context)
+    {
         return AccessUtils.equals(matrix, decomposition.reconstruct(), context);
     }
 
-    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final LU<N> decomposition, final NumberContext context) {
+    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final LU<N> decomposition, final NumberContext context)
+    {
 
         final MatrixStore<N> tmpL = decomposition.getL();
         final MatrixStore<N> tmpU = decomposition.getU();
@@ -214,7 +239,8 @@ public abstract class MatrixUtils {
         return AccessUtils.equals(matrix.logical().row(tmpPivotOrder).get(), tmpL.multiply(tmpU), context);
     }
 
-    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final QR<N> decomposition, final NumberContext context) {
+    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final QR<N> decomposition, final NumberContext context)
+    {
 
         final MatrixStore<N> tmpQ = decomposition.getQ();
         final MatrixStore<N> tmpR = decomposition.getR();
@@ -224,7 +250,8 @@ public abstract class MatrixUtils {
         return AccessUtils.equals(tmpStore, matrix, context);
     }
 
-    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final Schur<N> decomposition, final NumberContext context) {
+    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final Schur<N> decomposition, final NumberContext context)
+    {
 
         final MatrixStore<N> tmpU = decomposition.getU();
         final MatrixStore<N> tmpQ = decomposition.getQ();
@@ -236,7 +263,8 @@ public abstract class MatrixUtils {
         return AccessUtils.equals(tmpStore1, tmpStore2, context);
     }
 
-    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final SingularValue<N> decomposition, final NumberContext context) {
+    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final SingularValue<N> decomposition, final NumberContext context)
+    {
 
         final int tmpRowDim = (int) matrix.countRows();
         final int tmpColDim = (int) matrix.countColumns();
@@ -251,7 +279,8 @@ public abstract class MatrixUtils {
         boolean retVal = (tmpRowDim == tmpQ1.countRows()) && (tmpQ2.countRows() == tmpColDim);
 
         // Check that [A][Q2] == [Q1][D]
-        if (retVal) {
+        if (retVal)
+        {
 
             tmpThis = matrix.multiply(tmpQ2);
             tmpThat = tmpQ1.multiply(tmpD);
@@ -260,7 +289,8 @@ public abstract class MatrixUtils {
         }
 
         // If Q1 is square, then check if it is orthogonal/unitary.
-        if (retVal && (tmpQ1.countRows() == tmpQ1.countColumns())) {
+        if (retVal && (tmpQ1.countRows() == tmpQ1.countColumns()))
+        {
 
             tmpThis = tmpQ1.physical().makeEye(tmpRowDim, tmpRowDim);
             tmpThat = tmpQ1.logical().conjugate().get().multiply(tmpQ1);
@@ -269,7 +299,8 @@ public abstract class MatrixUtils {
         }
 
         // If Q2 is square, then check if it is orthogonal/unitary.
-        if (retVal && (tmpQ2.countRows() == tmpQ2.countColumns())) {
+        if (retVal && (tmpQ2.countRows() == tmpQ2.countColumns()))
+        {
 
             tmpThis = tmpQ2.physical().makeEye(tmpColDim, tmpColDim);
             tmpThat = tmpQ2.multiply(tmpQ2.logical().conjugate().get());
@@ -278,18 +309,23 @@ public abstract class MatrixUtils {
         }
 
         // Check the pseudoinverse.
-        if (retVal) {
+        if (retVal)
+        {
             retVal &= matrix.equals(matrix.multiply(decomposition.getInverse().multiply(matrix)), context);
         }
 
         // Check that the singular values are sorted in descending order
-        if (retVal) {
+        if (retVal)
+        {
             final Array1D<Double> tmpSV = decomposition.getSingularValues();
-            for (int i = 1; retVal && (i < tmpSV.size()); i++) {
+            for (int i = 1; retVal && (i < tmpSV.size()); i++)
+            {
                 retVal &= tmpSV.doubleValue(i - 1) >= tmpSV.doubleValue(i);
             }
-            if (retVal && decomposition.isOrdered()) {
-                for (int ij = 1; retVal && (ij < tmpD.countRows()); ij++) {
+            if (retVal && decomposition.isOrdered())
+            {
+                for (int ij = 1; retVal && (ij < tmpD.countRows()); ij++)
+                {
                     retVal &= tmpD.doubleValue(ij - 1, ij - 1) >= tmpD.doubleValue(ij, ij);
                 }
             }
@@ -298,7 +334,8 @@ public abstract class MatrixUtils {
         return retVal;
     }
 
-    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final Tridiagonal<N> decomposition, final NumberContext context) {
+    public static <N extends Number> boolean equals(final MatrixStore<N> matrix, final Tridiagonal<N> decomposition, final NumberContext context)
+    {
 
         // Check that [A] == [Q][D][Q]<sup>T</sup>
         return AccessUtils.equals(matrix, MatrixUtils.reconstruct(decomposition), context);
@@ -306,26 +343,31 @@ public abstract class MatrixUtils {
         // Check that Q is orthogonal/unitary...
     }
 
-    public static final int firstInColumn(final Access1D<?> matrix, final int col, final int defaultAndMinimum) {
+    public static final int firstInColumn(final Access1D<?> matrix, final int col, final int defaultAndMinimum)
+    {
         return matrix instanceof MatrixStore<?> ? Math.max(((MatrixStore<?>) matrix).firstInColumn(col), defaultAndMinimum) : defaultAndMinimum;
     }
 
-    public static final long firstInColumn(final Access1D<?> matrix, final long col, final long defaultAndMinimum) {
+    public static final long firstInColumn(final Access1D<?> matrix, final long col, final long defaultAndMinimum)
+    {
         return matrix instanceof MatrixStore<?> ? Math.max(((MatrixStore<?>) matrix).firstInColumn((int) col), defaultAndMinimum) : defaultAndMinimum;
     }
 
-    public static final int firstInRow(final Access1D<?> matrix, final int row, final int defaultAndMinimum) {
+    public static final int firstInRow(final Access1D<?> matrix, final int row, final int defaultAndMinimum)
+    {
         return matrix instanceof MatrixStore<?> ? Math.max(((MatrixStore<?>) matrix).firstInRow(row), defaultAndMinimum) : defaultAndMinimum;
     }
 
-    public static final long firstInRow(final Access1D<?> matrix, final long row, final long defaultAndMinimum) {
+    public static final long firstInRow(final Access1D<?> matrix, final long row, final long defaultAndMinimum)
+    {
         return matrix instanceof MatrixStore<?> ? Math.max(((MatrixStore<?>) matrix).firstInRow((int) row), defaultAndMinimum) : defaultAndMinimum;
     }
 
     /**
      * Extracts the argument of the ComplexNumber elements to a new primitive double valued matrix.
      */
-    public static PrimitiveDenseStore getComplexArgument(final Access2D<ComplexNumber> arg) {
+    public static PrimitiveDenseStore getComplexArgument(final Access2D<ComplexNumber> arg)
+    {
 
         final long tmpRows = arg.countRows();
         final long tmpColumns = arg.countColumns();
@@ -340,7 +382,8 @@ public abstract class MatrixUtils {
     /**
      * Extracts the imaginary part of the ComplexNumber elements to a new primitive double valued matrix.
      */
-    public static PrimitiveDenseStore getComplexImaginary(final Access2D<ComplexNumber> arg) {
+    public static PrimitiveDenseStore getComplexImaginary(final Access2D<ComplexNumber> arg)
+    {
 
         final long tmpRows = arg.countRows();
         final long tmpColumns = arg.countColumns();
@@ -355,7 +398,8 @@ public abstract class MatrixUtils {
     /**
      * Extracts the modulus of the ComplexNumber elements to a new primitive double valued matrix.
      */
-    public static PrimitiveDenseStore getComplexModulus(final Access2D<ComplexNumber> arg) {
+    public static PrimitiveDenseStore getComplexModulus(final Access2D<ComplexNumber> arg)
+    {
 
         final long tmpRows = arg.countRows();
         final long tmpColumns = arg.countColumns();
@@ -370,7 +414,8 @@ public abstract class MatrixUtils {
     /**
      * Extracts the real part of the ComplexNumber elements to a new primitive double valued matrix.
      */
-    public static PrimitiveDenseStore getComplexReal(final Access2D<ComplexNumber> arg) {
+    public static PrimitiveDenseStore getComplexReal(final Access2D<ComplexNumber> arg)
+    {
 
         final long tmpRows = arg.countRows();
         final long tmpColumns = arg.countColumns();
@@ -382,15 +427,18 @@ public abstract class MatrixUtils {
         return retVal;
     }
 
-    public static <N extends Number> int hashCode(final BasicMatrix matrix) {
+    public static <N extends Number> int hashCode(final BasicMatrix matrix)
+    {
         return AccessUtils.hashCode(matrix);
     }
 
-    public static <N extends Number> int hashCode(final MatrixStore<N> matrix) {
+    public static <N extends Number> int hashCode(final MatrixStore<N> matrix)
+    {
         return AccessUtils.hashCode(matrix);
     }
 
-    public static boolean isHermitian(final Access2D<?> matrix) {
+    public static boolean isHermitian(final Access2D<?> matrix)
+    {
 
         final long tmpRowDim = matrix.countRows();
         final long tmpColDim = matrix.countColumns();
@@ -399,24 +447,30 @@ public abstract class MatrixUtils {
 
         boolean retVal = tmpRowDim == tmpColDim;
 
-        if (tmpElement instanceof ComplexNumber) {
+        if (tmpElement instanceof ComplexNumber)
+        {
 
             ComplexNumber tmpLowerLeft;
             ComplexNumber tmpUpperRight;
 
-            for (int j = 0; retVal && (j < tmpColDim); j++) {
+            for (int j = 0; retVal && (j < tmpColDim); j++)
+            {
                 retVal &= PrimitiveScalar.isSmall(PrimitiveMath.ONE, ComplexNumber.valueOf(matrix.get(j, j)).i);
-                for (int i = j + 1; retVal && (i < tmpRowDim); i++) {
+                for (int i = j + 1; retVal && (i < tmpRowDim); i++)
+                {
                     tmpLowerLeft = ComplexNumber.valueOf(matrix.get(i, j)).conjugate();
                     tmpUpperRight = ComplexNumber.valueOf(matrix.get(j, i));
                     retVal &= PrimitiveScalar.isSmall(PrimitiveMath.ONE, tmpLowerLeft.subtract(tmpUpperRight).norm());
                 }
             }
 
-        } else {
+        } else
+        {
 
-            for (int j = 0; retVal && (j < tmpColDim); j++) {
-                for (int i = j + 1; retVal && (i < tmpRowDim); i++) {
+            for (int j = 0; retVal && (j < tmpColDim); j++)
+            {
+                for (int i = j + 1; retVal && (i < tmpRowDim); i++)
+                {
                     retVal &= PrimitiveScalar.isSmall(PrimitiveMath.ONE, matrix.doubleValue(i, j) - matrix.doubleValue(j, i));
                 }
             }
@@ -425,37 +479,45 @@ public abstract class MatrixUtils {
         return retVal;
     }
 
-    public static <N extends Number> boolean isNormal(final MatrixStore<N> matrix) {
+    public static <N extends Number> boolean isNormal(final MatrixStore<N> matrix)
+    {
 
         final MatrixStore<N> tmpConjugate = matrix.conjugate();
 
         return tmpConjugate.multiply(matrix).equals(matrix.multiply(tmpConjugate));
     }
 
-    public static final int limitOfColumn(final Access1D<?> matrix, final int col, final int defaultAndMaximum) {
+    public static final int limitOfColumn(final Access1D<?> matrix, final int col, final int defaultAndMaximum)
+    {
         return matrix instanceof MatrixStore<?> ? Math.min(((MatrixStore<?>) matrix).limitOfColumn(col), defaultAndMaximum) : defaultAndMaximum;
     }
 
-    public static final long limitOfColumn(final Access1D<?> matrix, final long col, final long defaultAndMaximum) {
+    public static final long limitOfColumn(final Access1D<?> matrix, final long col, final long defaultAndMaximum)
+    {
         return matrix instanceof MatrixStore<?> ? Math.min(((MatrixStore<?>) matrix).limitOfColumn((int) col), defaultAndMaximum) : defaultAndMaximum;
     }
 
-    public static final int limitOfRow(final Access1D<?> matrix, final int row, final int defaultAndMaximum) {
+    public static final int limitOfRow(final Access1D<?> matrix, final int row, final int defaultAndMaximum)
+    {
         return matrix instanceof MatrixStore<?> ? Math.min(((MatrixStore<?>) matrix).limitOfRow(row), defaultAndMaximum) : defaultAndMaximum;
     }
 
-    public static final long limitOfRow(final Access1D<?> matrix, final long row, final long defaultAndMaximum) {
+    public static final long limitOfRow(final Access1D<?> matrix, final long row, final long defaultAndMaximum)
+    {
         return matrix instanceof MatrixStore<?> ? Math.min(((MatrixStore<?>) matrix).limitOfRow((int) row), defaultAndMaximum) : defaultAndMaximum;
     }
 
-    public static PhysicalStore<ComplexNumber> makeRandomComplexStore(final int aRowDim, final int aColDim) {
+    public static PhysicalStore<ComplexNumber> makeRandomComplexStore(final int aRowDim, final int aColDim)
+    {
 
         final PhysicalStore<ComplexNumber> retVal = ComplexDenseStore.FACTORY.makeZero(aRowDim, aColDim);
 
         final Uniform tmpArgGen = new Uniform(PrimitiveMath.ZERO, PrimitiveMath.TWO_PI);
 
-        for (int j = 0; j < aColDim; j++) {
-            for (int i = 0; i < aRowDim; i++) {
+        for (int j = 0; j < aColDim; j++)
+        {
+            for (int i = 0; i < aRowDim; i++)
+            {
                 retVal.set(i, j, ComplexNumber.makePolar(PrimitiveMath.E, tmpArgGen.doubleValue()).add(PrimitiveMath.PI));
             }
         }
@@ -466,17 +528,20 @@ public abstract class MatrixUtils {
     /**
      * Make a random symmetric positive definite matrix
      */
-    public static PrimitiveDenseStore makeSPD(final int dim) {
+    public static PrimitiveDenseStore makeSPD(final int dim)
+    {
 
         final double[] tmpRandom = new double[dim];
 
         final PrimitiveDenseStore retVal = PrimitiveDenseStore.FACTORY.makeZero(dim, dim);
 
-        for (int i = 0; i < dim; i++) {
+        for (int i = 0; i < dim; i++)
+        {
 
             tmpRandom[i] = Math.random();
 
-            for (int j = 0; j < i; j++) {
+            for (int j = 0; j < i; j++)
+            {
                 retVal.set(i, j, tmpRandom[i] + tmpRandom[j]);
                 retVal.set(j, i, tmpRandom[j] + tmpRandom[i]);
             }
@@ -486,56 +551,67 @@ public abstract class MatrixUtils {
         return retVal;
     }
 
-    public static <N extends Number> MatrixStore<N> reconstruct(final Bidiagonal<N> decomposition) {
+    public static <N extends Number> MatrixStore<N> reconstruct(final Bidiagonal<N> decomposition)
+    {
         return decomposition.getQ1().multiply(decomposition.getD()).multiply(decomposition.getQ2().conjugate());
     }
 
-    public static <N extends Number> MatrixStore<N> reconstruct(final Cholesky<N> decomposition) {
+    public static <N extends Number> MatrixStore<N> reconstruct(final Cholesky<N> decomposition)
+    {
         final MatrixStore<N> tmpL = decomposition.getL();
         return tmpL.multiply(tmpL.conjugate());
     }
 
-    public static <N extends Number> MatrixStore<N> reconstruct(final Eigenvalue<N> decomposition) {
+    public static <N extends Number> MatrixStore<N> reconstruct(final Eigenvalue<N> decomposition)
+    {
         final MatrixStore<N> tmpV = decomposition.getV();
         return tmpV.multiply(decomposition.getD()).multiply(tmpV.conjugate());
     }
 
-    public static <N extends Number> MatrixStore<N> reconstruct(final Hessenberg<N> decomposition) {
+    public static <N extends Number> MatrixStore<N> reconstruct(final Hessenberg<N> decomposition)
+    {
         final MatrixStore<N> tmpQ = decomposition.getQ();
         final MatrixStore<N> tmpH = decomposition.getH();
         return tmpQ.multiply(tmpH).multiply(tmpQ.transpose());
     }
 
-    public static <N extends Number> MatrixStore<N> reconstruct(final LDL<N> decomposition) {
+    public static <N extends Number> MatrixStore<N> reconstruct(final LDL<N> decomposition)
+    {
         final MatrixStore<N> tmpL = decomposition.getL();
         final MatrixStore<N> tmpD = decomposition.getD();
         final MatrixStore<N> tmpR = decomposition.getR();
         return tmpL.multiply(tmpD).multiply(tmpR);
     }
 
-    public static <N extends Number> MatrixStore<N> reconstruct(final LU<N> decomposition) {
+    public static <N extends Number> MatrixStore<N> reconstruct(final LU<N> decomposition)
+    {
         return decomposition.getL().multiply(decomposition.getU()).logical().row(decomposition.getPivotOrder()).get();
     }
 
-    public static <N extends Number> MatrixStore<N> reconstruct(final QR<N> decomposition) {
+    public static <N extends Number> MatrixStore<N> reconstruct(final QR<N> decomposition)
+    {
         return decomposition.getQ().multiply(decomposition.getR());
     }
 
-    public static <N extends Number> MatrixStore<N> reconstruct(final Schur<N> decomposition) {
+    public static <N extends Number> MatrixStore<N> reconstruct(final Schur<N> decomposition)
+    {
         final MatrixStore<N> tmpQ = decomposition.getQ();
         return tmpQ.multiply(decomposition.getU()).multiply(tmpQ.logical().transpose().get());
     }
 
-    public static <N extends Number> MatrixStore<N> reconstruct(final SingularValue<N> decomposition) {
+    public static <N extends Number> MatrixStore<N> reconstruct(final SingularValue<N> decomposition)
+    {
         return decomposition.getQ1().multiply(decomposition.getD()).multiply(decomposition.getQ2().conjugate());
     }
 
-    public static <N extends Number> MatrixStore<N> reconstruct(final Tridiagonal<N> decomposition) {
+    public static <N extends Number> MatrixStore<N> reconstruct(final Tridiagonal<N> decomposition)
+    {
         final MatrixStore<N> tmpQ = decomposition.getQ();
         return tmpQ.multiply(decomposition.getD()).multiply(tmpQ.conjugate());
     }
 
-    public static void setAllOperationThresholds(final int value) {
+    public static void setAllOperationThresholds(final int value)
+    {
         MatrixUtils.setThresholdsMaxValue(value);
         MatrixUtils.setThresholdsMinValue(value);
     }
@@ -543,7 +619,8 @@ public abstract class MatrixUtils {
     /**
      * @param maxValue The max allowed/required value
      */
-    public static void setThresholdsMaxValue(final int maxValue) {
+    public static void setThresholdsMaxValue(final int maxValue)
+    {
         AggregateAll.THRESHOLD = Math.min(maxValue, AggregateAll.THRESHOLD);
         ApplyCholesky.THRESHOLD = Math.min(maxValue, ApplyCholesky.THRESHOLD);
         ApplyLU.THRESHOLD = Math.min(maxValue, ApplyLU.THRESHOLD);
@@ -576,7 +653,8 @@ public abstract class MatrixUtils {
     /**
      * @param minValue The min allowed/required value
      */
-    public static void setThresholdsMinValue(final int minValue) {
+    public static void setThresholdsMinValue(final int minValue)
+    {
         AggregateAll.THRESHOLD = Math.max(minValue, AggregateAll.THRESHOLD);
         ApplyCholesky.THRESHOLD = Math.max(minValue, ApplyCholesky.THRESHOLD);
         ApplyLU.THRESHOLD = Math.max(minValue, ApplyLU.THRESHOLD);
@@ -606,7 +684,8 @@ public abstract class MatrixUtils {
         SubtractScaledVector.THRESHOLD = Math.max(minValue, SubtractScaledVector.THRESHOLD);
     }
 
-    public static String toString(final Access2D<?> matrix) {
+    public static String toString(final Access2D<?> matrix)
+    {
 
         final StringBuilder retVal = new StringBuilder();
 
@@ -616,24 +695,28 @@ public abstract class MatrixUtils {
         retVal.append(matrix.getClass().getName());
         retVal.append(' ').append('<').append(' ').append(tmpRowDim).append(' ').append('x').append(' ').append(tmpColDim).append(' ').append('>');
 
-        if ((tmpRowDim > 0) && (tmpColDim > 0) && (tmpRowDim <= 50) && (tmpColDim <= 50) && ((tmpRowDim * tmpColDim) <= 200)) {
+        if ((tmpRowDim > 0) && (tmpColDim > 0) && (tmpRowDim <= 50) && (tmpColDim <= 50) && ((tmpRowDim * tmpColDim) <= 200))
+        {
 
             // First element
             retVal.append("\n{ { ").append(matrix.get(0, 0));
 
             // Rest of the first row
-            for (int j = 1; j < tmpColDim; j++) {
+            for (int j = 1; j < tmpColDim; j++)
+            {
                 retVal.append(",\t").append(matrix.get(0, j));
             }
 
             // For each of the remaining rows
-            for (int i = 1; i < tmpRowDim; i++) {
+            for (int i = 1; i < tmpRowDim; i++)
+            {
 
                 // First column
                 retVal.append(" },\n{ ").append(matrix.get(i, 0));
 
                 // Remaining columns
-                for (int j = 1; j < tmpColDim; j++) {
+                for (int j = 1; j < tmpColDim; j++)
+                {
                     retVal.append(",\t").append(matrix.get(i, j));
                 }
             }
@@ -645,109 +728,137 @@ public abstract class MatrixUtils {
         return retVal.toString();
     }
 
-    public static Access2D<BigDecimal> wrapBigAccess2D(final BasicMatrix matrix) {
-        return new Access2D<BigDecimal>() {
+    public static Access2D<BigDecimal> wrapBigAccess2D(final BasicMatrix matrix)
+    {
+        return new Access2D<BigDecimal>()
+        {
 
-            public long count() {
+            public long count()
+            {
                 return this.size();
             }
 
-            public long countColumns() {
+            public long countColumns()
+            {
                 return matrix.countColumns();
             }
 
-            public long countRows() {
+            public long countRows()
+            {
                 return matrix.countRows();
             }
 
-            public double doubleValue(final long index) {
+            public double doubleValue(final long index)
+            {
                 return matrix.doubleValue(index);
             }
 
-            public double doubleValue(final long row, final long col) {
+            public double doubleValue(final long row, final long col)
+            {
                 return matrix.doubleValue(row, col);
             }
 
-            public BigDecimal get(final long row, final long col) {
+            public BigDecimal get(final long row, final long col)
+            {
                 return matrix.toBigDecimal((int) row, (int) col);
             }
 
-            public int size() {
+            public int size()
+            {
                 return (int) matrix.count();
             }
 
         };
     }
 
-    public static Access2D<ComplexNumber> wrapComplexAccess2D(final BasicMatrix matrix) {
-        return new Access2D<ComplexNumber>() {
+    public static Access2D<ComplexNumber> wrapComplexAccess2D(final BasicMatrix matrix)
+    {
+        return new Access2D<ComplexNumber>()
+        {
 
-            public long count() {
+            public long count()
+            {
                 return this.size();
             }
 
-            public long countColumns() {
+            public long countColumns()
+            {
                 return matrix.countColumns();
             }
 
-            public long countRows() {
+            public long countRows()
+            {
                 return matrix.countRows();
             }
 
-            public double doubleValue(final long index) {
+            public double doubleValue(final long index)
+            {
                 return matrix.doubleValue(index);
             }
 
-            public double doubleValue(final long row, final long col) {
+            public double doubleValue(final long row, final long col)
+            {
                 return matrix.doubleValue(row, col);
             }
 
-            public ComplexNumber get(final long row, final long col) {
+            public ComplexNumber get(final long row, final long col)
+            {
                 return matrix.toComplexNumber((int) row, (int) col);
             }
 
-            public int size() {
+            public int size()
+            {
                 return (int) matrix.count();
             }
 
         };
     }
 
-    public static Access2D<Double> wrapPrimitiveAccess2D(final BasicMatrix matrix) {
-        return new Access2D<Double>() {
+    public static Access2D<Double> wrapPrimitiveAccess2D(final BasicMatrix matrix)
+    {
+        return new Access2D<Double>()
+        {
 
-            public long count() {
+            public long count()
+            {
                 return this.size();
             }
 
-            public long countColumns() {
+            public long countColumns()
+            {
                 return matrix.countColumns();
             }
 
-            public long countRows() {
+            public long countRows()
+            {
                 return matrix.countRows();
             }
 
-            public double doubleValue(final long index) {
+            public double doubleValue(final long index)
+            {
                 return matrix.doubleValue(index);
             }
 
-            public double doubleValue(final long row, final long col) {
+            public double doubleValue(final long row, final long col)
+            {
                 return matrix.doubleValue(row, col);
             }
 
-            public Double get(final long row, final long col) {
+            public Double get(final long row, final long col)
+            {
                 return matrix.doubleValue(row, col);
             }
 
-            public int size() {
+            public int size()
+            {
                 return (int) matrix.count();
             }
 
         };
     }
 
-    private MatrixUtils() {
+    private MatrixUtils()
+    {
         super();
     }
 }

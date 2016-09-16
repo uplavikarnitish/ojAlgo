@@ -31,34 +31,39 @@ import org.ojalgo.type.format.StringFormat;
  *
  * @author apete
  */
-public final class StringContext extends FormatContext<String> {
+public final class StringContext extends FormatContext<String>
+{
 
     private static final Format DEFAULT_FORMAT = new StringFormat();
 
     private final int myLength;
 
-    public StringContext() {
+    public StringContext()
+    {
 
         super(DEFAULT_FORMAT);
 
         myLength = 0;
     }
 
-    public StringContext(final Format format, final int length) {
+    public StringContext(final Format format, final int length)
+    {
 
         super(format);
 
         myLength = length;
     }
 
-    public StringContext(final int length) {
+    public StringContext(final int length)
+    {
 
         super(DEFAULT_FORMAT);
 
         myLength = length;
     }
 
-    private StringContext(final Format format) {
+    private StringContext(final Format format)
+    {
 
         super(format);
 
@@ -68,12 +73,14 @@ public final class StringContext extends FormatContext<String> {
     }
 
     @Override
-    public String enforce(final String object) {
+    public String enforce(final String object)
+    {
 
         String retVal = object.trim();
         final int tmpLength = retVal.length();
 
-        if ((myLength > 1) && (tmpLength > myLength)) {
+        if ((myLength > 1) && (tmpLength > myLength))
+        {
             retVal = retVal.substring(0, myLength - 1).trim() + "…";
         }
 
@@ -81,17 +88,20 @@ public final class StringContext extends FormatContext<String> {
     }
 
     @Override
-    protected void configureFormat(final Format format, final Object object) {
+    protected void configureFormat(final Format format, final Object object)
+    {
 
     }
 
     @Override
-    protected String handleFormatException(final Format format, final Object object) {
+    protected String handleFormatException(final Format format, final Object object)
+    {
         return "";
     }
 
     @Override
-    protected String handleParseException(final Format format, final String string) {
+    protected String handleParseException(final Format format, final String string)
+    {
         return "";
     }
 

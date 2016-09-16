@@ -31,13 +31,15 @@ import org.ojalgo.netio.ASCII;
  *
  * @author apete
  */
-public final class MapEntry<K extends Comparable<K>, V extends Object> implements Map.Entry<K, V>, KeyValue<K, V> {
+public final class MapEntry<K extends Comparable<K>, V extends Object> implements Map.Entry<K, V>, KeyValue<K, V>
+{
 
     private final K myKey;
     private final Map<K, V> myMap;
     private V myValue;
 
-    public MapEntry(final K aKey, final V aValue) {
+    public MapEntry(final K aKey, final V aValue)
+    {
 
         super();
 
@@ -46,7 +48,8 @@ public final class MapEntry<K extends Comparable<K>, V extends Object> implement
         myValue = aValue;
     }
 
-    public MapEntry(final Map.Entry<K, V> anEntry) {
+    public MapEntry(final Map.Entry<K, V> anEntry)
+    {
 
         super();
 
@@ -55,7 +58,8 @@ public final class MapEntry<K extends Comparable<K>, V extends Object> implement
         myValue = anEntry.getValue();
     }
 
-    public MapEntry(final Map<K, V> aMap, final K aKey) {
+    public MapEntry(final Map<K, V> aMap, final K aKey)
+    {
 
         super();
 
@@ -65,59 +69,77 @@ public final class MapEntry<K extends Comparable<K>, V extends Object> implement
     }
 
     @SuppressWarnings("unused")
-    private MapEntry() {
+    private MapEntry()
+    {
         this(null);
     }
 
-    public int compareTo(final KeyValue<K, ?> aReference) {
+    public int compareTo(final KeyValue<K, ?> aReference)
+    {
         return myKey.compareTo(aReference.getKey());
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return false;
         }
-        if (!(obj instanceof MapEntry)) {
+        if (!(obj instanceof MapEntry))
+        {
             return false;
         }
         final MapEntry<?, ?> other = (MapEntry<?, ?>) obj;
-        if (myKey == null) {
-            if (other.myKey != null) {
+        if (myKey == null)
+        {
+            if (other.myKey != null)
+            {
                 return false;
             }
-        } else if (!myKey.equals(other.myKey)) {
+        } else if (!myKey.equals(other.myKey))
+        {
             return false;
         }
-        if (myValue == null) {
-            if (other.myValue != null) {
+        if (myValue == null)
+        {
+            if (other.myValue != null)
+            {
                 return false;
             }
-        } else if (!myValue.equals(other.myValue)) {
+        } else if (!myValue.equals(other.myValue))
+        {
             return false;
         }
         return true;
     }
 
-    public K getKey() {
+    public K getKey()
+    {
         return myKey;
     }
 
-    public V getValue() {
-        if (myValue != null) {
+    public V getValue()
+    {
+        if (myValue != null)
+        {
             return myValue;
-        } else if (myMap != null) {
+        } else if (myMap != null)
+        {
             return myMap.get(myKey);
-        } else {
+        } else
+        {
             return null;
         }
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = 1;
         result = (prime * result) + ((myKey == null) ? 0 : myKey.hashCode());
@@ -125,13 +147,15 @@ public final class MapEntry<K extends Comparable<K>, V extends Object> implement
         return result;
     }
 
-    public V setValue(final V aValue) {
+    public V setValue(final V aValue)
+    {
 
         final V retVal = this.getValue();
 
         myValue = aValue;
 
-        if (myMap != null) {
+        if (myMap != null)
+        {
             myMap.put(myKey, aValue);
         }
 
@@ -139,7 +163,8 @@ public final class MapEntry<K extends Comparable<K>, V extends Object> implement
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return String.valueOf(myKey) + String.valueOf(ASCII.EQUALS) + String.valueOf(myValue);
     }
 

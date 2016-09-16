@@ -31,31 +31,39 @@ import org.ojalgo.type.TypeUtils;
 import org.ojalgo.type.context.NumberContext;
 import org.ojalgo.type.context.NumberContext.Enforceable;
 
-public final class BigScalar extends Number implements Scalar<BigDecimal>, Enforceable<BigScalar> {
+public final class BigScalar extends Number implements Scalar<BigDecimal>, Enforceable<BigScalar>
+{
 
-    public static final Scalar.Factory<BigDecimal> FACTORY = new Scalar.Factory<BigDecimal>() {
+    public static final Scalar.Factory<BigDecimal> FACTORY = new Scalar.Factory<BigDecimal>()
+    {
 
-        public BigDecimal cast(final double value) {
+        public BigDecimal cast(final double value)
+        {
             return new BigDecimal(value);
         }
 
-        public BigDecimal cast(final Number number) {
+        public BigDecimal cast(final Number number)
+        {
             return TypeUtils.toBigDecimal(number);
         }
 
-        public BigScalar convert(final double value) {
+        public BigScalar convert(final double value)
+        {
             return BigScalar.valueOf(value);
         }
 
-        public BigScalar convert(final Number number) {
+        public BigScalar convert(final Number number)
+        {
             return BigScalar.valueOf(number);
         }
 
-        public BigScalar one() {
+        public BigScalar one()
+        {
             return ONE;
         }
 
-        public BigScalar zero() {
+        public BigScalar zero()
+        {
             return ZERO;
         }
 
@@ -66,36 +74,45 @@ public final class BigScalar extends Number implements Scalar<BigDecimal>, Enfor
 
     static final NumberContext CONTEXT = NumberContext.getMath(MathContext.DECIMAL128);
 
-    public static boolean isAbsolute(final BigDecimal value) {
+    public static boolean isAbsolute(final BigDecimal value)
+    {
         return value.signum() >= 0;
     }
 
-    public static boolean isSmall(final double comparedTo, final BigDecimal value) {
+    public static boolean isSmall(final double comparedTo, final BigDecimal value)
+    {
         return (value.signum() == 0) || BigScalar.CONTEXT.isSmall(comparedTo, value.doubleValue());
     }
 
-    public static BigScalar of(final BigDecimal value) {
+    public static BigScalar of(final BigDecimal value)
+    {
         return new BigScalar(value);
     }
 
-    public static BigScalar valueOf(final double value) {
+    public static BigScalar valueOf(final double value)
+    {
         return new BigScalar(BigDecimal.valueOf(value));
     }
 
-    public static BigScalar valueOf(final Number number) {
+    public static BigScalar valueOf(final Number number)
+    {
 
-        if (number != null) {
+        if (number != null)
+        {
 
-            if (number instanceof BigScalar) {
+            if (number instanceof BigScalar)
+            {
 
                 return (BigScalar) number;
 
-            } else {
+            } else
+            {
 
                 return new BigScalar(TypeUtils.toBigDecimal(number));
             }
 
-        } else {
+        } else
+        {
 
             return ZERO;
         }
@@ -103,86 +120,106 @@ public final class BigScalar extends Number implements Scalar<BigDecimal>, Enfor
 
     private final BigDecimal myNumber;
 
-    private BigScalar() {
+    private BigScalar()
+    {
 
         super();
 
         myNumber = BigMath.ZERO;
     }
 
-    private BigScalar(final BigDecimal number) {
+    private BigScalar(final BigDecimal number)
+    {
 
         super();
 
         myNumber = number;
     }
 
-    public BigScalar add(final BigDecimal arg) {
+    public BigScalar add(final BigDecimal arg)
+    {
         return new BigScalar(myNumber.add(arg));
     }
 
-    public BigScalar add(final double arg) {
+    public BigScalar add(final double arg)
+    {
         return this.add(new BigDecimal(arg));
     }
 
-    public int compareTo(final BigDecimal reference) {
+    public int compareTo(final BigDecimal reference)
+    {
         return myNumber.compareTo(reference);
     }
 
-    public BigScalar conjugate() {
+    public BigScalar conjugate()
+    {
         return this;
     }
 
-    public BigScalar divide(final BigDecimal arg) {
+    public BigScalar divide(final BigDecimal arg)
+    {
         return new BigScalar(myNumber.divide(arg, BigScalar.CONTEXT.getMathContext()));
     }
 
-    public BigScalar divide(final double arg) {
+    public BigScalar divide(final double arg)
+    {
         return this.divide(new BigDecimal(arg));
     }
 
     @Override
-    public double doubleValue() {
+    public double doubleValue()
+    {
         return myNumber.doubleValue();
     }
 
-    public BigScalar enforce(final NumberContext context) {
+    public BigScalar enforce(final NumberContext context)
+    {
         return new BigScalar(context.enforce(myNumber));
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return false;
         }
-        if (!(obj instanceof Scalar<?>)) {
+        if (!(obj instanceof Scalar<?>))
+        {
             return false;
         }
         final BigDecimal other = ((Scalar<?>) obj).toBigDecimal();
-        if (myNumber == null) {
-            if (other != null) {
+        if (myNumber == null)
+        {
+            if (other != null)
+            {
                 return false;
             }
-        } else if (!myNumber.equals(other)) {
+        } else if (!myNumber.equals(other))
+        {
             return false;
         }
         return true;
     }
 
     @Override
-    public float floatValue() {
+    public float floatValue()
+    {
         return myNumber.floatValue();
     }
 
-    public BigDecimal getNumber() {
+    public BigDecimal getNumber()
+    {
         return myNumber;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = 1;
         result = (prime * result) + ((myNumber == null) ? 0 : myNumber.hashCode());
@@ -190,65 +227,80 @@ public final class BigScalar extends Number implements Scalar<BigDecimal>, Enfor
     }
 
     @Override
-    public int intValue() {
+    public int intValue()
+    {
         return myNumber.intValueExact();
     }
 
-    public BigScalar invert() {
+    public BigScalar invert()
+    {
         return ONE.divide(myNumber);
     }
 
-    public boolean isAbsolute() {
+    public boolean isAbsolute()
+    {
         return BigScalar.isAbsolute(myNumber);
     }
 
-    public boolean isSmall(final double comparedTo) {
+    public boolean isSmall(final double comparedTo)
+    {
         return BigScalar.CONTEXT.isSmall(comparedTo, this.doubleValue());
     }
 
     @Override
-    public long longValue() {
+    public long longValue()
+    {
         return myNumber.longValueExact();
     }
 
-    public BigScalar multiply(final BigDecimal arg) {
+    public BigScalar multiply(final BigDecimal arg)
+    {
         return new BigScalar(myNumber.multiply(arg));
     }
 
-    public BigScalar multiply(final double arg) {
+    public BigScalar multiply(final double arg)
+    {
         return this.multiply(new BigDecimal(arg));
     }
 
-    public BigScalar negate() {
+    public BigScalar negate()
+    {
         return new BigScalar(myNumber.negate());
     }
 
-    public double norm() {
+    public double norm()
+    {
         return PrimitiveFunction.ABS.invoke(myNumber.doubleValue());
     }
 
-    public BigScalar signum() {
+    public BigScalar signum()
+    {
         return new BigScalar(BigFunction.SIGNUM.invoke(myNumber));
     }
 
-    public BigScalar subtract(final BigDecimal arg) {
+    public BigScalar subtract(final BigDecimal arg)
+    {
         return new BigScalar(myNumber.subtract(arg));
     }
 
-    public BigScalar subtract(final double arg) {
+    public BigScalar subtract(final double arg)
+    {
         return this.subtract(new BigDecimal(arg));
     }
 
-    public BigDecimal toBigDecimal() {
+    public BigDecimal toBigDecimal()
+    {
         return myNumber;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return myNumber.toString();
     }
 
-    public String toString(final NumberContext context) {
+    public String toString(final NumberContext context)
+    {
         return context.enforce(myNumber).toString();
     }
 

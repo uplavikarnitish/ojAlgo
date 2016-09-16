@@ -29,56 +29,68 @@ import org.ojalgo.function.ParameterFunction;
 import org.ojalgo.function.UnaryFunction;
 import org.ojalgo.function.aggregator.AggregatorFunction;
 
-public final class DataSeries extends PrimitiveSeries {
+public final class DataSeries extends PrimitiveSeries
+{
 
-    public static DataSeries copy(final Access1D<?> template) {
+    public static DataSeries copy(final Access1D<?> template)
+    {
         return new DataSeries(Array1D.PRIMITIVE.copy(template));
     }
 
-    public static DataSeries copy(final double[] template) {
+    public static DataSeries copy(final double[] template)
+    {
         return new DataSeries(Array1D.PRIMITIVE.copy(template));
     }
 
-    public static DataSeries wrap(final double[] raw) {
+    public static DataSeries wrap(final double[] raw)
+    {
         return new DataSeries(Array1D.PRIMITIVE.wrap(PrimitiveArray.wrap(raw)));
     }
 
     private final Array1D<Double> myValues;
 
-    private DataSeries(final Array1D<Double> values) {
+    private DataSeries(final Array1D<Double> values)
+    {
 
         super();
 
         myValues = values;
     }
 
-    public final void modify(final BinaryFunction<Double> func, final double right) {
+    public final void modify(final BinaryFunction<Double> func, final double right)
+    {
         myValues.modifyAll(func.second(right));
     }
 
-    public final void modify(final double left, final BinaryFunction<Double> func) {
+    public final void modify(final double left, final BinaryFunction<Double> func)
+    {
         myValues.modifyAll(func.first(left));
     }
 
-    public final void modify(final ParameterFunction<Double> func, final int param) {
+    public final void modify(final ParameterFunction<Double> func, final int param)
+    {
         myValues.modifyAll(func.parameter(param));
     }
 
-    public final void modify(final UnaryFunction<Double> func) {
+    public final void modify(final UnaryFunction<Double> func)
+    {
         myValues.modifyAll(func);
     }
 
     @Override
-    public final int size() {
+    public final int size()
+    {
         return myValues.size();
     }
 
     @Override
-    public final double value(final int index) {
+    public final double value(final int index)
+    {
         return myValues.doubleValue(index);
     }
 
-    public final void visit(final AggregatorFunction<Double> visitor) {
+    public final void visit(final AggregatorFunction<Double> visitor)
+    {
         myValues.visitAll(visitor);
     }
 

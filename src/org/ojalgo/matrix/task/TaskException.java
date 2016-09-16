@@ -23,17 +23,21 @@ package org.ojalgo.matrix.task;
 
 import org.ojalgo.RecoverableCondition;
 
-public class TaskException extends RecoverableCondition {
+public class TaskException extends RecoverableCondition
+{
 
-    public static TaskException newNotInvertible() {
+    public static TaskException newNotInvertible()
+    {
         return new TaskException("Matrix Not Invertible!");
     }
 
-    public static TaskException newNotSolvable() {
+    public static TaskException newNotSolvable()
+    {
         return new TaskException("Equation System Not Solvable!");
     }
 
-    public TaskException(final String description) {
+    public TaskException(final String description)
+    {
         super(description);
     }
 

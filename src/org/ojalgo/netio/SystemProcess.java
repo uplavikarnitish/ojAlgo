@@ -26,7 +26,8 @@ import java.util.List;
 
 import org.ojalgo.ProgrammingError;
 
-public abstract class SystemProcess {
+public abstract class SystemProcess
+{
 
     private static String ERROR_TEXT = "System command not working!";
 
@@ -34,13 +35,15 @@ public abstract class SystemProcess {
     private ProcessOutputStream myOutStream;
     private Process myProcess;
 
-    public SystemProcess(final String[] aCommandArray, final String aLastCommandPrefix) {
+    public SystemProcess(final String[] aCommandArray, final String aLastCommandPrefix)
+    {
 
         super();
 
         final Runtime tmpRuntime = Runtime.getRuntime();
 
-        try {
+        try
+        {
 
             myProcess = tmpRuntime.exec(aCommandArray);
 
@@ -49,52 +52,64 @@ public abstract class SystemProcess {
 
             myInStream.collectMessages();
 
-        } catch (final IOException anException) {
+        } catch (final IOException anException)
+        {
             throw new ProgrammingError(ERROR_TEXT);
         }
     }
 
     @SuppressWarnings("unused")
-    private SystemProcess() {
+    private SystemProcess()
+    {
 
         super();
 
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    public List<Message> communicate(final List<Message> aBatch) {
+    public List<Message> communicate(final List<Message> aBatch)
+    {
         myOutStream.sendBatch(aBatch);
         return myInStream.collectMessages();
     }
 
-    public List<Message> communicate(final Message aMessage) {
+    public List<Message> communicate(final Message aMessage)
+    {
         myOutStream.sendMessage(aMessage);
         return myInStream.collectMessages();
     }
 
-    public String getLastReturnArgument() {
+    public String getLastReturnArgument()
+    {
         return myInStream.getLastArgument();
     }
 
-    public void terminate() {
+    public void terminate()
+    {
 
-        try {
+        try
+        {
 
-            if (myOutStream != null) {
+            if (myOutStream != null)
+            {
                 myOutStream.close();
             }
 
-            if (myInStream != null) {
+            if (myInStream != null)
+            {
                 myInStream.close();
             }
 
-            if (myProcess != null) {
+            if (myProcess != null)
+            {
                 myProcess.destroy();
             }
 
-        } catch (final IOException anException) {
+        } catch (final IOException anException)
+        {
             ;
-        } finally {
+        } finally
+        {
 
             myOutStream = null;
             myInStream = null;

@@ -36,51 +36,64 @@ import org.ojalgo.netio.BasicLogger.Printer;
  *
  * @author apete
  */
-public final class CharacterRing implements CharSequence, Appendable, Serializable, BasicLogger.Buffer {
+public final class CharacterRing implements CharSequence, Appendable, Serializable, BasicLogger.Buffer
+{
 
-    public static final class OutputStreamBuffer extends OutputStream implements BasicLogger.Buffer {
+    public static final class OutputStreamBuffer extends OutputStream implements BasicLogger.Buffer
+    {
 
         private final CharacterRing myRing;
 
-        OutputStreamBuffer(final CharacterRing ring) {
+        OutputStreamBuffer(final CharacterRing ring)
+        {
 
             super();
 
             myRing = ring;
         }
 
-        public void clear() {
+        public void clear()
+        {
             myRing.clear();
         }
 
         @Override
-        public boolean equals(final Object obj) {
-            if (this == obj) {
+        public boolean equals(final Object obj)
+        {
+            if (this == obj)
+            {
                 return true;
             }
-            if (obj == null) {
+            if (obj == null)
+            {
                 return false;
             }
-            if (!(obj instanceof OutputStreamBuffer)) {
+            if (!(obj instanceof OutputStreamBuffer))
+            {
                 return false;
             }
             final OutputStreamBuffer other = (OutputStreamBuffer) obj;
-            if (myRing == null) {
-                if (other.myRing != null) {
+            if (myRing == null)
+            {
+                if (other.myRing != null)
+                {
                     return false;
                 }
-            } else if (!myRing.equals(other.myRing)) {
+            } else if (!myRing.equals(other.myRing))
+            {
                 return false;
             }
             return true;
         }
 
-        public void flush(final Printer printer) {
+        public void flush(final Printer printer)
+        {
             myRing.flush(printer);
         }
 
         @Override
-        public int hashCode() {
+        public int hashCode()
+        {
             final int prime = 31;
             int result = 1;
             result = (prime * result) + ((myRing == null) ? 0 : myRing.hashCode());
@@ -88,55 +101,68 @@ public final class CharacterRing implements CharSequence, Appendable, Serializab
         }
 
         @Override
-        public void write(final int b) throws IOException {
+        public void write(final int b) throws IOException
+        {
             myRing.append((char) b);
         }
 
     }
 
-    public static final class PrinterBuffer extends BasicLogger.AppendablePrinter implements BasicLogger.Buffer {
+    public static final class PrinterBuffer extends BasicLogger.AppendablePrinter implements BasicLogger.Buffer
+    {
 
         private final CharacterRing myRing;
 
-        PrinterBuffer(final CharacterRing ring) {
+        PrinterBuffer(final CharacterRing ring)
+        {
 
             super(ring);
 
             myRing = ring;
         }
 
-        public void clear() {
+        public void clear()
+        {
             myRing.clear();
         }
 
         @Override
-        public boolean equals(final Object obj) {
-            if (this == obj) {
+        public boolean equals(final Object obj)
+        {
+            if (this == obj)
+            {
                 return true;
             }
-            if (obj == null) {
+            if (obj == null)
+            {
                 return false;
             }
-            if (!(obj instanceof PrinterBuffer)) {
+            if (!(obj instanceof PrinterBuffer))
+            {
                 return false;
             }
             final PrinterBuffer other = (PrinterBuffer) obj;
-            if (myRing == null) {
-                if (other.myRing != null) {
+            if (myRing == null)
+            {
+                if (other.myRing != null)
+                {
                     return false;
                 }
-            } else if (!myRing.equals(other.myRing)) {
+            } else if (!myRing.equals(other.myRing))
+            {
                 return false;
             }
             return true;
         }
 
-        public void flush(final Printer printer) {
+        public void flush(final Printer printer)
+        {
             myRing.flush(printer);
         }
 
         @Override
-        public int hashCode() {
+        public int hashCode()
+        {
             final int prime = 31;
             int result = 1;
             result = (prime * result) + ((myRing == null) ? 0 : myRing.hashCode());
@@ -145,59 +171,73 @@ public final class CharacterRing implements CharSequence, Appendable, Serializab
 
     }
 
-    public static final class WriterBuffer extends Writer implements BasicLogger.Buffer {
+    public static final class WriterBuffer extends Writer implements BasicLogger.Buffer
+    {
 
         private final CharacterRing myRing;
 
-        WriterBuffer(final CharacterRing ring) {
+        WriterBuffer(final CharacterRing ring)
+        {
 
             super(ring);
 
             myRing = ring;
         }
 
-        public void clear() {
+        public void clear()
+        {
             myRing.clear();
         }
 
         @Override
-        public void close() throws IOException {
+        public void close() throws IOException
+        {
             ;
         }
 
         @Override
-        public boolean equals(final Object obj) {
-            if (this == obj) {
+        public boolean equals(final Object obj)
+        {
+            if (this == obj)
+            {
                 return true;
             }
-            if (obj == null) {
+            if (obj == null)
+            {
                 return false;
             }
-            if (!(obj instanceof WriterBuffer)) {
+            if (!(obj instanceof WriterBuffer))
+            {
                 return false;
             }
             final WriterBuffer other = (WriterBuffer) obj;
-            if (myRing == null) {
-                if (other.myRing != null) {
+            if (myRing == null)
+            {
+                if (other.myRing != null)
+                {
                     return false;
                 }
-            } else if (!myRing.equals(other.myRing)) {
+            } else if (!myRing.equals(other.myRing))
+            {
                 return false;
             }
             return true;
         }
 
         @Override
-        public void flush() throws IOException {
+        public void flush() throws IOException
+        {
             ;
         }
 
-        public void flush(final Printer printer) {
+        public void flush(final Printer printer)
+        {
             myRing.flush(printer);
         }
 
         @Override
-        public int hashCode() {
+        public int hashCode()
+        {
             final int prime = 31;
             int result = 1;
             result = (prime * result) + ((myRing == null) ? 0 : myRing.hashCode());
@@ -205,8 +245,10 @@ public final class CharacterRing implements CharSequence, Appendable, Serializab
         }
 
         @Override
-        public void write(final char[] cbuf, final int off, final int len) throws IOException {
-            for (int i = 0; i < len; i++) {
+        public void write(final char[] cbuf, final int off, final int len) throws IOException
+        {
+            for (int i = 0; i < len; i++)
+            {
                 myRing.append(cbuf[off + i]);
             }
         }
@@ -218,7 +260,8 @@ public final class CharacterRing implements CharSequence, Appendable, Serializab
     private final char[] myCharacters;
     private char myCursor = 0;
 
-    public CharacterRing() {
+    public CharacterRing()
+    {
 
         super();
 
@@ -227,82 +270,103 @@ public final class CharacterRing implements CharSequence, Appendable, Serializab
     }
 
     @Override
-    public CharacterRing append(final char c) throws IOException {
+    public CharacterRing append(final char c) throws IOException
+    {
         myCharacters[myCursor++] = c;
         return this;
     }
 
     @Override
-    public CharacterRing append(final CharSequence csq) throws IOException {
+    public CharacterRing append(final CharSequence csq) throws IOException
+    {
         return this.append(csq, 0, csq.length());
     }
 
     @Override
-    public CharacterRing append(final CharSequence csq, final int start, final int end) throws IOException {
-        for (int i = start; i < end; i++) {
+    public CharacterRing append(final CharSequence csq, final int start, final int end) throws IOException
+    {
+        for (int i = start; i < end; i++)
+        {
             this.append(csq.charAt(i));
         }
         return this;
     }
 
-    public OutputStreamBuffer asOutputStream() {
+    public OutputStreamBuffer asOutputStream()
+    {
         return new OutputStreamBuffer(this);
     }
 
-    public PrinterBuffer asPrinter() {
+    public PrinterBuffer asPrinter()
+    {
         return new PrinterBuffer(this);
     }
 
-    public WriterBuffer asWriter() {
+    public WriterBuffer asWriter()
+    {
         return new WriterBuffer(this);
     }
 
     @Override
-    public char charAt(final int index) {
+    public char charAt(final int index)
+    {
         return myCharacters[(myCursor + index) % length];
     }
 
-    public void clear() {
+    public void clear()
+    {
         Arrays.fill(myCharacters, ASCII.NULL);
         myCursor = 0;
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return false;
         }
-        if (!(obj instanceof CharacterRing)) {
+        if (!(obj instanceof CharacterRing))
+        {
             return false;
         }
         final CharacterRing other = (CharacterRing) obj;
-        if (!Arrays.equals(myCharacters, other.myCharacters)) {
+        if (!Arrays.equals(myCharacters, other.myCharacters))
+        {
             return false;
         }
-        if (myCursor != other.myCursor) {
+        if (myCursor != other.myCursor)
+        {
             return false;
         }
         return true;
     }
 
-    public void flush(final BasicLogger.Printer receiver) {
+    public void flush(final BasicLogger.Printer receiver)
+    {
 
-        synchronized (receiver) {
+        synchronized (receiver)
+        {
 
             final int tmpCursor = myCursor;
             char tmpChar;
-            for (int i = tmpCursor; i < length; i++) {
+            for (int i = tmpCursor; i < length; i++)
+            {
                 tmpChar = myCharacters[i];
-                if (tmpChar != ASCII.NULL) {
+                if (tmpChar != ASCII.NULL)
+                {
                     receiver.print(tmpChar);
                 }
             }
-            for (int i = 0; i < tmpCursor; i++) {
+            for (int i = 0; i < tmpCursor; i++)
+            {
                 tmpChar = myCharacters[i];
-                if (tmpChar != ASCII.NULL) {
+                if (tmpChar != ASCII.NULL)
+                {
                     receiver.print(tmpChar);
                 }
             }
@@ -312,7 +376,8 @@ public final class CharacterRing implements CharSequence, Appendable, Serializab
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = 1;
         result = (prime * result) + Arrays.hashCode(myCharacters);
@@ -320,18 +385,23 @@ public final class CharacterRing implements CharSequence, Appendable, Serializab
         return result;
     }
 
-    public int indexOfFirst(final char c) {
+    public int indexOfFirst(final char c)
+    {
 
         int retVal = -1;
 
         final char tmpCursor = myCursor;
-        for (int i = tmpCursor; (retVal < 0) && (i < length); i++) {
-            if (myCharacters[i] == c) {
+        for (int i = tmpCursor; (retVal < 0) && (i < length); i++)
+        {
+            if (myCharacters[i] == c)
+            {
                 retVal = i - tmpCursor;
             }
         }
-        for (int i = 0; (retVal < 0) && (i < tmpCursor); i++) {
-            if (myCharacters[i] == c) {
+        for (int i = 0; (retVal < 0) && (i < tmpCursor); i++)
+        {
+            if (myCharacters[i] == c)
+            {
                 retVal = i + tmpCursor;
             }
         }
@@ -339,18 +409,23 @@ public final class CharacterRing implements CharSequence, Appendable, Serializab
         return retVal;
     }
 
-    public int indexOfLast(final char c) {
+    public int indexOfLast(final char c)
+    {
 
         int retVal = -1;
 
         final char tmpCursor = myCursor;
-        for (int i = tmpCursor - 1; (retVal < 0) && (i >= 0); i--) {
-            if (myCharacters[i] == c) {
+        for (int i = tmpCursor - 1; (retVal < 0) && (i >= 0); i--)
+        {
+            if (myCharacters[i] == c)
+            {
                 retVal = i + tmpCursor;
             }
         }
-        for (int i = length - 1; (retVal < 0) && (i >= tmpCursor); i--) {
-            if (myCharacters[i] == c) {
+        for (int i = length - 1; (retVal < 0) && (i >= tmpCursor); i--)
+        {
+            if (myCharacters[i] == c)
+            {
                 retVal = i - tmpCursor;
             }
         }
@@ -359,17 +434,20 @@ public final class CharacterRing implements CharSequence, Appendable, Serializab
     }
 
     @Override
-    public int length() {
+    public int length()
+    {
         return length;
     }
 
     @Override
-    public CharSequence subSequence(final int start, final int end) {
+    public CharSequence subSequence(final int start, final int end)
+    {
         return CharBuffer.wrap(this, start, end);
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
 
         final char tmpCursor = myCursor;
 
@@ -379,7 +457,8 @@ public final class CharacterRing implements CharSequence, Appendable, Serializab
         return tmpFirstPart + tmpSecondPart;
     }
 
-    char getCursor() {
+    char getCursor()
+    {
         return myCursor;
     }
 

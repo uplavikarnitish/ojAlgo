@@ -26,35 +26,43 @@ import java.math.BigDecimal;
 import org.ojalgo.access.Access2D;
 import org.ojalgo.scalar.ComplexNumber;
 
-public final class FillConjugated extends MatrixOperation {
+public final class FillConjugated extends MatrixOperation
+{
 
     public static final FillConjugated SETUP = new FillConjugated();
 
     public static int THRESHOLD = 128;
 
-    public static void invoke(final BigDecimal[] data, final int structure, final int firstColumn, final int limitColumn, final Access2D<?> source) {
+    public static void invoke(final BigDecimal[] data, final int structure, final int firstColumn, final int limitColumn, final Access2D<?> source)
+    {
         FillTransposed.invoke(data, structure, firstColumn, limitColumn, source);
     }
 
-    public static void invoke(final ComplexNumber[] data, final int structure, final int firstColumn, final int limitColumn, final Access2D<?> source) {
+    public static void invoke(final ComplexNumber[] data, final int structure, final int firstColumn, final int limitColumn, final Access2D<?> source)
+    {
         int tmpIndex = structure * firstColumn;
-        for (int j = firstColumn; j < limitColumn; j++) {
-            for (int i = 0; i < structure; i++) {
+        for (int j = firstColumn; j < limitColumn; j++)
+        {
+            for (int i = 0; i < structure; i++)
+            {
                 data[tmpIndex++] = ComplexNumber.valueOf(source.get(j, i)).conjugate();
             }
         }
     }
 
-    public static void invoke(final double[] data, final int structure, final int firstColumn, final int limitColumn, final Access2D<?> source) {
+    public static void invoke(final double[] data, final int structure, final int firstColumn, final int limitColumn, final Access2D<?> source)
+    {
         FillTransposed.invoke(data, structure, firstColumn, limitColumn, source);
     }
 
-    private FillConjugated() {
+    private FillConjugated()
+    {
         super();
     }
 
     @Override
-    public int threshold() {
+    public int threshold()
+    {
         return THRESHOLD;
     }
 

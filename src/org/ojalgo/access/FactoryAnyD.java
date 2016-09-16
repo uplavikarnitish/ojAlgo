@@ -23,7 +23,8 @@ package org.ojalgo.access;
 
 import org.ojalgo.function.NullaryFunction;
 
-public interface FactoryAnyD<I extends StructureAnyD> {
+public interface FactoryAnyD<I extends StructureAnyD>
+{
 
     I copy(AccessAnyD<?> source);
 

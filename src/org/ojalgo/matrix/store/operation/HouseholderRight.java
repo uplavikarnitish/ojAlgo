@@ -29,13 +29,15 @@ import org.ojalgo.function.BigFunction;
 import org.ojalgo.matrix.transformation.Householder;
 import org.ojalgo.scalar.ComplexNumber;
 
-public final class HouseholderRight extends MatrixOperation {
+public final class HouseholderRight extends MatrixOperation
+{
 
     public static final HouseholderRight SETUP = new HouseholderRight();
 
     public static int THRESHOLD = 512;
 
-    public static void invoke(final BigDecimal[] data, final int first, final int limit, final int tmpColDim, final Householder.Big householder) {
+    public static void invoke(final BigDecimal[] data, final int first, final int limit, final int tmpColDim, final Householder.Big householder)
+    {
 
         final BigDecimal[] tmpHouseholderVector = householder.vector;
         final int tmpFirstNonZero = householder.first;
@@ -45,23 +47,27 @@ public final class HouseholderRight extends MatrixOperation {
 
         BigDecimal tmpScale;
         int tmpIndex;
-        for (int i = first; i < limit; i++) {
+        for (int i = first; i < limit; i++)
+        {
             tmpScale = BigMath.ZERO;
             tmpIndex = i + (tmpFirstNonZero * tmpRowDim);
-            for (int j = tmpFirstNonZero; j < tmpColDim; j++) {
+            for (int j = tmpFirstNonZero; j < tmpColDim; j++)
+            {
                 tmpScale = BigFunction.ADD.invoke(tmpScale, BigFunction.MULTIPLY.invoke(tmpHouseholderVector[j], data[tmpIndex]));
                 tmpIndex += tmpRowDim;
             }
             tmpScale = BigFunction.MULTIPLY.invoke(tmpScale, tmpBeta);
             tmpIndex = i + (tmpFirstNonZero * tmpRowDim);
-            for (int j = tmpFirstNonZero; j < tmpColDim; j++) {
+            for (int j = tmpFirstNonZero; j < tmpColDim; j++)
+            {
                 data[tmpIndex] = BigFunction.SUBTRACT.invoke(data[tmpIndex], BigFunction.MULTIPLY.invoke(tmpScale, tmpHouseholderVector[j]));
                 tmpIndex += tmpRowDim;
             }
         }
     }
 
-    public static void invoke(final ComplexNumber[] data, final int first, final int limit, final int tmpColDim, final Householder.Complex householder) {
+    public static void invoke(final ComplexNumber[] data, final int first, final int limit, final int tmpColDim, final Householder.Complex householder)
+    {
 
         final ComplexNumber[] tmpHouseholderVector = householder.vector;
         final int tmpFirstNonZero = householder.first;
@@ -71,16 +77,19 @@ public final class HouseholderRight extends MatrixOperation {
 
         ComplexNumber tmpScale;
         int tmpIndex;
-        for (int i = first; i < limit; i++) {
+        for (int i = first; i < limit; i++)
+        {
             tmpScale = ComplexNumber.ZERO;
             tmpIndex = i + (tmpFirstNonZero * tmpRowDim);
-            for (int j = tmpFirstNonZero; j < tmpColDim; j++) {
+            for (int j = tmpFirstNonZero; j < tmpColDim; j++)
+            {
                 tmpScale = tmpScale.add(tmpHouseholderVector[j].conjugate().multiply(data[tmpIndex].conjugate()));
                 tmpIndex += tmpRowDim;
             }
             tmpScale = tmpScale.multiply(tmpBeta);
             tmpIndex = i + (tmpFirstNonZero * tmpRowDim);
-            for (int j = tmpFirstNonZero; j < tmpColDim; j++) {
+            for (int j = tmpFirstNonZero; j < tmpColDim; j++)
+            {
                 data[tmpIndex] = data[tmpIndex].conjugate().subtract(tmpScale.multiply(tmpHouseholderVector[j])).conjugate();
                 tmpIndex += tmpRowDim;
             }
@@ -88,21 +97,25 @@ public final class HouseholderRight extends MatrixOperation {
     }
 
     public static void invoke(final double[] data, final int structure, final int first, final int limit, final int numberOfColumns,
-            final Householder.Primitive householder, final double[] work) {
+                              final Householder.Primitive householder, final double[] work)
+    {
 
         final double[] tmpHouseholderVector = householder.vector;
         final int tmpFirstNonZero = householder.first;
         final double tmpBeta = householder.beta;
 
-        for (int j = tmpFirstNonZero; j < numberOfColumns; j++) {
+        for (int j = tmpFirstNonZero; j < numberOfColumns; j++)
+        {
             SubtractScaledVector.invoke(work, 0, data, j * structure, -tmpBeta * tmpHouseholderVector[j], first, limit);
         }
-        for (int j = tmpFirstNonZero; j < numberOfColumns; j++) {
+        for (int j = tmpFirstNonZero; j < numberOfColumns; j++)
+        {
             SubtractScaledVector.invoke(data, j * structure, work, 0, tmpHouseholderVector[j], first, limit);
         }
     }
 
-    private static void invoke2old(final double[] data, final int first, final int limit, final int tmpColDim, final Householder.Primitive householder) {
+    private static void invoke2old(final double[] data, final int first, final int limit, final int tmpColDim, final Householder.Primitive householder)
+    {
 
         final double[] tmpHouseholderVector = householder.vector;
         final int tmpFirstNonZero = householder.first;
@@ -112,28 +125,33 @@ public final class HouseholderRight extends MatrixOperation {
 
         double tmpScale;
         int tmpIndex;
-        for (int i = first; i < limit; i++) {
+        for (int i = first; i < limit; i++)
+        {
             tmpScale = PrimitiveMath.ZERO;
             tmpIndex = i + (tmpFirstNonZero * tmpRowDim);
-            for (int j = tmpFirstNonZero; j < tmpColDim; j++) {
+            for (int j = tmpFirstNonZero; j < tmpColDim; j++)
+            {
                 tmpScale += tmpHouseholderVector[j] * data[tmpIndex];
                 tmpIndex += tmpRowDim;
             }
             tmpScale *= tmpBeta;
             tmpIndex = i + (tmpFirstNonZero * tmpRowDim);
-            for (int j = tmpFirstNonZero; j < tmpColDim; j++) {
+            for (int j = tmpFirstNonZero; j < tmpColDim; j++)
+            {
                 data[tmpIndex] -= tmpScale * tmpHouseholderVector[j];
                 tmpIndex += tmpRowDim;
             }
         }
     }
 
-    private HouseholderRight() {
+    private HouseholderRight()
+    {
         super();
     }
 
     @Override
-    public int threshold() {
+    public int threshold()
+    {
         return THRESHOLD;
     }
 

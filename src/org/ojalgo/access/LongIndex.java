@@ -21,11 +21,13 @@
  */
 package org.ojalgo.access;
 
-public final class LongIndex implements Comparable<LongIndex> {
+public final class LongIndex implements Comparable<LongIndex>
+{
 
     public final long index;
 
-    public LongIndex(final long anIndex) {
+    public LongIndex(final long anIndex)
+    {
 
         super();
 
@@ -33,34 +35,42 @@ public final class LongIndex implements Comparable<LongIndex> {
     }
 
     @SuppressWarnings("unused")
-    private LongIndex() {
+    private LongIndex()
+    {
         this(-1L);
     }
 
-    public int compareTo(final LongIndex ref) {
+    public int compareTo(final LongIndex ref)
+    {
         return Long.compare(index, ref.index);
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return false;
         }
-        if (!(obj instanceof LongIndex)) {
+        if (!(obj instanceof LongIndex))
+        {
             return false;
         }
         final LongIndex other = (LongIndex) obj;
-        if (index != other.index) {
+        if (index != other.index)
+        {
             return false;
         }
         return true;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = 1;
         result = (prime * result) + (int) (index ^ (index >>> 32));
@@ -68,7 +78,8 @@ public final class LongIndex implements Comparable<LongIndex> {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return Long.toString(index);
     }
 

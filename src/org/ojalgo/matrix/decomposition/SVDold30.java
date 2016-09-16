@@ -54,17 +54,21 @@ import org.ojalgo.type.context.NumberContext;
  *
  * @author apete
  */
-abstract class SVDold30<N extends Number & Comparable<N>> extends SingularValueDecomposition<N> {
+abstract class SVDold30<N extends Number & Comparable<N>> extends SingularValueDecomposition<N>
+{
 
-    static final class Big extends SVDold30<BigDecimal> {
+    static final class Big extends SVDold30<BigDecimal>
+    {
 
-        Big() {
+        Big()
+        {
             super(BigDenseStore.FACTORY, new BidiagonalDecomposition.Big());
         }
 
         @Override
         protected Rotation<BigDecimal>[] rotations(final PhysicalStore<BigDecimal> aStore, final int aLowInd, final int aHighInd,
-                final Rotation<BigDecimal>[] retVal) {
+                                                   final Rotation<BigDecimal>[] retVal)
+        {
 
             final BigDecimal a00 = aStore.get(aLowInd, aLowInd);
             final BigDecimal a01 = aStore.get(aLowInd, aHighInd);
@@ -80,17 +84,21 @@ abstract class SVDold30<N extends Number & Comparable<N>> extends SingularValueD
             final BigDecimal cg; // cos Givens
             final BigDecimal sg; // sin Givens
 
-            if (y.signum() == 0) {
+            if (y.signum() == 0)
+            {
                 cg = BigFunction.SIGNUM.invoke(x);
                 sg = BigMath.ZERO;
-            } else if (x.signum() == 0) {
+            } else if (x.signum() == 0)
+            {
                 sg = BigFunction.SIGNUM.invoke(y);
                 cg = BigMath.ZERO;
-            } else if (y.abs().compareTo(x.abs()) == 1) {
+            } else if (y.abs().compareTo(x.abs()) == 1)
+            {
                 t = BigFunction.DIVIDE.invoke(x, y); // cot
                 sg = BigFunction.DIVIDE.invoke(BigFunction.SIGNUM.invoke(y), BigFunction.SQRT1PX2.invoke(t));
                 cg = sg.multiply(t);
-            } else {
+            } else
+            {
                 t = BigFunction.DIVIDE.invoke(y, x); // tan
                 cg = BigFunction.DIVIDE.invoke(BigFunction.SIGNUM.invoke(x), BigFunction.SQRT1PX2.invoke(t));
                 sg = cg.multiply(t);
@@ -115,15 +123,18 @@ abstract class SVDold30<N extends Number & Comparable<N>> extends SingularValueD
 
     }
 
-    static final class Complex extends SVDold30<ComplexNumber> {
+    static final class Complex extends SVDold30<ComplexNumber>
+    {
 
-        Complex() {
+        Complex()
+        {
             super(ComplexDenseStore.FACTORY, new BidiagonalDecomposition.Complex());
         }
 
         @Override
         protected Rotation<ComplexNumber>[] rotations(final PhysicalStore<ComplexNumber> aStore, final int aLowInd, final int aHighInd,
-                final Rotation<ComplexNumber>[] retVal) {
+                                                      final Rotation<ComplexNumber>[] retVal)
+        {
 
             final ComplexNumber a00 = aStore.get(aLowInd, aLowInd);
             final ComplexNumber a01 = aStore.get(aLowInd, aHighInd);
@@ -139,17 +150,21 @@ abstract class SVDold30<N extends Number & Comparable<N>> extends SingularValueD
             final ComplexNumber cg; // cos Givens
             final ComplexNumber sg; // sin Givens
 
-            if (ComplexNumber.isSmall(PrimitiveMath.ONE, y)) {
+            if (ComplexNumber.isSmall(PrimitiveMath.ONE, y))
+            {
                 cg = x.signum();
                 sg = ComplexNumber.ZERO;
-            } else if (ComplexNumber.isSmall(PrimitiveMath.ONE, x)) {
+            } else if (ComplexNumber.isSmall(PrimitiveMath.ONE, x))
+            {
                 sg = y.signum();
                 cg = ComplexNumber.ZERO;
-            } else if (y.compareTo(x) == 1) {
+            } else if (y.compareTo(x) == 1)
+            {
                 t = x.divide(y); // cot
                 sg = y.signum().divide(ComplexFunction.SQRT1PX2.invoke(t));
                 cg = sg.multiply(t);
-            } else {
+            } else
+            {
                 t = y.divide(x); // tan
                 cg = x.signum().divide(ComplexFunction.SQRT1PX2.invoke(t));
                 sg = cg.multiply(t);
@@ -174,14 +189,17 @@ abstract class SVDold30<N extends Number & Comparable<N>> extends SingularValueD
 
     }
 
-    static final class Primitive extends SVDold30<Double> {
+    static final class Primitive extends SVDold30<Double>
+    {
 
-        Primitive() {
+        Primitive()
+        {
             super(PrimitiveDenseStore.FACTORY, new BidiagonalDecomposition.Primitive());
         }
 
         @Override
-        protected Rotation<Double>[] rotations(final PhysicalStore<Double> aStore, final int aLowInd, final int aHighInd, final Rotation<Double>[] retVal) {
+        protected Rotation<Double>[] rotations(final PhysicalStore<Double> aStore, final int aLowInd, final int aHighInd, final Rotation<Double>[] retVal)
+        {
 
             final double a00 = aStore.doubleValue(aLowInd, aLowInd);
             final double a01 = aStore.doubleValue(aLowInd, aHighInd);
@@ -197,17 +215,21 @@ abstract class SVDold30<N extends Number & Comparable<N>> extends SingularValueD
             final double cg; // cos Givens
             final double sg; // sin Givens
 
-            if (PrimitiveScalar.isSmall(PrimitiveMath.ONE, y)) {
+            if (PrimitiveScalar.isSmall(PrimitiveMath.ONE, y))
+            {
                 cg = PrimitiveFunction.SIGNUM.invoke(x);
                 sg = PrimitiveMath.ZERO;
-            } else if (PrimitiveScalar.isSmall(PrimitiveMath.ONE, x)) {
+            } else if (PrimitiveScalar.isSmall(PrimitiveMath.ONE, x))
+            {
                 sg = PrimitiveFunction.SIGNUM.invoke(y);
                 cg = PrimitiveMath.ZERO;
-            } else if (PrimitiveFunction.ABS.invoke(y) > PrimitiveFunction.ABS.invoke(x)) {
+            } else if (PrimitiveFunction.ABS.invoke(y) > PrimitiveFunction.ABS.invoke(x))
+            {
                 t = x / y; // cot
                 sg = PrimitiveFunction.SIGNUM.invoke(y) / PrimitiveFunction.SQRT1PX2.invoke(t);
                 cg = sg * t;
-            } else {
+            } else
+            {
                 t = y / x; // tan
                 cg = PrimitiveFunction.SIGNUM.invoke(x) / PrimitiveFunction.SQRT1PX2.invoke(t);
                 sg = cg * t;
@@ -237,24 +259,29 @@ abstract class SVDold30<N extends Number & Comparable<N>> extends SingularValueD
     private final List<Rotation<N>> myQ1Rotations = new ArrayList<>();
     private final List<Rotation<N>> myQ2Rotations = new ArrayList<>();
 
-    protected SVDold30(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> aFactory, final BidiagonalDecomposition<N> aBidiagonal) {
+    protected SVDold30(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> aFactory, final BidiagonalDecomposition<N> aBidiagonal)
+    {
         super(aFactory, aBidiagonal);
     }
 
-    public boolean equals(final MatrixStore<N> aStore, final NumberContext context) {
+    public boolean equals(final MatrixStore<N> aStore, final NumberContext context)
+    {
         return MatrixUtils.equals(aStore, this, context);
     }
 
-    public boolean isOrdered() {
+    public boolean isOrdered()
+    {
         return false;
     }
 
-    public boolean isSolvable() {
+    public boolean isSolvable()
+    {
         return this.isComputed();
     }
 
     @Override
-    public void reset() {
+    public void reset()
+    {
 
         super.reset();
 
@@ -267,7 +294,8 @@ abstract class SVDold30<N extends Number & Comparable<N>> extends SingularValueD
 
     @Override
     @SuppressWarnings("unchecked")
-    protected boolean doCompute(final ElementsSupplier<N> aStore, final boolean singularValuesOnly, final boolean fullSize) {
+    protected boolean doCompute(final ElementsSupplier<N> aStore, final boolean singularValuesOnly, final boolean fullSize)
+    {
 
         final int tmpMinDim = (int) Math.min(aStore.countRows(), aStore.countColumns());
 
@@ -286,17 +314,21 @@ abstract class SVDold30<N extends Number & Comparable<N>> extends SingularValueD
 
         final N tmpZero = this.scalar().zero().getNumber();
         boolean tmpNotAllZeros = true;
-        for (int l = 0; tmpNotAllZeros && (l < tmpMinDim); l++) {
+        for (int l = 0; tmpNotAllZeros && (l < tmpMinDim); l++)
+        {
 
             tmpNotAllZeros = false;
 
             int i;
             //for (int i0 = tmpMinDim - 1; i0 > 0; i0--) { // Performs much slower
-            for (int i0 = 1; i0 < tmpMinDim; i0++) {
-                for (int j = 0; j < (tmpMinDim - i0); j++) {
+            for (int i0 = 1; i0 < tmpMinDim; i0++)
+            {
+                for (int j = 0; j < (tmpMinDim - i0); j++)
+                {
                     i = i0 + j;
 
-                    if (!tmpSimilar.isSmall(i, j, PrimitiveMath.ONE) || !tmpSimilar.isSmall(j, i, PrimitiveMath.ONE)) {
+                    if (!tmpSimilar.isSmall(i, j, PrimitiveMath.ONE) || !tmpSimilar.isSmall(j, i, PrimitiveMath.ONE))
+                    {
 
                         tmpNotAllZeros = true;
 
@@ -319,17 +351,21 @@ abstract class SVDold30<N extends Number & Comparable<N>> extends SingularValueD
         }
 
         double tmpSingularValue;
-        for (int ij = 0; ij < tmpMinDim; ij++) {
+        for (int ij = 0; ij < tmpMinDim; ij++)
+        {
 
-            if (tmpSimilar.isSmall(ij, ij, PrimitiveMath.ONE)) {
+            if (tmpSimilar.isSmall(ij, ij, PrimitiveMath.ONE))
+            {
 
                 tmpSingularValue = PrimitiveMath.ZERO;
 
-            } else if (tmpSimilar.isAbsolute(ij, ij)) {
+            } else if (tmpSimilar.isAbsolute(ij, ij))
+            {
 
                 tmpSingularValue = tmpSimilar.doubleValue(ij, ij);
 
-            } else {
+            } else
+            {
 
                 final Scalar<N> tmpDiagSclr = tmpSimilar.toScalar(ij, ij);
                 final N tmpSignum = tmpDiagSclr.signum().getNumber();
@@ -344,28 +380,32 @@ abstract class SVDold30<N extends Number & Comparable<N>> extends SingularValueD
 
         this.getSingularValues().sortDescending();
 
-        myFutureQ1 = DaemonPoolExecutor.invoke(() -> {
+        myFutureQ1 = DaemonPoolExecutor.invoke(() ->
+        {
 
             final PhysicalStore<N> retVal = SVDold30.this.getBidiagonalQ1();
 
             final List<Rotation<N>> tmpRotations1 = myQ1Rotations;
 
             final int tmpLimit = tmpRotations1.size();
-            for (int r = 0; r < tmpLimit; r++) {
+            for (int r = 0; r < tmpLimit; r++)
+            {
                 retVal.transformRight(tmpRotations1.get(r));
             }
 
             return retVal;
         });
 
-        myFutureQ2 = DaemonPoolExecutor.invoke(() -> {
+        myFutureQ2 = DaemonPoolExecutor.invoke(() ->
+        {
 
             final PhysicalStore<N> retVal = SVDold30.this.getBidiagonalQ2();
 
             final List<Rotation<N>> tmpRotations1 = myQ2Rotations;
 
             final int tmpLimit = tmpRotations1.size();
-            for (int r = 0; r < tmpLimit; r++) {
+            for (int r = 0; r < tmpLimit; r++)
+            {
                 retVal.transformRight(tmpRotations1.get(r));
             }
 
@@ -375,19 +415,22 @@ abstract class SVDold30<N extends Number & Comparable<N>> extends SingularValueD
         return this.computed(true);
     }
 
-    protected DiagonalAccess<N> extractSimilar(final PhysicalStore<N> aStore, final boolean aNormalAspectRatio) {
+    protected DiagonalAccess<N> extractSimilar(final PhysicalStore<N> aStore, final boolean aNormalAspectRatio)
+    {
 
         final DecompositionStore<N> tmpArray2D = ((DecompositionStore<N>) aStore);
 
         final Array1D<N> tmpMain = (Array1D<N>) tmpArray2D.sliceDiagonal(0, 0);
 
-        if (aNormalAspectRatio) {
+        if (aNormalAspectRatio)
+        {
 
             final Array1D<N> tmpSuper = (Array1D<N>) tmpArray2D.sliceDiagonal(0, 1);
 
             return new DiagonalAccess<>(tmpMain, tmpSuper, null, this.scalar().zero().getNumber());
 
-        } else {
+        } else
+        {
 
             final Array1D<N> tmpSub = (Array1D<N>) tmpArray2D.sliceDiagonal(1, 0);
 
@@ -396,7 +439,8 @@ abstract class SVDold30<N extends Number & Comparable<N>> extends SingularValueD
     }
 
     @Override
-    protected MatrixStore<N> makeD() {
+    protected MatrixStore<N> makeD()
+    {
 
         //        final int tmpMinDim = this..getMinDim();
         //
@@ -410,29 +454,38 @@ abstract class SVDold30<N extends Number & Comparable<N>> extends SingularValueD
     }
 
     @Override
-    protected MatrixStore<N> makeQ1() {
-        try {
+    protected MatrixStore<N> makeQ1()
+    {
+        try
+        {
             return myFutureQ1.get();
-        } catch (final InterruptedException anException) {
+        } catch (final InterruptedException anException)
+        {
             throw new ProgrammingError(anException.getMessage());
-        } catch (final ExecutionException anException) {
+        } catch (final ExecutionException anException)
+        {
             throw new ProgrammingError(anException.getMessage());
         }
     }
 
     @Override
-    protected MatrixStore<N> makeQ2() {
-        try {
+    protected MatrixStore<N> makeQ2()
+    {
+        try
+        {
             return myFutureQ2.get();
-        } catch (final InterruptedException anException) {
+        } catch (final InterruptedException anException)
+        {
             throw new ProgrammingError(anException.getMessage());
-        } catch (final ExecutionException anException) {
+        } catch (final ExecutionException anException)
+        {
             throw new ProgrammingError(anException.getMessage());
         }
     }
 
     @Override
-    protected Array1D<Double> makeSingularValues() {
+    protected Array1D<Double> makeSingularValues()
+    {
         // TODO Auto-generated method stub
         return null;
     }

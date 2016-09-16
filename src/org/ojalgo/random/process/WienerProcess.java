@@ -27,11 +27,13 @@ import org.ojalgo.function.PrimitiveFunction;
 import org.ojalgo.random.Normal;
 import org.ojalgo.random.RandomUtils;
 
-public final class WienerProcess extends AbstractProcess<Normal> {
+public final class WienerProcess extends AbstractProcess<Normal>
+{
 
     private static final Normal GENERATOR = new Normal();
 
-    public WienerProcess() {
+    public WienerProcess()
+    {
 
         super();
 
@@ -39,51 +41,60 @@ public final class WienerProcess extends AbstractProcess<Normal> {
     }
 
     @SuppressWarnings("unused")
-    private WienerProcess(final double initialValue) {
+    private WienerProcess(final double initialValue)
+    {
 
         super();
 
         this.setValue(initialValue);
     }
 
-    public Normal getDistribution(final double evaluationPoint) {
+    public Normal getDistribution(final double evaluationPoint)
+    {
         return new Normal(this.getValue(), PrimitiveFunction.SQRT.invoke(evaluationPoint));
     }
 
     @Override
-    protected double getNormalisedRandomIncrement() {
+    protected double getNormalisedRandomIncrement()
+    {
         return GENERATOR.doubleValue();
     }
 
     @Override
-    protected double step(final double currentValue, final double stepSize, final double normalisedRandomIncrement) {
+    protected double step(final double currentValue, final double stepSize, final double normalisedRandomIncrement)
+    {
         final double retVal = currentValue + (PrimitiveFunction.SQRT.invoke(stepSize) * normalisedRandomIncrement);
         this.setValue(retVal);
         return retVal;
     }
 
     @Override
-    double getExpected(final double stepSize) {
+    double getExpected(final double stepSize)
+    {
         return this.getValue();
     }
 
     @Override
-    double getLowerConfidenceQuantile(final double stepSize, final double confidence) {
+    double getLowerConfidenceQuantile(final double stepSize, final double confidence)
+    {
         return this.getValue() - (PrimitiveFunction.SQRT.invoke(stepSize) * SQRT_TWO * RandomUtils.erfi(confidence));
     }
 
     @Override
-    double getStandardDeviation(final double stepSize) {
+    double getStandardDeviation(final double stepSize)
+    {
         return PrimitiveFunction.SQRT.invoke(stepSize);
     }
 
     @Override
-    double getUpperConfidenceQuantile(final double stepSize, final double confidence) {
+    double getUpperConfidenceQuantile(final double stepSize, final double confidence)
+    {
         return this.getValue() + (PrimitiveFunction.SQRT.invoke(stepSize) * SQRT_TWO * RandomUtils.erfi(confidence));
     }
 
     @Override
-    double getVariance(final double stepSize) {
+    double getVariance(final double stepSize)
+    {
         return stepSize;
     }
 

@@ -26,19 +26,23 @@ package org.ojalgo.matrix.store;
  *
  * @author apete
  */
-abstract class SelectingStore<N extends Number> extends LogicalStore<N> {
+abstract class SelectingStore<N extends Number> extends LogicalStore<N>
+{
 
-    protected SelectingStore(final MatrixStore<N> base, final int rowsCount, final int columnsCount) {
+    protected SelectingStore(final MatrixStore<N> base, final int rowsCount, final int columnsCount)
+    {
         super(base, rowsCount, columnsCount);
     }
 
     @Override
-    public void supplyTo(final ElementsConsumer<N> consumer) {
+    public void supplyTo(final ElementsConsumer<N> consumer)
+    {
         this.addNonZerosTo(consumer);
     }
 
     @Override
-    protected void addNonZerosTo(final ElementsConsumer<N> consumer) {
+    protected void addNonZerosTo(final ElementsConsumer<N> consumer)
+    {
         consumer.fillMatching(this);
     }
 

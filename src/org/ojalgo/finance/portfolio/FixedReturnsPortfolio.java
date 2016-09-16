@@ -26,18 +26,21 @@ import java.util.List;
 import org.ojalgo.ProgrammingError;
 import org.ojalgo.matrix.BasicMatrix;
 
-public final class FixedReturnsPortfolio extends EquilibriumModel {
+public final class FixedReturnsPortfolio extends EquilibriumModel
+{
 
     private final BasicMatrix myReturns;
 
-    public FixedReturnsPortfolio(final Context aContext) {
+    public FixedReturnsPortfolio(final Context aContext)
+    {
 
         super(aContext);
 
         myReturns = aContext.getAssetReturns();
     }
 
-    public FixedReturnsPortfolio(final MarketEquilibrium aMarketEquilibrium, final BasicMatrix returnsVector) {
+    public FixedReturnsPortfolio(final MarketEquilibrium aMarketEquilibrium, final BasicMatrix returnsVector)
+    {
 
         super(aMarketEquilibrium);
 
@@ -45,7 +48,8 @@ public final class FixedReturnsPortfolio extends EquilibriumModel {
     }
 
     @SuppressWarnings("unused")
-    private FixedReturnsPortfolio(final MarketEquilibrium aMarketEquilibrium) {
+    private FixedReturnsPortfolio(final MarketEquilibrium aMarketEquilibrium)
+    {
 
         super(aMarketEquilibrium);
 
@@ -54,21 +58,25 @@ public final class FixedReturnsPortfolio extends EquilibriumModel {
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    public void calibrate(final FinancePortfolio targetWeights) {
+    public void calibrate(final FinancePortfolio targetWeights)
+    {
         this.calibrate(targetWeights.getWeights());
     }
 
-    public void calibrate(final List<? extends Number> targetWeights) {
+    public void calibrate(final List<? extends Number> targetWeights)
+    {
         this.calibrate(FinancePortfolio.MATRIX_FACTORY.columns(targetWeights), myReturns);
     }
 
     @Override
-    protected BasicMatrix calculateAssetReturns() {
+    protected BasicMatrix calculateAssetReturns()
+    {
         return myReturns;
     }
 
     @Override
-    protected BasicMatrix calculateAssetWeights() {
+    protected BasicMatrix calculateAssetWeights()
+    {
         return this.calculateAssetWeights(myReturns);
     }
 

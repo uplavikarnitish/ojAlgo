@@ -29,80 +29,99 @@ import org.ojalgo.access.Access1D;
 import org.ojalgo.array.Array1D;
 import org.ojalgo.array.PrimitiveArray;
 
-public abstract class PrimitiveSeries implements Access1D<Double> {
+public abstract class PrimitiveSeries implements Access1D<Double>
+{
 
-    public static PrimitiveSeries copy(final Access1D<?> template) {
+    public static PrimitiveSeries copy(final Access1D<?> template)
+    {
         return new AccessSeries(Array1D.PRIMITIVE.copy(template));
     }
 
-    public static PrimitiveSeries wrap(final Access1D<?> base) {
+    public static PrimitiveSeries wrap(final Access1D<?> base)
+    {
         return new AccessSeries(base);
     }
 
-    protected PrimitiveSeries() {
+    protected PrimitiveSeries()
+    {
         super();
     }
 
-    public PrimitiveSeries add(final double addend) {
+    public PrimitiveSeries add(final double addend)
+    {
         return new UnaryFunctionSeries(this, ADD.second(addend));
     }
 
-    public PrimitiveSeries add(final PrimitiveSeries addend) {
+    public PrimitiveSeries add(final PrimitiveSeries addend)
+    {
         return new BinaryFunctionSeries(this, ADD, addend);
     }
 
-    public PrimitiveSeries copy() {
+    public PrimitiveSeries copy()
+    {
         return this.toDataSeries();
     }
 
-    public long count() {
+    public long count()
+    {
         return this.size();
     }
 
     /**
      * period == 1
      */
-    public PrimitiveSeries differences() {
+    public PrimitiveSeries differences()
+    {
         return new DifferencesSeries(this, 1);
     }
 
-    public PrimitiveSeries differences(final int period) {
+    public PrimitiveSeries differences(final int period)
+    {
         return new DifferencesSeries(this, period);
     }
 
-    public PrimitiveSeries divide(final double divisor) {
+    public PrimitiveSeries divide(final double divisor)
+    {
         return new UnaryFunctionSeries(this, DIVIDE.second(divisor));
     }
 
-    public PrimitiveSeries divide(final PrimitiveSeries divisor) {
+    public PrimitiveSeries divide(final PrimitiveSeries divisor)
+    {
         return new BinaryFunctionSeries(this, DIVIDE, divisor);
     }
 
-    public final double doubleValue(final long index) {
+    public final double doubleValue(final long index)
+    {
         return this.value((int) index);
     }
 
-    public PrimitiveSeries exp() {
+    public PrimitiveSeries exp()
+    {
         return new UnaryFunctionSeries(this, EXP);
     }
 
-    public final Double get(final int index) {
+    public final Double get(final int index)
+    {
         return this.value(index);
     }
 
-    public final Double get(final long index) {
+    public final Double get(final long index)
+    {
         return this.value((int) index);
     }
 
-    public PrimitiveSeries log() {
+    public PrimitiveSeries log()
+    {
         return new UnaryFunctionSeries(this, LOG);
     }
 
-    public PrimitiveSeries multiply(final double multiplicand) {
+    public PrimitiveSeries multiply(final double multiplicand)
+    {
         return new UnaryFunctionSeries(this, MULTIPLY.second(multiplicand));
     }
 
-    public PrimitiveSeries multiply(final PrimitiveSeries multiplicand) {
+    public PrimitiveSeries multiply(final PrimitiveSeries multiplicand)
+    {
         return new BinaryFunctionSeries(this, MULTIPLY, multiplicand);
     }
 
@@ -110,63 +129,74 @@ public abstract class PrimitiveSeries implements Access1D<Double> {
      * A positive valued shift will prune that many elements off the head of the series. A negative valued
      * shift will prune that many elements off the tail of the series.
      */
-    public PrimitiveSeries prune(final int shift) {
+    public PrimitiveSeries prune(final int shift)
+    {
         return new PrunedSeries(this, shift);
     }
 
     /**
      * period == 1
      */
-    public PrimitiveSeries quotients() {
+    public PrimitiveSeries quotients()
+    {
         return new QuotientsSeries(this, 1);
     }
 
-    public PrimitiveSeries quotients(final int period) {
+    public PrimitiveSeries quotients(final int period)
+    {
         return new QuotientsSeries(this, period);
     }
 
-    public PrimitiveSeries runningProduct(final double initialValue) {
+    public PrimitiveSeries runningProduct(final double initialValue)
+    {
 
         final int tmpNewSize = this.size() + 1;
 
         final double[] tmpValues = new double[tmpNewSize];
 
         double tmpAggrVal = tmpValues[0] = initialValue;
-        for (int i = 1; i < tmpNewSize; i++) {
+        for (int i = 1; i < tmpNewSize; i++)
+        {
             tmpValues[i] = tmpAggrVal *= this.value(i - 1);
         }
 
         return DataSeries.wrap(tmpValues);
     }
 
-    public PrimitiveSeries runningSum(final double initialValue) {
+    public PrimitiveSeries runningSum(final double initialValue)
+    {
 
         final int tmpNewSize = this.size() + 1;
 
         final double[] tmpValues = new double[tmpNewSize];
 
         double tmpAggrVal = tmpValues[0] = initialValue;
-        for (int i = 1; i < tmpNewSize; i++) {
+        for (int i = 1; i < tmpNewSize; i++)
+        {
             tmpValues[i] = tmpAggrVal += this.value(i - 1);
         }
 
         return DataSeries.wrap(tmpValues);
     }
 
-    public PrimitiveSeries sample(final int interval) {
+    public PrimitiveSeries sample(final int interval)
+    {
 
-        if (interval <= 1) {
+        if (interval <= 1)
+        {
 
             throw new IllegalArgumentException();
 
-        } else {
+        } else
+        {
 
             final int tmpSampleSize = this.size() / interval;
             final int tmpLastIndex = this.size() - 1;
 
             final PrimitiveArray tmpValues = PrimitiveArray.make(tmpSampleSize);
 
-            for (int i = 0; i < tmpSampleSize; i++) {
+            for (int i = 0; i < tmpSampleSize; i++)
+            {
                 tmpValues.set(i, tmpLastIndex - (i * interval));
             }
 
@@ -176,31 +206,37 @@ public abstract class PrimitiveSeries implements Access1D<Double> {
 
     public abstract int size();
 
-    public PrimitiveSeries subtract(final double subtrahend) {
+    public PrimitiveSeries subtract(final double subtrahend)
+    {
         return new UnaryFunctionSeries(this, SUBTRACT.second(subtrahend));
     }
 
-    public PrimitiveSeries subtract(final PrimitiveSeries subtrahend) {
+    public PrimitiveSeries subtract(final PrimitiveSeries subtrahend)
+    {
         return new BinaryFunctionSeries(this, SUBTRACT, subtrahend);
     }
 
-    public final DataSeries toDataSeries() {
+    public final DataSeries toDataSeries()
+    {
         return DataSeries.wrap(this.values());
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "PrimitiveSeries [values()=" + Arrays.toString(this.values()) + "]";
     }
 
     public abstract double value(final int index);
 
-    public final double[] values() {
+    public final double[] values()
+    {
 
         final int tmpSize = this.size();
         final double[] retVal = new double[tmpSize];
 
-        for (int i = 0; i < tmpSize; i++) {
+        for (int i = 0; i < tmpSize; i++)
+        {
             retVal[i] = this.value(i);
         }
 

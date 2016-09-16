@@ -27,38 +27,45 @@ import org.ojalgo.access.Access2D;
 /**
  * @author apete
  */
-final class WrapperStore<N extends Number> extends FactoryStore<N> {
+final class WrapperStore<N extends Number> extends FactoryStore<N>
+{
 
     private final Access2D<?> myAccess;
 
-    private WrapperStore(final PhysicalStore.Factory<N, ?> factory, final int rowsCount, final int columnsCount) {
+    private WrapperStore(final PhysicalStore.Factory<N, ?> factory, final int rowsCount, final int columnsCount)
+    {
         super(factory, rowsCount, columnsCount);
         myAccess = null;
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    WrapperStore(final PhysicalStore.Factory<N, ?> factory, final Access2D<?> access) {
+    WrapperStore(final PhysicalStore.Factory<N, ?> factory, final Access2D<?> access)
+    {
 
         super(factory, (int) access.countRows(), (int) access.countColumns());
 
         myAccess = access;
     }
 
-    public double doubleValue(final long aRow, final long aCol) {
+    public double doubleValue(final long aRow, final long aCol)
+    {
         return myAccess.doubleValue(aRow, aCol);
     }
 
-    public N get(final long aRow, final long aCol) {
+    public N get(final long aRow, final long aCol)
+    {
         return this.physical().scalar().cast(myAccess.get(aRow, aCol));
     }
 
     @Override
-    public void supplyTo(final ElementsConsumer<N> consumer) {
+    public void supplyTo(final ElementsConsumer<N> consumer)
+    {
         this.addNonZerosTo(consumer);
     }
 
     @Override
-    protected void addNonZerosTo(final ElementsConsumer<N> consumer) {
+    protected void addNonZerosTo(final ElementsConsumer<N> consumer)
+    {
         consumer.fillMatching(myAccess);
     }
 

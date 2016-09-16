@@ -21,7 +21,8 @@
  */
 package org.ojalgo.type;
 
-public final class IntCount {
+public final class IntCount
+{
 
     private static final boolean BOOLEAN_FALSE = false;
     private static final boolean BOOLEAN_TRUE = true;
@@ -33,16 +34,19 @@ public final class IntCount {
     public final int count;
     public final boolean modified;
 
-    public IntCount(final int aCount) {
+    public IntCount(final int aCount)
+    {
         this(aCount, BOOLEAN_FALSE);
     }
 
     @SuppressWarnings("unused")
-    private IntCount() {
+    private IntCount()
+    {
         this(INT_ZERO, BOOLEAN_FALSE);
     }
 
-    private IntCount(final int aCount, final boolean aModified) {
+    private IntCount(final int aCount, final boolean aModified)
+    {
 
         super();
 
@@ -53,33 +57,41 @@ public final class IntCount {
     /**
      * @return count - 1
      */
-    public IntCount decrement() {
+    public IntCount decrement()
+    {
         return new IntCount(count - INT_ONE, BOOLEAN_TRUE);
     }
 
     /**
      * @return count * 2
      */
-    public IntCount duplicate() {
+    public IntCount duplicate()
+    {
         return new IntCount(count * INT_TWO, BOOLEAN_TRUE);
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return false;
         }
-        if (!(obj instanceof IntCount)) {
+        if (!(obj instanceof IntCount))
+        {
             return false;
         }
         final IntCount other = (IntCount) obj;
-        if (count != other.count) {
+        if (count != other.count)
+        {
             return false;
         }
-        if (modified != other.modified) {
+        if (modified != other.modified)
+        {
             return false;
         }
         return true;
@@ -88,12 +100,14 @@ public final class IntCount {
     /**
      * @return count / 2
      */
-    public IntCount halve() {
+    public IntCount halve()
+    {
         return new IntCount(count / INT_TWO, BOOLEAN_TRUE);
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = 1;
         result = (prime * result) + count;
@@ -104,12 +118,14 @@ public final class IntCount {
     /**
      * @return count + 1
      */
-    public IntCount increment() {
+    public IntCount increment()
+    {
         return new IntCount(count + INT_ONE, BOOLEAN_TRUE);
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return Integer.toString(count);
     }
 

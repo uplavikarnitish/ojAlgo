@@ -28,66 +28,79 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-public class ProcessOutputStream extends PrintStream {
+public class ProcessOutputStream extends PrintStream
+{
 
     private static String EMPTY = "";
     private String myLastArgument = EMPTY;
     private String myLastCommand = EMPTY;
 
-    public ProcessOutputStream(final Process aProcess) {
+    public ProcessOutputStream(final Process aProcess)
+    {
         super(aProcess.getOutputStream(), true);
     }
 
     @SuppressWarnings("unused")
-    private ProcessOutputStream(final File someFile) throws FileNotFoundException {
+    private ProcessOutputStream(final File someFile) throws FileNotFoundException
+    {
         super(someFile);
     }
 
     @SuppressWarnings("unused")
-    private ProcessOutputStream(final File someFile, final String someCsn) throws FileNotFoundException, UnsupportedEncodingException {
+    private ProcessOutputStream(final File someFile, final String someCsn) throws FileNotFoundException, UnsupportedEncodingException
+    {
         super(someFile, someCsn);
     }
 
     @SuppressWarnings("unused")
-    private ProcessOutputStream(final OutputStream anOutputStream) {
+    private ProcessOutputStream(final OutputStream anOutputStream)
+    {
         super(anOutputStream);
     }
 
     @SuppressWarnings("unused")
-    private ProcessOutputStream(final OutputStream someOut, final boolean autoFlush) {
+    private ProcessOutputStream(final OutputStream someOut, final boolean autoFlush)
+    {
         super(someOut, autoFlush);
     }
 
     @SuppressWarnings("unused")
-    private ProcessOutputStream(final OutputStream someOut, final boolean autoFlush, final String someEncoding) throws UnsupportedEncodingException {
+    private ProcessOutputStream(final OutputStream someOut, final boolean autoFlush, final String someEncoding) throws UnsupportedEncodingException
+    {
         super(someOut, autoFlush, someEncoding);
     }
 
     @SuppressWarnings("unused")
-    private ProcessOutputStream(final String someFileName) throws FileNotFoundException {
+    private ProcessOutputStream(final String someFileName) throws FileNotFoundException
+    {
         super(someFileName);
     }
 
     @SuppressWarnings("unused")
-    private ProcessOutputStream(final String someFileName, final String someCsn) throws FileNotFoundException, UnsupportedEncodingException {
+    private ProcessOutputStream(final String someFileName, final String someCsn) throws FileNotFoundException, UnsupportedEncodingException
+    {
         super(someFileName, someCsn);
     }
 
-    public String getLastArgument() {
+    public String getLastArgument()
+    {
         return myLastArgument;
     }
 
-    public String getLastCommand() {
+    public String getLastCommand()
+    {
         return myLastCommand;
     }
 
-    public void sendBatch(final List<Message> aBatch) {
+    public void sendBatch(final List<Message> aBatch)
+    {
 
         final StringBuilder retVal = new StringBuilder();
 
         Message tmpMessage = aBatch.get(0);
         retVal.append(tmpMessage);
-        for (int i = 1; i < aBatch.size(); i++) {
+        for (int i = 1; i < aBatch.size(); i++)
+        {
 
             tmpMessage = aBatch.get(i);
 
@@ -101,7 +114,8 @@ public class ProcessOutputStream extends PrintStream {
         this.writeString(retVal.toString());
     }
 
-    public void sendMessage(final Message aMessage) {
+    public void sendMessage(final Message aMessage)
+    {
 
         myLastCommand = aMessage.getCommand();
         myLastArgument = aMessage.getArgument();
@@ -109,7 +123,8 @@ public class ProcessOutputStream extends PrintStream {
         this.writeString(aMessage.toString());
     }
 
-    private void writeString(final String aString) {
+    private void writeString(final String aString)
+    {
         this.print(aString.length() + String.valueOf(ASCII.SP) + aString);
     }
 

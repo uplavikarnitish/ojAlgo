@@ -33,19 +33,23 @@ import org.ojalgo.matrix.store.PhysicalStore;
 import org.ojalgo.matrix.task.TaskException;
 import org.ojalgo.type.context.NumberContext;
 
-public final class GaussSeidelSolver extends StationaryIterativeSolver implements IterativeSolverTask.SparseDelegate {
+public final class GaussSeidelSolver extends StationaryIterativeSolver implements IterativeSolverTask.SparseDelegate
+{
 
-    public GaussSeidelSolver() {
+    public GaussSeidelSolver()
+    {
         super();
     }
 
-    public double resolve(final List<Equation> equations, final PhysicalStore<Double> solution) {
+    public double resolve(final List<Equation> equations, final PhysicalStore<Double> solution)
+    {
 
         double tmpNormErr = POSITIVE_INFINITY;
         double tmpNormRHS = ZERO;
 
         final int tmpCountRows = equations.size();
-        for (int r = 0; r < tmpCountRows; r++) {
+        for (int r = 0; r < tmpCountRows; r++)
+        {
             tmpNormRHS = PrimitiveFunction.HYPOT.invoke(tmpNormRHS, equations.get(r).getRHS());
         }
 
@@ -54,17 +58,20 @@ public final class GaussSeidelSolver extends StationaryIterativeSolver implement
         final NumberContext tmpCntxt = this.getAccuracyContext();
         final double tmpRelaxationFactor = this.getRelaxationFactor();
 
-        do {
+        do
+        {
 
             tmpNormErr = ZERO;
 
-            for (int r = 0; r < tmpCountRows; r++) {
+            for (int r = 0; r < tmpCountRows; r++)
+            {
                 tmpNormErr = PrimitiveFunction.HYPOT.invoke(tmpNormErr, equations.get(r).adjust(solution, tmpRelaxationFactor));
             }
 
             tmpIterations++;
 
-            if (this.isDebugPrinterSet()) {
+            if (this.isDebugPrinterSet())
+            {
                 this.debug(tmpIterations, solution);
             }
 
@@ -73,7 +80,8 @@ public final class GaussSeidelSolver extends StationaryIterativeSolver implement
         return tmpNormErr / tmpNormRHS;
     }
 
-    public MatrixStore<Double> solve(final Access2D<?> body, final Access2D<?> rhs, final DecompositionStore<Double> current) throws TaskException {
+    public MatrixStore<Double> solve(final Access2D<?> body, final Access2D<?> rhs, final DecompositionStore<Double> current) throws TaskException
+    {
 
         final List<Equation> tmpRows = IterativeSolverTask.toListOfRows(body, rhs);
 

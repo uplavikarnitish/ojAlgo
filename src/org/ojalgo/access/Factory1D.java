@@ -25,7 +25,8 @@ import java.util.List;
 
 import org.ojalgo.function.NullaryFunction;
 
-public interface Factory1D<I extends Structure1D> {
+public interface Factory1D<I extends Structure1D>
+{
 
     I copy(Access1D<?> source);
 

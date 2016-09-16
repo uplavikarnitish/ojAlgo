@@ -23,13 +23,15 @@ package org.ojalgo.series.primitive;
 
 import org.ojalgo.function.BinaryFunction;
 
-final class BinaryFunctionSeries extends PrimitiveSeries {
+final class BinaryFunctionSeries extends PrimitiveSeries
+{
 
     private final BinaryFunction<Double> myFunction;
     private final PrimitiveSeries myLeftSeries;
     private final PrimitiveSeries myRightSeries;
 
-    public BinaryFunctionSeries(final PrimitiveSeries leftSeries, final BinaryFunction<Double> function, final PrimitiveSeries rightSeries) {
+    public BinaryFunctionSeries(final PrimitiveSeries leftSeries, final BinaryFunction<Double> function, final PrimitiveSeries rightSeries)
+    {
 
         super();
 
@@ -39,12 +41,14 @@ final class BinaryFunctionSeries extends PrimitiveSeries {
     }
 
     @Override
-    public final int size() {
+    public final int size()
+    {
         return Math.min(myLeftSeries.size(), myRightSeries.size());
     }
 
     @Override
-    public final double value(final int index) {
+    public final double value(final int index)
+    {
         return myFunction.invoke(myLeftSeries.value(index), myRightSeries.value(index));
     }
 

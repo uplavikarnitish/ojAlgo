@@ -25,19 +25,23 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 
-public final class StringFormat extends Format {
+public final class StringFormat extends Format
+{
 
-    public StringFormat() {
+    public StringFormat()
+    {
         super();
     }
 
     @Override
-    public StringBuffer format(final Object anObject, final StringBuffer aBuffer, final FieldPosition aPosition) {
+    public StringBuffer format(final Object anObject, final StringBuffer aBuffer, final FieldPosition aPosition)
+    {
         return aBuffer.append(anObject);
     }
 
     @Override
-    public String parseObject(final String aSource, final ParsePosition aPosition) {
+    public String parseObject(final String aSource, final ParsePosition aPosition)
+    {
         return aSource;
     }
 

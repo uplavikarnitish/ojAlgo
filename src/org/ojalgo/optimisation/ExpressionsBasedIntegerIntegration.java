@@ -23,23 +23,28 @@ package org.ojalgo.optimisation;
 
 import org.ojalgo.optimisation.integer.IntegerSolver;
 
-final class ExpressionsBasedIntegerIntegration extends ExpressionsBasedModel.Integration<IntegerSolver> {
+final class ExpressionsBasedIntegerIntegration extends ExpressionsBasedModel.Integration<IntegerSolver>
+{
 
-    public IntegerSolver build(final ExpressionsBasedModel model) {
+    public IntegerSolver build(final ExpressionsBasedModel model)
+    {
         return IntegerSolver.make(model);
     }
 
-    public boolean isCapable(final ExpressionsBasedModel model) {
+    public boolean isCapable(final ExpressionsBasedModel model)
+    {
         return true;
     }
 
     @Override
-    public Result toModelState(final Result solverState, final ExpressionsBasedModel model) {
+    public Result toModelState(final Result solverState, final ExpressionsBasedModel model)
+    {
         return solverState;
     }
 
     @Override
-    public Result toSolverState(final Result modelState, final ExpressionsBasedModel model) {
+    public Result toSolverState(final Result modelState, final ExpressionsBasedModel model)
+    {
         return modelState;
     }
 

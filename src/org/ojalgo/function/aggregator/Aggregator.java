@@ -27,294 +27,312 @@ import org.ojalgo.scalar.ComplexNumber;
 import org.ojalgo.scalar.Quaternion;
 import org.ojalgo.scalar.RationalNumber;
 
-public enum Aggregator {
+public enum Aggregator
+{
 
     CARDINALITY, LARGEST, MAXIMUM, MINIMUM, NORM1, NORM2, PRODUCT, PRODUCT2, SMALLEST, SUM, SUM2;
 
-    public final AggregatorFunction<BigDecimal> getBigFunction() {
+    public final AggregatorFunction<BigDecimal> getBigFunction()
+    {
 
-        switch (this) {
+        switch (this)
+        {
 
-        case CARDINALITY:
+            case CARDINALITY:
 
-            return BigAggregator.CARDINALITY.get().reset();
+                return BigAggregator.CARDINALITY.get().reset();
 
-        case LARGEST:
+            case LARGEST:
 
-            return BigAggregator.LARGEST.get().reset();
+                return BigAggregator.LARGEST.get().reset();
 
-        case MAXIMUM:
+            case MAXIMUM:
 
-            return BigAggregator.MAX.get().reset();
+                return BigAggregator.MAX.get().reset();
 
-        case MINIMUM:
+            case MINIMUM:
 
-            return BigAggregator.MIN.get().reset();
+                return BigAggregator.MIN.get().reset();
 
-        case NORM1:
+            case NORM1:
 
-            return BigAggregator.NORM1.get().reset();
+                return BigAggregator.NORM1.get().reset();
 
-        case NORM2:
+            case NORM2:
 
-            return BigAggregator.NORM2.get().reset();
+                return BigAggregator.NORM2.get().reset();
 
-        case PRODUCT:
+            case PRODUCT:
 
-            return BigAggregator.PRODUCT.get().reset();
+                return BigAggregator.PRODUCT.get().reset();
 
-        case PRODUCT2:
+            case PRODUCT2:
 
-            return BigAggregator.PRODUCT2.get().reset();
+                return BigAggregator.PRODUCT2.get().reset();
 
-        case SMALLEST:
+            case SMALLEST:
 
-            return BigAggregator.SMALLEST.get().reset();
+                return BigAggregator.SMALLEST.get().reset();
 
-        case SUM:
+            case SUM:
 
-            return BigAggregator.SUM.get().reset();
+                return BigAggregator.SUM.get().reset();
 
-        case SUM2:
+            case SUM2:
 
-            return BigAggregator.SUM2.get().reset();
+                return BigAggregator.SUM2.get().reset();
 
-        default:
+            default:
 
-            return null;
+                return null;
         }
     }
 
-    public final AggregatorFunction<ComplexNumber> getComplexFunction() {
+    public final AggregatorFunction<ComplexNumber> getComplexFunction()
+    {
 
-        switch (this) {
+        switch (this)
+        {
 
-        case CARDINALITY:
+            case CARDINALITY:
 
-            return ComplexAggregator.CARDINALITY.get().reset();
+                return ComplexAggregator.CARDINALITY.get().reset();
 
-        case LARGEST:
+            case LARGEST:
 
-            return ComplexAggregator.LARGEST.get().reset();
+                return ComplexAggregator.LARGEST.get().reset();
 
-        case MAXIMUM:
+            case MAXIMUM:
 
-            return ComplexAggregator.MAX.get().reset();
+                return ComplexAggregator.MAX.get().reset();
 
-        case MINIMUM:
+            case MINIMUM:
 
-            return ComplexAggregator.MIN.get().reset();
+                return ComplexAggregator.MIN.get().reset();
 
-        case NORM1:
+            case NORM1:
 
-            return ComplexAggregator.NORM1.get().reset();
+                return ComplexAggregator.NORM1.get().reset();
 
-        case NORM2:
+            case NORM2:
 
-            return ComplexAggregator.NORM2.get().reset();
+                return ComplexAggregator.NORM2.get().reset();
 
-        case PRODUCT:
+            case PRODUCT:
 
-            return ComplexAggregator.PRODUCT.get().reset();
+                return ComplexAggregator.PRODUCT.get().reset();
 
-        case PRODUCT2:
+            case PRODUCT2:
 
-            return ComplexAggregator.PRODUCT2.get().reset();
+                return ComplexAggregator.PRODUCT2.get().reset();
 
-        case SMALLEST:
+            case SMALLEST:
 
-            return ComplexAggregator.SMALLEST.get().reset();
+                return ComplexAggregator.SMALLEST.get().reset();
 
-        case SUM:
+            case SUM:
 
-            return ComplexAggregator.SUM.get().reset();
+                return ComplexAggregator.SUM.get().reset();
 
-        case SUM2:
+            case SUM2:
 
-            return ComplexAggregator.SUM2.get().reset();
+                return ComplexAggregator.SUM2.get().reset();
 
-        default:
+            default:
 
-            return null;
+                return null;
         }
     }
 
     @SuppressWarnings("unchecked")
-    public final <N extends Number> AggregatorFunction<N> getFunction(final Class<?> scalarType) {
-        if (double.class.isAssignableFrom(scalarType) || Double.class.isAssignableFrom(scalarType)) {
+    public final <N extends Number> AggregatorFunction<N> getFunction(final Class<?> scalarType)
+    {
+        if (double.class.isAssignableFrom(scalarType) || Double.class.isAssignableFrom(scalarType))
+        {
             return (AggregatorFunction<N>) this.getPrimitiveFunction();
-        } else if (ComplexNumber.class.isAssignableFrom(scalarType)) {
+        } else if (ComplexNumber.class.isAssignableFrom(scalarType))
+        {
             return (AggregatorFunction<N>) this.getComplexFunction();
-        } else if (BigDecimal.class.isAssignableFrom(scalarType)) {
+        } else if (BigDecimal.class.isAssignableFrom(scalarType))
+        {
             return (AggregatorFunction<N>) this.getBigFunction();
-        } else if (RationalNumber.class.isAssignableFrom(scalarType)) {
+        } else if (RationalNumber.class.isAssignableFrom(scalarType))
+        {
             return (AggregatorFunction<N>) this.getRationalFunction();
-        } else if (Quaternion.class.isAssignableFrom(scalarType)) {
+        } else if (Quaternion.class.isAssignableFrom(scalarType))
+        {
             return (AggregatorFunction<N>) this.getQuaternionFunction();
-        } else {
+        } else
+        {
             return null;
         }
     }
 
-    public final AggregatorFunction<Double> getPrimitiveFunction() {
+    public final AggregatorFunction<Double> getPrimitiveFunction()
+    {
 
-        switch (this) {
+        switch (this)
+        {
 
-        case CARDINALITY:
+            case CARDINALITY:
 
-            return PrimitiveAggregator.CARDINALITY.get().reset();
+                return PrimitiveAggregator.CARDINALITY.get().reset();
 
-        case LARGEST:
+            case LARGEST:
 
-            return PrimitiveAggregator.LARGEST.get().reset();
+                return PrimitiveAggregator.LARGEST.get().reset();
 
-        case MAXIMUM:
+            case MAXIMUM:
 
-            return PrimitiveAggregator.MAX.get().reset();
+                return PrimitiveAggregator.MAX.get().reset();
 
-        case MINIMUM:
+            case MINIMUM:
 
-            return PrimitiveAggregator.MIN.get().reset();
+                return PrimitiveAggregator.MIN.get().reset();
 
-        case NORM1:
+            case NORM1:
 
-            return PrimitiveAggregator.NORM1.get().reset();
+                return PrimitiveAggregator.NORM1.get().reset();
 
-        case NORM2:
+            case NORM2:
 
-            return PrimitiveAggregator.NORM2.get().reset();
+                return PrimitiveAggregator.NORM2.get().reset();
 
-        case PRODUCT:
+            case PRODUCT:
 
-            return PrimitiveAggregator.PRODUCT.get().reset();
+                return PrimitiveAggregator.PRODUCT.get().reset();
 
-        case PRODUCT2:
+            case PRODUCT2:
 
-            return PrimitiveAggregator.PRODUCT2.get().reset();
+                return PrimitiveAggregator.PRODUCT2.get().reset();
 
-        case SMALLEST:
+            case SMALLEST:
 
-            return PrimitiveAggregator.SMALLEST.get().reset();
+                return PrimitiveAggregator.SMALLEST.get().reset();
 
-        case SUM:
+            case SUM:
 
-            return PrimitiveAggregator.SUM.get().reset();
+                return PrimitiveAggregator.SUM.get().reset();
 
-        case SUM2:
+            case SUM2:
 
-            return PrimitiveAggregator.SUM2.get().reset();
+                return PrimitiveAggregator.SUM2.get().reset();
 
-        default:
+            default:
 
-            return null;
+                return null;
         }
     }
 
-    public final AggregatorFunction<Quaternion> getQuaternionFunction() {
+    public final AggregatorFunction<Quaternion> getQuaternionFunction()
+    {
 
-        switch (this) {
+        switch (this)
+        {
 
-        case CARDINALITY:
+            case CARDINALITY:
 
-            return QuaternionAggregator.CARDINALITY.get().reset();
+                return QuaternionAggregator.CARDINALITY.get().reset();
 
-        case LARGEST:
+            case LARGEST:
 
-            return QuaternionAggregator.LARGEST.get().reset();
+                return QuaternionAggregator.LARGEST.get().reset();
 
-        case MAXIMUM:
+            case MAXIMUM:
 
-            return QuaternionAggregator.MAX.get().reset();
+                return QuaternionAggregator.MAX.get().reset();
 
-        case MINIMUM:
+            case MINIMUM:
 
-            return QuaternionAggregator.MIN.get().reset();
+                return QuaternionAggregator.MIN.get().reset();
 
-        case NORM1:
+            case NORM1:
 
-            return QuaternionAggregator.NORM1.get().reset();
+                return QuaternionAggregator.NORM1.get().reset();
 
-        case NORM2:
+            case NORM2:
 
-            return QuaternionAggregator.NORM2.get().reset();
+                return QuaternionAggregator.NORM2.get().reset();
 
-        case PRODUCT:
+            case PRODUCT:
 
-            return QuaternionAggregator.PRODUCT.get().reset();
+                return QuaternionAggregator.PRODUCT.get().reset();
 
-        case PRODUCT2:
+            case PRODUCT2:
 
-            return QuaternionAggregator.PRODUCT2.get().reset();
+                return QuaternionAggregator.PRODUCT2.get().reset();
 
-        case SMALLEST:
+            case SMALLEST:
 
-            return QuaternionAggregator.SMALLEST.get().reset();
+                return QuaternionAggregator.SMALLEST.get().reset();
 
-        case SUM:
+            case SUM:
 
-            return QuaternionAggregator.SUM.get().reset();
+                return QuaternionAggregator.SUM.get().reset();
 
-        case SUM2:
+            case SUM2:
 
-            return QuaternionAggregator.SUM2.get().reset();
+                return QuaternionAggregator.SUM2.get().reset();
 
-        default:
+            default:
 
-            return null;
+                return null;
         }
     }
 
-    public final AggregatorFunction<RationalNumber> getRationalFunction() {
+    public final AggregatorFunction<RationalNumber> getRationalFunction()
+    {
 
-        switch (this) {
+        switch (this)
+        {
 
-        case CARDINALITY:
+            case CARDINALITY:
 
-            return RationalAggregator.CARDINALITY.get().reset();
+                return RationalAggregator.CARDINALITY.get().reset();
 
-        case LARGEST:
+            case LARGEST:
 
-            return RationalAggregator.LARGEST.get().reset();
+                return RationalAggregator.LARGEST.get().reset();
 
-        case MAXIMUM:
+            case MAXIMUM:
 
-            return RationalAggregator.MAX.get().reset();
+                return RationalAggregator.MAX.get().reset();
 
-        case MINIMUM:
+            case MINIMUM:
 
-            return RationalAggregator.MIN.get().reset();
+                return RationalAggregator.MIN.get().reset();
 
-        case NORM1:
+            case NORM1:
 
-            return RationalAggregator.NORM1.get().reset();
+                return RationalAggregator.NORM1.get().reset();
 
-        case NORM2:
+            case NORM2:
 
-            return RationalAggregator.NORM2.get().reset();
+                return RationalAggregator.NORM2.get().reset();
 
-        case PRODUCT:
+            case PRODUCT:
 
-            return RationalAggregator.PRODUCT.get().reset();
+                return RationalAggregator.PRODUCT.get().reset();
 
-        case PRODUCT2:
+            case PRODUCT2:
 
-            return RationalAggregator.PRODUCT2.get().reset();
+                return RationalAggregator.PRODUCT2.get().reset();
 
-        case SMALLEST:
+            case SMALLEST:
 
-            return RationalAggregator.SMALLEST.get().reset();
+                return RationalAggregator.SMALLEST.get().reset();
 
-        case SUM:
+            case SUM:
 
-            return RationalAggregator.SUM.get().reset();
+                return RationalAggregator.SUM.get().reset();
 
-        case SUM2:
+            case SUM2:
 
-            return RationalAggregator.SUM2.get().reset();
+                return RationalAggregator.SUM2.get().reset();
 
-        default:
+            default:
 
-            return null;
+                return null;
         }
     }
 

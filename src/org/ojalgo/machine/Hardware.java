@@ -51,7 +51,8 @@ import org.ojalgo.netio.ASCII;
  *
  * @author apete
  */
-public final class Hardware extends AbstractMachine implements Comparable<Hardware> {
+public final class Hardware extends AbstractMachine implements Comparable<Hardware>
+{
 
     /**
      * Should contain all available hardware in ascending "power" order.
@@ -76,7 +77,7 @@ public final class Hardware extends AbstractMachine implements Comparable<Hardwa
      * </ul>
      */
     static final Hardware PPC__01 = new Hardware("ppc",
-            new BasicMachine[] { new BasicMachine(5L * 256L * K * K, 1), new BasicMachine(512L * K, 1), new BasicMachine(64L * K, 1) });
+            new BasicMachine[]{new BasicMachine(5L * 256L * K * K, 1), new BasicMachine(512L * K, 1), new BasicMachine(64L * K, 1)});
 
     /**
      * <ul>
@@ -96,7 +97,7 @@ public final class Hardware extends AbstractMachine implements Comparable<Hardwa
      * </ul>
      */
     static final Hardware X86__01 = new Hardware("x86",
-            new BasicMachine[] { new BasicMachine(1L * K * K * K, 1), new BasicMachine(1L * K * K, 1), new BasicMachine(32L * K, 1) });
+            new BasicMachine[]{new BasicMachine(1L * K * K * K, 1), new BasicMachine(1L * K * K, 1), new BasicMachine(32L * K, 1)});
 
     /**
      * <ul>
@@ -116,7 +117,7 @@ public final class Hardware extends AbstractMachine implements Comparable<Hardwa
      * </ul>
      */
     static final Hardware X86__02 = new Hardware("x86",
-            new BasicMachine[] { new BasicMachine(7L * 512L * K * K, 2), new BasicMachine(6L * K * K, 2), new BasicMachine(32L * K, 1) });
+            new BasicMachine[]{new BasicMachine(7L * 512L * K * K, 2), new BasicMachine(6L * K * K, 2), new BasicMachine(32L * K, 1)});
 
     /**
      * <ul>
@@ -136,7 +137,7 @@ public final class Hardware extends AbstractMachine implements Comparable<Hardwa
      * </ul>
      */
     static final Hardware X86_64__02 = new Hardware("x86_64",
-            new BasicMachine[] { new BasicMachine(3L * K * K * K, 2), new BasicMachine(4L * K * K, 2), new BasicMachine(32L * K, 1) });
+            new BasicMachine[]{new BasicMachine(3L * K * K * K, 2), new BasicMachine(4L * K * K, 2), new BasicMachine(32L * K, 1)});
 
     /**
      * <ul>
@@ -196,8 +197,8 @@ public final class Hardware extends AbstractMachine implements Comparable<Hardwa
      * </li>
      * </ul>
      */
-    static final Hardware X86_64__04 = new Hardware("x86_64", new BasicMachine[] { new BasicMachine(8L * K * K * K, 4), new BasicMachine(3L * K * K, 4),
-            new BasicMachine(256L * K, 2), new BasicMachine(32L * K, 2) });
+    static final Hardware X86_64__04 = new Hardware("x86_64", new BasicMachine[]{new BasicMachine(8L * K * K * K, 4), new BasicMachine(3L * K * K, 4),
+            new BasicMachine(256L * K, 2), new BasicMachine(32L * K, 2)});
 
     /**
      * <ul>
@@ -245,8 +246,8 @@ public final class Hardware extends AbstractMachine implements Comparable<Hardwa
      * </li>
      * </ul>
      */
-    static final Hardware X86_64__08 = new Hardware("x86_64", new BasicMachine[] { new BasicMachine(11L * K * K * K, 8), new BasicMachine(8L * K * K, 8),
-            new BasicMachine(256L * K, 2), new BasicMachine(32L * K, 2) });
+    static final Hardware X86_64__08 = new Hardware("x86_64", new BasicMachine[]{new BasicMachine(11L * K * K * K, 8), new BasicMachine(8L * K * K, 8),
+            new BasicMachine(256L * K, 2), new BasicMachine(32L * K, 2)});
 
     /**
      * <pre>
@@ -273,8 +274,8 @@ public final class Hardware extends AbstractMachine implements Comparable<Hardwa
      * </li>
      * </ul>
      */
-    static final Hardware X86_64__12 = new Hardware("x86_64", new BasicMachine[] { new BasicMachine(12L * K * K * K, 12), new BasicMachine(12L * K * K, 12),
-            new BasicMachine(256L * K, 2), new BasicMachine(32L * K, 2) });
+    static final Hardware X86_64__12 = new Hardware("x86_64", new BasicMachine[]{new BasicMachine(12L * K * K * K, 12), new BasicMachine(12L * K * K, 12),
+            new BasicMachine(256L * K, 2), new BasicMachine(32L * K, 2)});
 
     /**
      * <ul>
@@ -294,10 +295,11 @@ public final class Hardware extends AbstractMachine implements Comparable<Hardwa
      * </li>
      * </ul>
      */
-    static final Hardware X86_64__16 = new Hardware("x86_64", new BasicMachine[] { new BasicMachine(12L * K * K * K, 16), new BasicMachine(8L * K * K, 8),
-            new BasicMachine(256L * K, 2), new BasicMachine(32L * K, 2) });
+    static final Hardware X86_64__16 = new Hardware("x86_64", new BasicMachine[]{new BasicMachine(12L * K * K * K, 16), new BasicMachine(8L * K * K, 8),
+            new BasicMachine(256L * K, 2), new BasicMachine(32L * K, 2)});
 
-    static {
+    static
+    {
         PREDEFINED.add(PPC__01);
         PREDEFINED.add(X86__01);
         PREDEFINED.add(X86__02);
@@ -308,13 +310,16 @@ public final class Hardware extends AbstractMachine implements Comparable<Hardwa
         PREDEFINED.add(X86_64__16);
     }
 
-    public static Hardware makeSimple() {
+    public static Hardware makeSimple()
+    {
         return Hardware.makeSimple(VirtualMachine.getArchitecture(), VirtualMachine.getMemory(), VirtualMachine.getThreads());
     }
 
-    public static Hardware makeSimple(final String systemArchitecture, final long systemMemory, final int systemThreads) {
+    public static Hardware makeSimple(final String systemArchitecture, final long systemMemory, final int systemThreads)
+    {
 
-        if (systemThreads > 8) {
+        if (systemThreads > 8)
+        {
             // Assume hyperthreading, L3 cache and more than 1 CPU
 
             final BasicMachine tmpL1Machine = new BasicMachine(32L * K, 2); //Hyperthreading
@@ -325,9 +330,10 @@ public final class Hardware extends AbstractMachine implements Comparable<Hardwa
 
             final BasicMachine tmpSystemMachine = new BasicMachine(systemMemory, systemThreads);
 
-            return new Hardware(systemArchitecture, new BasicMachine[] { tmpSystemMachine, tmpL3Machine, tmpL2Machine, tmpL1Machine });
+            return new Hardware(systemArchitecture, new BasicMachine[]{tmpSystemMachine, tmpL3Machine, tmpL2Machine, tmpL1Machine});
 
-        } else if (systemThreads >= 4) {
+        } else if (systemThreads >= 4)
+        {
             // Assume hyperthreading, L3 cache but only 1 CPU
 
             final BasicMachine tmpL1Machine = new BasicMachine(32L * K, 2); //Hyperthreading
@@ -338,9 +344,10 @@ public final class Hardware extends AbstractMachine implements Comparable<Hardwa
 
             final BasicMachine tmpSystemMachine = new BasicMachine(systemMemory, systemThreads);
 
-            return new Hardware(systemArchitecture, new BasicMachine[] { tmpSystemMachine, tmpL3Machine, tmpL2Machine, tmpL1Machine });
+            return new Hardware(systemArchitecture, new BasicMachine[]{tmpSystemMachine, tmpL3Machine, tmpL2Machine, tmpL1Machine});
 
-        } else {
+        } else
+        {
             // No hyperthreading, no L3 cache and 1 CPU
 
             final BasicMachine tmpL1Machine = new BasicMachine(32L * K, 1); //No hyperthreading
@@ -349,7 +356,7 @@ public final class Hardware extends AbstractMachine implements Comparable<Hardwa
 
             final BasicMachine tmpSystemMachine = new BasicMachine(systemMemory, systemThreads);
 
-            return new Hardware(systemArchitecture, new BasicMachine[] { tmpSystemMachine, tmpL2Machine, tmpL1Machine });
+            return new Hardware(systemArchitecture, new BasicMachine[]{tmpSystemMachine, tmpL2Machine, tmpL1Machine});
         }
     }
 
@@ -360,18 +367,21 @@ public final class Hardware extends AbstractMachine implements Comparable<Hardwa
      * <code>new BasicMachine[] { SYSTEM, L2, L1 }</code> or in worst case
      * <code>new BasicMachine[] { SYSTEM, L1 }</code>
      */
-    public Hardware(final String architecture, final BasicMachine[] levels) {
+    public Hardware(final String architecture, final BasicMachine[] levels)
+    {
 
         super(architecture, levels);
 
-        if (levels.length < 2) {
+        if (levels.length < 2)
+        {
             throw new IllegalArgumentException();
         }
 
         myLevels = ArrayUtils.copyOf(levels);
     }
 
-    private Hardware(final Hardware aHardware, final Runtime aRuntime) {
+    private Hardware(final Hardware aHardware, final Runtime aRuntime)
+    {
 
         super(aHardware, aRuntime);
 
@@ -380,65 +390,83 @@ public final class Hardware extends AbstractMachine implements Comparable<Hardwa
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    public int compareTo(final Hardware aReference) {
-        if (units != aReference.units) {
+    public int compareTo(final Hardware aReference)
+    {
+        if (units != aReference.units)
+        {
             return units - aReference.units;
-        } else if (cache != aReference.cache) {
+        } else if (cache != aReference.cache)
+        {
             return (int) (cache - aReference.cache);
-        } else if (cores != aReference.cores) {
+        } else if (cores != aReference.cores)
+        {
             return cores - aReference.cores;
-        } else if (threads != aReference.threads) {
+        } else if (threads != aReference.threads)
+        {
             return threads - aReference.threads;
-        } else if (memory != aReference.memory) {
+        } else if (memory != aReference.memory)
+        {
             return (int) (memory - aReference.memory);
-        } else {
+        } else
+        {
             return 0;
         }
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (!super.equals(obj)) {
+        if (!super.equals(obj))
+        {
             return false;
         }
-        if (!(obj instanceof Hardware)) {
+        if (!(obj instanceof Hardware))
+        {
             return false;
         }
         final Hardware other = (Hardware) obj;
-        if (!Arrays.equals(myLevels, other.myLevels)) {
+        if (!Arrays.equals(myLevels, other.myLevels))
+        {
             return false;
         }
         return true;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = super.hashCode();
         result = (prime * result) + Arrays.hashCode(myLevels);
         return result;
     }
 
-    public boolean isL2Specified() {
+    public boolean isL2Specified()
+    {
         return myLevels.length > 2;
     }
 
-    public boolean isL3Specified() {
+    public boolean isL3Specified()
+    {
         return myLevels.length > 3;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
 
         final StringBuilder retVal = new StringBuilder("HW=");
 
         retVal.append(myLevels[0].toString());
-        if (this.isL3Specified()) {
+        if (this.isL3Specified())
+        {
             retVal.append(ASCII.COMMA).append(units).append("xL3:").append(myLevels[myLevels.length - 3]);
-        } else if (this.isL2Specified()) {
+        } else if (this.isL2Specified())
+        {
             retVal.append(ASCII.COMMA).append(units).append("xL2:").append(myLevels[myLevels.length - 2]);
         }
         retVal.append(ASCII.COMMA).append(cores).append("cores:").append(myLevels[myLevels.length - 1]);
@@ -446,7 +474,8 @@ public final class Hardware extends AbstractMachine implements Comparable<Hardwa
         return retVal.toString();
     }
 
-    public final VirtualMachine virtualise() {
+    public final VirtualMachine virtualise()
+    {
         return new VirtualMachine(this, Runtime.getRuntime());
     }
 

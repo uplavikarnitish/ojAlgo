@@ -33,9 +33,11 @@ import org.ojalgo.series.primitive.PrimitiveSeries;
  *
  * @author apete
  */
-public interface RandomProcess<D extends Distribution> {
+public interface RandomProcess<D extends Distribution>
+{
 
-    public static final class SimulationResults {
+    public static final class SimulationResults
+    {
 
         private final double myInitialValue;
 
@@ -43,9 +45,10 @@ public interface RandomProcess<D extends Distribution> {
 
         /**
          * @param initialValue
-         * @param results (Random values) scenarios/realisations/series in rows, and sample sets in columns.
+         * @param results      (Random values) scenarios/realisations/series in rows, and sample sets in columns.
          */
-        public SimulationResults(final double initialValue, final Array2D<Double> results) {
+        public SimulationResults(final double initialValue, final Array2D<Double> results)
+        {
 
             super();
 
@@ -54,7 +57,8 @@ public interface RandomProcess<D extends Distribution> {
         }
 
         @SuppressWarnings("unused")
-        private SimulationResults() {
+        private SimulationResults()
+        {
 
             super();
 
@@ -62,19 +66,23 @@ public interface RandomProcess<D extends Distribution> {
             myResults = null;
         }
 
-        public int countSampleSets() {
+        public int countSampleSets()
+        {
             return (int) myResults.countColumns();
         }
 
-        public int countScenarios() {
+        public int countScenarios()
+        {
             return (int) myResults.countRows();
         }
 
-        public double getInitialValue() {
+        public double getInitialValue()
+        {
             return myInitialValue;
         }
 
-        public SampleSet getSampleSet(final int index) {
+        public SampleSet getSampleSet(final int index)
+        {
             return SampleSet.wrap(myResults.sliceColumn(0, index));
         }
 
@@ -82,22 +90,28 @@ public interface RandomProcess<D extends Distribution> {
          * A series representing one scenario. Each series has length "number of simulation steps" + 1 as the
          * series includes the initial value.
          */
-        public PrimitiveSeries getScenario(final int index) {
+        public PrimitiveSeries getScenario(final int index)
+        {
 
             final Array1D<Double> tmpSlicedRow = myResults.sliceRow(index, 0);
 
-            return new PrimitiveSeries() {
+            return new PrimitiveSeries()
+            {
 
                 @Override
-                public int size() {
+                public int size()
+                {
                     return tmpSlicedRow.size() + 1;
                 }
 
                 @Override
-                public double value(final int index) {
-                    if (index == 0) {
+                public double value(final int index)
+                {
+                    if (index == 0)
+                    {
                         return myInitialValue;
-                    } else {
+                    } else
+                    {
                         return tmpSlicedRow.doubleValue(index - 1);
                     }
                 }
@@ -115,7 +129,7 @@ public interface RandomProcess<D extends Distribution> {
 
     /**
      * @return An array of sample sets. The array has aNumberOfSteps elements, and each sample set has
-     *         aNumberOfRealisations samples.
+     * aNumberOfRealisations samples.
      */
     RandomProcess.SimulationResults simulate(final int numberOfRealisations, final int numberOfSteps, final double stepSize);
 

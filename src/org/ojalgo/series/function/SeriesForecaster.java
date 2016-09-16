@@ -37,12 +37,14 @@ import org.ojalgo.type.CalendarDateUnit;
  *
  * @author apete
  */
-public abstract class SeriesForecaster extends SeriesFunction<CalendarDate> {
+public abstract class SeriesForecaster extends SeriesFunction<CalendarDate>
+{
 
     private final CalendarDate myLastKey;
     private final CalendarDateUnit myResolution;
 
-    private SeriesForecaster(final BasicSeries<CalendarDate, ? extends Number> data) {
+    private SeriesForecaster(final BasicSeries<CalendarDate, ? extends Number> data)
+    {
 
         super(data);
 
@@ -50,7 +52,8 @@ public abstract class SeriesForecaster extends SeriesFunction<CalendarDate> {
         myResolution = null;
     }
 
-    private SeriesForecaster(final Map<String, ? extends BasicSeries<CalendarDate, ? extends Number>> data) {
+    private SeriesForecaster(final Map<String, ? extends BasicSeries<CalendarDate, ? extends Number>> data)
+    {
 
         super(data);
 
@@ -58,7 +61,8 @@ public abstract class SeriesForecaster extends SeriesFunction<CalendarDate> {
         myResolution = null;
     }
 
-    protected SeriesForecaster(final CalendarDateSeries<? extends Number> data) {
+    protected SeriesForecaster(final CalendarDateSeries<? extends Number> data)
+    {
 
         super(data);
 
@@ -66,7 +70,8 @@ public abstract class SeriesForecaster extends SeriesFunction<CalendarDate> {
         myResolution = data.getResolution();
     }
 
-    protected SeriesForecaster(final CoordinationSet<? extends Number> coordinatedHistoricalData) {
+    protected SeriesForecaster(final CoordinationSet<? extends Number> coordinatedHistoricalData)
+    {
 
         super(coordinatedHistoricalData);
 
@@ -75,13 +80,15 @@ public abstract class SeriesForecaster extends SeriesFunction<CalendarDate> {
     }
 
     @Override
-    public Map<String, Access1D<?>> invoke(final CalendarDate... key) {
+    public Map<String, Access1D<?>> invoke(final CalendarDate... key)
+    {
 
         final CalendarDate tmpLastKey = this.getLastKey();
         final CalendarDateUnit tmpResolution = this.getResolution();
 
         final CalendarDateDuration[] tmpHorizon = new CalendarDateDuration[key.length];
-        for (int h = 0; h < tmpHorizon.length; h++) {
+        for (int h = 0; h < tmpHorizon.length; h++)
+        {
             final double tmpMeassure = tmpResolution.count(tmpLastKey.millis, key[h].millis);
             tmpHorizon[h] = new CalendarDateDuration(tmpMeassure, tmpResolution);
         }
@@ -91,11 +98,13 @@ public abstract class SeriesForecaster extends SeriesFunction<CalendarDate> {
 
     public abstract Map<String, Access1D<?>> invoke(CalendarDateDuration... horizon);
 
-    protected final CalendarDate getLastKey() {
+    protected final CalendarDate getLastKey()
+    {
         return myLastKey;
     }
 
-    protected final CalendarDateUnit getResolution() {
+    protected final CalendarDateUnit getResolution()
+    {
         return myResolution;
     }
 

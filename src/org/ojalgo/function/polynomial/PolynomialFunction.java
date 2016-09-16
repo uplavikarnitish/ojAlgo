@@ -30,7 +30,8 @@ import org.ojalgo.function.UnaryFunction;
 import org.ojalgo.series.NumberSeries;
 
 public interface PolynomialFunction<N extends Number>
-        extends UnaryFunction<N>, Access1D<N>, Differentiable<N, PolynomialFunction<N>>, Integratable<N, PolynomialFunction<N>> {
+        extends UnaryFunction<N>, Access1D<N>, Differentiable<N, PolynomialFunction<N>>, Integratable<N, PolynomialFunction<N>>
+{
 
     int degree();
 

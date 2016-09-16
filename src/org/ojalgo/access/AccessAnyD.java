@@ -27,12 +27,14 @@ import org.ojalgo.scalar.Scalar;
 /**
  * N-dimensional accessor methods
  *
- * @see Access1D
  * @author apete
+ * @see Access1D
  */
-public interface AccessAnyD<N extends Number> extends StructureAnyD, Access1D<N> {
+public interface AccessAnyD<N extends Number> extends StructureAnyD, Access1D<N>
+{
 
-    public interface Elements extends StructureAnyD, Access1D.Elements {
+    public interface Elements extends StructureAnyD, Access1D.Elements
+    {
 
         /**
          * @see Scalar#isAbsolute()
@@ -46,17 +48,20 @@ public interface AccessAnyD<N extends Number> extends StructureAnyD, Access1D<N>
 
     }
 
-    public interface IndexOf extends StructureAnyD, Access1D.IndexOf {
+    public interface IndexOf extends StructureAnyD, Access1D.IndexOf
+    {
 
     }
 
-    public interface Sliceable<N extends Number> extends StructureAnyD, Access1D.Sliceable<N> {
+    public interface Sliceable<N extends Number> extends StructureAnyD, Access1D.Sliceable<N>
+    {
 
         Access1D<N> slice(final long[] first, final int dimension);
 
     }
 
-    public interface Visitable<N extends Number> extends StructureAnyD, Access1D.Visitable<N> {
+    public interface Visitable<N extends Number> extends StructureAnyD, Access1D.Visitable<N>
+    {
 
         void visitOne(long[] reference, VoidFunction<N> visitor);
 
@@ -66,19 +71,22 @@ public interface AccessAnyD<N extends Number> extends StructureAnyD, Access1D<N>
      * Will pass through each matching element position calling the {@code through} function. What happens is
      * entirely dictated by how you implement the callback.
      */
-    default double doubleValue(final long index) {
+    default double doubleValue(final long index)
+    {
         return this.doubleValue(AccessUtils.reference(index, this.shape()));
     }
 
     double doubleValue(long[] ref);
 
-    default N get(final long index) {
+    default N get(final long index)
+    {
         return this.get(AccessUtils.reference(index, this.shape()));
     }
 
     N get(long[] ref);
 
-    default void passMatching(final CallbackAnyD<N> through, final MutateAnyD to) {
+    default void passMatching(final CallbackAnyD<N> through, final MutateAnyD to)
+    {
         CallbackAnyD.onMatching(this, through, to);
     }
 

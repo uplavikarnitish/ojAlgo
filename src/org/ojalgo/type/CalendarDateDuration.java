@@ -39,16 +39,18 @@ import org.ojalgo.constant.PrimitiveMath;
  * {@linkplain TemporalAmount} interface.
  * </p>
  *
+ * @author apete
  * @see CalendarDate
  * @see CalendarDateUnit
- * @author apete
  */
-public final class CalendarDateDuration extends Number implements TemporalAmount, Comparable<CalendarDateDuration>, Serializable {
+public final class CalendarDateDuration extends Number implements TemporalAmount, Comparable<CalendarDateDuration>, Serializable
+{
 
     public final double measure;
     public final CalendarDateUnit unit;
 
-    public CalendarDateDuration(final double aMeasure, final CalendarDateUnit aUnit) {
+    public CalendarDateDuration(final double aMeasure, final CalendarDateUnit aUnit)
+    {
 
         super();
 
@@ -56,70 +58,87 @@ public final class CalendarDateDuration extends Number implements TemporalAmount
         unit = aUnit;
     }
 
-    CalendarDateDuration() {
+    CalendarDateDuration()
+    {
         this(PrimitiveMath.ZERO, CalendarDateUnit.MILLIS);
     }
 
-    public Temporal addTo(final Temporal temporal) {
+    public Temporal addTo(final Temporal temporal)
+    {
         return temporal.plus(this.toDurationInMillis(), CalendarDateUnit.MILLIS);
     }
 
-    public int compareTo(final CalendarDateDuration reference) {
+    public int compareTo(final CalendarDateDuration reference)
+    {
         final long tmpVal = this.toDurationInMillis();
         final long refVal = reference.toDurationInMillis();
         return Long.signum(tmpVal - refVal);
     }
 
-    public CalendarDateDuration convertTo(final CalendarDateUnit newUnit) {
+    public CalendarDateDuration convertTo(final CalendarDateUnit newUnit)
+    {
         final double tmpNewMeasure = newUnit.convert(measure, unit);
         return new CalendarDateDuration(tmpNewMeasure, newUnit);
     }
 
     @Override
-    public double doubleValue() {
+    public double doubleValue()
+    {
         return measure;
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return false;
         }
-        if (!(obj instanceof CalendarDateDuration)) {
+        if (!(obj instanceof CalendarDateDuration))
+        {
             return false;
         }
         final CalendarDateDuration other = (CalendarDateDuration) obj;
-        if (Double.doubleToLongBits(measure) != Double.doubleToLongBits(other.measure)) {
+        if (Double.doubleToLongBits(measure) != Double.doubleToLongBits(other.measure))
+        {
             return false;
         }
-        if (unit != other.unit) {
+        if (unit != other.unit)
+        {
             return false;
         }
         return true;
     }
 
     @Override
-    public float floatValue() {
+    public float floatValue()
+    {
         return (float) measure;
     }
 
-    public long get(final TemporalUnit unit) {
-        if (unit == this.unit) {
+    public long get(final TemporalUnit unit)
+    {
+        if (unit == this.unit)
+        {
             return (long) measure;
-        } else {
+        } else
+        {
             return 0L;
         }
     }
 
-    public List<TemporalUnit> getUnits() {
+    public List<TemporalUnit> getUnits()
+    {
         return Collections.singletonList(unit);
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         final int prime = 31;
         int result = 1;
         long temp;
@@ -130,25 +149,30 @@ public final class CalendarDateDuration extends Number implements TemporalAmount
     }
 
     @Override
-    public int intValue() {
+    public int intValue()
+    {
         return (int) measure;
     }
 
     @Override
-    public long longValue() {
+    public long longValue()
+    {
         return (long) measure;
     }
 
-    public Temporal subtractFrom(final Temporal temporal) {
+    public Temporal subtractFrom(final Temporal temporal)
+    {
         return temporal.minus(this.toDurationInMillis(), CalendarDateUnit.MILLIS);
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return Double.toString(measure) + unit.toString();
     }
 
-    long toDurationInMillis() {
+    long toDurationInMillis()
+    {
         return (long) (measure * unit.size());
     }
 

@@ -29,45 +29,56 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 
-public final class BufferedOutputStreamWriter extends BufferedWriter {
+public final class BufferedOutputStreamWriter extends BufferedWriter
+{
 
-    public BufferedOutputStreamWriter(final OutputStream aStream) {
+    public BufferedOutputStreamWriter(final OutputStream aStream)
+    {
         super(new OutputStreamWriter(aStream));
     }
 
-    public BufferedOutputStreamWriter(final OutputStream aStream, final Charset aCharset) {
+    public BufferedOutputStreamWriter(final OutputStream aStream, final Charset aCharset)
+    {
         super(new OutputStreamWriter(aStream, aCharset));
     }
 
-    public BufferedOutputStreamWriter(final OutputStream aStream, final Charset aCharset, final int aSize) {
+    public BufferedOutputStreamWriter(final OutputStream aStream, final Charset aCharset, final int aSize)
+    {
         super(new OutputStreamWriter(aStream, aCharset), aSize);
     }
 
-    public BufferedOutputStreamWriter(final OutputStream aStream, final CharsetEncoder anEncoder) {
+    public BufferedOutputStreamWriter(final OutputStream aStream, final CharsetEncoder anEncoder)
+    {
         super(new OutputStreamWriter(aStream, anEncoder));
     }
 
-    public BufferedOutputStreamWriter(final OutputStream aStream, final CharsetEncoder anEncoder, final int aSize) {
+    public BufferedOutputStreamWriter(final OutputStream aStream, final CharsetEncoder anEncoder, final int aSize)
+    {
         super(new OutputStreamWriter(aStream, anEncoder), aSize);
     }
 
-    public BufferedOutputStreamWriter(final OutputStream aStream, final int aSize) {
+    public BufferedOutputStreamWriter(final OutputStream aStream, final int aSize)
+    {
         super(new OutputStreamWriter(aStream), aSize);
     }
 
-    public BufferedOutputStreamWriter(final OutputStream aStream, final String aCharsetName) throws UnsupportedEncodingException {
+    public BufferedOutputStreamWriter(final OutputStream aStream, final String aCharsetName) throws UnsupportedEncodingException
+    {
         super(new OutputStreamWriter(aStream, aCharsetName));
     }
 
-    public BufferedOutputStreamWriter(final OutputStream aStream, final String aCharsetName, final int aSize) throws UnsupportedEncodingException {
+    public BufferedOutputStreamWriter(final OutputStream aStream, final String aCharsetName, final int aSize) throws UnsupportedEncodingException
+    {
         super(new OutputStreamWriter(aStream, aCharsetName), aSize);
     }
 
-    protected BufferedOutputStreamWriter(final Writer aWriter) {
+    protected BufferedOutputStreamWriter(final Writer aWriter)
+    {
         super(aWriter);
     }
 
-    protected BufferedOutputStreamWriter(final Writer aWriter, final int aSize) {
+    protected BufferedOutputStreamWriter(final Writer aWriter, final int aSize)
+    {
         super(aWriter, aSize);
     }
 

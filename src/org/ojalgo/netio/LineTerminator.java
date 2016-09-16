@@ -21,22 +21,26 @@
  */
 package org.ojalgo.netio;
 
-public enum LineTerminator {
+public enum LineTerminator
+{
 
-    MACINTOSH(new char[] { ASCII.CR }), UNIX(new char[] { ASCII.LF }), WINDOWS(new char[] { ASCII.CR, ASCII.LF });
+    MACINTOSH(new char[]{ASCII.CR}), UNIX(new char[]{ASCII.LF}), WINDOWS(new char[]{ASCII.CR, ASCII.LF});
 
     private final char[] myCharArray;
 
-    LineTerminator(final char[] aCharArray) {
+    LineTerminator(final char[] aCharArray)
+    {
         myCharArray = aCharArray;
     }
 
-    public final char[] getCharArray() {
+    public final char[] getCharArray()
+    {
         return myCharArray.clone();
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return String.valueOf(myCharArray);
     }
 

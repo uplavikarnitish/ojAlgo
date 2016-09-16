@@ -23,21 +23,26 @@ package org.ojalgo.optimisation;
 
 import org.ojalgo.function.multiary.MultiaryFunction;
 
-final class FunctionsBasedModel extends AbstractModel<GenericSolver> {
+final class FunctionsBasedModel extends AbstractModel<GenericSolver>
+{
 
-    public static abstract class Integration<S extends Optimisation.Solver> implements Optimisation.Integration<FunctionsBasedModel, S> {
+    public static abstract class Integration<S extends Optimisation.Solver> implements Optimisation.Integration<FunctionsBasedModel, S>
+    {
 
     }
 
-    static final class Function extends ModelEntity<Function> {
+    static final class Function extends ModelEntity<Function>
+    {
 
         private final MultiaryFunction<Double> myFunction = null;
 
-        Function(final Function entityToCopy) {
+        Function(final Function entityToCopy)
+        {
             super(entityToCopy);
         }
 
-        Function(final String name) {
+        Function(final String name)
+        {
             super(name);
         }
 
@@ -45,21 +50,24 @@ final class FunctionsBasedModel extends AbstractModel<GenericSolver> {
 
     private final int myNumberOfVariables;
 
-    public FunctionsBasedModel(final int numberOfVariables) {
+    public FunctionsBasedModel(final int numberOfVariables)
+    {
 
         super();
 
         myNumberOfVariables = numberOfVariables;
     }
 
-    private FunctionsBasedModel() {
+    private FunctionsBasedModel()
+    {
 
         super();
 
         myNumberOfVariables = 0;
     }
 
-    private FunctionsBasedModel(final Options someOptions) {
+    private FunctionsBasedModel(final Options someOptions)
+    {
 
         super(someOptions);
 
@@ -67,21 +75,25 @@ final class FunctionsBasedModel extends AbstractModel<GenericSolver> {
     }
 
     @Override
-    public void dispose() {
+    public void dispose()
+    {
         // TODO Auto-generated method stub
     }
 
-    public Result maximise() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Result minimise() {
+    public Result maximise()
+    {
         // TODO Auto-generated method stub
         return null;
     }
 
-    public boolean validate() {
+    public Result minimise()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public boolean validate()
+    {
         // TODO Auto-generated method stub
         return false;
     }

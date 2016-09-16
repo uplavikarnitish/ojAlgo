@@ -37,16 +37,19 @@ import org.ojalgo.type.context.NumberContext;
  *
  * @author apete
  */
-abstract class GenericDecomposition<N extends Number> extends AbstractDecomposition<N> {
+abstract class GenericDecomposition<N extends Number> extends AbstractDecomposition<N>
+{
 
     private final PhysicalStore.Factory<N, ? extends DecompositionStore<N>> myFactory;
 
     @SuppressWarnings("unused")
-    private GenericDecomposition() {
+    private GenericDecomposition()
+    {
         this(null);
     }
 
-    protected GenericDecomposition(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> factory) {
+    protected GenericDecomposition(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> factory)
+    {
 
         super();
 
@@ -55,64 +58,80 @@ abstract class GenericDecomposition<N extends Number> extends AbstractDecomposit
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean equals(final Object someObj) {
-        if (someObj instanceof MatrixStore) {
+    public boolean equals(final Object someObj)
+    {
+        if (someObj instanceof MatrixStore)
+        {
             return this.equals((MatrixStore<N>) someObj, NumberContext.getGeneral(6));
-        } else {
+        } else
+        {
             return super.equals(someObj);
         }
     }
 
-    protected final AggregatorSet<N> aggregator() {
+    protected final AggregatorSet<N> aggregator()
+    {
         return myFactory.aggregator();
     }
 
     @Override
-    protected final DecompositionStore<N> allocate(final long numberOfRows, final long numberOfColumns) {
+    protected final DecompositionStore<N> allocate(final long numberOfRows, final long numberOfColumns)
+    {
         return myFactory.makeZero(numberOfRows, numberOfColumns);
     }
 
-    protected final DecompositionStore<N> copy(final Access2D<?> source) {
+    protected final DecompositionStore<N> copy(final Access2D<?> source)
+    {
         return myFactory.copy(source);
     }
 
-    protected final FunctionSet<N> function() {
+    protected final FunctionSet<N> function()
+    {
         return myFactory.function();
     }
 
-    protected final BasicArray<N> makeArray(final int length) {
+    protected final BasicArray<N> makeArray(final int length)
+    {
         return myFactory.makeArray(length);
     }
 
-    protected final DecompositionStore<N> makeEye(final int numberOfRows, final int numberOfColumns) {
+    protected final DecompositionStore<N> makeEye(final int numberOfRows, final int numberOfColumns)
+    {
         return myFactory.makeEye(numberOfRows, numberOfColumns);
     }
 
-    protected final Householder<N> makeHouseholder(final int dimension) {
+    protected final Householder<N> makeHouseholder(final int dimension)
+    {
         return myFactory.makeHouseholder(dimension);
     }
 
-    protected final MatrixStore.LogicalBuilder<N> makeIdentity(final int dimension) {
+    protected final MatrixStore.LogicalBuilder<N> makeIdentity(final int dimension)
+    {
         return myFactory.builder().makeIdentity(dimension);
     }
 
-    protected final Rotation<N> makeRotation(final int low, final int high, final double cos, final double sin) {
+    protected final Rotation<N> makeRotation(final int low, final int high, final double cos, final double sin)
+    {
         return myFactory.makeRotation(low, high, cos, sin);
     }
 
-    protected final Rotation<N> makeRotation(final int low, final int high, final N cos, final N sin) {
+    protected final Rotation<N> makeRotation(final int low, final int high, final N cos, final N sin)
+    {
         return myFactory.makeRotation(low, high, cos, sin);
     }
 
-    protected final DecompositionStore<N> makeZero(final int numberOfRows, final int numberOfColumns) {
+    protected final DecompositionStore<N> makeZero(final int numberOfRows, final int numberOfColumns)
+    {
         return myFactory.makeZero(numberOfRows, numberOfColumns);
     }
 
-    protected final Scalar.Factory<N> scalar() {
+    protected final Scalar.Factory<N> scalar()
+    {
         return myFactory.scalar();
     }
 
-    protected final MatrixStore.LogicalBuilder<N> wrap(final Access2D<?> source) {
+    protected final MatrixStore.LogicalBuilder<N> wrap(final Access2D<?> source)
+    {
         return myFactory.builder().makeWrapper(source);
     }
 

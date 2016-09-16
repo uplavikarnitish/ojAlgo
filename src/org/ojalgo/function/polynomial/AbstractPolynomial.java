@@ -27,7 +27,8 @@ import org.ojalgo.array.Array1D;
 import org.ojalgo.array.ArrayUtils;
 import org.ojalgo.series.NumberSeries;
 
-abstract class AbstractPolynomial<N extends Number> implements PolynomialFunction<N> {
+abstract class AbstractPolynomial<N extends Number> implements PolynomialFunction<N>
+{
 
     private final Array1D<N> myCoefficients;
 
@@ -36,26 +37,31 @@ abstract class AbstractPolynomial<N extends Number> implements PolynomialFunctio
     private transient AbstractPolynomial<N> myPrimitive = null;
 
     @SuppressWarnings("unused")
-    private AbstractPolynomial() {
+    private AbstractPolynomial()
+    {
         this(null);
     }
 
-    protected AbstractPolynomial(final Array1D<N> someCoefficients) {
+    protected AbstractPolynomial(final Array1D<N> someCoefficients)
+    {
 
         super();
 
         myCoefficients = someCoefficients;
     }
 
-    public final PolynomialFunction<N> buildDerivative() {
+    public final PolynomialFunction<N> buildDerivative()
+    {
 
-        if (myDerivative == null) {
+        if (myDerivative == null)
+        {
 
             final int tmpSize = Math.max(1, myCoefficients.size() - 1);
 
             myDerivative = this.makeInstance(tmpSize);
 
-            for (int i = 0; i < tmpSize; i++) {
+            for (int i = 0; i < tmpSize; i++)
+            {
                 myDerivative.set(i, this.getDerivativeFactor(i));
             }
         }
@@ -63,15 +69,18 @@ abstract class AbstractPolynomial<N extends Number> implements PolynomialFunctio
         return myDerivative;
     }
 
-    public final PolynomialFunction<N> buildPrimitive() {
+    public final PolynomialFunction<N> buildPrimitive()
+    {
 
-        if (myPrimitive == null) {
+        if (myPrimitive == null)
+        {
 
             final int tmpSize = myCoefficients.size() + 1;
 
             myPrimitive = this.makeInstance(tmpSize);
 
-            for (int i = 0; i < tmpSize; i++) {
+            for (int i = 0; i < tmpSize; i++)
+            {
                 myPrimitive.set(i, this.getPrimitiveFactor(i));
             }
         }
@@ -79,56 +88,67 @@ abstract class AbstractPolynomial<N extends Number> implements PolynomialFunctio
         return myPrimitive;
     }
 
-    public long count() {
+    public long count()
+    {
         return this.size();
     }
 
-    public final int degree() {
+    public final int degree()
+    {
         return myCoefficients.size() - 1;
     }
 
-    public final double doubleValue(final long aPower) {
+    public final double doubleValue(final long aPower)
+    {
         return myCoefficients.doubleValue(aPower);
     }
 
-    public final void estimate(final List<? extends Number> x, final List<? extends Number> y) {
+    public final void estimate(final List<? extends Number> x, final List<? extends Number> y)
+    {
         this.estimate(ArrayUtils.wrapAccess1D(x), ArrayUtils.wrapAccess1D(y));
     }
 
-    public final void estimate(final NumberSeries<?> samples) {
+    public final void estimate(final NumberSeries<?> samples)
+    {
         this.estimate(samples.accessKeys(), samples.accessValues());
     }
 
-    public final N get(final long aPower) {
+    public final N get(final long aPower)
+    {
         return myCoefficients.get(aPower);
     }
 
-    public final double invoke(final double arg) {
+    public final double invoke(final double arg)
+    {
 
         int tmpPower = this.degree();
 
         double retVal = this.doubleValue(tmpPower);
 
-        while (--tmpPower >= 0) {
+        while (--tmpPower >= 0)
+        {
             retVal = this.doubleValue(tmpPower) + (arg * retVal);
         }
 
         return retVal;
     }
 
-    public final void set(final int aPower, final double aNmbr) {
+    public final void set(final int aPower, final double aNmbr)
+    {
         myCoefficients.set(aPower, aNmbr);
         myDerivative = null;
         myPrimitive = null;
     }
 
-    public final void set(final int aPower, final N aNmbr) {
+    public final void set(final int aPower, final N aNmbr)
+    {
         myCoefficients.set(aPower, aNmbr);
         myDerivative = null;
         myPrimitive = null;
     }
 
-    public final int size() {
+    public final int size()
+    {
         return myCoefficients.size();
     }
 

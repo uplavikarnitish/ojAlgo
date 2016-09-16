@@ -34,29 +34,35 @@ import org.ojalgo.type.TypeUtils;
  *
  * @author apete
  */
-public final class SimpleAsset extends FinancePortfolio {
+public final class SimpleAsset extends FinancePortfolio
+{
 
     private final double myMeanReturn;
     private final double myVolatility;
     private final BigDecimal myWeight;
 
-    public SimpleAsset(final FinancePortfolio portfolio) {
+    public SimpleAsset(final FinancePortfolio portfolio)
+    {
         this(portfolio.getMeanReturn(), portfolio.getVolatility(), BigMath.ONE);
     }
 
-    public SimpleAsset(final FinancePortfolio portfolio, final Number weight) {
+    public SimpleAsset(final FinancePortfolio portfolio, final Number weight)
+    {
         this(portfolio.getMeanReturn(), portfolio.getVolatility(), weight);
     }
 
-    public SimpleAsset(final Number weight) {
+    public SimpleAsset(final Number weight)
+    {
         this(PrimitiveMath.ZERO, PrimitiveMath.ZERO, weight);
     }
 
-    public SimpleAsset(final Number meanReturn, final Number volatility) {
+    public SimpleAsset(final Number meanReturn, final Number volatility)
+    {
         this(meanReturn, volatility, BigMath.ONE);
     }
 
-    public SimpleAsset(final Number meanReturn, final Number volatility, final Number weight) {
+    public SimpleAsset(final Number meanReturn, final Number volatility, final Number weight)
+    {
 
         super();
 
@@ -66,34 +72,40 @@ public final class SimpleAsset extends FinancePortfolio {
     }
 
     @SuppressWarnings("unused")
-    private SimpleAsset() {
+    private SimpleAsset()
+    {
         this(BigMath.ZERO, BigMath.ZERO, BigMath.ONE);
     }
 
     @Override
-    public double getMeanReturn() {
+    public double getMeanReturn()
+    {
         return myMeanReturn;
     }
 
     @Override
-    public double getVolatility() {
+    public double getVolatility()
+    {
         return myVolatility;
     }
 
     /**
      * Assuming there is precisely 1 weight - this class is used to describe 1 asset (portfolio member).
      */
-    public BigDecimal getWeight() {
+    public BigDecimal getWeight()
+    {
         return myWeight;
     }
 
     @Override
-    public List<BigDecimal> getWeights() {
+    public List<BigDecimal> getWeights()
+    {
         return Collections.singletonList(myWeight);
     }
 
     @Override
-    protected void reset() {
+    protected void reset()
+    {
         ;
     }
 

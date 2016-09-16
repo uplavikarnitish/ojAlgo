@@ -35,20 +35,23 @@ import org.ojalgo.random.Normal1D;
  *
  * @author apete
  */
-public final class GaussianProcess extends AbstractProcess<Normal> {
+public final class GaussianProcess extends AbstractProcess<Normal>
+{
 
     private static final Normal GENERATOR = new Normal();
 
     private final GaussianField<Double> myDelegate;
 
-    public GaussianProcess(final GaussianField.Covariance<Double> covarFunc) {
+    public GaussianProcess(final GaussianField.Covariance<Double> covarFunc)
+    {
 
         super();
 
         myDelegate = new GaussianField<>(covarFunc, this.getObservations());
     }
 
-    public GaussianProcess(final GaussianField.Mean<Double> meanFunc, final GaussianField.Covariance<Double> covarFunc) {
+    public GaussianProcess(final GaussianField.Mean<Double> meanFunc, final GaussianField.Covariance<Double> covarFunc)
+    {
 
         super();
 
@@ -56,17 +59,20 @@ public final class GaussianProcess extends AbstractProcess<Normal> {
     }
 
     @SuppressWarnings("unused")
-    private GaussianProcess() {
+    private GaussianProcess()
+    {
         this(null, null);
     }
 
-    public void calibrate() {
+    public void calibrate()
+    {
         myDelegate.calibrate();
     }
 
-    public Normal getDistribution(final double evaluationPoint) {
+    public Normal getDistribution(final double evaluationPoint)
+    {
 
-        final Normal1D tmpVal = this.getDistribution(new Double[] { evaluationPoint });
+        final Normal1D tmpVal = this.getDistribution(new Double[]{evaluationPoint});
 
         final double tmpLocation = tmpVal.getExpected().doubleValue(0);
         final double tmpScale = tmpVal.getStandardDeviation().doubleValue(0);
@@ -74,17 +80,20 @@ public final class GaussianProcess extends AbstractProcess<Normal> {
         return new Normal(tmpLocation, tmpScale);
     }
 
-    public Normal1D getDistribution(final Double... evaluationPoint) {
+    public Normal1D getDistribution(final Double... evaluationPoint)
+    {
         return myDelegate.getDistribution(false, evaluationPoint);
     }
 
     @Override
-    protected double getNormalisedRandomIncrement() {
+    protected double getNormalisedRandomIncrement()
+    {
         return GENERATOR.doubleValue();
     }
 
     @Override
-    protected double step(final double currentValue, final double stepSize, final double normalisedRandomIncrement) {
+    protected double step(final double currentValue, final double stepSize, final double normalisedRandomIncrement)
+    {
 
         final Normal tmpDistr = this.getDistribution(stepSize);
 
@@ -95,32 +104,38 @@ public final class GaussianProcess extends AbstractProcess<Normal> {
         return retVal;
     }
 
-    MatrixStore<Double> getCovariances() {
+    MatrixStore<Double> getCovariances()
+    {
         return myDelegate.getC22().reconstruct();
     }
 
     @Override
-    double getExpected(final double stepSize) {
+    double getExpected(final double stepSize)
+    {
         return this.getDistribution(stepSize).getExpected();
     }
 
     @Override
-    double getLowerConfidenceQuantile(final double stepSize, final double confidence) {
+    double getLowerConfidenceQuantile(final double stepSize, final double confidence)
+    {
         return this.getDistribution(stepSize).getLowerConfidenceQuantile(confidence);
     }
 
     @Override
-    double getStandardDeviation(final double stepSize) {
+    double getStandardDeviation(final double stepSize)
+    {
         return this.getDistribution(stepSize).getStandardDeviation();
     }
 
     @Override
-    double getUpperConfidenceQuantile(final double stepSize, final double confidence) {
+    double getUpperConfidenceQuantile(final double stepSize, final double confidence)
+    {
         return this.getDistribution(stepSize).getUpperConfidenceQuantile(confidence);
     }
 
     @Override
-    double getVariance(final double stepSize) {
+    double getVariance(final double stepSize)
+    {
         return this.getDistribution(stepSize).getVariance();
     }
 

@@ -35,27 +35,31 @@ import org.ojalgo.scalar.Scalar;
  *
  * @author apete
  */
-final class LeftRightStore<N extends Number> extends DelegatingStore<N> {
+final class LeftRightStore<N extends Number> extends DelegatingStore<N>
+{
 
     private final MatrixStore<N> myRight;
     private final int mySplit;
 
     @SuppressWarnings("unused")
-    private LeftRightStore(final MatrixStore<N> base) {
+    private LeftRightStore(final MatrixStore<N> base)
+    {
 
         this(base, null);
 
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    LeftRightStore(final MatrixStore<N> base, final MatrixStore<N> right) {
+    LeftRightStore(final MatrixStore<N> base, final MatrixStore<N> right)
+    {
 
         super(base, (int) base.countRows(), (int) (base.countColumns() + right.countColumns()));
 
         myRight = right;
         mySplit = (int) base.countColumns();
 
-        if (base.countRows() != right.countRows()) {
+        if (base.countRows() != right.countRows())
+        {
             throw new IllegalArgumentException();
         }
     }
@@ -63,57 +67,69 @@ final class LeftRightStore<N extends Number> extends DelegatingStore<N> {
     /**
      * @see org.ojalgo.matrix.store.MatrixStore#doubleValue(long, long)
      */
-    public double doubleValue(final long row, final long col) {
+    public double doubleValue(final long row, final long col)
+    {
         return (col >= mySplit) ? myRight.doubleValue(row, col - mySplit) : this.getBase().doubleValue(row, col);
     }
 
-    public int firstInColumn(final int col) {
+    public int firstInColumn(final int col)
+    {
         return (col < mySplit) ? this.getBase().firstInColumn(col) : myRight.firstInColumn(col - mySplit);
     }
 
-    public int firstInRow(final int row) {
+    public int firstInRow(final int row)
+    {
         return this.getBase().firstInRow(row);
     }
 
-    public N get(final long row, final long col) {
+    public N get(final long row, final long col)
+    {
         return (col >= mySplit) ? myRight.get(row, col - mySplit) : this.getBase().get(row, col);
     }
 
     @Override
-    public int limitOfColumn(final int col) {
+    public int limitOfColumn(final int col)
+    {
         return (col < mySplit) ? this.getBase().limitOfColumn(col) : myRight.limitOfColumn(col - mySplit);
     }
 
     @Override
-    public int limitOfRow(final int row) {
+    public int limitOfRow(final int row)
+    {
         return mySplit + myRight.limitOfRow(row);
     }
 
-    public MatrixStore<N> premultiply(final Access1D<N> leftMtrx) {
+    public MatrixStore<N> premultiply(final Access1D<N> leftMtrx)
+    {
 
         final Future<MatrixStore<N>> tmpBaseFuture = this.executeMultiplyLeftOnBase(leftMtrx);
 
         final MatrixStore<N> tmpRight = myRight.premultiply(leftMtrx).get();
 
-        try {
+        try
+        {
             return new LeftRightStore<>(tmpBaseFuture.get(), tmpRight);
-        } catch (final InterruptedException | ExecutionException ex) {
+        } catch (final InterruptedException | ExecutionException ex)
+        {
             return null;
         }
     }
 
     @Override
-    public void supplyTo(final ElementsConsumer<N> consumer) {
+    public void supplyTo(final ElementsConsumer<N> consumer)
+    {
         this.getBase().supplyTo(consumer.regionByLimits(this.getRowDim(), mySplit));
         myRight.supplyTo(consumer.regionByOffsets(0, mySplit));
     }
 
-    public Scalar<N> toScalar(final long row, final long column) {
+    public Scalar<N> toScalar(final long row, final long column)
+    {
         return (column >= mySplit) ? myRight.toScalar(row, column - mySplit) : this.getBase().toScalar(row, column);
     }
 
     @Override
-    protected void addNonZerosTo(final ElementsConsumer<N> consumer) {
+    protected void addNonZerosTo(final ElementsConsumer<N> consumer)
+    {
         this.supplyTo(consumer);
     }
 

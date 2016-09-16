@@ -24,9 +24,11 @@ package org.ojalgo.algebra;
 /**
  * @author apete
  */
-public interface ScalarOperation {
+public interface ScalarOperation
+{
 
-    public interface Addition<T, N extends Number> extends ScalarOperation {
+    public interface Addition<T, N extends Number> extends ScalarOperation
+    {
 
         /**
          * @return <code>this + scalarAddend</code>.
@@ -40,7 +42,8 @@ public interface ScalarOperation {
 
     }
 
-    public interface Division<T, N extends Number> extends ScalarOperation {
+    public interface Division<T, N extends Number> extends ScalarOperation
+    {
 
         /**
          * @return <code>this / scalarDivisor</code>.
@@ -54,7 +57,8 @@ public interface ScalarOperation {
 
     }
 
-    public interface Multiplication<T, N extends Number> extends ScalarOperation {
+    public interface Multiplication<T, N extends Number> extends ScalarOperation
+    {
 
         /**
          * @return <code>this * scalarMultiplicand</code>.
@@ -68,7 +72,8 @@ public interface ScalarOperation {
 
     }
 
-    public interface Subtraction<T, N extends Number> extends ScalarOperation {
+    public interface Subtraction<T, N extends Number> extends ScalarOperation
+    {
 
         /**
          * @return <code>this - scalarSubtrahend</code>.

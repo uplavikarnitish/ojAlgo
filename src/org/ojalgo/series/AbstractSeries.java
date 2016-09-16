@@ -35,57 +35,70 @@ import org.ojalgo.type.ColourData;
 import org.ojalgo.type.TypeUtils;
 import org.ojalgo.type.keyvalue.KeyValue;
 
-abstract class AbstractSeries<K extends Comparable<K>, V extends Number, I extends AbstractSeries<K, V, I>> extends TreeMap<K, V> implements BasicSeries<K, V> {
+abstract class AbstractSeries<K extends Comparable<K>, V extends Number, I extends AbstractSeries<K, V, I>> extends TreeMap<K, V> implements BasicSeries<K, V>
+{
 
     private ColourData myColour = null;
     private String myName = null;
 
-    protected AbstractSeries() {
+    protected AbstractSeries()
+    {
         super();
     }
 
-    protected AbstractSeries(final Comparator<? super K> comparator) {
+    protected AbstractSeries(final Comparator<? super K> comparator)
+    {
         super(comparator);
     }
 
-    protected AbstractSeries(final Map<? extends K, ? extends V> map) {
+    protected AbstractSeries(final Map<? extends K, ? extends V> map)
+    {
         super(map);
     }
 
-    protected AbstractSeries(final SortedMap<K, ? extends V> sortedMap) {
+    protected AbstractSeries(final SortedMap<K, ? extends V> sortedMap)
+    {
         super(sortedMap);
     }
 
-    public I colour(final ColourData colour) {
+    public I colour(final ColourData colour)
+    {
         myColour = colour;
         return (I) this;
     }
 
-    public V firstValue() {
+    public V firstValue()
+    {
         return this.get(this.firstKey());
     }
 
-    public ColourData getColour() {
+    public ColourData getColour()
+    {
         return myColour;
     }
 
-    public DataSeries getDataSeries() {
+    public DataSeries getDataSeries()
+    {
         return DataSeries.wrap(this.getPrimitiveValues());
     }
 
-    public String getName() {
-        if (myName == null) {
+    public String getName()
+    {
+        if (myName == null)
+        {
             myName = UUID.randomUUID().toString();
         }
         return myName;
     }
 
-    public double[] getPrimitiveValues() {
+    public double[] getPrimitiveValues()
+    {
 
         final double[] retVal = new double[this.size()];
 
         int i = 0;
-        for (final V tmpValue : this.values()) {
+        for (final V tmpValue : this.values())
+        {
             retVal[i] = tmpValue.doubleValue();
             i++;
         }
@@ -93,29 +106,36 @@ abstract class AbstractSeries<K extends Comparable<K>, V extends Number, I exten
         return retVal;
     }
 
-    public V lastValue() {
+    public V lastValue()
+    {
         return this.get(this.lastKey());
     }
 
-    public void modifyAll(final UnaryFunction<V> function) {
-        for (final Map.Entry<K, V> tmpEntry : this.entrySet()) {
+    public void modifyAll(final UnaryFunction<V> function)
+    {
+        for (final Map.Entry<K, V> tmpEntry : this.entrySet())
+        {
             this.put(tmpEntry.getKey(), function.invoke(tmpEntry.getValue()));
         }
     }
 
-    public I name(final String name) {
+    public I name(final String name)
+    {
         myName = name;
         return (I) this;
     }
 
-    public void putAll(final Collection<? extends KeyValue<? extends K, ? extends V>> data) {
-        for (final KeyValue<? extends K, ? extends V> tmpKeyValue : data) {
+    public void putAll(final Collection<? extends KeyValue<? extends K, ? extends V>> data)
+    {
+        for (final KeyValue<? extends K, ? extends V> tmpKeyValue : data)
+        {
             this.put(tmpKeyValue.getKey(), tmpKeyValue.getValue());
         }
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
 
         final StringBuilder retVal = this.toStringFirstPart();
 
@@ -124,16 +144,20 @@ abstract class AbstractSeries<K extends Comparable<K>, V extends Number, I exten
         return retVal.toString();
     }
 
-    final void appendLastPartToString(final StringBuilder builder) {
+    final void appendLastPartToString(final StringBuilder builder)
+    {
 
-        if (myColour != null) {
+        if (myColour != null)
+        {
             builder.append(TypeUtils.toHexString(myColour.getRGB()));
             builder.append(ASCII.NBSP);
         }
 
-        if (this.size() <= 30) {
+        if (this.size() <= 30)
+        {
             builder.append(super.toString());
-        } else {
+        } else
+        {
             builder.append("First:");
             builder.append(this.firstEntry());
             builder.append(ASCII.NBSP);
@@ -145,19 +169,23 @@ abstract class AbstractSeries<K extends Comparable<K>, V extends Number, I exten
         }
     }
 
-    void setColour(final ColourData colour) {
+    void setColour(final ColourData colour)
+    {
         this.colour(colour);
     }
 
-    void setName(final String name) {
+    void setName(final String name)
+    {
         this.name(name);
     }
 
-    StringBuilder toStringFirstPart() {
+    StringBuilder toStringFirstPart()
+    {
 
         final StringBuilder retVal = new StringBuilder();
 
-        if (myName != null) {
+        if (myName != null)
+        {
             retVal.append(myName);
             retVal.append(ASCII.NBSP);
         }

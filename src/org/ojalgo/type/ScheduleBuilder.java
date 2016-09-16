@@ -25,14 +25,16 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class ScheduleBuilder {
+public class ScheduleBuilder
+{
 
     private final TimerTask myTask;
     private Date myStartDate = null;
     private int myRepetitionMeassure;
     private CalendarDateUnit myRepetitionUnit = null;
 
-    public ScheduleBuilder(final TimerTask aTask) {
+    public ScheduleBuilder(final TimerTask aTask)
+    {
 
         super();
 
@@ -40,38 +42,49 @@ public class ScheduleBuilder {
     }
 
     @SuppressWarnings("unused")
-    private ScheduleBuilder() {
+    private ScheduleBuilder()
+    {
         this(null);
     }
 
-    public ScheduleBuilder repetition(final int aRepetitionMeassure, final CalendarDateUnit aRepetitionUnit) {
+    public ScheduleBuilder repetition(final int aRepetitionMeassure, final CalendarDateUnit aRepetitionUnit)
+    {
         myRepetitionMeassure = aRepetitionMeassure;
         myRepetitionUnit = aRepetitionUnit;
         return this;
     }
 
-    public void schedule(final Timer aTimer) {
-        if (myStartDate != null) {
-            if (myRepetitionUnit != null) {
+    public void schedule(final Timer aTimer)
+    {
+        if (myStartDate != null)
+        {
+            if (myRepetitionUnit != null)
+            {
                 aTimer.scheduleAtFixedRate(myTask, myStartDate, myRepetitionMeassure * myRepetitionUnit.size());
-            } else {
+            } else
+            {
                 aTimer.schedule(myTask, myStartDate);
             }
-        } else {
-            if (myRepetitionUnit != null) {
+        } else
+        {
+            if (myRepetitionUnit != null)
+            {
                 aTimer.scheduleAtFixedRate(myTask, new Date(), myRepetitionMeassure * myRepetitionUnit.size());
-            } else {
+            } else
+            {
                 aTimer.schedule(myTask, new Date());
             }
         }
     }
 
-    public ScheduleBuilder start(final Date aStartDate) {
+    public ScheduleBuilder start(final Date aStartDate)
+    {
         myStartDate = new Date(aStartDate.getTime());
         return this;
     }
 
-    public ScheduleBuilder start(final int aDelayMeassure, final CalendarDateUnit aDelayUnit) {
+    public ScheduleBuilder start(final int aDelayMeassure, final CalendarDateUnit aDelayUnit)
+    {
         myStartDate = new Date(System.currentTimeMillis() + (aDelayMeassure * aDelayUnit.size()));
         return this;
     }

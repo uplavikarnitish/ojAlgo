@@ -35,7 +35,8 @@ import org.ojalgo.matrix.store.ElementsConsumer;
 import org.ojalgo.matrix.store.PrimitiveDenseStore.PrimitiveMultiplyBoth;
 import org.ojalgo.scalar.ComplexNumber;
 
-public final class MultiplyBoth extends MatrixOperation {
+public final class MultiplyBoth extends MatrixOperation
+{
 
     public static final MultiplyBoth SETUP = new MultiplyBoth();
 
@@ -44,12 +45,15 @@ public final class MultiplyBoth extends MatrixOperation {
     static final BigMultiplyBoth BIG = (product, left, complexity, right) -> MultiplyBoth.invokeBig(product, 0, ((int) left.count()) / complexity, left,
             complexity, right);
 
-    static final BigMultiplyBoth BIG_MT = (product, left, complexity, right) -> {
+    static final BigMultiplyBoth BIG_MT = (product, left, complexity, right) ->
+    {
 
-        final DivideAndConquer tmpConquerer = new DivideAndConquer() {
+        final DivideAndConquer tmpConquerer = new DivideAndConquer()
+        {
 
             @Override
-            public void conquer(final int first, final int limit) {
+            public void conquer(final int first, final int limit)
+            {
                 MultiplyBoth.invokeBig(product, first, limit, left, complexity, right);
             }
         };
@@ -60,12 +64,15 @@ public final class MultiplyBoth extends MatrixOperation {
     static final ComplexMultiplyBoth COMPLEX = (product, left, complexity, right) -> MultiplyBoth.invokeComplex(product, 0, ((int) left.count()) / complexity,
             left, complexity, right);
 
-    static final ComplexMultiplyBoth COMPLEX_MT = (product, left, complexity, right) -> {
+    static final ComplexMultiplyBoth COMPLEX_MT = (product, left, complexity, right) ->
+    {
 
-        final DivideAndConquer tmpConquerer = new DivideAndConquer() {
+        final DivideAndConquer tmpConquerer = new DivideAndConquer()
+        {
 
             @Override
-            public void conquer(final int first, final int limit) {
+            public void conquer(final int first, final int limit)
+            {
                 MultiplyBoth.invokeComplex(product, first, limit, left, complexity, right);
             }
         };
@@ -76,12 +83,14 @@ public final class MultiplyBoth extends MatrixOperation {
     static final PrimitiveMultiplyBoth PRIMITIVE = (product, left, complexity, right) -> MultiplyBoth.invokePrimitive(product, 0,
             ((int) left.count()) / complexity, left, complexity, right);
 
-    static final PrimitiveMultiplyBoth PRIMITIVE_0XN = (product, left, complexity, right) -> {
+    static final PrimitiveMultiplyBoth PRIMITIVE_0XN = (product, left, complexity, right) ->
+    {
 
         left.count();
         final int tmpColDim = (int) (right.count() / complexity);
 
-        for (int j = 0; j < tmpColDim; j++) {
+        for (int j = 0; j < tmpColDim; j++)
+        {
 
             double tmp0J = PrimitiveMath.ZERO;
             double tmp1J = PrimitiveMath.ZERO;
@@ -95,7 +104,8 @@ public final class MultiplyBoth extends MatrixOperation {
             double tmp9J = PrimitiveMath.ZERO;
 
             int tmpIndex = 0;
-            for (int c = 0; c < complexity; c++) {
+            for (int c = 0; c < complexity; c++)
+            {
                 final double tmpRightCJ = right.doubleValue(c + (j * complexity));
                 tmp0J += left.doubleValue(tmpIndex++) * tmpRightCJ;
                 tmp1J += left.doubleValue(tmpIndex++) * tmpRightCJ;
@@ -122,27 +132,32 @@ public final class MultiplyBoth extends MatrixOperation {
         }
     };
 
-    static final PrimitiveMultiplyBoth PRIMITIVE_1X1 = (product, left, complexity, right) -> {
+    static final PrimitiveMultiplyBoth PRIMITIVE_1X1 = (product, left, complexity, right) ->
+    {
 
         double tmp00 = PrimitiveMath.ZERO;
 
-        for (long c = 0L; c < complexity; c++) {
+        for (long c = 0L; c < complexity; c++)
+        {
             tmp00 += left.doubleValue(c) * right.doubleValue(c);
         }
 
         product.set(0L, 0L, tmp00);
     };
 
-    static final PrimitiveMultiplyBoth PRIMITIVE_1XN = (product, left, complexity, right) -> {
+    static final PrimitiveMultiplyBoth PRIMITIVE_1XN = (product, left, complexity, right) ->
+    {
 
         final int tmpColDim = (int) (right.count() / complexity);
 
-        for (int j = 0; j < tmpColDim; j++) {
+        for (int j = 0; j < tmpColDim; j++)
+        {
 
             double tmp0J = PrimitiveMath.ZERO;
 
             int tmpIndex = 0;
-            for (int c = 0; c < complexity; c++) {
+            for (int c = 0; c < complexity; c++)
+            {
                 tmp0J += left.doubleValue(tmpIndex++) * right.doubleValue(c + (j * complexity));
             }
 
@@ -150,7 +165,8 @@ public final class MultiplyBoth extends MatrixOperation {
         }
     };
 
-    static final PrimitiveMultiplyBoth PRIMITIVE_2X2 = (product, left, complexity, right) -> {
+    static final PrimitiveMultiplyBoth PRIMITIVE_2X2 = (product, left, complexity, right) ->
+    {
 
         double tmp00 = PrimitiveMath.ZERO;
         double tmp10 = PrimitiveMath.ZERO;
@@ -158,7 +174,8 @@ public final class MultiplyBoth extends MatrixOperation {
         double tmp11 = PrimitiveMath.ZERO;
 
         long tmpIndex;
-        for (long c = 0; c < complexity; c++) {
+        for (long c = 0; c < complexity; c++)
+        {
 
             tmpIndex = c * 2L;
             final double tmpLeft0 = left.doubleValue(tmpIndex);
@@ -182,7 +199,8 @@ public final class MultiplyBoth extends MatrixOperation {
         product.set(1, 1, tmp11);
     };
 
-    static final PrimitiveMultiplyBoth PRIMITIVE_3X3 = (product, left, complexity, right) -> {
+    static final PrimitiveMultiplyBoth PRIMITIVE_3X3 = (product, left, complexity, right) ->
+    {
 
         double tmp00 = PrimitiveMath.ZERO;
         double tmp10 = PrimitiveMath.ZERO;
@@ -195,7 +213,8 @@ public final class MultiplyBoth extends MatrixOperation {
         double tmp22 = PrimitiveMath.ZERO;
 
         long tmpIndex;
-        for (long c = 0; c < complexity; c++) {
+        for (long c = 0; c < complexity; c++)
+        {
 
             tmpIndex = c * 3L;
             final double tmpLeft0 = left.doubleValue(tmpIndex);
@@ -234,7 +253,8 @@ public final class MultiplyBoth extends MatrixOperation {
         product.set(2, 2, tmp22);
     };
 
-    static final PrimitiveMultiplyBoth PRIMITIVE_4X4 = (product, left, complexity, right) -> {
+    static final PrimitiveMultiplyBoth PRIMITIVE_4X4 = (product, left, complexity, right) ->
+    {
 
         double tmp00 = PrimitiveMath.ZERO;
         double tmp10 = PrimitiveMath.ZERO;
@@ -254,7 +274,8 @@ public final class MultiplyBoth extends MatrixOperation {
         double tmp33 = PrimitiveMath.ZERO;
 
         long tmpIndex;
-        for (long c = 0; c < complexity; c++) {
+        for (long c = 0; c < complexity; c++)
+        {
 
             tmpIndex = c * 4L;
             final double tmpLeft0 = left.doubleValue(tmpIndex);
@@ -312,7 +333,8 @@ public final class MultiplyBoth extends MatrixOperation {
         product.set(3, 3, tmp33);
     };
 
-    static final PrimitiveMultiplyBoth PRIMITIVE_5X5 = (product, left, complexity, right) -> {
+    static final PrimitiveMultiplyBoth PRIMITIVE_5X5 = (product, left, complexity, right) ->
+    {
 
         double tmp00 = PrimitiveMath.ZERO;
         double tmp10 = PrimitiveMath.ZERO;
@@ -341,7 +363,8 @@ public final class MultiplyBoth extends MatrixOperation {
         double tmp44 = PrimitiveMath.ZERO;
 
         long tmpIndex;
-        for (long c = 0; c < complexity; c++) {
+        for (long c = 0; c < complexity; c++)
+        {
 
             tmpIndex = c * 5L;
             final double tmpLeft0 = left.doubleValue(tmpIndex);
@@ -422,11 +445,13 @@ public final class MultiplyBoth extends MatrixOperation {
         product.set(4, 4, tmp44);
     };
 
-    static final PrimitiveMultiplyBoth PRIMITIVE_6XN = (product, left, complexity, right) -> {
+    static final PrimitiveMultiplyBoth PRIMITIVE_6XN = (product, left, complexity, right) ->
+    {
 
         final int tmpColDim = (int) (right.count() / complexity);
 
-        for (int j = 0; j < tmpColDim; j++) {
+        for (int j = 0; j < tmpColDim; j++)
+        {
 
             double tmp0J = PrimitiveMath.ZERO;
             double tmp1J = PrimitiveMath.ZERO;
@@ -436,7 +461,8 @@ public final class MultiplyBoth extends MatrixOperation {
             double tmp5J = PrimitiveMath.ZERO;
 
             int tmpIndex = 0;
-            for (int c = 0; c < complexity; c++) {
+            for (int c = 0; c < complexity; c++)
+            {
                 final double tmpRightCJ = right.doubleValue(c + (j * complexity));
                 tmp0J += left.doubleValue(tmpIndex++) * tmpRightCJ;
                 tmp1J += left.doubleValue(tmpIndex++) * tmpRightCJ;
@@ -455,12 +481,14 @@ public final class MultiplyBoth extends MatrixOperation {
         }
     };
 
-    static final PrimitiveMultiplyBoth PRIMITIVE_7XN = (product, left, complexity, right) -> {
+    static final PrimitiveMultiplyBoth PRIMITIVE_7XN = (product, left, complexity, right) ->
+    {
 
         left.count();
         final int tmpColDim = (int) (right.count() / complexity);
 
-        for (int j = 0; j < tmpColDim; j++) {
+        for (int j = 0; j < tmpColDim; j++)
+        {
 
             double tmp0J = PrimitiveMath.ZERO;
             double tmp1J = PrimitiveMath.ZERO;
@@ -471,7 +499,8 @@ public final class MultiplyBoth extends MatrixOperation {
             double tmp6J = PrimitiveMath.ZERO;
 
             int tmpIndex = 0;
-            for (int c = 0; c < complexity; c++) {
+            for (int c = 0; c < complexity; c++)
+            {
                 final double tmpRightCJ = right.doubleValue(c + (j * complexity));
                 tmp0J += left.doubleValue(tmpIndex++) * tmpRightCJ;
                 tmp1J += left.doubleValue(tmpIndex++) * tmpRightCJ;
@@ -492,12 +521,14 @@ public final class MultiplyBoth extends MatrixOperation {
         }
     };
 
-    static final PrimitiveMultiplyBoth PRIMITIVE_8XN = (product, left, complexity, right) -> {
+    static final PrimitiveMultiplyBoth PRIMITIVE_8XN = (product, left, complexity, right) ->
+    {
 
         left.count();
         final int tmpColDim = (int) (right.count() / complexity);
 
-        for (int j = 0; j < tmpColDim; j++) {
+        for (int j = 0; j < tmpColDim; j++)
+        {
 
             double tmp0J = PrimitiveMath.ZERO;
             double tmp1J = PrimitiveMath.ZERO;
@@ -509,7 +540,8 @@ public final class MultiplyBoth extends MatrixOperation {
             double tmp7J = PrimitiveMath.ZERO;
 
             int tmpIndex = 0;
-            for (int c = 0; c < complexity; c++) {
+            for (int c = 0; c < complexity; c++)
+            {
                 final double tmpRightCJ = right.doubleValue(c + (j * complexity));
                 tmp0J += left.doubleValue(tmpIndex++) * tmpRightCJ;
                 tmp1J += left.doubleValue(tmpIndex++) * tmpRightCJ;
@@ -532,12 +564,14 @@ public final class MultiplyBoth extends MatrixOperation {
         }
     };
 
-    static final PrimitiveMultiplyBoth PRIMITIVE_9XN = (product, left, complexity, right) -> {
+    static final PrimitiveMultiplyBoth PRIMITIVE_9XN = (product, left, complexity, right) ->
+    {
 
         left.count();
         final int tmpColDim = (int) (right.count() / complexity);
 
-        for (int j = 0; j < tmpColDim; j++) {
+        for (int j = 0; j < tmpColDim; j++)
+        {
 
             double tmp0J = PrimitiveMath.ZERO;
             double tmp1J = PrimitiveMath.ZERO;
@@ -550,7 +584,8 @@ public final class MultiplyBoth extends MatrixOperation {
             double tmp8J = PrimitiveMath.ZERO;
 
             int tmpIndex = 0;
-            for (int c = 0; c < complexity; c++) {
+            for (int c = 0; c < complexity; c++)
+            {
                 final double tmpRightCJ = right.doubleValue(c + (j * complexity));
                 tmp0J += left.doubleValue(tmpIndex++) * tmpRightCJ;
                 tmp1J += left.doubleValue(tmpIndex++) * tmpRightCJ;
@@ -575,12 +610,15 @@ public final class MultiplyBoth extends MatrixOperation {
         }
     };
 
-    static final PrimitiveMultiplyBoth PRIMITIVE_MT = (product, left, complexity, right) -> {
+    static final PrimitiveMultiplyBoth PRIMITIVE_MT = (product, left, complexity, right) ->
+    {
 
-        final DivideAndConquer tmpConquerer = new DivideAndConquer() {
+        final DivideAndConquer tmpConquerer = new DivideAndConquer()
+        {
 
             @Override
-            public void conquer(final int first, final int limit) {
+            public void conquer(final int first, final int limit)
+            {
                 MultiplyBoth.invokePrimitive(product, first, limit, left, complexity, right);
             }
         };
@@ -588,52 +626,72 @@ public final class MultiplyBoth extends MatrixOperation {
         tmpConquerer.invoke(0, ((int) left.count()) / complexity, THRESHOLD);
     };
 
-    public static BigMultiplyBoth getBig(final long rows, final long columns) {
-        if (rows > THRESHOLD) {
+    public static BigMultiplyBoth getBig(final long rows, final long columns)
+    {
+        if (rows > THRESHOLD)
+        {
             return BIG_MT;
-        } else {
+        } else
+        {
             return BIG;
         }
     }
 
-    public static ComplexMultiplyBoth getComplex(final long rows, final long columns) {
-        if (rows > THRESHOLD) {
+    public static ComplexMultiplyBoth getComplex(final long rows, final long columns)
+    {
+        if (rows > THRESHOLD)
+        {
             return COMPLEX_MT;
-        } else {
+        } else
+        {
             return COMPLEX;
         }
     }
 
-    public static PrimitiveMultiplyBoth getPrimitive(final long rows, final long columns) {
-        if (rows > THRESHOLD) {
+    public static PrimitiveMultiplyBoth getPrimitive(final long rows, final long columns)
+    {
+        if (rows > THRESHOLD)
+        {
             return PRIMITIVE_MT;
-        } else if (rows == 10) {
+        } else if (rows == 10)
+        {
             return PRIMITIVE_0XN;
-        } else if (rows == 9) {
+        } else if (rows == 9)
+        {
             return PRIMITIVE_9XN;
-        } else if (rows == 8) {
+        } else if (rows == 8)
+        {
             return PRIMITIVE_8XN;
-        } else if (rows == 7) {
+        } else if (rows == 7)
+        {
             return PRIMITIVE_7XN;
-        } else if (rows == 6) {
+        } else if (rows == 6)
+        {
             return PRIMITIVE_6XN;
-        } else if ((rows == 5) && (columns == 5)) {
+        } else if ((rows == 5) && (columns == 5))
+        {
             return PRIMITIVE_5X5;
-        } else if ((rows == 4) && (columns == 4)) {
+        } else if ((rows == 4) && (columns == 4))
+        {
             return PRIMITIVE_4X4;
-        } else if ((rows == 3) && (columns == 3)) {
+        } else if ((rows == 3) && (columns == 3))
+        {
             return PRIMITIVE_3X3;
-        } else if ((rows == 2) && (columns == 2)) {
+        } else if ((rows == 2) && (columns == 2))
+        {
             return PRIMITIVE_2X2;
-        } else if (rows == 1) {
+        } else if (rows == 1)
+        {
             return PRIMITIVE_1XN;
-        } else {
+        } else
+        {
             return PRIMITIVE;
         }
     }
 
     static void invokeBig(final ElementsConsumer<BigDecimal> product, final int firstRow, final int rowLimit, final Access1D<BigDecimal> left,
-            final int complexity, final Access1D<BigDecimal> right) {
+                          final int complexity, final Access1D<BigDecimal> right)
+    {
 
         final int tmpRowDim = (int) (left.count() / complexity);
         final int tmpColDim = (int) (right.count() / complexity);
@@ -644,23 +702,27 @@ public final class MultiplyBoth extends MatrixOperation {
         int tmpFirst = 0;
         int tmpLimit = complexity;
 
-        for (int i = firstRow; i < rowLimit; i++) {
+        for (int i = firstRow; i < rowLimit; i++)
+        {
 
             final int tmpFirstInRow = MatrixUtils.firstInRow(left, i, 0);
             final int tmpLimitOfRow = MatrixUtils.limitOfRow(left, i, complexity);
 
-            for (int c = tmpFirstInRow; c < tmpLimitOfRow; c++) {
+            for (int c = tmpFirstInRow; c < tmpLimitOfRow; c++)
+            {
                 tmpLeftRow[c] = left.get(i + (c * tmpRowDim));
             }
 
-            for (int j = 0; j < tmpColDim; j++) {
+            for (int j = 0; j < tmpColDim; j++)
+            {
                 final int tmpColBase = j * complexity;
 
                 tmpFirst = MatrixUtils.firstInColumn(right, j, tmpFirstInRow);
                 tmpLimit = MatrixUtils.limitOfColumn(right, j, tmpLimitOfRow);
 
                 tmpVal = BigMath.ZERO;
-                for (int c = tmpFirst; c < tmpLimit; c++) {
+                for (int c = tmpFirst; c < tmpLimit; c++)
+                {
                     tmpVal = BigFunction.ADD.invoke(tmpVal, BigFunction.MULTIPLY.invoke(tmpLeftRow[c], right.get(c + tmpColBase)));
                 }
                 product.set(i, j, tmpVal);
@@ -669,7 +731,8 @@ public final class MultiplyBoth extends MatrixOperation {
     }
 
     static void invokeComplex(final ElementsConsumer<ComplexNumber> product, final int firstRow, final int rowLimit, final Access1D<ComplexNumber> left,
-            final int complexity, final Access1D<ComplexNumber> right) {
+                              final int complexity, final Access1D<ComplexNumber> right)
+    {
 
         final int tmpRowDim = (int) (left.count() / complexity);
         final int tmpColDim = (int) (right.count() / complexity);
@@ -680,23 +743,27 @@ public final class MultiplyBoth extends MatrixOperation {
         int tmpFirst = 0;
         int tmpLimit = complexity;
 
-        for (int i = firstRow; i < rowLimit; i++) {
+        for (int i = firstRow; i < rowLimit; i++)
+        {
 
             final int tmpFirstInRow = MatrixUtils.firstInRow(left, i, 0);
             final int tmpLimitOfRow = MatrixUtils.limitOfRow(left, i, complexity);
 
-            for (int c = tmpFirstInRow; c < tmpLimitOfRow; c++) {
+            for (int c = tmpFirstInRow; c < tmpLimitOfRow; c++)
+            {
                 tmpLeftRow[c] = left.get(i + (c * tmpRowDim));
             }
 
-            for (int j = 0; j < tmpColDim; j++) {
+            for (int j = 0; j < tmpColDim; j++)
+            {
                 final int tmpColBase = j * complexity;
 
                 tmpFirst = MatrixUtils.firstInColumn(right, j, tmpFirstInRow);
                 tmpLimit = MatrixUtils.limitOfColumn(right, j, tmpLimitOfRow);
 
                 tmpVal = ComplexNumber.ZERO;
-                for (int c = tmpFirst; c < tmpLimit; c++) {
+                for (int c = tmpFirst; c < tmpLimit; c++)
+                {
                     tmpVal = tmpVal.add(tmpLeftRow[c].multiply(right.get(c + tmpColBase)));
                 }
                 product.set(i, j, tmpVal);
@@ -705,7 +772,8 @@ public final class MultiplyBoth extends MatrixOperation {
     }
 
     static void invokePrimitive(final ElementsConsumer<Double> product, final int firstRow, final int rowLimit, final Access1D<Double> left,
-            final int complexity, final Access1D<Double> right) {
+                                final int complexity, final Access1D<Double> right)
+    {
 
         final int tmpRowDim = (int) product.countRows();
         final int tmpColDim = (int) product.countColumns();
@@ -716,23 +784,27 @@ public final class MultiplyBoth extends MatrixOperation {
         int tmpFirst = 0;
         int tmpLimit = complexity;
 
-        for (int i = firstRow; i < rowLimit; i++) {
+        for (int i = firstRow; i < rowLimit; i++)
+        {
 
             final int tmpFirstInRow = MatrixUtils.firstInRow(left, i, 0);
             final int tmpLimitOfRow = MatrixUtils.limitOfRow(left, i, complexity);
 
-            for (int c = tmpFirstInRow; c < tmpLimitOfRow; c++) {
+            for (int c = tmpFirstInRow; c < tmpLimitOfRow; c++)
+            {
                 tmpLeftRow[c] = left.doubleValue(i + (c * tmpRowDim));
             }
 
-            for (int j = 0; j < tmpColDim; j++) {
+            for (int j = 0; j < tmpColDim; j++)
+            {
                 final int tmpColBase = j * complexity;
 
                 tmpFirst = MatrixUtils.firstInColumn(right, j, tmpFirstInRow);
                 tmpLimit = MatrixUtils.limitOfColumn(right, j, tmpLimitOfRow);
 
                 tmpVal = PrimitiveMath.ZERO;
-                for (int c = tmpFirst; c < tmpLimit; c++) {
+                for (int c = tmpFirst; c < tmpLimit; c++)
+                {
                     tmpVal += tmpLeftRow[c] * right.doubleValue(c + tmpColBase);
                 }
                 product.set(i, j, tmpVal);
@@ -740,12 +812,14 @@ public final class MultiplyBoth extends MatrixOperation {
         }
     }
 
-    private MultiplyBoth() {
+    private MultiplyBoth()
+    {
         super();
     }
 
     @Override
-    public int threshold() {
+    public int threshold()
+    {
         return THRESHOLD;
     }
 

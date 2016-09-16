@@ -40,18 +40,21 @@ import org.ojalgo.type.context.NumberContext;
  *
  * @author apete
  */
-public final class ConjugateGradientSolver extends KrylovSubspaceSolver implements IterativeSolverTask.SparseDelegate {
+public final class ConjugateGradientSolver extends KrylovSubspaceSolver implements IterativeSolverTask.SparseDelegate
+{
 
     private transient PrimitiveDenseStore myDirection = null;
     private transient PrimitiveDenseStore myPreconditioned = null;
     private transient PrimitiveDenseStore myResidual = null;
     private transient PrimitiveDenseStore myVector = null;
 
-    public ConjugateGradientSolver() {
+    public ConjugateGradientSolver()
+    {
         super();
     }
 
-    public double resolve(final List<Equation> equations, final PhysicalStore<Double> solution) {
+    public double resolve(final List<Equation> equations, final PhysicalStore<Double> solution)
+    {
 
         final int tmpCountRows = equations.size();
 
@@ -70,7 +73,8 @@ public final class ConjugateGradientSolver extends KrylovSubspaceSolver implemen
         double zr1 = 1;
         double pAp0 = 0;
 
-        for (int r = 0; r < tmpCountRows; r++) {
+        for (int r = 0; r < tmpCountRows; r++)
+        {
             final Equation tmpRow = equations.get(r);
             double tmpVal = tmpRow.getRHS();
             tmpNormRHS = PrimitiveFunction.HYPOT.invoke(tmpNormRHS, tmpVal);
@@ -88,11 +92,13 @@ public final class ConjugateGradientSolver extends KrylovSubspaceSolver implemen
         // zr1 = tmpPreconditioned.transpose().multiply(tmpResidual).doubleValue(0L);
         zr1 = tmpPreconditioned.dot(tmpResidual);
 
-        do {
+        do
+        {
 
             zr0 = zr1;
 
-            for (int i = 0; i < tmpCountRows; i++) {
+            for (int i = 0; i < tmpCountRows; i++)
+            {
                 final Equation tmpRow = equations.get(i);
                 final double tmpVal = tmpRow.dot(tmpDirection);
                 tmpVector.set(tmpRow.index, tmpVal);
@@ -103,14 +109,16 @@ public final class ConjugateGradientSolver extends KrylovSubspaceSolver implemen
 
             tmpStepLength = zr0 / pAp0;
 
-            if (!Double.isNaN(tmpStepLength)) {
+            if (!Double.isNaN(tmpStepLength))
+            {
                 solution.maxpy(tmpStepLength, tmpDirection);
                 tmpResidual.maxpy(-tmpStepLength, tmpVector);
             }
 
             tmpNormErr = ZERO;
 
-            for (int r = 0; r < tmpCountRows; r++) {
+            for (int r = 0; r < tmpCountRows; r++)
+            {
                 final Equation tmpRow = equations.get(r);
                 final double tmpValue = tmpResidual.doubleValue(tmpRow.index);
                 tmpNormErr = PrimitiveFunction.HYPOT.invoke(tmpNormErr, tmpValue);
@@ -125,7 +133,8 @@ public final class ConjugateGradientSolver extends KrylovSubspaceSolver implemen
 
             tmpIterations++;
 
-            if (this.isDebugPrinterSet()) {
+            if (this.isDebugPrinterSet())
+            {
                 this.debug(tmpIterations, solution);
             }
 
@@ -136,7 +145,8 @@ public final class ConjugateGradientSolver extends KrylovSubspaceSolver implemen
         return tmpNormErr / tmpNormRHS;
     }
 
-    public MatrixStore<Double> solve(final Access2D<?> body, final Access2D<?> rhs, final DecompositionStore<Double> preallocated) throws TaskException {
+    public MatrixStore<Double> solve(final Access2D<?> body, final Access2D<?> rhs, final DecompositionStore<Double> preallocated) throws TaskException
+    {
 
         final List<Equation> tmpRows = IterativeSolverTask.toListOfRows(body, rhs);
 
@@ -145,37 +155,49 @@ public final class ConjugateGradientSolver extends KrylovSubspaceSolver implemen
         return preallocated;
     }
 
-    private PrimitiveDenseStore direction(final Structure1D structure) {
-        if ((myDirection == null) || (myDirection.count() != structure.count())) {
+    private PrimitiveDenseStore direction(final Structure1D structure)
+    {
+        if ((myDirection == null) || (myDirection.count() != structure.count()))
+        {
             myDirection = PrimitiveDenseStore.FACTORY.makeZero(structure.count(), 1L);
-        } else {
+        } else
+        {
             myDirection.fillAll(ZERO);
         }
         return myDirection;
     }
 
-    private PrimitiveDenseStore preconditioned(final Structure1D structure) {
-        if ((myPreconditioned == null) || (myPreconditioned.count() != structure.count())) {
+    private PrimitiveDenseStore preconditioned(final Structure1D structure)
+    {
+        if ((myPreconditioned == null) || (myPreconditioned.count() != structure.count()))
+        {
             myPreconditioned = PrimitiveDenseStore.FACTORY.makeZero(structure.count(), 1L);
-        } else {
+        } else
+        {
             myPreconditioned.fillAll(ZERO);
         }
         return myPreconditioned;
     }
 
-    private PrimitiveDenseStore residual(final Structure1D structure) {
-        if ((myResidual == null) || (myResidual.count() != structure.count())) {
+    private PrimitiveDenseStore residual(final Structure1D structure)
+    {
+        if ((myResidual == null) || (myResidual.count() != structure.count()))
+        {
             myResidual = PrimitiveDenseStore.FACTORY.makeZero(structure.count(), 1L);
-        } else {
+        } else
+        {
             myResidual.fillAll(ZERO);
         }
         return myResidual;
     }
 
-    private PrimitiveDenseStore vector(final Structure1D structure) {
-        if ((myVector == null) || (myVector.count() != structure.count())) {
+    private PrimitiveDenseStore vector(final Structure1D structure)
+    {
+        if ((myVector == null) || (myVector.count() != structure.count()))
+        {
             myVector = PrimitiveDenseStore.FACTORY.makeZero(structure.count(), 1L);
-        } else {
+        } else
+        {
             myVector.fillAll(ZERO);
         }
         return myVector;

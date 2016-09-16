@@ -38,51 +38,62 @@ import org.ojalgo.scalar.Scalar;
  *
  * @author apete
  */
-public final class QuadraticFunction<N extends Number> extends AbstractMultiary<N, QuadraticFunction<N>> implements MultiaryFunction.Quadratic<N> {
+public final class QuadraticFunction<N extends Number> extends AbstractMultiary<N, QuadraticFunction<N>> implements MultiaryFunction.Quadratic<N>
+{
 
-    public static QuadraticFunction<BigDecimal> makeBig(final Access2D<? extends Number> factors) {
+    public static QuadraticFunction<BigDecimal> makeBig(final Access2D<? extends Number> factors)
+    {
         return new QuadraticFunction<>(BigDenseStore.FACTORY.copy(factors));
     }
 
-    public static QuadraticFunction<BigDecimal> makeBig(final int arity) {
+    public static QuadraticFunction<BigDecimal> makeBig(final int arity)
+    {
         return new QuadraticFunction<>(BigDenseStore.FACTORY.makeZero(arity, arity));
     }
 
-    public static QuadraticFunction<ComplexNumber> makeComplex(final Access2D<? extends Number> factors) {
+    public static QuadraticFunction<ComplexNumber> makeComplex(final Access2D<? extends Number> factors)
+    {
         return new QuadraticFunction<>(ComplexDenseStore.FACTORY.copy(factors));
     }
 
-    public static QuadraticFunction<ComplexNumber> makeComplex(final int arity) {
+    public static QuadraticFunction<ComplexNumber> makeComplex(final int arity)
+    {
         return new QuadraticFunction<>(ComplexDenseStore.FACTORY.makeZero(arity, arity));
     }
 
-    public static QuadraticFunction<Double> makePrimitive(final Access2D<? extends Number> factors) {
+    public static QuadraticFunction<Double> makePrimitive(final Access2D<? extends Number> factors)
+    {
         return new QuadraticFunction<>(PrimitiveDenseStore.FACTORY.copy(factors));
     }
 
-    public static QuadraticFunction<Double> makePrimitive(final int arity) {
+    public static QuadraticFunction<Double> makePrimitive(final int arity)
+    {
         return new QuadraticFunction<>(PrimitiveDenseStore.FACTORY.makeZero(arity, arity));
     }
 
     private final MatrixStore<N> myFactors;
 
-    QuadraticFunction(final MatrixStore<N> factors) {
+    QuadraticFunction(final MatrixStore<N> factors)
+    {
 
         super();
 
         myFactors = factors;
 
-        if (myFactors.countRows() != myFactors.countColumns()) {
+        if (myFactors.countRows() != myFactors.countColumns())
+        {
             throw new IllegalArgumentException("Must be sqaure!");
         }
     }
 
-    public int arity() {
+    public int arity()
+    {
         return (int) myFactors.countColumns();
     }
 
     @Override
-    public MatrixStore<N> getGradient(final Access1D<N> point) {
+    public MatrixStore<N> getGradient(final Access1D<N> point)
+    {
 
         final PhysicalStore<N> tmpPreallocated = myFactors.physical().makeZero(this.arity(), 1L);
 
@@ -92,12 +103,14 @@ public final class QuadraticFunction<N extends Number> extends AbstractMultiary<
     }
 
     @Override
-    public MatrixStore<N> getHessian(final Access1D<N> point) {
+    public MatrixStore<N> getHessian(final Access1D<N> point)
+    {
         return myFactors.logical().superimpose(0, 0, myFactors.conjugate()).get();
     }
 
     @Override
-    public N invoke(final Access1D<N> arg) {
+    public N invoke(final Access1D<N> arg)
+    {
 
         Scalar<N> retVal = this.getScalarConstant();
 
@@ -106,12 +119,14 @@ public final class QuadraticFunction<N extends Number> extends AbstractMultiary<
         return retVal.getNumber();
     }
 
-    public PhysicalStore<N> quadratic() {
+    public PhysicalStore<N> quadratic()
+    {
         return (PhysicalStore<N>) myFactors;
     }
 
     @Override
-    protected org.ojalgo.matrix.store.PhysicalStore.Factory<N, ?> factory() {
+    protected org.ojalgo.matrix.store.PhysicalStore.Factory<N, ?> factory()
+    {
         return myFactors.physical();
     }
 

@@ -24,19 +24,22 @@ package org.ojalgo.matrix.store;
 import org.ojalgo.ProgrammingError;
 import org.ojalgo.scalar.Scalar;
 
-final class SingleStore<N extends Number> extends FactoryStore<N> {
+final class SingleStore<N extends Number> extends FactoryStore<N>
+{
 
     private final N myNumber;
     private final double myValue;
 
-    private SingleStore(final PhysicalStore.Factory<N, ?> factory, final int rowsCount, final int columnsCount) {
+    private SingleStore(final PhysicalStore.Factory<N, ?> factory, final int rowsCount, final int columnsCount)
+    {
         super(factory, rowsCount, columnsCount);
         myNumber = null;
         myValue = 0;
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    SingleStore(final PhysicalStore.Factory<N, ?> factory, final Number element) {
+    SingleStore(final PhysicalStore.Factory<N, ?> factory, final Number element)
+    {
 
         super(factory, 1, 1);
 
@@ -45,25 +48,30 @@ final class SingleStore<N extends Number> extends FactoryStore<N> {
     }
 
     @Override
-    public MatrixStore<N> conjugate() {
+    public MatrixStore<N> conjugate()
+    {
         return new SingleStore<>(this.physical(), this.physical().scalar().convert(myNumber).conjugate().getNumber());
     }
 
     @Override
-    public double doubleValue(final long anInd) {
+    public double doubleValue(final long anInd)
+    {
         return myValue;
     }
 
-    public double doubleValue(final long aRow, final long aCol) {
+    public double doubleValue(final long aRow, final long aCol)
+    {
         return myValue;
     }
 
-    public N get(final long aRow, final long aCol) {
+    public N get(final long aRow, final long aCol)
+    {
         return myNumber;
     }
 
     @Override
-    public MatrixStore<N> multiply(final MatrixStore<N> right) {
+    public MatrixStore<N> multiply(final MatrixStore<N> right)
+    {
 
         final PhysicalStore.Factory<N, ?> tmpFactory = this.physical();
 
@@ -75,21 +83,25 @@ final class SingleStore<N extends Number> extends FactoryStore<N> {
     }
 
     @Override
-    public void supplyTo(final ElementsConsumer<N> consumer) {
+    public void supplyTo(final ElementsConsumer<N> consumer)
+    {
         this.addNonZerosTo(consumer);
     }
 
-    public Scalar<N> toScalar(final long row, final long column) {
+    public Scalar<N> toScalar(final long row, final long column)
+    {
         return this.physical().scalar().convert(myNumber);
     }
 
     @Override
-    public MatrixStore<N> transpose() {
+    public MatrixStore<N> transpose()
+    {
         return this;
     }
 
     @Override
-    protected void addNonZerosTo(final ElementsConsumer<N> consumer) {
+    protected void addNonZerosTo(final ElementsConsumer<N> consumer)
+    {
         consumer.fillOne(0L, 0L, myNumber);
     }
 

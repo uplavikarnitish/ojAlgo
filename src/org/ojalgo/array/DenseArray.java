@@ -38,19 +38,23 @@ import org.ojalgo.scalar.Scalar;
  *
  * @author apete
  */
-abstract class DenseArray<N extends Number> extends BasicArray<N> implements RandomAccess {
+abstract class DenseArray<N extends Number> extends BasicArray<N> implements RandomAccess
+{
 
-    static abstract class DenseFactory<N extends Number> extends ArrayFactory<N> {
+    static abstract class DenseFactory<N extends Number> extends ArrayFactory<N>
+    {
 
         abstract DenseArray<N> make(int size);
 
         @Override
-        final DenseArray<N> makeStructuredZero(final long... structure) {
+        final DenseArray<N> makeStructuredZero(final long... structure)
+        {
             return this.make((int) AccessUtils.count(structure));
         }
 
         @Override
-        final DenseArray<N> makeToBeFilled(final long... structure) {
+        final DenseArray<N> makeToBeFilled(final long... structure)
+        {
             return this.make((int) AccessUtils.count(structure));
         }
 
@@ -60,93 +64,114 @@ abstract class DenseArray<N extends Number> extends BasicArray<N> implements Ran
 
     static final int CHARACTERISTICS = Spliterator.ORDERED | Spliterator.IMMUTABLE;
 
-    DenseArray() {
+    DenseArray()
+    {
         super();
     }
 
-    public void add(final long index, final double addend) {
+    public void add(final long index, final double addend)
+    {
         this.add((int) index, addend);
     }
 
-    public void add(final long index, final Number addend) {
+    public void add(final long index, final Number addend)
+    {
         this.add((int) index, addend);
     }
 
-    public final long count() {
+    public final long count()
+    {
         return this.size();
     }
 
-    public final double doubleValue(final long index) {
+    public final double doubleValue(final long index)
+    {
         return this.doubleValue((int) index);
     }
 
-    public final void fillAll(final N number) {
+    public final void fillAll(final N number)
+    {
         this.fill(0, this.size(), 1, number);
     }
 
-    public final void fillAll(final NullaryFunction<N> supplier) {
+    public final void fillAll(final NullaryFunction<N> supplier)
+    {
         this.fill(0, this.size(), 1, supplier);
     }
 
-    public void fillOne(final long index, final N value) {
+    public void fillOne(final long index, final N value)
+    {
         this.fillOne((int) index, value);
     }
 
-    public void fillOne(final long index, final NullaryFunction<N> supplier) {
+    public void fillOne(final long index, final NullaryFunction<N> supplier)
+    {
         this.fillOne((int) index, supplier);
     }
 
-    public final void fillOne(final long index, final Access1D<?> values, final long valueIndex) {
+    public final void fillOne(final long index, final Access1D<?> values, final long valueIndex)
+    {
         this.fillOne((int) index, values, valueIndex);
     }
 
-    public final void fillRange(final long first, final long limit, final N number) {
+    public final void fillRange(final long first, final long limit, final N number)
+    {
         this.fill(first, limit, 1L, number);
     }
 
-    public final void fillRange(final long first, final long limit, final NullaryFunction<N> supplier) {
+    public final void fillRange(final long first, final long limit, final NullaryFunction<N> supplier)
+    {
         this.fill(first, limit, 1L, supplier);
     }
 
-    public final N get(final long index) {
+    public final N get(final long index)
+    {
         return this.get((int) index);
     }
 
     /**
      * @see Scalar#isAbsolute()
      */
-    public final boolean isAbsolute(final long index) {
+    public final boolean isAbsolute(final long index)
+    {
         return this.isAbsolute((int) index);
     }
 
     /**
      * @see Scalar#isSmall(double)
      */
-    public final boolean isSmall(final long index, final double comparedTo) {
+    public final boolean isSmall(final long index, final double comparedTo)
+    {
         return this.isSmall((int) index, comparedTo);
     }
 
-    public final void modifyOne(final long index, final UnaryFunction<N> modifier) {
+    public final void modifyOne(final long index, final UnaryFunction<N> modifier)
+    {
         this.modify((int) index, modifier);
     }
 
-    public final void set(final long index, final double value) {
+    public final void set(final long index, final double value)
+    {
         this.set((int) index, value);
     }
 
-    public final void set(final long index, final Number number) {
+    public final void set(final long index, final Number number)
+    {
         this.set((int) index, number);
     }
 
-    public void visitOne(final long index, final VoidFunction<N> visitor) {
+    public void visitOne(final long index, final VoidFunction<N> visitor)
+    {
         this.visitOne((int) index, visitor);
     }
 
-    private final boolean isSmall(final int first, final int limit, final int step, final double comparedTo) {
+    private final boolean isSmall(final int first, final int limit, final int step, final double comparedTo)
+    {
 
         boolean retVal = true;
 
-        for (int i = first; retVal && (i < limit); i += step) {
+        for (int i = first; retVal && (i < limit); i += step)
+        {
             retVal &= this.isSmall(i, comparedTo);
         }
 
@@ -162,7 +187,8 @@ abstract class DenseArray<N extends Number> extends BasicArray<N> implements Ran
     protected abstract void exchange(int firstA, int firstB, int step, int count);
 
     @Override
-    protected final void exchange(final long firstA, final long firstB, final long step, final long count) {
+    protected final void exchange(final long firstA, final long firstB, final long step, final long count)
+    {
         this.exchange((int) firstA, (int) firstB, (int) step, (int) count);
     }
 
@@ -177,12 +203,14 @@ abstract class DenseArray<N extends Number> extends BasicArray<N> implements Ran
     protected abstract void fill(final int first, final int limit, final N left, final BinaryFunction<N> function, final Access1D<N> right);
 
     @Override
-    protected final void fill(final long first, final long limit, final long step, final N value) {
+    protected final void fill(final long first, final long limit, final long step, final N value)
+    {
         this.fill((int) first, (int) limit, (int) step, value);
     }
 
     @Override
-    protected final void fill(final long first, final long limit, final long step, final NullaryFunction<N> supplier) {
+    protected final void fill(final long first, final long limit, final long step, final NullaryFunction<N> supplier)
+    {
         this.fill((int) first, (int) limit, (int) step, supplier);
     }
 
@@ -197,7 +225,8 @@ abstract class DenseArray<N extends Number> extends BasicArray<N> implements Ran
     protected abstract int indexOfLargest(int first, int limit, int step);
 
     @Override
-    protected final long indexOfLargest(final long first, final long limit, final long step) {
+    protected final long indexOfLargest(final long first, final long limit, final long step)
+    {
         return this.indexOfLargest((int) first, (int) limit, (int) step);
     }
 
@@ -212,7 +241,8 @@ abstract class DenseArray<N extends Number> extends BasicArray<N> implements Ran
     protected abstract boolean isSmall(int index, double comparedTo);
 
     @Override
-    protected final boolean isSmall(final long first, final long limit, final long step, final double comparedTo) {
+    protected final boolean isSmall(final long first, final long limit, final long step, final double comparedTo)
+    {
         return this.isSmall((int) first, (int) limit, (int) step, comparedTo);
     }
 
@@ -235,25 +265,28 @@ abstract class DenseArray<N extends Number> extends BasicArray<N> implements Ran
     protected abstract void modify(int index, UnaryFunction<N> function);
 
     @Override
-    protected final void modify(final long first, final long limit, final long step, final Access1D<N> left, final BinaryFunction<N> function) {
+    protected final void modify(final long first, final long limit, final long step, final Access1D<N> left, final BinaryFunction<N> function)
+    {
         this.modify((int) first, (int) limit, (int) step, left, function);
     }
 
     @Override
-    protected final void modify(final long first, final long limit, final long step, final BinaryFunction<N> function, final Access1D<N> right) {
+    protected final void modify(final long first, final long limit, final long step, final BinaryFunction<N> function, final Access1D<N> right)
+    {
         this.modify((int) first, (int) limit, (int) step, function, right);
     }
 
     @Override
-    protected final void modify(final long first, final long limit, final long step, final UnaryFunction<N> function) {
+    protected final void modify(final long first, final long limit, final long step, final UnaryFunction<N> function)
+    {
         this.modify((int) first, (int) limit, (int) step, function);
     }
 
     /**
+     * @throws UnsupportedOperationException if the this operation is not supported by this
+     *                                       implementation/subclass
      * @see java.util.Arrays#binarySearch(Object[], Object)
      * @see #sortAscending()
-     * @throws UnsupportedOperationException if the this operation is not supported by this
-     *         implementation/subclass
      */
     protected abstract int searchAscending(N number);
 
@@ -264,17 +297,18 @@ abstract class DenseArray<N extends Number> extends BasicArray<N> implements Ran
     protected abstract int size();
 
     /**
+     * @throws UnsupportedOperationException if the this operation is not supported by this
+     *                                       implementation/subclass
      * @see java.util.Arrays#sort(Object[])
      * @see #searchAscending(Number)
-     * @throws UnsupportedOperationException if the this operation is not supported by this
-     *         implementation/subclass
      */
     protected abstract void sortAscending();
 
     protected abstract void visit(int first, int limit, int step, VoidFunction<N> visitor);
 
     @Override
-    protected final void visit(final long first, final long limit, final long step, final VoidFunction<N> visitor) {
+    protected final void visit(final long first, final long limit, final long step, final VoidFunction<N> visitor)
+    {
         this.visit((int) first, (int) limit, (int) step, visitor);
     }
 

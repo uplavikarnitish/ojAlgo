@@ -29,7 +29,8 @@ import org.ojalgo.scalar.Scalar;
  *
  * @author apete
  */
-final class SuperimposedStore<N extends Number> extends DelegatingStore<N> {
+final class SuperimposedStore<N extends Number> extends DelegatingStore<N>
+{
 
     private final int myColFirst;
     private final int myColLimit;
@@ -38,14 +39,16 @@ final class SuperimposedStore<N extends Number> extends DelegatingStore<N> {
     private final int myRowLimit;
 
     @SuppressWarnings("unused")
-    private SuperimposedStore(final int rowsCount, final int columnsCount, final MatrixStore<N> base) {
+    private SuperimposedStore(final int rowsCount, final int columnsCount, final MatrixStore<N> base)
+    {
 
         this(base, 0, 0, (MatrixStore<N>) null);
 
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    SuperimposedStore(final MatrixStore<N> base, final int row, final int column, final MatrixStore<N> diff) {
+    SuperimposedStore(final MatrixStore<N> base, final int row, final int column, final MatrixStore<N> diff)
+    {
 
         super(base, (int) base.countRows(), (int) base.countColumns());
 
@@ -61,52 +64,61 @@ final class SuperimposedStore<N extends Number> extends DelegatingStore<N> {
         myDiff = diff;
     }
 
-    SuperimposedStore(final MatrixStore<N> base, final MatrixStore<N> diff) {
+    SuperimposedStore(final MatrixStore<N> base, final MatrixStore<N> diff)
+    {
         this(base, 0, 0, diff);
     }
 
     /**
      * @see org.ojalgo.matrix.store.MatrixStore#doubleValue(long, long)
      */
-    public double doubleValue(final long row, final long col) {
+    public double doubleValue(final long row, final long col)
+    {
 
         double retVal = this.getBase().doubleValue(row, col);
 
-        if (this.isCovered((int) row, (int) col)) {
+        if (this.isCovered((int) row, (int) col))
+        {
             retVal += myDiff.doubleValue(row - myRowFirst, col - myColFirst);
         }
 
         return retVal;
     }
 
-    public N get(final long row, final long col) {
+    public N get(final long row, final long col)
+    {
 
         N retVal = this.getBase().get(row, col);
 
-        if (this.isCovered((int) row, (int) col)) {
+        if (this.isCovered((int) row, (int) col))
+        {
             retVal = myDiff.toScalar((int) row - myRowFirst, (int) col - myColFirst).add(retVal).getNumber();
         }
 
         return retVal;
     }
 
-    public Scalar<N> toScalar(final long row, final long column) {
+    public Scalar<N> toScalar(final long row, final long column)
+    {
 
         Scalar<N> retVal = this.getBase().toScalar(row, column);
 
-        if (this.isCovered((int) row, (int) column)) {
+        if (this.isCovered((int) row, (int) column))
+        {
             retVal = retVal.add(myDiff.get(row - myRowFirst, column - myColFirst));
         }
 
         return retVal;
     }
 
-    private final boolean isCovered(final int row, final int column) {
+    private final boolean isCovered(final int row, final int column)
+    {
         return (myRowFirst <= row) && (myColFirst <= column) && (row < myRowLimit) && (column < myColLimit);
     }
 
     @Override
-    protected void addNonZerosTo(final ElementsConsumer<N> consumer) {
+    protected void addNonZerosTo(final ElementsConsumer<N> consumer)
+    {
         consumer.fillMatching(this.getBase());
         consumer.regionByLimits(myRowLimit, myColLimit).regionByOffsets(myRowFirst, myColFirst).modifyMatching(this.physical().function().add(), myDiff);
     }

@@ -26,13 +26,16 @@ import java.util.List;
 import org.ojalgo.access.Access2D;
 import org.ojalgo.random.Normal;
 
-public class Wiener1D extends Process1D<Normal, WienerProcess> {
+public class Wiener1D extends Process1D<Normal, WienerProcess>
+{
 
-    public Wiener1D(final Access2D<?> correlations, final List<? extends WienerProcess> processes) {
+    public Wiener1D(final Access2D<?> correlations, final List<? extends WienerProcess> processes)
+    {
         super(correlations, processes);
     }
 
-    public Wiener1D(final List<? extends WienerProcess> processes) {
+    public Wiener1D(final List<? extends WienerProcess> processes)
+    {
         super(processes);
     }
 

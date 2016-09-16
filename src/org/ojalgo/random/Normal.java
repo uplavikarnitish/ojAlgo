@@ -31,18 +31,21 @@ import org.ojalgo.function.PrimitiveFunction;
  *
  * @author apete
  */
-public class Normal extends AbstractContinuous {
+public class Normal extends AbstractContinuous
+{
 
     private static final long serialVersionUID = 7164712313114018919L;
 
     private final double myLocation;
     private final double myScale;
 
-    public Normal() {
+    public Normal()
+    {
         this(ZERO, ONE);
     }
 
-    public Normal(final double aLocation, final double aScale) {
+    public Normal(final double aLocation, final double aScale)
+    {
 
         super();
 
@@ -50,22 +53,26 @@ public class Normal extends AbstractContinuous {
         myScale = aScale;
     }
 
-    public double getDistribution(final double aValue) {
+    public double getDistribution(final double aValue)
+    {
         return (ONE + RandomUtils.erf((aValue - myLocation) / (myScale * SQRT_TWO))) / TWO;
     }
 
-    public double getExpected() {
+    public double getExpected()
+    {
         return myLocation;
     }
 
-    public double getProbability(final double aValue) {
+    public double getProbability(final double aValue)
+    {
 
         final double tmpVal = (aValue - myLocation) / myScale;
 
         return PrimitiveFunction.EXP.invoke((tmpVal * tmpVal) / -TWO) / (myScale * SQRT_TWO_PI);
     }
 
-    public double getQuantile(final double aProbality) {
+    public double getQuantile(final double aProbality)
+    {
 
         this.checkProbabilty(aProbality);
 
@@ -73,12 +80,14 @@ public class Normal extends AbstractContinuous {
     }
 
     @Override
-    public double getStandardDeviation() {
+    public double getStandardDeviation()
+    {
         return myScale;
     }
 
     @Override
-    protected double generate() {
+    protected double generate()
+    {
         return (this.random().nextGaussian() * myScale) + myLocation;
     }
 

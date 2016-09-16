@@ -52,9 +52,11 @@ import org.ojalgo.scalar.ComplexNumber;
  *
  * @author apete
  */
-public interface LU<N extends Number> extends LDU<N> {
+public interface LU<N extends Number> extends LDU<N>
+{
 
-    interface Factory<N extends Number> extends MatrixDecomposition.Factory<LU<N>> {
+    interface Factory<N extends Number> extends MatrixDecomposition.Factory<LU<N>>
+    {
 
     }
 
@@ -62,26 +64,34 @@ public interface LU<N extends Number> extends LDU<N> {
 
     public static final Factory<ComplexNumber> COMPLEX = typical -> new LUDecomposition.Complex();
 
-    public static final Factory<Double> PRIMITIVE = typical -> {
-        if ((16L < typical.countColumns()) && (typical.count() <= BasicArray.MAX_ARRAY_SIZE)) {
+    public static final Factory<Double> PRIMITIVE = typical ->
+    {
+        if ((16L < typical.countColumns()) && (typical.count() <= BasicArray.MAX_ARRAY_SIZE))
+        {
             return new LUDecomposition.Primitive();
-        } else {
+        } else
+        {
             return new RawLU();
         }
     };
 
     @SuppressWarnings("unchecked")
-    public static <N extends Number> LU<N> make(final Access2D<N> typical) {
+    public static <N extends Number> LU<N> make(final Access2D<N> typical)
+    {
 
         final N tmpNumber = typical.get(0, 0);
 
-        if (tmpNumber instanceof BigDecimal) {
+        if (tmpNumber instanceof BigDecimal)
+        {
             return (LU<N>) BIG.make(typical);
-        } else if (tmpNumber instanceof ComplexNumber) {
+        } else if (tmpNumber instanceof ComplexNumber)
+        {
             return (LU<N>) COMPLEX.make(typical);
-        } else if (tmpNumber instanceof Double) {
+        } else if (tmpNumber instanceof Double)
+        {
             return (LU<N>) PRIMITIVE.make(typical);
-        } else {
+        } else
+        {
             throw new IllegalArgumentException();
         }
     }
@@ -115,7 +125,8 @@ public interface LU<N extends Number> extends LDU<N> {
 
     boolean isSquareAndNotSingular();
 
-    default MatrixStore<N> reconstruct() {
+    default MatrixStore<N> reconstruct()
+    {
         return MatrixUtils.reconstruct(this);
     }
 

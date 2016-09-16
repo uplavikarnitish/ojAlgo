@@ -35,13 +35,16 @@ import org.ojalgo.type.context.NumberContext;
  *
  * @author apete
  */
-public final class Variable extends ModelEntity<Variable> {
+public final class Variable extends ModelEntity<Variable>
+{
 
-    public static Variable make(final String name) {
+    public static Variable make(final String name)
+    {
         return new Variable(name);
     }
 
-    public static Variable makeBinary(final String name) {
+    public static Variable makeBinary(final String name)
+    {
         return Variable.make(name).binary();
     }
 
@@ -51,11 +54,13 @@ public final class Variable extends ModelEntity<Variable> {
 
     private BigDecimal myValue = null;
 
-    public Variable(final String name) {
+    public Variable(final String name)
+    {
         super(name);
     }
 
-    protected Variable(final Variable variableToCopy) {
+    protected Variable(final Variable variableToCopy)
+    {
 
         super(variableToCopy);
 
@@ -64,70 +69,85 @@ public final class Variable extends ModelEntity<Variable> {
         myValue = variableToCopy.getValue();
     }
 
-    public Variable binary() {
+    public Variable binary()
+    {
         return this.lower(ZERO).upper(ONE).integer(true);
     }
 
-    public Variable copy() {
+    public Variable copy()
+    {
         return new Variable(this);
     }
 
-    public BigDecimal getLowerSlack() {
+    public BigDecimal getLowerSlack()
+    {
 
         BigDecimal retVal = null;
 
-        if (this.getLowerLimit() != null) {
+        if (this.getLowerLimit() != null)
+        {
 
-            if (myValue != null) {
+            if (myValue != null)
+            {
 
                 retVal = this.getLowerLimit().subtract(myValue);
 
-            } else {
+            } else
+            {
 
                 retVal = this.getLowerLimit();
             }
         }
 
-        if ((retVal != null) && this.isInteger()) {
+        if ((retVal != null) && this.isInteger())
+        {
             retVal = retVal.setScale(0, BigDecimal.ROUND_CEILING);
         }
 
         return retVal;
     }
 
-    public BigDecimal getUpperSlack() {
+    public BigDecimal getUpperSlack()
+    {
 
         BigDecimal retVal = null;
 
-        if (this.getUpperLimit() != null) {
+        if (this.getUpperLimit() != null)
+        {
 
-            if (myValue != null) {
+            if (myValue != null)
+            {
 
                 retVal = this.getUpperLimit().subtract(myValue);
 
-            } else {
+            } else
+            {
 
                 retVal = this.getUpperLimit();
             }
         }
 
-        if ((retVal != null) && this.isInteger()) {
+        if ((retVal != null) && this.isInteger())
+        {
             retVal = retVal.setScale(0, BigDecimal.ROUND_FLOOR);
         }
 
         return retVal;
     }
 
-    public BigDecimal getValue() {
+    public BigDecimal getValue()
+    {
         return myValue;
     }
 
-    public Variable integer(final boolean integer) {
+    public Variable integer(final boolean integer)
+    {
         this.setInteger(integer);
         return this;
     }
 
-    public boolean isBinary() {
+    public boolean isBinary()
+    {
 
         boolean retVal = this.isInteger();
 
@@ -138,57 +158,69 @@ public final class Variable extends ModelEntity<Variable> {
         return retVal;
     }
 
-    public boolean isInteger() {
+    public boolean isInteger()
+    {
         return myInteger;
     }
 
-    public boolean isNegative() {
+    public boolean isNegative()
+    {
         return !this.isLowerLimitSet() || (this.getLowerLimit().signum() < 0);
     }
 
-    public boolean isPositive() {
+    public boolean isPositive()
+    {
         return !this.isUpperLimitSet() || (this.getUpperLimit().signum() > 0);
     }
 
-    public boolean isValueSet() {
+    public boolean isValueSet()
+    {
         return myValue != null;
     }
 
-    public BigDecimal quantifyContribution() {
+    public BigDecimal quantifyContribution()
+    {
 
         BigDecimal retVal = ZERO;
 
         final BigDecimal tmpContributionWeight = this.getContributionWeight();
-        if ((tmpContributionWeight != null) && (myValue != null)) {
+        if ((tmpContributionWeight != null) && (myValue != null))
+        {
             retVal = tmpContributionWeight.multiply(myValue);
         }
 
         return retVal;
     }
 
-    public Variable relax() {
+    public Variable relax()
+    {
         return this.integer(false);
     }
 
-    public void setInteger(final boolean integer) {
+    public void setInteger(final boolean integer)
+    {
         myInteger = integer;
     }
 
-    public void setValue(final Number value) {
+    public void setValue(final Number value)
+    {
         myValue = TypeUtils.toBigDecimal(value);
     }
 
     @Override
-    protected void appendMiddlePart(final StringBuilder aStringBuilder) {
+    protected void appendMiddlePart(final StringBuilder aStringBuilder)
+    {
 
         aStringBuilder.append(this.getName());
 
-        if (myValue != null) {
+        if (myValue != null)
+        {
             aStringBuilder.append(": ");
             aStringBuilder.append(OptimisationUtils.DISPLAY.enforce(myValue).toPlainString());
         }
 
-        if (this.isObjective()) {
+        if (this.isObjective())
+        {
             aStringBuilder.append(" (");
             aStringBuilder.append(OptimisationUtils.DISPLAY.enforce(this.getContributionWeight()).toPlainString());
             aStringBuilder.append(")");
@@ -196,7 +228,8 @@ public final class Variable extends ModelEntity<Variable> {
     }
 
     @Override
-    protected void destroy() {
+    protected void destroy()
+    {
 
         super.destroy();
 
@@ -205,15 +238,20 @@ public final class Variable extends ModelEntity<Variable> {
     }
 
     @Override
-    protected boolean validate(final BigDecimal value, final NumberContext context, final BasicLogger.Printer appender) {
+    protected boolean validate(final BigDecimal value, final NumberContext context, final BasicLogger.Printer appender)
+    {
 
         boolean retVal = super.validate(value, context, appender);
 
-        if (retVal && myInteger) {
-            try {
+        if (retVal && myInteger)
+        {
+            try
+            {
                 context.enforce(value).longValueExact();
-            } catch (final ArithmeticException ex) {
-                if (appender != null) {
+            } catch (final ArithmeticException ex)
+            {
+                if (appender != null)
+                {
                     appender.println(value + " ! Integer: " + this.getName());
                 }
                 retVal = false;
@@ -223,36 +261,45 @@ public final class Variable extends ModelEntity<Variable> {
         return retVal;
     }
 
-    protected boolean validate(final NumberContext context, final BasicLogger.Printer appender) {
+    protected boolean validate(final NumberContext context, final BasicLogger.Printer appender)
+    {
 
-        if (myValue != null) {
+        if (myValue != null)
+        {
 
             return this.validate(myValue, context, appender);
 
-        } else {
+        } else
+        {
 
             return false;
         }
     }
 
-    IntIndex getIndex() {
+    IntIndex getIndex()
+    {
         return myIndex;
     }
 
-    boolean isUnbounded() {
+    boolean isUnbounded()
+    {
         return myUnbounded;
     }
 
-    void setIndex(final IntIndex index) {
-        if (index == null) {
+    void setIndex(final IntIndex index)
+    {
+        if (index == null)
+        {
             throw new IllegalArgumentException("The index cannot be null!");
-        } else if ((myIndex != null) && (myIndex.index != index.index)) {
+        } else if ((myIndex != null) && (myIndex.index != index.index))
+        {
             throw new IllegalStateException("Cannot change a variable's index, or add a variable to more than one model!");
         }
         myIndex = index;
     }
 
-    void setUnbounded(final boolean uncorrelated) {
+    void setUnbounded(final boolean uncorrelated)
+    {
         myUnbounded = uncorrelated;
     }
 

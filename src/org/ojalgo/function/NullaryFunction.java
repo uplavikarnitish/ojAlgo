@@ -24,15 +24,18 @@ package org.ojalgo.function;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-public interface NullaryFunction<N extends Number> extends BasicFunction<N>, Supplier<N>, DoubleSupplier {
+public interface NullaryFunction<N extends Number> extends BasicFunction<N>, Supplier<N>, DoubleSupplier
+{
 
     double doubleValue();
 
-    default N get() {
+    default N get()
+    {
         return this.invoke();
     }
 
-    default double getAsDouble() {
+    default double getAsDouble()
+    {
         return this.doubleValue();
     }
 

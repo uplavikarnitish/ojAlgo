@@ -25,7 +25,8 @@ import org.ojalgo.access.Access2D;
 import org.ojalgo.array.Array1D;
 import org.ojalgo.constant.PrimitiveMath;
 
-final class DiagonalAccess<N extends Number> implements Access2D<N> {
+final class DiagonalAccess<N extends Number> implements Access2D<N>
+{
 
     private final int myDimension;
     private final N myZero;
@@ -35,11 +36,13 @@ final class DiagonalAccess<N extends Number> implements Access2D<N> {
     final Array1D<N> superdiagonal;
 
     @SuppressWarnings("unused")
-    private DiagonalAccess() {
+    private DiagonalAccess()
+    {
         this(null, null, null, null);
     }
 
-    DiagonalAccess(final Array1D<N> mainDiag, final Array1D<N> superdiag, final Array1D<N> subdiag, final N zero) {
+    DiagonalAccess(final Array1D<N> mainDiag, final Array1D<N> superdiag, final Array1D<N> subdiag, final N zero)
+    {
 
         super();
 
@@ -49,53 +52,70 @@ final class DiagonalAccess<N extends Number> implements Access2D<N> {
 
         myZero = zero;
 
-        if (mainDiag != null) {
+        if (mainDiag != null)
+        {
             myDimension = mainDiag.size();
-        } else if (superdiag != null) {
+        } else if (superdiag != null)
+        {
             myDimension = superdiag.size() + 1;
-        } else {
+        } else
+        {
             myDimension = subdiag.size() + 1;
         }
     }
 
-    public long countColumns() {
+    public long countColumns()
+    {
         return myDimension;
     }
 
-    public long countRows() {
+    public long countRows()
+    {
         return myDimension;
     }
 
-    public double doubleValue(final long row, final long col) {
-        if ((mainDiagonal != null) && (row == col)) {
+    public double doubleValue(final long row, final long col)
+    {
+        if ((mainDiagonal != null) && (row == col))
+        {
             return mainDiagonal.doubleValue(row);
-        } else if ((superdiagonal != null) && ((col - row) == 1L)) {
+        } else if ((superdiagonal != null) && ((col - row) == 1L))
+        {
             return superdiagonal.doubleValue(row);
-        } else if ((subdiagonal != null) && ((row - col) == 1L)) {
+        } else if ((subdiagonal != null) && ((row - col) == 1L))
+        {
             return subdiagonal.doubleValue(col);
-        } else {
+        } else
+        {
             return PrimitiveMath.ZERO;
         }
     }
 
-    public N get(final long row, final long col) {
-        if ((mainDiagonal != null) && (row == col)) {
+    public N get(final long row, final long col)
+    {
+        if ((mainDiagonal != null) && (row == col))
+        {
             return mainDiagonal.get(row);
-        } else if ((superdiagonal != null) && ((col - row) == 1L)) {
+        } else if ((superdiagonal != null) && ((col - row) == 1L))
+        {
             return superdiagonal.get(row);
-        } else if ((subdiagonal != null) && ((row - col) == 1L)) {
+        } else if ((subdiagonal != null) && ((row - col) == 1L))
+        {
             return subdiagonal.get(col);
-        } else {
+        } else
+        {
             return myZero;
         }
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "DiagonalAccess [mainDiagonal=" + mainDiagonal + ", subdiagonal=" + subdiagonal + ", superdiagonal=" + superdiagonal + "]";
     }
 
-    DiagonalAccess<N> columns(final int first, final int limit) {
+    DiagonalAccess<N> columns(final int first, final int limit)
+    {
 
         final Array1D<N> tmpMainDiagonal = mainDiagonal != null ? mainDiagonal.subList(first, limit) : null;
         final Array1D<N> tmpSuperdiagonal = superdiagonal != null ? superdiagonal.subList(Math.max(first - 1, 0), limit - 1) : null;
@@ -104,11 +124,13 @@ final class DiagonalAccess<N extends Number> implements Access2D<N> {
         return new DiagonalAccess<>(tmpMainDiagonal, tmpSuperdiagonal, tmpSubdiagonal, myZero);
     }
 
-    int getDimension() {
+    int getDimension()
+    {
         return myDimension;
     }
 
-    DiagonalAccess<N> rows(final int first, final int limit) {
+    DiagonalAccess<N> rows(final int first, final int limit)
+    {
 
         final Array1D<N> tmpMainDiagonal = mainDiagonal != null ? mainDiagonal.subList(first, limit) : null;
         final Array1D<N> tmpSuperdiagonal = superdiagonal != null ? superdiagonal.subList(first, Math.min(limit, myDimension - 1)) : null;
@@ -117,7 +139,8 @@ final class DiagonalAccess<N extends Number> implements Access2D<N> {
         return new DiagonalAccess<>(tmpMainDiagonal, tmpSuperdiagonal, tmpSubdiagonal, myZero);
     }
 
-    DiagonalAccess<N> transpose() {
+    DiagonalAccess<N> transpose()
+    {
         return new DiagonalAccess<>(mainDiagonal, subdiagonal, superdiagonal, myZero);
     }
 

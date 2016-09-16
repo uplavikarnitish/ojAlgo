@@ -39,26 +39,31 @@ import org.ojalgo.type.context.NumberContext;
  *
  * @author apete
  */
-public final class ComplexMatrix extends AbstractMatrix<ComplexNumber, ComplexMatrix> {
+public final class ComplexMatrix extends AbstractMatrix<ComplexNumber, ComplexMatrix>
+{
 
     public static final BasicMatrix.Factory<ComplexMatrix> FACTORY = new MatrixFactory<>(ComplexMatrix.class, ComplexDenseStore.FACTORY);
 
-    public static Builder<ComplexMatrix> getBuilder(final int aLength) {
+    public static Builder<ComplexMatrix> getBuilder(final int aLength)
+    {
         return FACTORY.getBuilder(aLength);
     }
 
-    public static Builder<ComplexMatrix> getBuilder(final int aRowDim, final int aColDim) {
+    public static Builder<ComplexMatrix> getBuilder(final int aRowDim, final int aColDim)
+    {
         return FACTORY.getBuilder(aRowDim, aColDim);
     }
 
     /**
      * This method is for internal use only - YOU should NOT use it!
      */
-    ComplexMatrix(final MatrixStore<ComplexNumber> aStore) {
+    ComplexMatrix(final MatrixStore<ComplexNumber> aStore)
+    {
         super(aStore);
     }
 
-    public ComplexMatrix enforce(final NumberContext context) {
+    public ComplexMatrix enforce(final NumberContext context)
+    {
         return this.modify(context.getComplexFunction());
     }
 
@@ -66,7 +71,8 @@ public final class ComplexMatrix extends AbstractMatrix<ComplexNumber, ComplexMa
      * @return A primitive double valued matrix containg this matrix' element arguments
      */
     @SuppressWarnings("unchecked")
-    public PrimitiveMatrix getArgument() {
+    public PrimitiveMatrix getArgument()
+    {
         return ((MatrixFactory<Double, PrimitiveMatrix>) PrimitiveMatrix.FACTORY).instantiate(MatrixUtils.getComplexArgument(this.getStore()));
     }
 
@@ -74,7 +80,8 @@ public final class ComplexMatrix extends AbstractMatrix<ComplexNumber, ComplexMa
      * @return A primitive double valued matrix containg this matrix' element imaginary parts
      */
     @SuppressWarnings("unchecked")
-    public PrimitiveMatrix getImaginary() {
+    public PrimitiveMatrix getImaginary()
+    {
         return ((MatrixFactory<Double, PrimitiveMatrix>) PrimitiveMatrix.FACTORY).instantiate(MatrixUtils.getComplexImaginary(this.getStore()));
     }
 
@@ -82,7 +89,8 @@ public final class ComplexMatrix extends AbstractMatrix<ComplexNumber, ComplexMa
      * @return A primitive double valued matrix containg this matrix' element modulus
      */
     @SuppressWarnings("unchecked")
-    public PrimitiveMatrix getModulus() {
+    public PrimitiveMatrix getModulus()
+    {
         return ((MatrixFactory<Double, PrimitiveMatrix>) PrimitiveMatrix.FACTORY).instantiate(MatrixUtils.getComplexModulus(this.getStore()));
     }
 
@@ -90,61 +98,76 @@ public final class ComplexMatrix extends AbstractMatrix<ComplexNumber, ComplexMa
      * @return A primitive double valued matrix containg this matrix' element real parts
      */
     @SuppressWarnings("unchecked")
-    public PrimitiveMatrix getReal() {
+    public PrimitiveMatrix getReal()
+    {
         return ((MatrixFactory<Double, PrimitiveMatrix>) PrimitiveMatrix.FACTORY).instantiate(MatrixUtils.getComplexReal(this.getStore()));
     }
 
-    public BigDecimal toBigDecimal(final int row, final int column) {
+    public BigDecimal toBigDecimal(final int row, final int column)
+    {
         return new BigDecimal(this.getStore().doubleValue(row, column));
     }
 
-    public ComplexNumber toComplexNumber(final int row, final int column) {
+    public ComplexNumber toComplexNumber(final int row, final int column)
+    {
         return this.getStore().get(row, column);
     }
 
     @Override
-    public PhysicalStore<ComplexNumber> toComplexStore() {
+    public PhysicalStore<ComplexNumber> toComplexStore()
+    {
         return this.getStore().copy();
     }
 
-    public String toString(final int row, final int col) {
+    public String toString(final int row, final int col)
+    {
         return this.toComplexNumber(row, col).toString();
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    MatrixStore<ComplexNumber> cast(final Access1D<?> matrix) {
-        if (matrix instanceof ComplexMatrix) {
+    MatrixStore<ComplexNumber> cast(final Access1D<?> matrix)
+    {
+        if (matrix instanceof ComplexMatrix)
+        {
             return ((ComplexMatrix) matrix).getStore();
-        } else if (matrix instanceof ComplexDenseStore) {
+        } else if (matrix instanceof ComplexDenseStore)
+        {
             return (ComplexDenseStore) matrix;
-        } else if ((matrix instanceof MatrixStore) && !this.isEmpty() && (matrix.get(0) instanceof ComplexNumber)) {
+        } else if ((matrix instanceof MatrixStore) && !this.isEmpty() && (matrix.get(0) instanceof ComplexNumber))
+        {
             return (MatrixStore<ComplexNumber>) matrix;
-        } else if (matrix instanceof Access2D<?>) {
+        } else if (matrix instanceof Access2D<?>)
+        {
             return this.getStore().physical().copy((Access2D<?>) matrix);
-        } else {
+        } else
+        {
             return this.getStore().physical().columns(matrix);
         }
     }
 
     @Override
-    DeterminantTask<ComplexNumber> getDeterminantTask(final MatrixStore<ComplexNumber> template) {
+    DeterminantTask<ComplexNumber> getDeterminantTask(final MatrixStore<ComplexNumber> template)
+    {
         return DeterminantTask.COMPLEX.make(template, this.isHermitian(), false);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    MatrixFactory<ComplexNumber, ComplexMatrix> getFactory() {
+    MatrixFactory<ComplexNumber, ComplexMatrix> getFactory()
+    {
         return (MatrixFactory<ComplexNumber, ComplexMatrix>) FACTORY;
     }
 
     @Override
-    InverterTask<ComplexNumber> getInverterTask(final MatrixStore<ComplexNumber> base) {
+    InverterTask<ComplexNumber> getInverterTask(final MatrixStore<ComplexNumber> base)
+    {
         return InverterTask.COMPLEX.make(base, this.isHermitian(), false);
     }
 
     @Override
-    SolverTask<ComplexNumber> getSolverTask(final MatrixStore<ComplexNumber> templateBody, final MatrixStore<ComplexNumber> templateRHS) {
+    SolverTask<ComplexNumber> getSolverTask(final MatrixStore<ComplexNumber> templateBody, final MatrixStore<ComplexNumber> templateRHS)
+    {
         return SolverTask.COMPLEX.make(templateBody, templateRHS, this.isHermitian(), false);
     }
 

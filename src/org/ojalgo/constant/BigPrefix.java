@@ -24,7 +24,8 @@ package org.ojalgo.constant;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
-public abstract class BigPrefix {
+public abstract class BigPrefix
+{
 
     public static final BigDecimal YOCTO = new BigDecimal("0.000000000000000000000001", MathContext.DECIMAL128);
     public static final BigDecimal ZEPTO = new BigDecimal("0.000000000000000000001", MathContext.DECIMAL128);
@@ -47,7 +48,8 @@ public abstract class BigPrefix {
     public static final BigDecimal ZETTA = new BigDecimal("1000000000000000000000", MathContext.DECIMAL128);
     public static final BigDecimal YOTTA = new BigDecimal("1000000000000000000000000", MathContext.DECIMAL128);
 
-    private BigPrefix() {
+    private BigPrefix()
+    {
         super();
     }
 

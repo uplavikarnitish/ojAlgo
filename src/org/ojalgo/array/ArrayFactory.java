@@ -27,53 +27,65 @@ import org.ojalgo.access.Access1D;
 import org.ojalgo.access.Factory1D;
 import org.ojalgo.function.NullaryFunction;
 
-abstract class ArrayFactory<N extends Number> extends Object implements Factory1D<BasicArray<N>> {
+abstract class ArrayFactory<N extends Number> extends Object implements Factory1D<BasicArray<N>>
+{
 
-    public final BasicArray<N> copy(final Access1D<?> source) {
+    public final BasicArray<N> copy(final Access1D<?> source)
+    {
         final long tmpCount = source.count();
         final BasicArray<N> retVal = this.makeToBeFilled(tmpCount);
-        for (long i = 0L; i < tmpCount; i++) {
+        for (long i = 0L; i < tmpCount; i++)
+        {
             retVal.set(i, source.doubleValue(i));
         }
         return retVal;
     }
 
-    public final BasicArray<N> copy(final double... source) {
+    public final BasicArray<N> copy(final double... source)
+    {
         final int tmpLength = source.length;
         final BasicArray<N> retVal = this.makeToBeFilled(tmpLength);
-        for (int i = 0; i < tmpLength; i++) {
+        for (int i = 0; i < tmpLength; i++)
+        {
             retVal.set(i, source[i]);
         }
         return retVal;
     }
 
-    public final BasicArray<N> copy(final List<? extends Number> source) {
+    public final BasicArray<N> copy(final List<? extends Number> source)
+    {
         final int tmpSize = source.size();
         final BasicArray<N> retVal = this.makeToBeFilled(tmpSize);
-        for (int i = 0; i < tmpSize; i++) {
+        for (int i = 0; i < tmpSize; i++)
+        {
             retVal.set(i, source.get(i));
         }
         return retVal;
     }
 
-    public final BasicArray<N> copy(final Number... source) {
+    public final BasicArray<N> copy(final Number... source)
+    {
         final int tmpLength = source.length;
         final BasicArray<N> retVal = this.makeToBeFilled(tmpLength);
-        for (int i = 0; i < tmpLength; i++) {
+        for (int i = 0; i < tmpLength; i++)
+        {
             retVal.set(i, source[i]);
         }
         return retVal;
     }
 
-    public BasicArray<N> makeFilled(final long count, final NullaryFunction<?> supplier) {
+    public BasicArray<N> makeFilled(final long count, final NullaryFunction<?> supplier)
+    {
         final BasicArray<N> retVal = this.makeToBeFilled(count);
-        for (long i = 0L; i < count; i++) {
+        for (long i = 0L; i < count; i++)
+        {
             retVal.set(i, supplier.get());
         }
         return retVal;
     }
 
-    public final BasicArray<N> makeZero(final long count) {
+    public final BasicArray<N> makeZero(final long count)
+    {
         return this.makeStructuredZero(count);
     }
 

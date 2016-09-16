@@ -26,22 +26,26 @@ import static org.ojalgo.constant.PrimitiveMath.*;
 import org.ojalgo.function.PrimitiveFunction;
 import org.ojalgo.type.context.NumberContext;
 
-abstract class OptimisationUtils {
+abstract class OptimisationUtils
+{
 
     private static final double _16_0 = EIGHT + EIGHT;
 
     static final NumberContext DISPLAY = NumberContext.getGeneral(6);
 
-    static int getAdjustmentExponent(final double largest, final double smallest) {
+    static int getAdjustmentExponent(final double largest, final double smallest)
+    {
 
         final double tmpLargestExp = largest > ZERO ? PrimitiveFunction.LOG10.invoke(largest) : ZERO;
         final double tmpSmallestExp = smallest > ZERO ? PrimitiveFunction.LOG10.invoke(smallest) : -EIGHT;
 
-        if ((tmpLargestExp > _16_0) || (tmpSmallestExp < -_16_0)) {
+        if ((tmpLargestExp > _16_0) || (tmpSmallestExp < -_16_0))
+        {
 
             return 0;
 
-        } else {
+        } else
+        {
 
             final double tmpNegatedAverage = (tmpLargestExp + tmpSmallestExp) / (-TWO);
 
@@ -49,7 +53,8 @@ abstract class OptimisationUtils {
         }
     }
 
-    private OptimisationUtils() {
+    private OptimisationUtils()
+    {
         super();
     }
 

@@ -23,9 +23,11 @@ package org.ojalgo.access;
 
 import java.util.Iterator;
 
-public class RowView<N extends Number> implements Access1D<N>, Iterator<RowView<N>> {
+public class RowView<N extends Number> implements Access1D<N>, Iterator<RowView<N>>
+{
 
-    public static <S extends Number> Iterable<RowView<S>> makeIterable(final Access2D<S> access) {
+    public static <S extends Number> Iterable<RowView<S>> makeIterable(final Access2D<S> access)
+    {
         return new RowView<>(access).iterable;
     }
 
@@ -36,15 +38,18 @@ public class RowView<N extends Number> implements Access1D<N>, Iterator<RowView<
     final Iterable<RowView<N>> iterable = () -> RowView.this;
 
     @SuppressWarnings("unused")
-    private RowView() {
+    private RowView()
+    {
         this(null);
     }
 
-    protected RowView(final Access2D<N> access) {
+    protected RowView(final Access2D<N> access)
+    {
         this(access, -1L);
     }
 
-    RowView(final Access2D<N> access, final long row) {
+    RowView(final Access2D<N> access, final long row)
+    {
 
         super();
 
@@ -54,45 +59,55 @@ public class RowView<N extends Number> implements Access1D<N>, Iterator<RowView<
         myRow = row;
     }
 
-    public long count() {
+    public long count()
+    {
         return myDelegate2D.countColumns();
     }
 
-    public double doubleValue(final long index) {
+    public double doubleValue(final long index)
+    {
         return myDelegate2D.doubleValue(myRow, index);
     }
 
-    public N get(final long index) {
+    public N get(final long index)
+    {
         return myDelegate2D.get(myRow, index);
     }
 
-    public boolean hasNext() {
+    public boolean hasNext()
+    {
         return myRow < myLastRow;
     }
 
-    public boolean hasPrevious() {
+    public boolean hasPrevious()
+    {
         return myRow > 0L;
     }
 
-    public RowView<N> next() {
+    public RowView<N> next()
+    {
         myRow++;
         return this;
     }
 
-    public RowView<N> previous() {
+    public RowView<N> previous()
+    {
         myRow--;
         return this;
     }
 
-    public void remove() {
+    public void remove()
+    {
         throw new UnsupportedOperationException();
     }
 
-    public long row() {
+    public long row()
+    {
         return myRow;
     }
 
-    protected void setRow(final long row) {
+    protected void setRow(final long row)
+    {
         myRow = row;
     }
 

@@ -30,22 +30,27 @@ import org.ojalgo.scalar.Scalar;
  *
  * @author apete
  */
-abstract class ScalarArray<N extends Number & Scalar<N>> extends ReferenceTypeArray<N> {
+abstract class ScalarArray<N extends Number & Scalar<N>> extends ReferenceTypeArray<N>
+{
 
-    protected ScalarArray(final N[] data) {
+    protected ScalarArray(final N[] data)
+    {
         super(data);
     }
 
     @Override
-    protected final int indexOfLargest(final int first, final int limit, final int step) {
+    protected final int indexOfLargest(final int first, final int limit, final int step)
+    {
 
         int retVal = first;
         double tmpLargest = ZERO;
         double tmpValue;
 
-        for (int i = first; i < limit; i += step) {
+        for (int i = first; i < limit; i += step)
+        {
             tmpValue = data[i].norm();
-            if (tmpValue > tmpLargest) {
+            if (tmpValue > tmpLargest)
+            {
                 tmpLargest = tmpValue;
                 retVal = i;
             }
@@ -55,12 +60,14 @@ abstract class ScalarArray<N extends Number & Scalar<N>> extends ReferenceTypeAr
     }
 
     @Override
-    protected boolean isAbsolute(final int index) {
+    protected boolean isAbsolute(final int index)
+    {
         return data[index].isAbsolute();
     }
 
     @Override
-    protected boolean isSmall(final int index, final double comparedTo) {
+    protected boolean isSmall(final int index, final double comparedTo)
+    {
         return data[index].isSmall(comparedTo);
     }
 

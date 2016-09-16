@@ -25,12 +25,14 @@ package org.ojalgo.algebra;
  * @author apete
  * @see <a href="https://en.wikipedia.org/wiki/Operation_(mathematics)">Operation (mathematics)</a>
  */
-public interface Operation {
+public interface Operation
+{
 
     /**
      * @see <a href="https://en.wikipedia.org/wiki/Addition">Addition</a>
      */
-    public interface Addition<T> extends Operation {
+    public interface Addition<T> extends Operation
+    {
 
         /**
          * @param addend What to add
@@ -43,7 +45,8 @@ public interface Operation {
     /**
      * @see <a href="https://en.wikipedia.org/wiki/Division_(mathematics)">Division (mathematics)</a>
      */
-    public interface Division<T> extends Operation {
+    public interface Division<T> extends Operation
+    {
 
         /**
          * @param divisor The divisor
@@ -56,7 +59,8 @@ public interface Operation {
     /**
      * @see <a href="https://en.wikipedia.org/wiki/Multiplication">Multiplication</a>
      */
-    public interface Multiplication<T> extends Operation {
+    public interface Multiplication<T> extends Operation
+    {
 
         /**
          * @param multiplicand The multiplicand
@@ -69,7 +73,8 @@ public interface Operation {
     /**
      * @see <a href="https://en.wikipedia.org/wiki/Subtraction">Subtraction</a>
      */
-    public interface Subtraction<T> extends Operation {
+    public interface Subtraction<T> extends Operation
+    {
 
         /**
          * @param subtrahend The subtrahend

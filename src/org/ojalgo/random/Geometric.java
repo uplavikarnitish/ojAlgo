@@ -31,42 +31,50 @@ import org.ojalgo.function.PrimitiveFunction;
  *
  * @author apete
  */
-public class Geometric extends AbstractDiscrete {
+public class Geometric extends AbstractDiscrete
+{
 
     private static final long serialVersionUID = 1324905651790774444L;
 
     private final double myProbability;
 
-    public Geometric() {
+    public Geometric()
+    {
         this(HALF);
     }
 
-    public Geometric(final double aProbability) {
+    public Geometric(final double aProbability)
+    {
 
         super();
 
         myProbability = aProbability;
     }
 
-    public double getExpected() {
+    public double getExpected()
+    {
         return ONE / myProbability;
     }
 
-    public double getProbability(final int aVal) {
+    public double getProbability(final int aVal)
+    {
         return myProbability * PrimitiveFunction.POW.invoke(ONE - myProbability, aVal - ONE);
     }
 
     @Override
-    public double getVariance() {
+    public double getVariance()
+    {
         return (ONE - myProbability) / (myProbability * myProbability);
     }
 
     @Override
-    protected double generate() {
+    protected double generate()
+    {
 
         int retVal = 1;
 
-        while ((this.random().nextDouble() + myProbability) <= ONE) {
+        while ((this.random().nextDouble() + myProbability) <= ONE)
+        {
             retVal++;
         }
 

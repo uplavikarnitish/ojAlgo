@@ -55,9 +55,11 @@ import org.ojalgo.type.context.NumberContext;
  *
  * @author apete
  */
-public interface MatrixDecomposition<N extends Number> {
+public interface MatrixDecomposition<N extends Number>
+{
 
-    interface Determinant<N extends Number> extends MatrixDecomposition<N>, DeterminantTask<N> {
+    interface Determinant<N extends Number> extends MatrixDecomposition<N>, DeterminantTask<N>
+    {
 
         /**
          * <p>
@@ -78,7 +80,8 @@ public interface MatrixDecomposition<N extends Number> {
      *
      * @author apete
      */
-    interface EconomySize<N extends Number> extends MatrixDecomposition<N> {
+    interface EconomySize<N extends Number> extends MatrixDecomposition<N>
+    {
 
         /**
          * @return True if it will generate a full sized decomposition.
@@ -89,9 +92,11 @@ public interface MatrixDecomposition<N extends Number> {
 
     }
 
-    interface Factory<D extends MatrixDecomposition<?>> {
+    interface Factory<D extends MatrixDecomposition<?>>
+    {
 
-        default D make() {
+        default D make()
+        {
             return this.make(TYPICAL);
         }
 
@@ -105,7 +110,8 @@ public interface MatrixDecomposition<N extends Number> {
      *
      * @author apete
      */
-    public interface Hermitian<N extends Number> extends MatrixDecomposition<N> {
+    public interface Hermitian<N extends Number> extends MatrixDecomposition<N>
+    {
 
         /**
          * Absolutely must check if the matrix is hermitian or not. Then, depending on the result differents
@@ -114,25 +120,30 @@ public interface MatrixDecomposition<N extends Number> {
          * @param matrix A matrix to check and then (maybe) decompose
          * @return true if the hermitian check passed and computation suceeded; false if not
          */
-        default boolean checkAndCompute(final MatrixStore<N> matrix) {
+        default boolean checkAndCompute(final MatrixStore<N> matrix)
+        {
 
             this.reset();
 
-            if (MatrixUtils.isHermitian(matrix)) {
+            if (MatrixUtils.isHermitian(matrix))
+            {
                 return this instanceof Solver<?> ? ((Solver<N>) this).compute(matrix) : this.decompose(matrix);
-            } else {
+            } else
+            {
                 return false;
             }
         }
     }
 
-    interface Solver<N extends Number> extends MatrixDecomposition<N>, SolverTask<N>, InverterTask<N> {
+    interface Solver<N extends Number> extends MatrixDecomposition<N>, SolverTask<N>, InverterTask<N>
+    {
 
         /**
          * @param matrix A matrix to decompose
          * @return true if the decomposition suceeded AND {@link #isSolvable()}; false if not
          */
-        default boolean compute(final ElementsSupplier<N> matrix) {
+        default boolean compute(final ElementsSupplier<N> matrix)
+        {
             return this.decompose(matrix) && this.isSolvable();
         }
 
@@ -156,8 +167,8 @@ public interface MatrixDecomposition<N extends Number> {
          * </p>
          *
          * @param preallocated Preallocated memory for the results, possibly some intermediate results. You
-         *        must assume this is modified, but you cannot assume it will contain the full/final/correct
-         *        solution.
+         *                     must assume this is modified, but you cannot assume it will contain the full/final/correct
+         *                     solution.
          * @return The inverse, this is where you get the solution
          * @throws UnsupportedOperationException When/if this feature is not implemented
          */
@@ -165,7 +176,7 @@ public interface MatrixDecomposition<N extends Number> {
 
         /**
          * @return true if it is ok to call {@linkplain #solve(ElementsSupplier)} (computation was
-         *         successful); false if not
+         * successful); false if not
          * @see #solve(ElementsSupplier)
          * @see #isComputed()
          */
@@ -188,10 +199,10 @@ public interface MatrixDecomposition<N extends Number> {
          * Should produce the same results as calling {@link #solve(ElementsSupplier)}.
          * </p>
          *
-         * @param rhs The Right Hand Side, wont be modfied
+         * @param rhs          The Right Hand Side, wont be modfied
          * @param preallocated Preallocated memory for the results, possibly some intermediate results. You
-         *        must assume this is modified, but you cannot assume it will contain the full/final/correct
-         *        solution.
+         *                     must assume this is modified, but you cannot assume it will contain the full/final/correct
+         *                     solution.
          * @return The solution
          * @throws UnsupportedOperationException When/if this feature is not implemented
          */
@@ -201,7 +212,8 @@ public interface MatrixDecomposition<N extends Number> {
          * To differentiate between {@link SolverTask#solve(Access2D, Access2D)} and
          * {@link #solve(ElementsSupplier, DecompositionStore)} when the RHS is a {@link MatrixStore}.
          */
-        default MatrixStore<N> solve(final MatrixStore<N> rhs, final DecompositionStore<N> preallocated) {
+        default MatrixStore<N> solve(final MatrixStore<N> rhs, final DecompositionStore<N> preallocated)
+        {
             return this.solve((ElementsSupplier<N>) rhs, preallocated);
         }
 
@@ -212,7 +224,8 @@ public interface MatrixDecomposition<N extends Number> {
      *
      * @author apete
      */
-    interface Values<N extends Number> extends MatrixDecomposition<N> {
+    interface Values<N extends Number> extends MatrixDecomposition<N>
+    {
 
         boolean computeValuesOnly(ElementsSupplier<N> matrix);
 
@@ -226,13 +239,16 @@ public interface MatrixDecomposition<N extends Number> {
 
     }
 
-    static final Structure2D TYPICAL = new Structure2D() {
+    static final Structure2D TYPICAL = new Structure2D()
+    {
 
-        public long countColumns() {
+        public long countColumns()
+        {
             return 50L;
         }
 
-        public long countRows() {
+        public long countRows()
+        {
             return 50L;
         }
     };

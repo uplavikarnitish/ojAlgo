@@ -27,14 +27,17 @@ import java.util.concurrent.Future;
 import org.ojalgo.access.Access1D;
 import org.ojalgo.concurrent.DaemonPoolExecutor;
 
-abstract class DelegatingStore<N extends Number> extends LogicalStore<N> {
+abstract class DelegatingStore<N extends Number> extends LogicalStore<N>
+{
 
-    private static final class MultiplyLeft<N extends Number> implements Callable<MatrixStore<N>> {
+    private static final class MultiplyLeft<N extends Number> implements Callable<MatrixStore<N>>
+    {
 
         private Access1D<N> myLeftStore;
         private MatrixStore<N> myThisStore;
 
-        public MultiplyLeft(final MatrixStore<N> thisStore, final Access1D<N> leftStore) {
+        public MultiplyLeft(final MatrixStore<N> thisStore, final Access1D<N> leftStore)
+        {
 
             super();
 
@@ -43,22 +46,26 @@ abstract class DelegatingStore<N extends Number> extends LogicalStore<N> {
         }
 
         @SuppressWarnings("unused")
-        private MultiplyLeft() {
+        private MultiplyLeft()
+        {
             this(null, null);
         }
 
-        public MatrixStore<N> call() throws Exception {
+        public MatrixStore<N> call() throws Exception
+        {
             return ((MatrixStore<N>) myLeftStore).multiply(myThisStore);
         }
 
     }
 
-    private static final class MultiplyRight<N extends Number> implements Callable<MatrixStore<N>> {
+    private static final class MultiplyRight<N extends Number> implements Callable<MatrixStore<N>>
+    {
 
         private MatrixStore<N> myRightStore;
         private MatrixStore<N> myThisStore;
 
-        public MultiplyRight(final MatrixStore<N> thisStore, final MatrixStore<N> rightStore) {
+        public MultiplyRight(final MatrixStore<N> thisStore, final MatrixStore<N> rightStore)
+        {
 
             super();
 
@@ -67,30 +74,36 @@ abstract class DelegatingStore<N extends Number> extends LogicalStore<N> {
         }
 
         @SuppressWarnings("unused")
-        private MultiplyRight() {
+        private MultiplyRight()
+        {
             this(null, null);
         }
 
-        public MatrixStore<N> call() throws Exception {
+        public MatrixStore<N> call() throws Exception
+        {
             return myThisStore.multiply(myRightStore);
         }
 
     }
 
-    protected DelegatingStore(final MatrixStore<N> base, final int rowsCount, final int columnsCount) {
+    protected DelegatingStore(final MatrixStore<N> base, final int rowsCount, final int columnsCount)
+    {
         super(base, rowsCount, columnsCount);
     }
 
     @Override
-    public void supplyTo(final ElementsConsumer<N> consumer) {
+    public void supplyTo(final ElementsConsumer<N> consumer)
+    {
         this.addNonZerosTo(consumer);
     }
 
-    protected final Future<MatrixStore<N>> executeMultiplyLeftOnBase(final Access1D<N> left) {
+    protected final Future<MatrixStore<N>> executeMultiplyLeftOnBase(final Access1D<N> left)
+    {
         return DaemonPoolExecutor.invoke(new MultiplyLeft<>(this.getBase(), left));
     }
 
-    protected final Future<MatrixStore<N>> executeMultiplyRightOnBase(final MatrixStore<N> right) {
+    protected final Future<MatrixStore<N>> executeMultiplyRightOnBase(final MatrixStore<N> right)
+    {
         return DaemonPoolExecutor.invoke(new MultiplyRight<>(this.getBase(), right));
     }
 

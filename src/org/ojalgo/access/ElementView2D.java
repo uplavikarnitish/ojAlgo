@@ -21,7 +21,8 @@
  */
 package org.ojalgo.access;
 
-public interface ElementView2D<N extends Number, V extends ElementView2D<N, V>> extends ElementView1D<N, V> {
+public interface ElementView2D<N extends Number, V extends ElementView2D<N, V>> extends ElementView1D<N, V>
+{
 
     long column();
 

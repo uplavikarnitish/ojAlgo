@@ -27,7 +27,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-public class ProcessInputStream extends DataInputStream {
+public class ProcessInputStream extends DataInputStream
+{
 
     private static String EMPTY = "";
 
@@ -36,7 +37,8 @@ public class ProcessInputStream extends DataInputStream {
     private final String myLastCommandPrefix;
     private long myWaitTime = 1;
 
-    public ProcessInputStream(final Process aProcess, final String aLastCommandPrefix) {
+    public ProcessInputStream(final Process aProcess, final String aLastCommandPrefix)
+    {
 
         super(aProcess.getInputStream());
 
@@ -44,25 +46,29 @@ public class ProcessInputStream extends DataInputStream {
     }
 
     @SuppressWarnings("unused")
-    private ProcessInputStream(final InputStream someIn) {
+    private ProcessInputStream(final InputStream someIn)
+    {
 
         super(someIn);
 
         myLastCommandPrefix = null;
     }
 
-    public List<Message> collectMessages() {
+    public List<Message> collectMessages()
+    {
 
         final List<Message> retVal = new Batch();
 
         Message tmpMessage;
         myWaitTime = 1;
         boolean tmpReadOneMore = true;
-        while (tmpReadOneMore) {
+        while (tmpReadOneMore)
+        {
 
             tmpMessage = this.constructMessage();
 
-            if (tmpMessage != null) {
+            if (tmpMessage != null)
+            {
 
                 retVal.add(tmpMessage);
 
@@ -73,21 +79,25 @@ public class ProcessInputStream extends DataInputStream {
         return retVal;
     }
 
-    public String getLastArgument() {
+    public String getLastArgument()
+    {
         return myLastArgument;
     }
 
-    public String getLastCommand() {
+    public String getLastCommand()
+    {
         return myLastCommand;
     }
 
-    private Message constructMessage() {
+    private Message constructMessage()
+    {
 
         Message retVal = null;
 
         final String tmpString = this.readString();
 
-        if ((tmpString != null) && !tmpString.equals(EMPTY)) {
+        if ((tmpString != null) && !tmpString.equals(EMPTY))
+        {
 
             int tmpFirst = 0;
             int tmpLast = tmpString.indexOf(ASCII.LF);
@@ -104,11 +114,14 @@ public class ProcessInputStream extends DataInputStream {
 
             retVal = new Message(tmpCommand, tmpArgument);
 
-        } else {
+        } else
+        {
 
-            try {
+            try
+            {
                 this.wait(myWaitTime);
-            } catch (final InterruptedException anException) {
+            } catch (final InterruptedException anException)
+            {
                 ;
             }
 
@@ -124,19 +137,22 @@ public class ProcessInputStream extends DataInputStream {
      * count of bytes to come, as well as any '\r' character are discarded. Everything else is converted and
      * merged.
      */
-    private String readString() {
+    private String readString()
+    {
 
         //     BasicLogger.logDebug("Reading in new characters.");
 
         final StringBuilder retVal = new StringBuilder();
 
-        try {
+        try
+        {
 
             int tmpInt;
             char tmpChar;
             int tmpByteCount = 0;
 
-            while (((tmpInt = this.readByteAsInt()) != ASCII.SP) && (tmpInt >= ASCII.DECIMAL_ZERO) && (tmpInt <= ASCII.DECIMAL_NINE)) {
+            while (((tmpInt = this.readByteAsInt()) != ASCII.SP) && (tmpInt >= ASCII.DECIMAL_ZERO) && (tmpInt <= ASCII.DECIMAL_NINE))
+            {
 
                 //    BasicLogger.logDebug("The byte/int is: {}", tmpInt);
 
@@ -147,17 +163,20 @@ public class ProcessInputStream extends DataInputStream {
 
             }
 
-            for (int i = 0; i < tmpByteCount; i++) {
+            for (int i = 0; i < tmpByteCount; i++)
+            {
                 tmpChar = this.readByteAsChar();
 
                 //  BasicLogger.logDebug("The byte/char is: {}", tmpChar);
 
-                if (tmpChar != ASCII.CR) {
+                if (tmpChar != ASCII.CR)
+                {
                     retVal.append(tmpChar);
                 }
             }
 
-        } catch (final IOException anException) {
+        } catch (final IOException anException)
+        {
             retVal.append(ASCII.SP);
             retVal.append(anException);
         }
@@ -170,11 +189,13 @@ public class ProcessInputStream extends DataInputStream {
     /**
      * @see java.io.DataInput#readByte()
      */
-    protected char readByteAsChar() throws IOException {
+    protected char readByteAsChar() throws IOException
+    {
 
         final int retVal = this.read();
 
-        if (retVal < 0) {
+        if (retVal < 0)
+        {
             throw new EOFException();
         }
 
@@ -184,11 +205,13 @@ public class ProcessInputStream extends DataInputStream {
     /**
      * @see java.io.DataInput#readByte()
      */
-    protected int readByteAsInt() throws IOException {
+    protected int readByteAsInt() throws IOException
+    {
 
         final int retVal = this.read();
 
-        if (retVal < 0) {
+        if (retVal < 0)
+        {
             throw new EOFException();
         }
 

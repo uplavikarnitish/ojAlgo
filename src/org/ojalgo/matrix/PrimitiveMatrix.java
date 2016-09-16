@@ -39,80 +39,99 @@ import org.ojalgo.type.context.NumberContext;
  *
  * @author apete
  */
-public final class PrimitiveMatrix extends AbstractMatrix<Double, PrimitiveMatrix> {
+public final class PrimitiveMatrix extends AbstractMatrix<Double, PrimitiveMatrix>
+{
 
     public static final BasicMatrix.Factory<PrimitiveMatrix> FACTORY = new MatrixFactory<>(PrimitiveMatrix.class, PrimitiveDenseStore.FACTORY);
 
-    public static Builder<PrimitiveMatrix> getBuilder(final int aLength) {
+    public static Builder<PrimitiveMatrix> getBuilder(final int aLength)
+    {
         return FACTORY.getBuilder(aLength);
     }
 
-    public static Builder<PrimitiveMatrix> getBuilder(final int aRowDim, final int aColDim) {
+    public static Builder<PrimitiveMatrix> getBuilder(final int aRowDim, final int aColDim)
+    {
         return FACTORY.getBuilder(aRowDim, aColDim);
     }
 
     /**
      * This method is for internal use only - YOU should NOT use it!
      */
-    PrimitiveMatrix(final MatrixStore<Double> aStore) {
+    PrimitiveMatrix(final MatrixStore<Double> aStore)
+    {
         super(aStore);
     }
 
-    public PrimitiveMatrix enforce(final NumberContext context) {
+    public PrimitiveMatrix enforce(final NumberContext context)
+    {
         return this.modify(context.getPrimitiveFunction());
     }
 
-    public BigDecimal toBigDecimal(final int row, final int column) {
+    public BigDecimal toBigDecimal(final int row, final int column)
+    {
         return new BigDecimal(this.getStore().doubleValue(row, column));
     }
 
-    public ComplexNumber toComplexNumber(final int row, final int column) {
+    public ComplexNumber toComplexNumber(final int row, final int column)
+    {
         return ComplexNumber.valueOf(this.getStore().doubleValue(row, column));
     }
 
     @Override
-    public PhysicalStore<Double> toPrimitiveStore() {
+    public PhysicalStore<Double> toPrimitiveStore()
+    {
         return this.getStore().copy();
     }
 
-    public String toString(final int row, final int col) {
+    public String toString(final int row, final int col)
+    {
         return Double.toString(this.doubleValue(row, col));
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    MatrixStore<Double> cast(final Access1D<?> matrix) {
-        if (matrix instanceof PrimitiveMatrix) {
+    MatrixStore<Double> cast(final Access1D<?> matrix)
+    {
+        if (matrix instanceof PrimitiveMatrix)
+        {
             return ((PrimitiveMatrix) matrix).getStore();
-        } else if (matrix instanceof PrimitiveDenseStore) {
+        } else if (matrix instanceof PrimitiveDenseStore)
+        {
             return (PrimitiveDenseStore) matrix;
-        } else if ((matrix instanceof MatrixStore) && !this.isEmpty() && (matrix.get(0) instanceof Double)) {
+        } else if ((matrix instanceof MatrixStore) && !this.isEmpty() && (matrix.get(0) instanceof Double))
+        {
             return (MatrixStore<Double>) matrix;
-        } else if (matrix instanceof Access2D<?>) {
+        } else if (matrix instanceof Access2D<?>)
+        {
             return this.getStore().physical().copy((Access2D<?>) matrix);
-        } else {
+        } else
+        {
             return this.getStore().physical().columns(matrix);
         }
     }
 
     @Override
-    DeterminantTask<Double> getDeterminantTask(final MatrixStore<Double> template) {
+    DeterminantTask<Double> getDeterminantTask(final MatrixStore<Double> template)
+    {
         return DeterminantTask.PRIMITIVE.make(template, this.isHermitian(), false);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    MatrixFactory<Double, PrimitiveMatrix> getFactory() {
+    MatrixFactory<Double, PrimitiveMatrix> getFactory()
+    {
         return (MatrixFactory<Double, PrimitiveMatrix>) FACTORY;
     }
 
     @Override
-    InverterTask<Double> getInverterTask(final MatrixStore<Double> base) {
+    InverterTask<Double> getInverterTask(final MatrixStore<Double> base)
+    {
         return InverterTask.PRIMITIVE.make(base, this.isHermitian(), false);
     }
 
     @Override
-    SolverTask<Double> getSolverTask(final MatrixStore<Double> templateBody, final MatrixStore<Double> templateRHS) {
+    SolverTask<Double> getSolverTask(final MatrixStore<Double> templateBody, final MatrixStore<Double> templateRHS)
+    {
         return SolverTask.PRIMITIVE.make(templateBody, templateRHS, this.isHermitian(), false);
     }
 

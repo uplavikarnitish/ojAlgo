@@ -39,7 +39,8 @@ import org.ojalgo.ProgrammingError;
  *
  * @author apete
  */
-public final class ResourceLocator {
+public final class ResourceLocator
+{
 
     private String myHost = null;
     private String myPath = null;
@@ -47,71 +48,88 @@ public final class ResourceLocator {
     private Map<String, String> myQueryParameters = new TreeMap<>();
     private String myScheme = "http";
 
-    public ResourceLocator() {
+    public ResourceLocator()
+    {
         super();
     }
 
-    public String addQueryParameter(final String aKey, final String aValue) {
+    public String addQueryParameter(final String aKey, final String aValue)
+    {
         return myQueryParameters.put(aKey, aValue);
     }
 
     /**
      * Open connection and return a buffered input stream reader.
      */
-    public BufferedReader getStreamReader() {
-        try {
+    public BufferedReader getStreamReader()
+    {
+        try
+        {
             return new BufferedInputStreamReader(this.toURL().openStream());
-        } catch (final IOException anException) {
+        } catch (final IOException anException)
+        {
             return null;
         }
     }
 
-    public String removeQueryParameter(final String aKey) {
+    public String removeQueryParameter(final String aKey)
+    {
         return myQueryParameters.remove(aKey);
     }
 
-    public void setHost(final String someHost) {
+    public void setHost(final String someHost)
+    {
         myHost = someHost;
     }
 
-    public void setPath(final String somePath) {
+    public void setPath(final String somePath)
+    {
         myPath = somePath;
     }
 
     /**
      * The default (null) value is -1.
      */
-    public void setPort(final int somePort) {
+    public void setPort(final int somePort)
+    {
         myPort = somePort;
     }
 
-    public void setQueryParameters(final Map<String, String> someQueryParameters) {
+    public void setQueryParameters(final Map<String, String> someQueryParameters)
+    {
         myQueryParameters = someQueryParameters;
     }
 
     /**
      * Protocol The default value is "http"
      */
-    public void setScheme(final String someScheme) {
+    public void setScheme(final String someScheme)
+    {
         myScheme = someScheme;
     }
 
-    private URI makeURI() {
-        try {
+    private URI makeURI()
+    {
+        try
+        {
             return new URI(myScheme, null, myHost, myPort, myPath, this.query(), null);
-        } catch (final URISyntaxException anException) {
+        } catch (final URISyntaxException anException)
+        {
             throw new ProgrammingError(anException);
         }
     }
 
-    private String query() {
+    private String query()
+    {
 
-        if (myQueryParameters.size() >= 1) {
+        if (myQueryParameters.size() >= 1)
+        {
 
             final StringBuilder retVal = new StringBuilder();
 
             Entry<String, String> tmpEntry;
-            for (final Iterator<Entry<String, String>> tmpIter = myQueryParameters.entrySet().iterator(); tmpIter.hasNext();) {
+            for (final Iterator<Entry<String, String>> tmpIter = myQueryParameters.entrySet().iterator(); tmpIter.hasNext(); )
+            {
                 tmpEntry = tmpIter.next();
                 retVal.append(tmpEntry.getKey());
                 retVal.append('=');
@@ -124,16 +142,20 @@ public final class ResourceLocator {
 
             return retVal.toString();
 
-        } else {
+        } else
+        {
 
             return null;
         }
     }
 
-    private URL toURL() {
-        try {
+    private URL toURL()
+    {
+        try
+        {
             return this.makeURI().toURL();
-        } catch (final MalformedURLException anException) {
+        } catch (final MalformedURLException anException)
+        {
             throw new ProgrammingError(anException);
         }
     }

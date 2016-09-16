@@ -43,27 +43,34 @@ import org.ojalgo.type.context.NumberContext;
  *
  * @author apete
  */
-abstract class SVDnew32<N extends Number & Comparable<N>> extends SingularValueDecomposition<N> {
+abstract class SVDnew32<N extends Number & Comparable<N>> extends SingularValueDecomposition<N>
+{
 
-    static final class Big extends SVDnew32<BigDecimal> {
+    static final class Big extends SVDnew32<BigDecimal>
+    {
 
-        Big() {
+        Big()
+        {
             super(BigDenseStore.FACTORY, new BidiagonalDecomposition.Big());
         }
 
     }
 
-    static final class Complex extends SVDnew32<ComplexNumber> {
+    static final class Complex extends SVDnew32<ComplexNumber>
+    {
 
-        Complex() {
+        Complex()
+        {
             super(ComplexDenseStore.FACTORY, new BidiagonalDecomposition.Complex());
         }
 
     }
 
-    static final class Primitive extends SVDnew32<Double> {
+    static final class Primitive extends SVDnew32<Double>
+    {
 
-        Primitive() {
+        Primitive()
+        {
             super(PrimitiveDenseStore.FACTORY, new BidiagonalDecomposition.Primitive());
         }
 
@@ -75,7 +82,8 @@ abstract class SVDnew32<N extends Number & Comparable<N>> extends SingularValueD
     @Deprecated
     static final double TINY = PrimitiveFunction.POW.invoke(2.0, -966.0);
 
-    static void doCase1(final double[] s, final double[] e, final int p, final int k, final DecompositionStore<?> mtrxQ2) {
+    static void doCase1(final double[] s, final double[] e, final int p, final int k, final DecompositionStore<?> mtrxQ2)
+    {
 
         double f = e[p - 2];
         e[p - 2] = ZERO;
@@ -84,25 +92,29 @@ abstract class SVDnew32<N extends Number & Comparable<N>> extends SingularValueD
         double cs;
         double sn;
 
-        for (int j = p - 2; j >= k; j--) {
+        for (int j = p - 2; j >= k; j--)
+        {
 
             t = PrimitiveFunction.HYPOT.invoke(s[j], f);
             cs = s[j] / t;
             sn = f / t;
 
             s[j] = t;
-            if (j != k) {
+            if (j != k)
+            {
                 f = -sn * e[j - 1];
                 e[j - 1] = cs * e[j - 1];
             }
 
-            if (mtrxQ2 != null) {
+            if (mtrxQ2 != null)
+            {
                 mtrxQ2.rotateRight(p - 1, j, cs, sn);
             }
         }
     }
 
-    static void doCase2(final double[] s, final double[] e, final int p, final int k, final DecompositionStore<?> mtrxQ1) {
+    static void doCase2(final double[] s, final double[] e, final int p, final int k, final DecompositionStore<?> mtrxQ1)
+    {
 
         double f = e[k - 1];
         e[k - 1] = ZERO;
@@ -111,7 +123,8 @@ abstract class SVDnew32<N extends Number & Comparable<N>> extends SingularValueD
         double cs;
         double sn;
 
-        for (int j = k; j < p; j++) {
+        for (int j = k; j < p; j++)
+        {
 
             t = PrimitiveFunction.HYPOT.invoke(s[j], f);
             cs = s[j] / t;
@@ -121,13 +134,15 @@ abstract class SVDnew32<N extends Number & Comparable<N>> extends SingularValueD
             f = -sn * e[j];
             e[j] = cs * e[j];
 
-            if (mtrxQ1 != null) {
+            if (mtrxQ1 != null)
+            {
                 mtrxQ1.rotateRight(k - 1, j, cs, sn);
             }
         }
     }
 
-    static void doCase3(final double[] s, final double[] e, final int p, final int k, final DecompositionStore<?> mtrxQ1, final DecompositionStore<?> mtrxQ2) {
+    static void doCase3(final double[] s, final double[] e, final int p, final int k, final DecompositionStore<?> mtrxQ1, final DecompositionStore<?> mtrxQ2)
+    {
 
         final int indPm1 = p - 1;
         final int indPm2 = p - 2;
@@ -145,9 +160,11 @@ abstract class SVDnew32<N extends Number & Comparable<N>> extends SingularValueD
         final double b = (((sPm2 + sPm1) * (sPm2 - sPm1)) + (ePm2 * ePm2)) / TWO;
         final double c = (sPm1 * ePm2) * (sPm1 * ePm2);
         double shift = ZERO;
-        if ((c != ZERO) || (b != ZERO)) {
+        if ((c != ZERO) || (b != ZERO))
+        {
             shift = PrimitiveFunction.SQRT.invoke((b * b) + c);
-            if (b < ZERO) {
+            if (b < ZERO)
+            {
                 shift = -shift;
             }
             shift = c / (b + shift);
@@ -161,12 +178,14 @@ abstract class SVDnew32<N extends Number & Comparable<N>> extends SingularValueD
         double sn;
 
         // Chase zeros.
-        for (int j = k; j < indPm1; j++) {
+        for (int j = k; j < indPm1; j++)
+        {
 
             t = PrimitiveFunction.HYPOT.invoke(f, g);
             cs = f / t;
             sn = g / t;
-            if (j != k) {
+            if (j != k)
+            {
                 e[j - 1] = t;
             }
             f = (cs * s[j]) + (sn * e[j]);
@@ -174,7 +193,8 @@ abstract class SVDnew32<N extends Number & Comparable<N>> extends SingularValueD
             g = sn * s[j + 1];
             s[j + 1] = cs * s[j + 1];
 
-            if (mtrxQ2 != null) {
+            if (mtrxQ2 != null)
+            {
                 mtrxQ2.rotateRight(j + 1, j, cs, sn);
 
             }
@@ -188,7 +208,8 @@ abstract class SVDnew32<N extends Number & Comparable<N>> extends SingularValueD
             g = sn * e[j + 1];
             e[j + 1] = cs * e[j + 1];
 
-            if (mtrxQ1 != null) {
+            if (mtrxQ1 != null)
+            {
                 mtrxQ1.rotateRight(j + 1, j, cs, sn);
 
             }
@@ -197,39 +218,47 @@ abstract class SVDnew32<N extends Number & Comparable<N>> extends SingularValueD
         e[indPm2] = f;
     }
 
-    static void doCase4(final double[] s, final int k, final DecompositionStore<?> mtrxQ1, final DecompositionStore<?> mtrxQ2) {
+    static void doCase4(final double[] s, final int k, final DecompositionStore<?> mtrxQ1, final DecompositionStore<?> mtrxQ2)
+    {
 
         final int tmpDiagDim = s.length;
 
         // Make the singular values positive.
         final double tmpSk = s[k];
-        if (tmpSk < ZERO) {
+        if (tmpSk < ZERO)
+        {
             s[k] = -tmpSk;
 
-            if (mtrxQ2 != null) {
+            if (mtrxQ2 != null)
+            {
                 //aQ2.modifyColumn(0, k, PrimitiveFunction.NEGATE);
                 mtrxQ2.negateColumn(k);
 
             }
-        } else if (tmpSk == ZERO) {
+        } else if (tmpSk == ZERO)
+        {
             s[k] = ZERO; // To get rid of negative zeros
         }
 
         // Order the singular values.
         int tmpK = k;
 
-        while (tmpK < (tmpDiagDim - 1)) {
-            if (s[tmpK] >= s[tmpK + 1]) {
+        while (tmpK < (tmpDiagDim - 1))
+        {
+            if (s[tmpK] >= s[tmpK + 1])
+            {
                 break;
             }
             final double t = s[tmpK];
             s[tmpK] = s[tmpK + 1];
             s[tmpK + 1] = t;
 
-            if (mtrxQ1 != null) {
+            if (mtrxQ1 != null)
+            {
                 mtrxQ1.exchangeColumns(tmpK + 1, tmpK);
             }
-            if (mtrxQ2 != null) {
+            if (mtrxQ2 != null)
+            {
                 mtrxQ2.exchangeColumns(tmpK + 1, tmpK);
             }
 
@@ -237,14 +266,16 @@ abstract class SVDnew32<N extends Number & Comparable<N>> extends SingularValueD
         }
     }
 
-    static Array1D<Double> toDiagonal(final DiagonalAccess<?> bidiagonal, final DecompositionStore<?> mtrxQ1, final DecompositionStore<?> mtrxQ2) {
+    static Array1D<Double> toDiagonal(final DiagonalAccess<?> bidiagonal, final DecompositionStore<?> mtrxQ1, final DecompositionStore<?> mtrxQ2)
+    {
 
         final int tmpDiagDim = bidiagonal.mainDiagonal.size();
 
         final double[] s = bidiagonal.mainDiagonal.toRawCopy1D(); // s
         final double[] e = new double[tmpDiagDim]; // e
         final int tmpOffLength = bidiagonal.superdiagonal.size();
-        for (int i = 0; i < tmpOffLength; i++) {
+        for (int i = 0; i < tmpOffLength; i++)
+        {
             e[i] = bidiagonal.superdiagonal.doubleValue(i);
         }
 
@@ -252,7 +283,8 @@ abstract class SVDnew32<N extends Number & Comparable<N>> extends SingularValueD
         int kase;
         int k;
         int p = tmpDiagDim;
-        while (p > 0) {
+        while (p > 0)
+        {
 
             //
             // This section of the program inspects for negligible elements in the s and e arrays.
@@ -267,66 +299,78 @@ abstract class SVDnew32<N extends Number & Comparable<N>> extends SingularValueD
             kase = 0;
             k = 0;
 
-            for (k = p - 2; k >= -1; k--) {
-                if (k == -1) {
+            for (k = p - 2; k >= -1; k--)
+            {
+                if (k == -1)
+                {
                     break;
                 }
-                if (PrimitiveFunction.ABS.invoke(e[k]) <= (SVDnew32.TINY + (MACHINE_EPSILON * (PrimitiveFunction.ABS.invoke(s[k]) + PrimitiveFunction.ABS.invoke(s[k + 1]))))) {
+                if (PrimitiveFunction.ABS.invoke(e[k]) <= (SVDnew32.TINY + (MACHINE_EPSILON * (PrimitiveFunction.ABS.invoke(s[k]) + PrimitiveFunction.ABS.invoke(s[k + 1])))))
+                {
                     e[k] = ZERO;
                     break;
                 }
             }
-            if (k == (p - 2)) {
+            if (k == (p - 2))
+            {
                 kase = 4;
-            } else {
+            } else
+            {
                 int ks;
-                for (ks = p - 1; ks >= k; ks--) {
-                    if (ks == k) {
+                for (ks = p - 1; ks >= k; ks--)
+                {
+                    if (ks == k)
+                    {
                         break;
                     }
                     final double t = (ks != p ? PrimitiveFunction.ABS.invoke(e[ks]) : ZERO) + (ks != (k + 1) ? PrimitiveFunction.ABS.invoke(e[ks - 1]) : ZERO);
-                    if (PrimitiveFunction.ABS.invoke(s[ks]) <= (SVDnew32.TINY + (MACHINE_EPSILON * t))) {
+                    if (PrimitiveFunction.ABS.invoke(s[ks]) <= (SVDnew32.TINY + (MACHINE_EPSILON * t)))
+                    {
                         s[ks] = ZERO;
                         break;
                     }
                 }
-                if (ks == k) {
+                if (ks == k)
+                {
                     kase = 3;
-                } else if (ks == (p - 1)) {
+                } else if (ks == (p - 1))
+                {
                     kase = 1;
-                } else {
+                } else
+                {
                     kase = 2;
                     k = ks;
                 }
             }
             k++;
 
-            switch (kase) { // Perform the task indicated by kase.
+            switch (kase)
+            { // Perform the task indicated by kase.
 
-            case 1: // Deflate negligible s[p]
+                case 1: // Deflate negligible s[p]
 
-                SVDnew32.doCase1(s, e, p, k, mtrxQ2);
-                break;
+                    SVDnew32.doCase1(s, e, p, k, mtrxQ2);
+                    break;
 
-            case 2: // Split at negligible s[k]
+                case 2: // Split at negligible s[k]
 
-                SVDnew32.doCase2(s, e, p, k, mtrxQ1);
-                break;
+                    SVDnew32.doCase2(s, e, p, k, mtrxQ1);
+                    break;
 
-            case 3: // Perform QR-step.
+                case 3: // Perform QR-step.
 
-                SVDnew32.doCase3(s, e, p, k, mtrxQ1, mtrxQ2);
-                break;
+                    SVDnew32.doCase3(s, e, p, k, mtrxQ1, mtrxQ2);
+                    break;
 
-            case 4: // Convergence
+                case 4: // Convergence
 
-                SVDnew32.doCase4(s, k, mtrxQ1, mtrxQ2);
-                p--;
-                break;
+                    SVDnew32.doCase4(s, k, mtrxQ1, mtrxQ2);
+                    p--;
+                    break;
 
-            default:
+                default:
 
-                throw new IllegalStateException();
+                    throw new IllegalStateException();
 
             } // switch
         } // while
@@ -335,24 +379,29 @@ abstract class SVDnew32<N extends Number & Comparable<N>> extends SingularValueD
         return Array1D.PRIMITIVE.wrap(PrimitiveArray.wrap(s));
     }
 
-    protected SVDnew32(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> factory, final BidiagonalDecomposition<N> bidiagonal) {
+    protected SVDnew32(final DecompositionStore.Factory<N, ? extends DecompositionStore<N>> factory, final BidiagonalDecomposition<N> bidiagonal)
+    {
         super(factory, bidiagonal);
     }
 
-    public boolean equals(final MatrixStore<N> other, final NumberContext context) {
+    public boolean equals(final MatrixStore<N> other, final NumberContext context)
+    {
         return MatrixUtils.equals(other, this, NumberContext.getGeneral(6));
     }
 
-    public boolean isOrdered() {
+    public boolean isOrdered()
+    {
         return true;
     }
 
-    public boolean isSolvable() {
+    public boolean isSolvable()
+    {
         return this.isComputed();
     }
 
     @Override
-    protected boolean doCompute(final ElementsSupplier<N> matrix, final boolean singularValuesOnly, final boolean fullSize) {
+    protected boolean doCompute(final ElementsSupplier<N> matrix, final boolean singularValuesOnly, final boolean fullSize)
+    {
 
         this.computeBidiagonal(matrix, fullSize);
 
@@ -369,22 +418,26 @@ abstract class SVDnew32<N extends Number & Comparable<N>> extends SingularValueD
     }
 
     @Override
-    protected MatrixStore<N> makeD() {
+    protected MatrixStore<N> makeD()
+    {
         return this.wrap(new DiagonalAccess<>(this.getSingularValues(), null, null, ZERO)).get();
     }
 
     @Override
-    protected MatrixStore<N> makeQ1() {
+    protected MatrixStore<N> makeQ1()
+    {
         return this.getBidiagonalQ1();
     }
 
     @Override
-    protected MatrixStore<N> makeQ2() {
+    protected MatrixStore<N> makeQ2()
+    {
         return this.getBidiagonalQ2();
     }
 
     @Override
-    protected Array1D<Double> makeSingularValues() {
+    protected Array1D<Double> makeSingularValues()
+    {
         throw new IllegalStateException("Should never have to be called!");
     }
 }

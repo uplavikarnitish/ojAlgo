@@ -23,52 +23,63 @@ package org.ojalgo.matrix.store;
 
 import org.ojalgo.ProgrammingError;
 
-abstract class TransjugatedStore<N extends Number> extends LogicalStore<N> {
+abstract class TransjugatedStore<N extends Number> extends LogicalStore<N>
+{
 
-    private TransjugatedStore(final MatrixStore<N> base, final int rows, final int columns) {
+    private TransjugatedStore(final MatrixStore<N> base, final int rows, final int columns)
+    {
 
         super(base, rows, columns);
 
         ProgrammingError.throwForIllegalInvocation();
     }
 
-    protected TransjugatedStore(final MatrixStore<N> base) {
+    protected TransjugatedStore(final MatrixStore<N> base)
+    {
         super(base, (int) base.countColumns(), (int) base.countRows());
     }
 
-    public final double doubleValue(final long aRow, final long aCol) {
+    public final double doubleValue(final long aRow, final long aCol)
+    {
         return this.getBase().doubleValue(aCol, aRow);
     }
 
-    public final int firstInColumn(final int col) {
+    public final int firstInColumn(final int col)
+    {
         return this.getBase().firstInRow(col);
     }
 
-    public final int firstInRow(final int row) {
+    public final int firstInRow(final int row)
+    {
         return this.getBase().firstInColumn(row);
     }
 
-    public final MatrixStore<N> getOriginal() {
+    public final MatrixStore<N> getOriginal()
+    {
         return this.getBase();
     }
 
     @Override
-    public final int limitOfColumn(final int col) {
+    public final int limitOfColumn(final int col)
+    {
         return this.getBase().limitOfRow(col);
     }
 
     @Override
-    public final int limitOfRow(final int row) {
+    public final int limitOfRow(final int row)
+    {
         return this.getBase().limitOfColumn(row);
     }
 
     @Override
-    public void supplyTo(final ElementsConsumer<N> consumer) {
+    public void supplyTo(final ElementsConsumer<N> consumer)
+    {
         this.addNonZerosTo(consumer);
     }
 
     @Override
-    protected void addNonZerosTo(final ElementsConsumer<N> consumer) {
+    protected void addNonZerosTo(final ElementsConsumer<N> consumer)
+    {
         consumer.fillMatching(this);
     }
 
