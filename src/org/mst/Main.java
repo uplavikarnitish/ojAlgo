@@ -1,6 +1,8 @@
 package org.mst;
 
+import org.ojalgo.matrix.store.MatrixStore;
 import org.ojalgo.matrix.store.RawStore;
+import org.ojalgo.matrix.decomposition.SingularValue;
 
 /**
  * Created by nuplavikar on 9/11/16.
@@ -23,8 +25,11 @@ public class Main
         System.out.println("CCt = "+CCt);
 
         RawStore C_raw = new RawStore(C.mat, C.m, C.n);
-        C_raw.
-        RawSingularValue rawSingularValue = new RawSingularValue();
+        MatrixStore matrixStore = new MatrixStore();
+        matrixStore.add(C_raw);
+        System.out.println("Num. rows = "+matrixStore.countRows()+"\t\tNum. columns = "+matrixStore.countColumns());
+
+
 
         //Find CCt
 //        Matrix B = new Matrix();
