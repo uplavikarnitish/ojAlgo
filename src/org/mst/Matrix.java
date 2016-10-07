@@ -1,5 +1,8 @@
 package org.mst;
 
+import org.ojalgo.matrix.BasicMatrix;
+import org.ojalgo.matrix.PrimitiveMatrix;
+
 /**
  * Created by nuplavikar on 9/11/16.
  */
@@ -30,6 +33,14 @@ public class Matrix
 
         System.out.println("Matrix created "+this);
 
+    }
+
+    public Matrix(BasicMatrix.Factory<PrimitiveMatrix> basicMatFactPrimMat)
+    {
+        if ( basicMatFactPrimMat != null )
+        {
+            basicMatFactPrimMat.s
+        }
     }
 
     public static Matrix multiply( Matrix a, Matrix b)
