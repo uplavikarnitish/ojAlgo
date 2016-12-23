@@ -16,6 +16,7 @@ public class Main
 {
     public static void main(String args[])
     {
+        /*
         Matrix C = new Matrix();
         //Find C^T
         Matrix Ct = C.getTransposeOf();
@@ -29,7 +30,7 @@ public class Main
         System.out.println("CtC = "+CtC);
         System.out.println("CCt = "+CCt);
 
-        RawStore C_raw = new RawStore(C.mat, C.m, C.n);
+        RawStore C_raw = new RawStore(C.mat, C.m, C.n);*/
         /*MatrixStore matrixStore = new MatrixStore();
         matrixStore.add(C_raw);
         System.out.println("Num. rows = "+matrixStore.countRows()+"\t\tNum. columns = "+matrixStore.countColumns());
@@ -40,7 +41,12 @@ public class Main
         final PhysicalStore.Factory<Double, PrimitiveDenseStore> doublePrimitiveDenseStoreFactory = PrimitiveDenseStore.FACTORY;
 
         final PrimitiveMatrix matA = matFactoryPrimitive.makeZero(5, 6);
-        matFactoryPrimitive.makeFilled();
+
+        final PrimitiveMatrix matB = matFactoryPrimitive.makeZero(6, 5);
+
+        final PrimitiveMatrix matC = matA.multiply(matB);
+
+        System.out.println("AxB: "+matC.toString());
 
 
         //Find CCt

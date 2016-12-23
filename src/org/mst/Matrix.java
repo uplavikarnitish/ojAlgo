@@ -39,7 +39,7 @@ public class Matrix
     {
         if ( basicMatFactPrimMat != null )
         {
-            basicMatFactPrimMat.s
+            //basicMatFactPrimMat.s
         }
     }
 
