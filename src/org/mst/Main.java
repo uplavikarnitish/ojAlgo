@@ -2,12 +2,14 @@ package org.mst;
 
 import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
+import org.ojalgo.matrix.decomposition.MatrixDecomposition;
 import org.ojalgo.matrix.store.MatrixStore;
 import org.ojalgo.matrix.store.PhysicalStore;
 import org.ojalgo.matrix.store.PrimitiveDenseStore;
 import org.ojalgo.matrix.store.RawStore;
 import org.ojalgo.matrix.decomposition.SingularValue;
 import org.ojalgo.matrix.transformation.Householder;
+import org.ojalgo.random.Weibull;
 
 /**
  * Created by nuplavikar on 9/11/16.
@@ -37,16 +39,87 @@ public class Main
 
         SingularValue singularValue = new Si*/
 
-        final BasicMatrix.Factory<PrimitiveMatrix> matFactoryPrimitive = PrimitiveMatrix.FACTORY;
         final PhysicalStore.Factory<Double, PrimitiveDenseStore> doublePrimitiveDenseStoreFactory = PrimitiveDenseStore.FACTORY;
+        final PrimitiveDenseStore primitiveDenseStore =
+                 doublePrimitiveDenseStoreFactory.makeZero(5, 6);
+        //row 0
+        int rowNo=0;
+        primitiveDenseStore.set(rowNo, 0, 1);
+        primitiveDenseStore.set(rowNo, 1, 0);
+        primitiveDenseStore.set(rowNo, 2, 1);
+        primitiveDenseStore.set(rowNo, 3, 0);
+        primitiveDenseStore.set(rowNo, 4, 0);
+        primitiveDenseStore.set(rowNo, 5, 0);
+        //row 1
+        rowNo = 1;
+        primitiveDenseStore.set(rowNo, 0, 0);
+        primitiveDenseStore.set(rowNo, 1, 1);
+        primitiveDenseStore.set(rowNo, 2, 0);
+        primitiveDenseStore.set(rowNo, 3, 0);
+        primitiveDenseStore.set(rowNo, 4, 0);
+        primitiveDenseStore.set(rowNo, 5, 0);
+        //row 2
+        rowNo = 2;
+        primitiveDenseStore.set(rowNo, 0, 1);
+        primitiveDenseStore.set(rowNo, 1, 1);
+        primitiveDenseStore.set(rowNo, 2, 0);
+        primitiveDenseStore.set(rowNo, 3, 0);
+        primitiveDenseStore.set(rowNo, 4, 0);
+        primitiveDenseStore.set(rowNo, 5, 0);
+        //row 3
+        rowNo = 3;
+        primitiveDenseStore.set(rowNo, 0, 1);
+        primitiveDenseStore.set(rowNo, 1, 0);
+        primitiveDenseStore.set(rowNo, 2, 0);
+        primitiveDenseStore.set(rowNo, 3, 1);
+        primitiveDenseStore.set(rowNo, 4, 1);
+        primitiveDenseStore.set(rowNo, 5, 0);
+        //row 4
+        rowNo = 4;
+        primitiveDenseStore.set(rowNo, 0, 0);
+        primitiveDenseStore.set(rowNo, 1, 0);
+        primitiveDenseStore.set(rowNo, 2, 0);
+        primitiveDenseStore.set(rowNo, 3, 1);
+        primitiveDenseStore.set(rowNo, 4, 0);
+        primitiveDenseStore.set(rowNo, 5, 1);
 
-        final PrimitiveMatrix matA = matFactoryPrimitive.makeZero(5, 6);
 
-        final PrimitiveMatrix matB = matFactoryPrimitive.makeZero(6, 5);
+        System.out.printf("Incidence matrix: "+primitiveDenseStore);
 
-        final PrimitiveMatrix matC = matA.multiply(matB);
+        PrimitiveDenseStore C = primitiveDenseStore;
 
-        System.out.println("AxB: "+matC.toString());
+        MatrixStore<Double> Ct = C.transpose();
+
+        MatrixStore<Double> CCt = C.multiply(Ct);
+
+        MatrixStore<Double> CtC = Ct.multiply(C);
+
+        System.out.println("\nC^t(Transpose) = " + Ct);
+        System.out.println("CCt = " + CCt);
+        System.out.println("CtC = " + CtC);
+
+
+        //SingularValue<Double> svd = MatrixDecomposition.Factory<SingularValue<Double>>;
+        final SingularValue<Double> svd = SingularValue.PRIMITIVE.make();
+        System.out.println("\n\niscomputed = "+svd.isComputed());
+        svd.decompose(C);
+        System.out.println("\n\niscomputed = "+svd.isComputed());
+        MatrixStore<Double> U = svd.getQ1();
+        MatrixStore<Double> V = svd.getQ2();
+        MatrixStore<Double> Sigma = svd.getD();
+
+        System.out.println("\n\nU = "+U);
+        System.out.println("\n\nSigma = "+Sigma);
+        System.out.println("\n\nV = "+V);
+
+
+        //Testing orthogonality
+        System.out.println("\n\nU*Ut = "+U.multiply(U.transpose()));
+        System.out.println("\n\nV*Vt = "+V.transpose().multiply(V));
+
+        //Computing U*Sigma*(Vt)
+
+        System.out.println("\n\n\nC = "+U.multiply(Sigma.multiply(V.transpose())));
 
 
         //Find CCt
