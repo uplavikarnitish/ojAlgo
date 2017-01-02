@@ -1,5 +1,7 @@
 package org.mst;
 
+import org.ojalgo.access.Access1D;
+import org.ojalgo.array.PrimitiveArray;
 import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
 import org.ojalgo.matrix.decomposition.MatrixDecomposition;
@@ -121,6 +123,18 @@ public class Main
 
         System.out.println("\n\n\nC = "+U.multiply(Sigma.multiply(V.transpose())));
 
+        //k-approximation calculation
+        int k = 2;
+
+        //Access1D<Double> access1D = Sigma.sliceDiagonal(k, k);
+
+        PrimitiveArray primitiveArray = PrimitiveArray.make(k);
+        primitiveArray.fillMatching(Sigma.sliceDiagonal(0, 0));
+        System.out.println("primitiveArray: "+primitiveArray);
+        System.out.println(Sigma);
+
+        MatrixStore Sigma_approx = new MatrixStore()
+        //System.out.println("Access1D: "+access1D);
 
         //Find CCt
 //        Matrix B = new Matrix();
