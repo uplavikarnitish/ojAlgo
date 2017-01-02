@@ -133,7 +133,8 @@ public class Main
         System.out.println("primitiveArray: "+primitiveArray);
         System.out.println(Sigma);
 
-        MatrixStore Sigma_approx = new MatrixStore()
+        System.out.println("Sigma class "+Sigma.getClass());
+
         //System.out.println("Access1D: "+access1D);
 
         //Find CCt
