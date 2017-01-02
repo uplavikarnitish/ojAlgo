@@ -125,15 +125,10 @@ public class Main
 
         //k-approximation calculation
         int k = 2;
+        truncateSigmaMemFriendly(k, Sigma);
 
         //Access1D<Double> access1D = Sigma.sliceDiagonal(k, k);
 
-        PrimitiveArray primitiveArray = PrimitiveArray.make(k);
-        primitiveArray.fillMatching(Sigma.sliceDiagonal(0, 0));
-        System.out.println("primitiveArray: "+primitiveArray);
-        System.out.println(Sigma);
-
-        System.out.println("Sigma class "+Sigma.getClass());
 
         //System.out.println("Access1D: "+access1D);
 
@@ -144,6 +139,30 @@ public class Main
 //        System.out.println(" C = B' = "+C);
 //        System.out.println("A*C = "+ Matrix.multiply(A, C));
 //        System.out.println("C*A = "+ Matrix.multiply(C, A));
+    }
+
+    public static int truncateSigmaMemFriendly(long k, MatrixStore<Double> Sigma)
+    {
+        long rank;
+        final PhysicalStore.Factory<Double, PrimitiveDenseStore> doublePrimitiveDenseStoreFactory = PrimitiveDenseStore.FACTORY;
+
+//        PrimitiveArray primitiveArray = PrimitiveArray.make(k);
+//        primitiveArray.fillMatching(Sigma.sliceDiagonal(0, 0));
+//        System.out.println("primitiveArray: "+primitiveArray);
+//        System.out.println(Sigma);
+//
+//        System.out.println("Sigma class "+Sigma.getClass());
+
+        if ( Sigma.limitOfColumn(1000) != Sigma.limitOfRow(2000)  )
+        {
+            System.err.println("Sigma should be a square singular matrix: limitOfColumn:"+Sigma.limitOfColumn(1000)+" limitOfRow:"+Sigma.limitOfRow(2000));
+        }
+        System.out.println("Sigma--------->\n"+Sigma);
+        System.out.println("Sigma: limitOfColumn:"+Sigma.limitOfColumn(1000)+" limitOfRow:"+Sigma.limitOfRow(2000));
+        PrimitiveDenseStore a = doublePrimitiveDenseStoreFactory.;
+        //rank = Sigma.limitOfColumn()
+
+        return 0;
     }
 
 }
