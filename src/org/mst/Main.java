@@ -42,6 +42,7 @@ public class Main
         SingularValue singularValue = new Si*/
 
         final PhysicalStore.Factory<Double, PrimitiveDenseStore> doublePrimitiveDenseStoreFactory = PrimitiveDenseStore.FACTORY;
+        System.out.println("PrimitiveDenseStore.FACTORY:"+doublePrimitiveDenseStoreFactory);
         final PrimitiveDenseStore primitiveDenseStore =
                  doublePrimitiveDenseStoreFactory.makeZero(5, 6);
         //row 0
@@ -125,9 +126,25 @@ public class Main
 
         //k-approximation calculation
         int k = 2;
-        truncateSigmaMemFriendly(k, Sigma);
+        PrimitiveDenseStore Sigma_k = truncateSigmaMemFriendly(k, Sigma);
+        PrimitiveDenseStore U_k = truncateRightmostColumns((U.countColumns()-k), U);
+        PrimitiveDenseStore V_k = truncateRightmostColumns((V.countColumns()-k), V);
 
-        //Access1D<Double> access1D = Sigma.sliceDiagonal(k, k);
+        //Destroy unnecessary objects
+        Sigma = null;
+        U = null;
+        V = null;
+
+        System.out.println("k = "+k);
+        System.out.println("Sigma_k dimensions:"+Sigma_k.countRows()+" x "+Sigma_k.countColumns());
+        System.out.println("U_k dimensions:"+U_k.countRows()+" x "+U_k.countColumns());
+        System.out.println("V_k dimensions:"+V_k.countRows()+" x "+V_k.countColumns());
+        //After truncation, sizes of the matrices are:
+        //Sigma_k: k x k
+        //U_k: m x k
+        //V-k: n x k
+
+        //Computing the scaled-up document matrix (V_k x Sigma_k)
 
 
         //System.out.println("Access1D: "+access1D);
@@ -141,7 +158,7 @@ public class Main
 //        System.out.println("C*A = "+ Matrix.multiply(C, A));
     }
 
-    public static int truncateSigmaMemFriendly(long k, MatrixStore<Double> Sigma)
+    public static PrimitiveDenseStore truncateSigmaMemFriendly(long k, MatrixStore<Double> Sigma)
     {
         long rank;
         final PhysicalStore.Factory<Double, PrimitiveDenseStore> doublePrimitiveDenseStoreFactory = PrimitiveDenseStore.FACTORY;
@@ -159,10 +176,80 @@ public class Main
         }
         System.out.println("Sigma--------->\n"+Sigma);
         System.out.println("Sigma: limitOfColumn:"+Sigma.limitOfColumn(1000)+" limitOfRow:"+Sigma.limitOfRow(2000));
-        PrimitiveDenseStore a = doublePrimitiveDenseStoreFactory.;
-        //rank = Sigma.limitOfColumn()
 
-        return 0;
+        PrimitiveDenseStore Sigma_k = doublePrimitiveDenseStoreFactory.makeZero(k, k);
+        for (int i =0; i<k; i++)
+        {
+            Sigma_k.set(i, i, Sigma.get(i, i));
+        }
+
+        //rank = Sigma.limitOfColumn()
+        /*
+        System.out.println("Checking if elements are pointed using the same references --v");
+        Double a, b;
+        for (int i =0; i<k; i++)
+        {
+            a = Sigma.get(i, i);
+            b = Sigma_k.get(i, i);
+            System.out.println("#"+i+"Sigma:"+a+" \tSigma_k:"+b);
+            System.out.println("After new Double, a:"+a.hashCode()+" \tb:"+b.hashCode());
+        }
+        a = new Double(10);
+        b = a;
+        System.out.println("a:"+a.hashCode()+" \tb:"+b.hashCode());
+        b = new Double(11);
+        System.out.println("After new Double, a:"+a.hashCode()+" \tb:"+b.hashCode());
+        Double c = Sigma.get(0, 0);
+        c = c*10;
+        Sigma_k.set(0, 0, c);
+        for (int i =0; i<k; i++)
+        {
+            a = Sigma.get(i, i);
+            b = Sigma_k.get(i, i);
+            System.out.println("#"+i+"Sigma:"+a+" \tSigma_k:"+b);
+            System.out.println("After new Double, a:"+a.hashCode()+" \tb:"+b.hashCode());
+        }*/
+        return Sigma_k;
+    }
+
+    public static PrimitiveDenseStore truncateRightmostColumns(long truncateCount, MatrixStore<Double> matrixStore)
+    {
+        long rank, rowCnt, colCnt, newColCnt;
+        final PhysicalStore.Factory<Double, PrimitiveDenseStore> doublePrimitiveDenseStoreFactory = PrimitiveDenseStore.FACTORY;
+
+//        PrimitiveArray primitiveArray = PrimitiveArray.make(k);
+//        primitiveArray.fillMatching(Sigma.sliceDiagonal(0, 0));
+//        System.out.println("primitiveArray: "+primitiveArray);
+//        System.out.println(Sigma);
+//
+//        System.out.println("Sigma class "+Sigma.getClass());
+
+        if ( matrixStore.countColumns() < truncateCount  )
+        {
+            System.err.println("ERROR! Not sufficient columns to truncate. Existing column count:"+
+                    matrixStore.countColumns()+" columnn truncation count:"+truncateCount);
+            return null;
+        }
+
+        //DBG System.out.println("Matrix to be truncated--------->\n"+matrixStore);
+        rowCnt = matrixStore.countRows();
+        colCnt = matrixStore.countColumns();
+        //DBG System.out.println("matrixStore: row:"+rowCnt+" columns:"+colCnt);
+        newColCnt = (colCnt - truncateCount);
+        PrimitiveDenseStore truncatedPrimitiveDenseStore = doublePrimitiveDenseStoreFactory.makeZero(rowCnt, newColCnt);
+        for ( int i = 0; i<rowCnt; i++ )
+        {
+            for ( int j = 0; j < newColCnt; j++ )
+            {
+                truncatedPrimitiveDenseStore.set(i, j, matrixStore.get(i, j));
+            }
+        }
+        //DBG System.out.println("Truncated matrix--------->\n"+truncatedPrimitiveDenseStore);
+        //DBG rowCnt = truncatedPrimitiveDenseStore.countRows();
+        //DBG colCnt = truncatedPrimitiveDenseStore.countColumns();
+        //DBG System.out.println("Truncated prim. dense store: row:"+rowCnt+" columns:"+colCnt);
+
+        return truncatedPrimitiveDenseStore;
     }
 
 }
