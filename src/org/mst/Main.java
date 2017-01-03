@@ -142,9 +142,27 @@ public class Main
         //After truncation, sizes of the matrices are:
         //Sigma_k: k x k
         //U_k: m x k
-        //V-k: n x k
+        //V_k: n x k
+        System.out.println("V_k:"+V_k);
 
         //Computing the scaled-up document matrix (V_k x Sigma_k)
+        MatrixStore scaledupDocMat = V_k.multiply(Sigma_k);
+        //MatrixStore scaledupDocMat = V_k;
+
+        System.out.println("scaledupDocMat:"+scaledupDocMat);
+
+        //Computing similarity
+        int queryDocNum = 1;
+        Access1D<Double> query = scaledupDocMat.sliceRow(queryDocNum, 0);
+        System.out.println("queryDocNum:"+queryDocNum+"\t\tquery:"+query);
+
+        long n = scaledupDocMat.countRows(); //Store number of documents
+        for ( int i=0; i<n; i++ )
+        {
+            Access1D<Double> candidateDoc = scaledupDocMat.sliceRow(i, 0);
+            double score = candidateDoc.dot(query);
+            System.out.println("candidateDocNum:"+i+"\t\tcandidate:"+candidateDoc+"\t\tscore:"+score);
+        }
 
 
         //System.out.println("Access1D: "+access1D);
